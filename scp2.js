@@ -11,7 +11,7 @@ scp.scp(
     port: 22, // 服务器端口， 一般为 22
     username: "root", // 用户名
     password: "uI3rnw%Q0*D60g^Y",
-    path: "/usr/project/rk-front/dist/", //服务器存放文件路径
+    path: "/usr/project/www/rk/", //服务器存放文件路径
   },
   (err) => {
     if (!err) {
