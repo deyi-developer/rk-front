@@ -29,8 +29,9 @@ import {
   addDateRange,
   selectDictLabel,
   selectDictLabels,
-  handleTree,
+  handleTree
 } from "@/utils/ruoyi";
+
 // 分页组件
 import Pagination from "@/components/Pagination";
 // 自定义表格工具组件
@@ -51,6 +52,12 @@ import VueMeta from "vue-meta";
 import DictData from "@/components/DictData";
 // 性别组件
 import sex from "@/views/components/sex.vue";
+
+import "xe-utils";
+import VXETable from "vxe-table";
+import "vxe-table/lib/style.css";
+
+Vue.use(VXETable);
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts;
@@ -88,7 +95,7 @@ DictData.install();
  */
 
 Vue.use(Element, {
-  size: Cookies.get("size") || "medium", // set element-ui default size
+  size: Cookies.get("size") || "medium" // set element-ui default size
 });
 
 Vue.config.productionTip = false;
@@ -97,5 +104,5 @@ new Vue({
   el: "#app",
   router,
   store,
-  render: (h) => h(App),
+  render: (h) => h(App)
 });
