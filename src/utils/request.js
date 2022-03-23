@@ -17,7 +17,7 @@ const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: process.env.VUE_APP_BASE_API,
   // 超时
-  timeout: 10000,
+  timeout: 10000
 });
 
 // request拦截器
@@ -47,15 +47,15 @@ service.interceptors.request.use(
           typeof config.data === "object"
             ? JSON.stringify(config.data)
             : config.data,
-        time: new Date().getTime(),
+        time: new Date().getTime()
       };
-      const sessionObj = cache.session.getJSON("sessionObj");
+      const sessionObj = cache.session.getJSON("sessionObj-rk");
       if (
         sessionObj === undefined ||
         sessionObj === null ||
         sessionObj === ""
       ) {
-        cache.session.setJSON("sessionObj", requestObj);
+        cache.session.setJSON("sessionObj-rk", requestObj);
       } else {
         const s_url = sessionObj.url; // 请求地址
         const s_data = sessionObj.data; // 请求数据
@@ -70,7 +70,7 @@ service.interceptors.request.use(
           console.warn(`[${s_url}]: ` + message);
           return Promise.reject(new Error(message));
         } else {
-          cache.session.setJSON("sessionObj", requestObj);
+          cache.session.setJSON("sessionObj-rk", requestObj);
         }
       }
     }
@@ -106,7 +106,7 @@ service.interceptors.response.use(
           {
             confirmButtonText: "重新登录",
             cancelButtonText: "取消",
-            type: "warning",
+            type: "warning"
           }
         )
           .then(() => {
@@ -126,12 +126,12 @@ service.interceptors.response.use(
     } else if (code === 500) {
       Message({
         message: msg,
-        type: "error",
+        type: "error"
       });
       return Promise.reject(new Error(msg));
     } else if (code !== 200) {
       Notification.error({
-        title: msg,
+        title: msg
       });
       return Promise.reject("error");
     } else {
@@ -151,7 +151,7 @@ service.interceptors.response.use(
     Message({
       message: message,
       type: "error",
-      duration: 5 * 1000,
+      duration: 5 * 1000
     });
     return Promise.reject(error);
   }
@@ -162,17 +162,17 @@ export function download(url, params, filename) {
   downloadLoadingInstance = Loading.service({
     text: "正在下载数据，请稍候",
     spinner: "el-icon-loading",
-    background: "rgba(0, 0, 0, 0.7)",
+    background: "rgba(0, 0, 0, 0.7)"
   });
   return service
     .post(url, params, {
       transformRequest: [
         (params) => {
           return tansParams(params);
-        },
+        }
       ],
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      responseType: "blob",
+      responseType: "blob"
     })
     .then(async (data) => {
       const isLogin = await blobValidate(data);

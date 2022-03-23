@@ -101,23 +101,23 @@ export default {
         password: "admin123",
         rememberMe: false,
         code: "",
-        uuid: "",
+        uuid: ""
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" },
+          { required: true, trigger: "blur", message: "请输入您的账号" }
         ],
         password: [
-          { required: true, trigger: "blur", message: "请输入您的密码" },
+          { required: true, trigger: "blur", message: "请输入您的密码" }
         ],
-        code: [{ required: true, trigger: "change", message: "请输入验证码" }],
+        code: [{ required: true, trigger: "change", message: "请输入验证码" }]
       },
       loading: false,
       // 验证码开关
       captchaOnOff: false,
       // 注册开关
       register: false,
-      redirect: undefined,
+      redirect: undefined
     };
   },
   watch: {
@@ -125,8 +125,8 @@ export default {
       handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   created() {
     this.getCode();
@@ -144,14 +144,14 @@ export default {
       });
     },
     getCookie() {
-      const username = Cookies.get("username");
-      const password = Cookies.get("password");
-      const rememberMe = Cookies.get("rememberMe");
+      const username = Cookies.get("username-rk");
+      const password = Cookies.get("password-rk");
+      const rememberMe = Cookies.get("rememberMe-rk");
       this.loginForm = {
         username: username === undefined ? this.loginForm.username : username,
         password:
           password === undefined ? this.loginForm.password : decrypt(password),
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
+        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
     },
     handleLogin() {
@@ -159,17 +159,19 @@ export default {
         if (valid) {
           this.loading = true;
           if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, { expires: 30 });
-            Cookies.set("password", encrypt(this.loginForm.password), {
-              expires: 30,
+            Cookies.set("username-rk", this.loginForm.username, {
+              expires: 30
             });
-            Cookies.set("rememberMe", this.loginForm.rememberMe, {
-              expires: 30,
+            Cookies.set("password-rk", encrypt(this.loginForm.password), {
+              expires: 30
+            });
+            Cookies.set("rememberMe-rk", this.loginForm.rememberMe, {
+              expires: 30
             });
           } else {
-            Cookies.remove("username");
-            Cookies.remove("password");
-            Cookies.remove("rememberMe");
+            Cookies.remove("username-rk");
+            Cookies.remove("password-rk");
+            Cookies.remove("rememberMe-rk");
           }
           this.$store
             .dispatch("Login", this.loginForm)
@@ -184,8 +186,8 @@ export default {
             });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
