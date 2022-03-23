@@ -17,30 +17,65 @@
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
         <search id="header-search" class="right-menu-item" />
-
-        <!-- <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
-
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
-
-        <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
       </template>
+
+      <el-dropdown
+        class="msg-menu-wrapper right-menu-item hover-effect"
+        trigger="click"
+      >
+        <span style="line-height: 20px; height: 20px">
+          <Badge :count="100" :overflow-count="99">
+            <Icon type="ios-notifications-outline" size="22"></Icon>
+          </Badge>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <div class="msg-drop-menu">
+            <Tabs size="small">
+              <TabPane label="站内消息">
+                <ul class="msg-list">
+                  <li class="msg-list-item">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Voluptates dolorum in nesciunt modi eaque, autem
+                    necessitatibus? Voluptatem et iure accusamus deleniti
+                    dignissimos repellendus perferendis sunt, voluptatum commodi
+                    omnis ducimus atque.
+                  </li>
+                  <li class="msg-list-item">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Sapiente itaque quibusdam laboriosam. At nam veritatis atque
+                    mollitia pariatur odio? Rerum est assumenda vel nobis
+                    distinctio laboriosam dolor perferendis odit cum.
+                  </li>
+                  <li class="msg-list-item">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Vitae, earum facilis! Magnam, voluptatum. Error sed
+                    voluptatibus laborum delectus, repudiandae repellendus
+                    molestiae suscipit, magnam consequatur labore velit quia
+                    amet perspiciatis tenetur.
+                  </li>
+                  <li class="msg-list-item">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Qui dolores sit illo porro odio? Itaque repellat, molestiae
+                    consequatur ad voluptates excepturi quisquam molestias
+                    voluptatibus corporis non eaque obcaecati aliquam nesciunt?
+                  </li>
+                </ul>
+              </TabPane>
+            </Tabs>
+          </div>
+        </el-dropdown-menu>
+      </el-dropdown>
 
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <span class="user-name">{{ $store.state.user.name }}</span>
           <img :src="avatar" class="user-avatar" />
-          <i class="el-icon-caret-bottom" />
+          <span class="user-name">{{ $store.state.user.name }}</span>
+
+          <i class="el-icon-arrow-down el-icon--right"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
@@ -60,6 +95,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { Badge, Icon, Tabs, TabPane } from "view-design";
 import Breadcrumb from "@/components/Breadcrumb";
 import TopNav from "@/components/TopNav";
 import Hamburger from "@/components/Hamburger";
@@ -78,7 +114,11 @@ export default {
     SizeSelect,
     Search,
     RuoYiGit,
+    Badge,
+    Icon,
     RuoYiDoc,
+    Tabs,
+    TabPane
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
@@ -89,15 +129,15 @@ export default {
       set(val) {
         this.$store.dispatch("settings/changeSetting", {
           key: "showSettings",
-          value: val,
+          value: val
         });
-      },
+      }
     },
     topNav: {
       get() {
         return this.$store.state.settings.topNav;
-      },
-    },
+      }
+    }
   },
   methods: {
     toggleSideBar() {
@@ -107,7 +147,7 @@ export default {
       this.$confirm("确定注销并退出系统吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           this.$store.dispatch("LogOut").then(() => {
@@ -115,8 +155,8 @@ export default {
           });
         })
         .catch(() => {});
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -182,36 +222,61 @@ export default {
       }
     }
 
+    .message-wrapper {
+      i {
+        cursor: pointer;
+        font-size: 18px;
+        vertical-align: middle;
+      }
+    }
+
     .avatar-container {
-      margin-right: 30px;
+      margin-right: 15px;
 
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
         .user-name {
           display: inline-block;
-          width: 40px;
           height: 40px;
           line-height: 40px;
           font-size: 12px;
           text-align: center;
           vertical-align: top;
+          margin-left: 5px;
         }
         .user-avatar {
           vertical-align: top;
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;
         }
 
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+        i {
+          vertical-align: text-top;
         }
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+.msg-drop-menu {
+  padding: 0px 10px;
+  font-size: 12px;
+  .msg-list {
+    max-width: 500px;
+    li.msg-list-item {
+      border-bottom: 1px solid #eee;
+      padding: 5px 10px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      word-break: break-all;
+      cursor: pointer;
+      &:hover {
+        color: #409eff;
       }
     }
   }
