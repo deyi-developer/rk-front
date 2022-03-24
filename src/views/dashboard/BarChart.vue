@@ -42,67 +42,74 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = this.$echarts.init(this.$el, "walden");
-
-      this.chart.setOption({
+      const option = {
+        title: {
+          text: "Waterfall Chart",
+          subtext: "Living Expenses in Shenzhen"
+        },
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+            type: "shadow"
+          },
+          formatter: function (params) {
+            var tar = params[1];
+            return tar.name + "<br/>" + tar.seriesName + " : " + tar.value;
           }
         },
         grid: {
-          top: 10,
-          left: "2%",
-          right: "2%",
+          left: "3%",
+          right: "4%",
           bottom: "3%",
           containLabel: true
         },
-        xAxis: [
-          {
-            type: "category",
-            data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            axisTick: {
-              alignWithLabel: true
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            axisTick: {
-              show: false
-            }
-          }
-        ],
+        xAxis: {
+          type: "category",
+          splitLine: { show: false },
+          data: [
+            "Total",
+            "Rent",
+            "Utilities",
+            "Transportation",
+            "Meals",
+            "Other"
+          ]
+        },
+        yAxis: {
+          type: "value"
+        },
         series: [
           {
-            name: "pageA",
+            name: "Placeholder",
             type: "bar",
-            stack: "vistors",
-            barWidth: "60%",
-            data: [79, 52, 200, 334, 390, 330, 220],
-            animationDuration
+            stack: "Total",
+            itemStyle: {
+              borderColor: "transparent",
+              color: "transparent"
+            },
+            emphasis: {
+              itemStyle: {
+                borderColor: "transparent",
+                color: "transparent"
+              }
+            },
+            data: [0, 1700, 1400, 1200, 300, 0]
           },
           {
-            name: "pageB",
+            name: "Life Cost",
             type: "bar",
-            stack: "vistors",
-            barWidth: "60%",
-            data: [80, 52, 200, 334, 390, 330, 220],
-            animationDuration
-          },
-          {
-            name: "pageC",
-            type: "bar",
-            stack: "vistors",
-            barWidth: "60%",
-            data: [30, 52, 200, 334, 390, 330, 220],
-            animationDuration
+            stack: "Total",
+            label: {
+              show: true,
+              position: "inside"
+            },
+            data: [2900, 1200, 300, 200, 900, 300]
           }
         ]
-      });
+      };
+      this.chart = this.$echarts.init(this.$el, "walden");
+
+      this.chart.setOption(option);
     }
   }
 };
