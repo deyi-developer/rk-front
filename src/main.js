@@ -9,7 +9,7 @@ import "@/assets/styles/index.scss"; // global css
 import "@/assets/styles/ruoyi.scss"; // ruoyi css
 
 import "view-design/dist/styles/iview.css";
-
+import echarts from "echarts";
 import App from "./App";
 import store from "./store";
 import router from "./router";
@@ -57,9 +57,13 @@ import "xe-utils";
 import VXETable from "vxe-table";
 import "vxe-table/lib/style.css";
 
+require("./assets/walden"); // echarts theme
+
 Vue.use(VXETable);
 
 // 全局方法挂载
+Vue.prototype.$echarts = echarts;
+
 Vue.prototype.getDicts = getDicts;
 Vue.prototype.getConfigKey = getConfigKey;
 Vue.prototype.parseTime = parseTime;

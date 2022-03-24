@@ -1,70 +1,19 @@
 <template>
   <div class="app-container home">
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button @click="validAllEvent">全量数据校验</vxe-button>
-      </template>
-    </vxe-toolbar>
-
-    <vxe-table
-      border
-      show-overflow
-      keep-source
-      ref="xTable"
-      :data="tableData"
-      :edit-rules="validRules"
-      :edit-config="{ trigger: 'click', mode: 'row', showStatus: true }"
-    >
-      <vxe-column type="checkbox" width="80"></vxe-column>
-      <vxe-column type="seq" width="80"></vxe-column>
-      <vxe-column field="name" title="Name" width="400" :edit-render="{}">
-        <template #edit="scope">
-          <vxe-input
-            v-model="scope.row.name"
-            type="text"
-            @change="$refs.xTable.updateStatus(scope)"
-          ></vxe-input>
-        </template>
-      </vxe-column>
-      <vxe-column field="age" title="Age" width="200" :edit-render="{}">
-        <template #edit="scope">
-          <vxe-input
-            v-model="scope.row.age"
-            type="text"
-            @change="$refs.xTable.updateStatus(scope)"
-          ></vxe-input>
-        </template>
-      </vxe-column>
-      <vxe-column field="sex" title="Sex" width="200" :edit-render="{}">
-        <template #edit="scope">
-          <vxe-input
-            v-model="scope.row.sex"
-            type="text"
-            @change="$refs.xTable.updateStatus(scope)"
-          ></vxe-input>
-        </template>
-      </vxe-column>
-      <vxe-column
-        field="date"
-        title="Date"
-        width="300"
-        fixed="right"
-        :edit-render="{}"
-      >
-        <template #edit="scope">
-          <vxe-input
-            v-model="scope.row.date"
-            type="date"
-            transfer
-            @change="$refs.xTable.updateStatus(scope)"
-          ></vxe-input>
-        </template>
-      </vxe-column>
-    </vxe-table>
+    <PaneGroup />
+    <BarChart />
+    <LineChart />
+    <PieChart />
+    <RaddarChart />
   </div>
 </template>
 
 <script>
+import PaneGroup from "./dashboard/PanelGroup.vue";
+import BarChart from "./dashboard/BarChart";
+import LineChart from "./dashboard/LineChart";
+import PieChart from "./dashboard/PieChart";
+import RaddarChart from "./dashboard/RaddarChart";
 export default {
   name: "Index",
   data() {
