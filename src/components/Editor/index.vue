@@ -56,13 +56,13 @@ export default {
     type: {
       type: String,
       default: "url",
-    }
+    },
   },
   data() {
     return {
       uploadUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
       Quill: null,
       currentValue: "",
@@ -73,16 +73,16 @@ export default {
         modules: {
           // 工具栏配置
           toolbar: [
-            ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
-            ["blockquote", "code-block"],                    // 引用  代码块
-            [{ list: "ordered" }, { list: "bullet" }],       // 有序、无序列表
-            [{ indent: "-1" }, { indent: "+1" }],            // 缩进
-            [{ size: ["small", false, "large", "huge"] }],   // 字体大小
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],         // 标题
-            [{ color: [] }, { background: [] }],             // 字体颜色、字体背景颜色
-            [{ align: [] }],                                 // 对齐方式
-            ["clean"],                                       // 清除文本格式
-            ["link", "image", "video"]                       // 链接、图片、视频
+            ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
+            ["blockquote", "code-block"], // 引用  代码块
+            [{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表
+            [{ indent: "-1" }, { indent: "+1" }], // 缩进
+            [{ size: ["small", false, "large", "huge"] }], // 字体大小
+            [{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题
+            [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
+            [{ align: [] }], // 对齐方式
+            ["clean"], // 清除文本格式
+            ["link", "image"], // 链接、图片、视频
           ],
         },
         placeholder: "请输入内容",
@@ -126,7 +126,7 @@ export default {
       const editor = this.$refs.editor;
       this.Quill = new Quill(editor, this.options);
       // 如果设置了上传地址则自定义图片上传事件
-      if (this.type == 'url') {
+      if (this.type == "url") {
         let toolbar = this.Quill.getModule("toolbar");
         toolbar.addHandler("image", (value) => {
           this.uploadType = "image";
@@ -176,7 +176,11 @@ export default {
         // 获取光标所在位置
         let length = quill.getSelection().index;
         // 插入图片  res.url为服务器返回的图片地址
-        quill.insertEmbed(length, "image", process.env.VUE_APP_BASE_API + res.fileName);
+        quill.insertEmbed(
+          length,
+          "image",
+          process.env.VUE_APP_BASE_API + res.fileName
+        );
         // 调整光标到最后
         quill.setSelection(length + 1);
       } else {
@@ -191,7 +195,8 @@ export default {
 </script>
 
 <style>
-.editor, .ql-toolbar {
+.editor,
+.ql-toolbar {
   white-space: pre-wrap !important;
   line-height: normal !important;
 }

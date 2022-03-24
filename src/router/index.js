@@ -1,10 +1,10 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from "vue"
+import Router from "vue-router"
 
-Vue.use(Router);
+Vue.use(Router)
 
 /* Layout */
-import Layout from "@/layout";
+import Layout from "@/layout"
 
 /**
  * Note: 路由配置项
@@ -88,8 +88,33 @@ export const constantRoutes = [
       },
     ],
   },
-  
-];
+  {
+    path: "/order",
+    component: Layout,
+    meta: { title: "工单发起", icon: "user" },
+    redirect: "/order/send",
+    children: [
+      {
+        path: "send",
+        component: () => import("@/views/order/send"),
+        name: "send",
+        meta: { title: "工单发起", icon: "user" },
+      },
+      {
+        path: "details",
+        component: () => import("@/views/order/project"),
+        name: "details",
+        meta: { title: "项目明细", icon: "user" },
+      },
+      {
+        path: "list",
+        component: () => import("@/views/order/list"),
+        name: "list",
+        meta: { title: "项目列表", icon: "user" },
+      },
+    ],
+  },
+]
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
@@ -163,11 +188,11 @@ export const dynamicRoutes = [
       },
     ],
   },
-];
+]
 
 export default new Router({
   base: "rk",
   mode: "history", // 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes,
-});
+})
