@@ -83,7 +83,7 @@ export default {
           role: "Develop",
           sex: "0",
           age: 28,
-          address: "test abc"
+          address: "test abc",
         },
         {
           id: 10002,
@@ -91,7 +91,7 @@ export default {
           role: "Test",
           sex: "1",
           age: 22,
-          address: "Guangzhou"
+          address: "Guangzhou",
         },
         {
           id: 10003,
@@ -99,7 +99,7 @@ export default {
           role: "PM",
           sex: "0",
           age: 32,
-          address: "Shanghai"
+          address: "Shanghai",
         },
         {
           id: 10004,
@@ -107,7 +107,7 @@ export default {
           role: "Designer",
           sex: "1",
           age: 23,
-          address: "test abc"
+          address: "test abc",
         },
         {
           id: 10005,
@@ -115,7 +115,7 @@ export default {
           role: "Develop",
           sex: "1",
           age: 30,
-          address: "Shanghai"
+          address: "Shanghai",
         },
         {
           id: 10006,
@@ -123,8 +123,8 @@ export default {
           role: "Designer",
           sex: "1",
           age: 21,
-          address: "test abc"
-        }
+          address: "test abc",
+        },
       ],
       validRules: {
         name: [{ validator: nameValid }],
@@ -134,11 +134,11 @@ export default {
             type: "number",
             min: 10,
             max: 100000,
-            message: "输入 10 ~ 100000 范围"
-          }
+            message: "输入 10 ~ 100000 范围",
+          },
         ],
-        date: [{ required: true, message: "日期必须填写" }]
-      }
+        date: [{ required: true, message: "日期必须填写" }],
+      },
     };
   },
   methods: {
@@ -150,8 +150,8 @@ export default {
       } else {
         VXETable.modal.message({ status: "success", message: "校验成功！" });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
