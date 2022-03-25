@@ -21,6 +21,10 @@ export default {
     height: {
       type: String,
       default: "300px"
+    },
+    options: {
+      type: Object,
+      default: () => { }
     }
   },
   data() {
@@ -81,8 +85,10 @@ export default {
               }
             }
           }
-        ]
+        ],
+        ...this.options
       };
+
       this.chart = this.$echarts.init(this.$el, "walden");
 
       this.chart.setOption(option);

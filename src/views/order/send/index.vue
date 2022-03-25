@@ -32,7 +32,7 @@
       <el-divider content-position="left">回复</el-divider>
     </header>
     <ul class="list">
-      <li class="item" v-for="(item, index) in 1" :key="index">
+      <li class="item" v-for="(item, index) in 4" :key="index">
         <div class="top">
           <div class="avatar">象</div>
           <p class="name">客服</p>
@@ -58,30 +58,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import editor from "@/components/Editor";
-export default {
-  components: {
-    editor,
-  },
+import { ref } from "@vue/composition-api";
 
-  data() {
-    return {
-      choose: -1,
-    };
-  },
+const choose = ref(-1)
 
-  methods: {
-    handleChange(value) {
-      console.log("value", value);
-    },
-  },
-};
+const handleChange = (value) => {
+  console.log(value)
+}
+
 </script>
 
 <style lang="scss" scoped>
 .work-order {
-  padding: 12px;
+  margin: 12px;
+  padding: 24px;
   background: #fff;
   .el-row {
     padding: 16px 0;
