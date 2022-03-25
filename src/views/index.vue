@@ -36,7 +36,11 @@
     </el-row>
   </div>
 </template>
-
+<script>
+export default {
+  name: "Index"
+};
+</script>
 <script setup>
 import PaneGroup from "./dashboard/PanelGroup.vue";
 import TableDesc from "./dashboard/TableDesc.vue";
