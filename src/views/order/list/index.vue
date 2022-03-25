@@ -1,5 +1,6 @@
 <template>
   <div class="list">
+    <filter-form></filter-form>
     <el-table style="width: 100%">
       <el-table-column prop="date" label="服务单编号" width="180">
       </el-table-column>
@@ -16,11 +17,17 @@
 </template>
 
 <script>
-export default {};
+import FilterForm from "./filterForm.vue";
+export default {
+  components: {
+    FilterForm,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .list {
   padding: 12px;
+  background: #fff;
 }
 </style>

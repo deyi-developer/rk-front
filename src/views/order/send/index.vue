@@ -3,22 +3,22 @@
     <header>
       <h1>登高</h1>
       <el-row>
-        <el-col span="12">
+        <el-col :span="12">
           <label class="space">项目</label>
           <span>无边落木萧萧下</span>
         </el-col>
-        <el-col span="12">
+        <el-col :span="12">
           <label class="space">单据类型</label>
           <span>不尽长江滚滚来</span>
         </el-col>
       </el-row>
       <el-divider content-position="left">详情</el-divider>
       <el-row>
-        <el-col span="12">
+        <el-col :span="12">
           <label class="space">服务目录</label>
           <span>万里悲秋常作客</span>
         </el-col>
-        <el-col span="12">
+        <el-col :span="12">
           <label class="space">状态</label>
           <span>百年多病独登台</span>
         </el-col>
@@ -43,7 +43,7 @@
         <editor
           style="margin-top: 12px"
           v-show="choose === index"
-          height="200"
+          :height="200"
           @on-change="handleChange"
         ></editor>
       </li>
@@ -64,11 +64,13 @@ export default {
   components: {
     editor,
   },
+
   data() {
     return {
       choose: -1,
     };
   },
+
   methods: {
     handleChange(value) {
       console.log("value", value);
@@ -80,6 +82,7 @@ export default {
 <style lang="scss" scoped>
 .work-order {
   padding: 12px;
+  background: #fff;
   .el-row {
     padding: 16px 0;
   }
