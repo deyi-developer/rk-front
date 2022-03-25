@@ -1,50 +1,54 @@
 <template>
-  <vxe-table
-    border
-    show-overflow
-    :data="tableData"
-    :edit-config="{
-      trigger: 'click',
-      mode: 'cell',
-      activeMethod: activeCellMethod
-    }"
-  >
-    <vxe-column type="seq" width="60"></vxe-column>
-    <vxe-column
-      field="name"
-      title="Name"
-      :edit-render="{ autofocus: '.myinput' }"
-    >
-      <template #edit="{ row }">
-        <vxe-input v-model="row.name" class="myinput"></vxe-input>
-      </template>
-    </vxe-column>
-    <vxe-column field="sex" title="Sex" :edit-render="{}">
-      <template #default="{ row }">
-        <span>{{ formatSex(row.sex) }}</span>
-      </template>
-      <template #edit="{ row }">
-        <vxe-select v-model="row.sex" transfer>
-          <vxe-option
-            v-for="item in sexList"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          ></vxe-option>
-        </vxe-select>
-      </template>
-    </vxe-column>
-    <vxe-column field="date" title="Date" :edit-render="{}">
-      <template #edit="{ row }">
-        <vxe-input
-          v-model="row.date"
-          type="week"
-          placeholder="请选择日期"
-          transfer
-        ></vxe-input>
-      </template>
-    </vxe-column>
-  </vxe-table>
+  <div class="project-list app-container">
+    <el-card>
+      <vxe-table
+        border
+        show-overflow
+        :data="tableData"
+        :edit-config="{
+          trigger: 'click',
+          mode: 'cell',
+          activeMethod: activeCellMethod
+        }"
+      >
+        <vxe-column type="seq" width="60"></vxe-column>
+        <vxe-column
+          field="name"
+          title="Name"
+          :edit-render="{ autofocus: '.myinput' }"
+        >
+          <template #edit="{ row }">
+            <vxe-input v-model="row.name" class="myinput"></vxe-input>
+          </template>
+        </vxe-column>
+        <vxe-column field="sex" title="Sex" :edit-render="{}">
+          <template #default="{ row }">
+            <span>{{ formatSex(row.sex) }}</span>
+          </template>
+          <template #edit="{ row }">
+            <vxe-select v-model="row.sex" transfer>
+              <vxe-option
+                v-for="item in sexList"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></vxe-option>
+            </vxe-select>
+          </template>
+        </vxe-column>
+        <vxe-column field="date" title="Date" :edit-render="{}">
+          <template #edit="{ row }">
+            <vxe-input
+              v-model="row.date"
+              type="week"
+              placeholder="请选择日期"
+              transfer
+            ></vxe-input>
+          </template>
+        </vxe-column>
+      </vxe-table>
+    </el-card>
+  </div>
 </template>
 <script>
 export default {
@@ -196,3 +200,4 @@ setTimeout(() => {
   });
 }, 5000);
 </script>
+<style lang="scss" scoped></style>

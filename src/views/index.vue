@@ -1,6 +1,6 @@
 <template>
   <div class="app-container home">
-    <PaneGroup />
+    <PanelGroup />
     <TableDesc />
 
     <el-row type="flex" :gutter="20">
@@ -42,7 +42,7 @@ export default {
 };
 </script>
 <script setup>
-import PaneGroup from "./dashboard/PanelGroup.vue";
+import PanelGroup from "./dashboard/PanelGroup.vue";
 import TableDesc from "./dashboard/TableDesc.vue";
 import BarChart from "./dashboard/BarChart";
 import LineChart from "./dashboard/LineChart";
@@ -56,12 +56,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .home {
-  hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 0;
-    border-top: 1px solid #eee;
-  }
   .box-card {
     margin-bottom: 10px;
   }
