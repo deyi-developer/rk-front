@@ -36,26 +36,22 @@
     </el-row>
   </div>
 </template>
-
 <script>
+export default {
+  name: "Index"
+};
+</script>
+<script setup>
 import PaneGroup from "./dashboard/PanelGroup.vue";
 import TableDesc from "./dashboard/TableDesc.vue";
 import BarChart from "./dashboard/BarChart";
 import LineChart from "./dashboard/LineChart";
 import PieChart from "./dashboard/PieChart";
 import PieChart2 from "./dashboard/PieChart2";
-export default {
-  name: "Index",
-  components: {
-    BarChart,
-    TableDesc,
-    PaneGroup,
-    LineChart,
-    PieChart,
-    PieChart2
-  },
-  methods: {}
-};
+import { ref, onMounted } from "@vue/composition-api";
+onMounted(() => {
+  console.log("mounted");
+});
 </script>
 
 <style scoped lang="scss">
