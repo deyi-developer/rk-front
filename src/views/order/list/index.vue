@@ -30,4 +30,3 @@ export default {
   padding: 12px;
   background: #fff;
 }
-</style>

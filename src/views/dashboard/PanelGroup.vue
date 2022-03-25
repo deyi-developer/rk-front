@@ -1,44 +1,114 @@
+<!--  -->
 <template>
   <el-row :gutter="12" style="margin-bottom: 10px">
     <el-col :span="6">
-      <el-card shadow="always" style="height: 150px">
-        <i-circle :percent="80" stroke-color="#409EFF">
-          <span class="demo-Circle-inner" style="font-size: 24px">80%</span>
-        </i-circle>
+      <el-card shadow="always">
+        <div class="ds-flex">
+          <i-circle :percent="80" stroke-color="#19be6b">
+            <span class="demo-Circle-inner">80%</span>
+          </i-circle>
+          <div class="circel-desc">
+            <p class="circel-desc-title">无风险项目</p>
+            <div class="circel-desc-content">
+              <countTo :startVal="0" :endVal="3000" :duration="1000"></countTo
+              >/4999
+            </div>
+            <p class="tooltip-icon-wrap">
+              <Tooltip
+                class="tooltip-icon"
+                content="项目数：30000，总项目数：4000"
+              >
+                <i style="font-size: 16px" class="el-icon-warning-outline"></i>
+              </Tooltip>
+            </p>
+          </div>
+        </div>
       </el-card>
     </el-col>
     <el-col :span="6">
-      <el-card shadow="always" style="height: 150px">
-        <i-circle :percent="80" stroke-color="#5cb85c">
-          <span class="demo-Circle-inner" style="font-size: 24px">80%</span>
-        </i-circle>
+      <el-card shadow="always">
+        <div class="ds-flex">
+          <i-circle :percent="12" stroke-color="#ff9900">
+            <span class="demo-Circle-inner">12%</span>
+          </i-circle>
+          <div class="circel-desc">
+            <p class="circel-desc-title">中风险项目</p>
+            <div class="circel-desc-content">
+              <countTo :startVal="0" :endVal="12" :duration="1000"></countTo
+              >/4999
+            </div>
+            <p class="tooltip-icon-wrap">
+              <Tooltip
+                class="tooltip-icon"
+                content="项目数：30000，总项目数：4000"
+              >
+                <i style="font-size: 16px" class="el-icon-warning-outline"></i>
+              </Tooltip>
+            </p>
+          </div>
+        </div>
       </el-card>
     </el-col>
     <el-col :span="6">
-      <el-card shadow="always" style="height: 150px">
-        <i-circle :percent="80" stroke-color="#5cb85c">
-          <span class="demo-Circle-inner" style="font-size: 24px">80%</span>
-        </i-circle>
+      <el-card shadow="always">
+        <div class="ds-flex">
+          <i-circle :percent="5" stroke-color="#ed4014">
+            <span class="demo-Circle-inner">5%</span>
+          </i-circle>
+          <div class="circel-desc">
+            <p class="circel-desc-title">高风险项目</p>
+            <div class="circel-desc-content">
+              <countTo :startVal="0" :endVal="5" :duration="1000"></countTo
+              >/4999
+            </div>
+            <p class="tooltip-icon-wrap">
+              <Tooltip
+                class="tooltip-icon"
+                content="项目数：30000，总项目数：4000"
+              >
+                <i style="font-size: 16px" class="el-icon-warning-outline"></i>
+              </Tooltip>
+            </p>
+          </div>
+        </div>
       </el-card>
     </el-col>
     <el-col :span="6">
-      <el-card shadow="always" style="height: 150px">
-        <i-circle :percent="80" stroke-color="#ff5500">
-          <span class="demo-Circle-inner" style="font-size: 24px">80%</span>
-        </i-circle>
+      <el-card shadow="always">
+        <div class="ds-flex">
+          <i-circle :percent="3" stroke-color="#808695">
+            <span class="demo-Circle-inner">2%</span>
+          </i-circle>
+          <div class="circel-desc">
+            <p class="circel-desc-title">法务接管项目</p>
+            <div class="circel-desc-content">
+              <countTo :startVal="0" :endVal="2" :duration="1000"></countTo
+              >/4999
+            </div>
+            <p class="tooltip-icon-wrap">
+              <Tooltip
+                class="tooltip-icon"
+                content="项目数：30000，总项目数：4000"
+              >
+                <i style="font-size: 16px" class="el-icon-warning-outline"></i>
+              </Tooltip>
+            </p>
+          </div>
+        </div>
       </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { Circle } from "view-design";
+import { Circle, Tooltip } from "view-design";
 import CountTo from "vue-count-to";
 
 export default {
   components: {
     CountTo,
-    iCircle: Circle
+    iCircle: Circle,
+    Tooltip
   },
   methods: {
     handleSetLineChartData(type) {
@@ -49,111 +119,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.panel-group {
-  // margin-top: 18px;
-
-  .card-panel-col {
-    margin-bottom: 16px;
+.circel-desc {
+  display: inline-block;
+  vertical-align: top;
+  height: 125px;
+  flex: 1;
+  .circel-desc-title {
+    text-align: right;
+    color: #808695;
+    font-size: 14px;
   }
-
-  .card-panel {
-    height: 182px;
-    cursor: pointer;
-    font-size: 12px;
-    position: relative;
-    overflow: hidden;
-    color: #666;
-    background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.05);
-
-    &:hover {
-      .card-panel-icon-wrapper {
-        color: #fff;
-      }
-
-      .icon-people {
-        background: #40c9c6;
-      }
-
-      .icon-message {
-        background: #36a3f7;
-      }
-
-      .icon-money {
-        background: #f4516c;
-      }
-
-      .icon-shopping {
-        background: #34bfa3;
-      }
-    }
-
-    .icon-people {
-      color: #40c9c6;
-    }
-
-    .icon-message {
-      color: #36a3f7;
-    }
-
-    .icon-money {
-      color: #f4516c;
-    }
-
-    .icon-shopping {
-      color: #34bfa3;
-    }
-
-    .card-panel-icon-wrapper {
-      float: left;
-      margin: 14px 0 0 14px;
-      padding: 16px;
-      transition: all 0.38s ease-out;
-      border-radius: 6px;
-    }
-
-    .card-panel-icon {
-      float: left;
-      font-size: 48px;
-    }
-
-    .card-panel-description {
-      float: right;
-      font-weight: bold;
-      margin: 26px;
-      margin-left: 0px;
-
-      .card-panel-text {
-        line-height: 18px;
-        color: rgba(0, 0, 0, 0.45);
-        font-size: 16px;
-        margin-bottom: 12px;
-      }
-
-      .card-panel-num {
-        font-size: 20px;
-      }
-    }
+  .circel-desc-content {
+    text-align: right;
+    margin-top: 15px;
+    color: #17233d;
+    font-size: 30px;
+    height: 80px;
+  }
+  .tooltip-icon-wrap {
+    text-align: right;
   }
 }
-
-@media (max-width: 550px) {
-  .card-panel-description {
-    display: none;
-  }
-
-  .card-panel-icon-wrapper {
-    float: none !important;
-    width: 100%;
-    height: 100%;
-    margin: 0 !important;
-
-    .svg-icon {
-      display: block;
-      margin: 14px auto !important;
-      float: none !important;
-    }
-  }
+.demo-Circle-inner {
+  font-size: 24px;
 }
 </style>

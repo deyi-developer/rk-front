@@ -43,6 +43,12 @@ export default {
   methods: {
     initChart() {
       const option = {
+        aria: {
+          enabled: true,
+          decal: {
+            show: true
+          }
+        },
         title: {
           text: "Waterfall Chart",
           subtext: "Living Expenses in Shenzhen"
