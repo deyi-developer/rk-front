@@ -1,26 +1,20 @@
 <template>
-  <div class="list">
-    <el-table style="width: 100%">
-      <el-table-column prop="date" label="服务单编号" width="180">
-      </el-table-column>
-      <el-table-column prop="name" label="标题" width="180"> </el-table-column>
-      <el-table-column prop="address" label="状态"> </el-table-column>
-      <el-table-column prop="address" label="优先级"> </el-table-column>
-      <el-table-column prop="address" label="提单人"> </el-table-column>
-      <el-table-column prop="address" label="提交时间"> </el-table-column>
-      <el-table-column prop="address" label="处理人"> </el-table-column>
-      <el-table-column prop="address" label="处理组"> </el-table-column>
-      <el-table-column prop="address" label="最后更新时间"> </el-table-column>
-    </el-table>
-  </div>
+  <button @click="increment">Count is: {{ count }}</button>
 </template>
 
-<script>
-export default {};
-</script>
+<script setup>
+import { ref, onMounted } from "@vue/composition-api";
 
-<style lang="scss" scoped>
-.list {
-  padding: 12px;
+// reactive state
+const count = ref(0);
+
+// functions that mutate state and trigger updates
+function increment() {
+  count.value++;
 }
-</style>
+
+// lifecycle hooks
+onMounted(() => {
+  console.log(`The initial count is ${count.value}.`);
+});
+</script>

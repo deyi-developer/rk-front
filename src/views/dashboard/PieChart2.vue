@@ -43,6 +43,12 @@ export default {
   methods: {
     initChart() {
       const option = {
+        aria: {
+          enabled: true,
+          decal: {
+            show: true
+          }
+        },
         tooltip: {
           trigger: "item"
         },

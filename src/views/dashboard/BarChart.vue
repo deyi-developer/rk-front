@@ -44,7 +44,10 @@ export default {
     initChart() {
       const option = {
         aria: {
-          enabled: true
+          enabled: true,
+          decal: {
+            show: true
+          }
         },
         title: {
           text: "Waterfall Chart",
