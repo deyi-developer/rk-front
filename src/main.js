@@ -58,6 +58,7 @@ import VXETable from "vxe-table";
 import "vxe-table/lib/style.css";
 
 require("./assets/walden"); // echarts theme
+// require("./assets/westeros"); // echarts theme
 // require("echarts/theme/walden");
 
 Vue.use(VXETable);
