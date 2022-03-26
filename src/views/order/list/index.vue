@@ -1,8 +1,16 @@
 <template>
   <div class="project-list app-container">
     <el-card>
+      <el-radio-group v-model="radioVal" size="small">
+        <el-radio-button label="标签一"></el-radio-button>
+        <el-radio-button label="标签二" disabled></el-radio-button>
+        <el-radio-button label="标签三"></el-radio-button>
+        <el-radio-button label="标签4"></el-radio-button>
+      </el-radio-group>
+
       <vxe-table
         border
+        max-height="200"
         show-overflow
         :data="tableData"
         :edit-config="{
@@ -11,10 +19,10 @@
           activeMethod: activeCellMethod
         }"
       >
-        <vxe-column type="seq" width="60"></vxe-column>
+        <vxe-column type="seq" title="序号" width="60"></vxe-column>
         <vxe-column
           field="name"
-          title="Name"
+          title="名字"
           :edit-render="{ autofocus: '.myinput' }"
         >
           <template #edit="{ row }">
@@ -56,7 +64,8 @@ export default {
 };
 </script>
 <script setup>
-import { reactive } from "@vue/composition-api";
+import { reactive, ref } from "@vue/composition-api";
+const radioVal = ref("标签一");
 const tableData = reactive([
   {
     id: 10001,
