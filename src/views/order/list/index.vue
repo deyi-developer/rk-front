@@ -18,6 +18,7 @@
         align="center"
         max-height="550"
         show-overflow
+        size="small"
         :data="state.tableData"
         :edit-config="{
           trigger: 'click',
@@ -45,13 +46,14 @@
           width="125"
           title="项目名称"
         ></vxe-column>
-        <vxe-column
-          field="name"
-          fixed="left"
-          width="125"
-          title="项目类型"
-        ></vxe-column>
+
         <vxe-colgroup title="项目基本信息">
+          <vxe-column
+            field="name"
+            class-name="bg-base"
+            width="125"
+            title="项目类型"
+          ></vxe-column>
           <vxe-column
             field="name"
             class-name="bg-base"
