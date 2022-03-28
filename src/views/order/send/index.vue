@@ -60,7 +60,7 @@
 
 <script setup>
 import editor from "@/components/Editor";
-import { ref } from "@vue/composition-api";
+import { ref, onCreated } from "@vue/composition-api";
 
 const choose = ref(-1)
 
@@ -72,7 +72,7 @@ const handleChange = (value) => {
 
 <style lang="scss" scoped>
 .work-order {
-  margin: 12px;
+  margin: 20px;
   padding: 24px;
   background: #fff;
   .el-row {
