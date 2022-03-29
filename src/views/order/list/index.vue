@@ -16,14 +16,17 @@
         ref="tableList"
         border
         align="center"
-        max-height="550"
+        height="550"
         show-overflow
         size="small"
-        :data="state.tableData"
+        id="projectCode"
+        :loading="tableLodaing"
+        :data="tableData"
+        :scroll-y="{ gt: 100, oSize: 10 }"
+        :scroll-x="{ gt: 10 }"
         :edit-config="{
           trigger: 'click',
-          mode: 'cell',
-          activeMethod: activeCellMethod
+          mode: 'cell'
         }"
         @scroll="scrollHandle"
       >
@@ -35,13 +38,13 @@
         ></vxe-column>
         <!-- 项目基本信息 -->
         <vxe-column
-          field="name"
+          field="projectCode"
           fixed="left"
           width="125"
           title="项目编码"
         ></vxe-column>
         <vxe-column
-          field="name"
+          field="projectName"
           fixed="left"
           width="125"
           title="项目名称"
@@ -49,55 +52,67 @@
 
         <vxe-colgroup title="项目基本信息">
           <vxe-column
-            field="name"
+            field="projectChargeType"
             class-name="bg-base"
             width="125"
             title="项目类型"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="parentProjectCode"
+            class-name="bg-base"
+            width="125"
+            title="对外项目编码"
+          ></vxe-column>
+          <vxe-column
+            field="parentProjectName"
+            class-name="bg-base"
+            width="125"
+            title="对外项目名称"
+          ></vxe-column>
+          <vxe-column
+            field="projectManagerEmpNum"
             class-name="bg-base"
             width="125"
             title="项目经理工号"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="pmName"
             class-name="bg-base"
             width="125"
             title="项目经理姓名"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="oneDeptName"
             class-name="bg-base"
             width="125"
             title="一级部门"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="deptName"
             class-name="bg-base"
             width="125"
             title="项目部门"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="projectCreateDate"
             class-name="bg-base"
             width="125"
             title="项目创建日期"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="projectStartDate"
             class-name="bg-base"
             width="125"
             title="项目开始日期"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="projectEndDate"
             class-name="bg-base"
             width="125"
             title="项目结束日期"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="customName"
             class-name="bg-base"
             width="125"
             title="最终用户"
@@ -108,84 +123,84 @@
         <vxe-colgroup title="项目开票信息">
           <vxe-column
             class-name="bg-inv"
-            field="name"
+            field="pjtdTotalMoney"
             width="125"
             title="总收入"
           ></vxe-column>
           <vxe-column
             class-name="bg-inv"
-            field="name"
+            field="projectChargePeriod"
             width="125"
             title="结算周期"
           ></vxe-column>
           <vxe-column
             class-name="bg-inv"
-            field="name"
+            field="billingDeadline"
             width="125"
             title="开票截止期间"
           ></vxe-column>
           <vxe-column
             class-name="bg-inv"
-            field="name"
+            field="totalShouldBillingMoney"
             width="125"
             title="应开总额"
           ></vxe-column>
           <vxe-column
             class-name="bg-inv"
-            field="name"
+            field="billingRate"
             width="125"
             title="应开比例"
           ></vxe-column>
           <vxe-column
             class-name="bg-inv"
-            field="name"
+            field="totalAlreadyBillingMoney"
             width="125"
             title="已开总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="billingRateOfTotalPjtd"
             class-name="bg-inv"
             width="125"
             title="相对总收入开票率"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="correspondingBillingRate"
             class-name="bg-inv"
             width="125"
             title="相对应开开票率"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="totalShouldNotBillingMoney"
             class-name="bg-inv"
             width="125"
             title="超账期应开未开总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="billingMoney30Day"
             class-name="bg-inv"
             width="125"
             title="超账期30天内应开未开"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="billingMoney30to60Day"
             class-name="bg-inv"
             width="125"
             title="超账期30-60天应开未开"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="billingMoney60to90Day"
             class-name="bg-inv"
             width="125"
             title="超账期60-90天应开未开"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="billingMoney90Day"
             class-name="bg-inv"
             width="125"
             title="超账期90天以上应开未开"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="invoicingRiskLevel"
             class-name="bg-inv"
             width="125"
             title="开票风险等级"
@@ -195,85 +210,85 @@
         <!-- 项目收款 -->
         <vxe-colgroup title="项目收款信息">
           <vxe-column
-            field="name"
+            field="totalAlreadyBillingMoney"
             width="125"
             class-name="bg-collection"
             title="已开总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="projectInvoicePeriod"
             width="125"
             class-name="bg-collection"
             title="发票账期"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receivedEndTime"
             width="125"
             class-name="bg-collection"
             title="收款截止日期"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="totalShouldReceiptsMoney"
             class-name="bg-collection"
             width="125"
             title="账期内应收总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="shouldReceiverRate"
             class-name="bg-collection"
             width="125"
             title="应收比例"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="totalReceiptssMoney"
             class-name="bg-collection"
             width="125"
             title="已收总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receivedRateOfTotalPjtd"
             class-name="bg-collection"
             width="125"
             title="相对总收入收款率"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="relativeReceivableRate"
             class-name="bg-collection"
             width="125"
             title="相对应收款率"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="totalShouldNotReceiptsMoney"
             class-name="bg-collection"
             width="125"
             title="超账期应收未收总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receiptsMoney30Day"
             class-name="bg-collection"
             width="125"
             title="超账期30天内应收未收"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receiptsMoney30to60Day"
             class-name="bg-collection"
             width="125"
             title="超账期30-60天应收未收"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receiptsMoney60to90Day"
             class-name="bg-collection"
             width="125"
             title="超账期60-90天应收未收"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receiptsMoney90Day"
             class-name="bg-collection"
             width="125"
             title="超账期90天以上应收未收"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receiveRiskLevel"
             class-name="bg-collection"
             width="125"
             title="收款风险等级"
@@ -283,55 +298,55 @@
         <!-- 项目计划 -->
         <vxe-colgroup title="项目计划">
           <vxe-column
-            field="name"
+            field="totalShouldNotBillingMoney"
             class-name="bg-plan"
             width="125"
             title="超帐期应开未开总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="planBillingMoney"
             class-name="bg-plan"
             width="125"
             title="本月计划开票额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="billingThisMonth"
             class-name="bg-plan"
             width="125"
             title="本月实开总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="compleBillingThisMonth"
             class-name="bg-plan"
             width="125"
             title="本月开票完成率"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="totalShouldNotReceiptsMoney"
             class-name="bg-plan"
             width="125"
             title="超帐期应收未收总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="planReceiptsMoney"
             width="125"
             class-name="bg-plan"
             title="本月计划收款额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="receiptsThisMonth"
             class-name="bg-plan"
             width="125"
             title="本月实收总额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="compleReceiptsThisMonth"
             width="125"
             class-name="bg-plan"
             title="本月收款完成率"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="planRemark"
             class-name="bg-plan"
             width="125"
             title="备注"
@@ -341,18 +356,18 @@
         <!-- 其他指标 -->
         <vxe-colgroup title="其他指标">
           <vxe-column
-            field="name"
+            field="grossProfit"
             class-name="bg-other"
             width="125"
             title="毛利额"
           ></vxe-column>
           <vxe-column
-            field="name"
+            field="grossProfitRate"
             class-name="bg-other"
             width="125"
             title="毛利率"
           ></vxe-column>
-          <vxe-column
+          <!-- <vxe-column
             field="name"
             class-name="bg-other"
             width="125"
@@ -363,9 +378,9 @@
             class-name="bg-other"
             width="125"
             title="平均月收款计划完成率"
-          ></vxe-column>
+          ></vxe-column> -->
           <vxe-column
-            field="name"
+            field="grossProfitRiskLevel"
             class-name="bg-other"
             width="125"
             title="毛利风险等级"
@@ -388,53 +403,40 @@
   </div>
 </template>
 <script>
-export default {
-  name: "ProjectList"
-};
-</script>
-<script setup>
 import { Tabs, TabPane } from "view-design";
 import { throttle } from "lodash-es";
-import { reactive, ref, onBeforeMount } from "@vue/composition-api";
-
-// 获取数据
-onBeforeMount(() => {
-  const arr = [];
-  for (let index = 0; index < 30; index++) {
-    arr[index] = {
-      id: index,
-      name: `长文本测试长文本测试长文本测试${index}`
+import { getList } from "./api";
+export default {
+  name: "ProjectList",
+  components: { Tabs, TabPane },
+  data() {
+    return {
+      activeName: "first",
+      tableLodaing: true,
+      tableData: []
     };
-  }
-  state.tableData = arr;
-});
-// tab逻辑
-const activeName = ref("first");
-const handleClick = (name) => {
-  console.log(name);
-  // tableList.value.scrollToColumn("date");
-};
-
-//表格实例
-const tableList = ref(null);
-
-const state = reactive({
-  tableData: []
-});
-
-const saveRowEvent = (row) => {
-  console.log(row);
-};
-
-const activeCellMethod = ({ columnIndex }) => {
-  if (columnIndex === 1) {
-    return false;
-  }
-  return true;
-};
-
-const scrollHandle = throttle(({ isX, bodyWidth, scrollLeft, scrollWidth }) => {
-  /* 每列宽度125
+  },
+  created() {
+    getList({
+      pageSize: 9999,
+      page: 1
+    })
+      .then((res) => {
+        this.tableData = res.rows;
+      })
+      .finally(() => (this.tableLodaing = false));
+  },
+  methods: {
+    handleClick: (name) => {
+      console.log(name);
+    },
+    scrollHandle: throttle(function ({
+      isX,
+      bodyWidth,
+      scrollLeft,
+      scrollWidth
+    }) {
+      /* 每列宽度125
     前面3列固定
     项目基本信息 12个字段
     项目开票 14个字段
@@ -442,53 +444,56 @@ const scrollHandle = throttle(({ isX, bodyWidth, scrollLeft, scrollWidth }) => {
     项目计划 9个字段
     其他指标 5个字段
    */
-  // 列宽度
-  const fixedWidth = 125 * 3 + 60; //固定列
-  const firstWidth = 125 * 12 - 60 - fixedWidth;
-  const secondWidth = 125 * 14;
-  const thirdWidth = 125 * 15;
-  const fourthWidth = 125 * 9;
-  const fifthWidth = 125 * 5;
-  //列   距离
-  const firstLeft = 0;
-  const secondLeft = firstWidth;
-  const thirdLeft = firstWidth + secondWidth;
-  const fourthLeft = firstWidth + secondWidth + thirdWidth;
-  const fifthLeft =
-    fixedWidth + firstWidth + secondWidth + thirdWidth + fourthWidth;
+      // 列宽度
+      const fixedWidth = 125 * 3 + 60; //固定列
+      const firstWidth = 125 * 12 - 60 - fixedWidth;
+      const secondWidth = 125 * 14;
+      const thirdWidth = 125 * 15;
+      const fourthWidth = 125 * 9;
+      const fifthWidth = 125 * 5;
+      //列   距离
+      const firstLeft = 0;
+      const secondLeft = firstWidth;
+      const thirdLeft = firstWidth + secondWidth;
+      const fourthLeft = firstWidth + secondWidth + thirdWidth;
+      const fifthLeft =
+        fixedWidth + firstWidth + secondWidth + thirdWidth + fourthWidth;
 
-  if (isX) {
-    console.log(bodyWidth, scrollLeft, scrollWidth);
-    if (scrollLeft >= firstLeft && scrollLeft <= firstLeft + firstWidth) {
-      activeName.value = "first";
-    } else if (
-      scrollLeft >= secondLeft &&
-      scrollLeft <= secondLeft + secondWidth
-    ) {
-      activeName.value = "second";
-    } else if (
-      scrollLeft >= thirdLeft &&
-      scrollLeft <= thirdLeft + thirdWidth
-    ) {
-      activeName.value = "third";
-    } else if (
-      scrollLeft >= fourthLeft &&
-      scrollLeft <= fourthLeft + fourthWidth
-    ) {
-      activeName.value = "fourth";
-    } else if (
-      scrollLeft >= fifthLeft &&
-      scrollLeft <= fifthLeft + fifthWidth
-    ) {
-      activeName.value = "fifth";
-    }
+      if (isX) {
+        if (scrollLeft >= firstLeft && scrollLeft <= firstLeft + firstWidth) {
+          this.activeName = "first";
+        } else if (
+          scrollLeft >= secondLeft &&
+          scrollLeft <= secondLeft + secondWidth
+        ) {
+          this.activeName = "second";
+        } else if (
+          scrollLeft >= thirdLeft &&
+          scrollLeft <= thirdLeft + thirdWidth
+        ) {
+          this.activeName = "third";
+        } else if (
+          scrollLeft >= fourthLeft &&
+          scrollLeft <= fourthLeft + fourthWidth
+        ) {
+          this.activeName = "fourth";
+        } else if (
+          scrollLeft >= fifthLeft &&
+          scrollLeft <= fifthLeft + fifthWidth
+        ) {
+          this.activeName = "fifth";
+        }
 
-    if (scrollLeft + bodyWidth == scrollWidth) {
-      activeName.value = "fifth";
-    }
+        if (scrollLeft + bodyWidth == scrollWidth) {
+          this.activeName = "fifth";
+        }
+      }
+    },
+    150)
   }
-}, 100);
+};
 </script>
+
 <style lang="scss">
 .bg-base {
   background-color: #ecf5ff;
