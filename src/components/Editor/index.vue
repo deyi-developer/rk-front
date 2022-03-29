@@ -11,8 +11,7 @@
       style="display: none"
       ref="upload"
       v-if="this.type == 'url'"
-    >
-    </el-upload>
+    ></el-upload>
     <div class="editor" ref="editor" :style="styles"></div>
   </div>
 </template>
@@ -57,6 +56,14 @@ export default {
       type: String,
       default: "url",
     },
+    placeholder: {
+      typr: String,
+      default: '请输入内容'
+    }
+  },
+  model: {
+    prop: "value",
+    event: "input",
   },
   data() {
     return {
@@ -85,7 +92,7 @@ export default {
             ["link", "image"], // 链接、图片、视频
           ],
         },
-        placeholder: "请输入内容",
+        placeholder: this.placeholder,
         readOnly: this.readOnly,
       },
     };

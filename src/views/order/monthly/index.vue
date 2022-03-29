@@ -86,7 +86,6 @@ const options = ref({
     name: "Access From",
     type: "pie",
     radius: "70%",
-
     data: [
       { value: 1048, name: "已开" },
       { value: 735, name: "超90天应开未开" },

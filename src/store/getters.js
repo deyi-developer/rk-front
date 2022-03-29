@@ -15,6 +15,7 @@ const getters = {
   defaultRoutes: (state) => state.permission.defaultRoutes,
   sidebarRouters: (state) => state.permission.sidebarRouters,
   lightLevel: (state) => state.screen.lightLevel,
-  msgCount: (state) => state.msg.msgArr.length
-};
-export default getters;
+  msgCount: (state) => state.msg.msgArr.length,
+  usersInfo: (state) => state.user.user,
+}
+export default getters

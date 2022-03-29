@@ -1,73 +1,123 @@
 <template>
   <div class="work-order">
     <header>
-      <h1>登高</h1>
+      <h1 style="font-weight: 500;">{{ info.eventTitle }}</h1>
       <el-row>
         <el-col :span="12">
-          <label class="space">项目</label>
-          <span>无边落木萧萧下</span>
+          <label class="space">项目:</label>
+          <span>{{ info.projectCode }}</span>
         </el-col>
         <el-col :span="12">
-          <label class="space">单据类型</label>
-          <span>不尽长江滚滚来</span>
+          <label class="space">工单类型:</label>
+          <span>{{ info.eventType }}</span>
         </el-col>
       </el-row>
-      <el-divider content-position="left">详情</el-divider>
-      <el-row>
+      <el-divider content-position="left">内容</el-divider>
+      <!-- <el-row>
         <el-col :span="12">
-          <label class="space">服务目录</label>
+          <label class="space">服务目录:</label>
           <span>万里悲秋常作客</span>
         </el-col>
         <el-col :span="12">
-          <label class="space">状态</label>
+          <label class="space">状态:</label>
           <span>百年多病独登台</span>
         </el-col>
-      </el-row>
-      <el-row>
+      </el-row>-->
+      <el-row style="padding-top: 0;">
         <el-col>
-          <label class="space">描述</label>
-          <el-input type="textarea"></el-input>
+          <!-- <label class="space">内容</label> -->
+          <div class="content">
+            <span v-html="info.eventContext"></span>
+          </div>
         </el-col>
       </el-row>
       <el-divider content-position="left">回复</el-divider>
     </header>
     <ul class="list">
-      <li class="item" v-for="(item, index) in 4" :key="index">
+      <li class="item" v-for="(item, index) in replyList" :key="index">
         <div class="top">
-          <div class="avatar">象</div>
-          <p class="name">客服</p>
+          <img class="avatar" :src="avatar" />
+          <p class="name">{{ usersInfo.userName }}</p>
           <p class="time">2019-07-11 18:44:44</p>
-          <p class="reply" @click="() => (choose = index)">回复</p>
+          <p class="reply" @click="editorVisible = !editorVisible">回复</p>
         </div>
-        <div class="bottom">小楼一夜听风雨,深巷明朝卖杏花</div>
-        <editor
-          style="margin-top: 12px"
-          v-show="choose === index"
-          :height="200"
-          @on-change="handleChange"
-        ></editor>
+        <div class="bottom" v-html="item.eventMsg"></div>
       </li>
     </ul>
-    <el-divider content-position="left">解决方案</el-divider>
+    <el-card v-show="editorVisible" style="margin: 12px 0">
+      <editor
+        v-model="info.eventMsg"
+        style="margin-bottom: 12px"
+        placeholder="请输入回复内容"
+        :height="200"
+      ></editor>
+      <el-button type="primary" size="small" @click="submit">确定</el-button>
+    </el-card>
+    <!-- <el-divider content-position="left">解决方案</el-divider>
     <el-row>
       <el-col>
         <label class="space">解决方案</label>
         <el-input type="textarea"></el-input>
       </el-col>
-    </el-row>
+    </el-row>-->
   </div>
 </template>
+<script>
+import { detail, reply, replyList } from './api'
+import { mapGetters } from 'vuex'
+import editor from "@/components/Editor"
+export default {
+  components: {
+    editor
+  },
 
-<script setup>
-import editor from "@/components/Editor";
-import { ref, onCreated } from "@vue/composition-api";
+  data() {
+    return {
+      info: {},
+      replyList: [],
+      editorVisible: true
+    }
+  },
 
-const choose = ref(-1)
+  computed: {
+    ...mapGetters(['usersInfo']),
 
-const handleChange = (value) => {
-  console.log(value)
+    avatar() {
+      return process.env.VUE_APP_BASE_API + this.usersInfo.avatar
+    }
+  },
+
+  created() {
+    const { query: { id } } = this.$route
+    this.getDetailInfo(id)
+  },
+
+  methods: {
+    /** 获取详情数据 */
+    async getDetailInfo(id) {
+      const { data } = await detail(id)
+      this.info = data
+      this.info.eventHandler = this.usersInfo.userId // 默认自己能搞定补转接
+      this.getReplyList()
+    },
+
+    /** 回复 */
+    async submit() {
+      const { code, msg } = await reply(this.info)
+      if (code === 200) {
+        this.$modal.msgSuccess(msg);
+      } else {
+        this.$modal.msgError(msg);
+      }
+    },
+
+    /** 获取回复列表 */
+    async getReplyList() {
+      const { rows } = await replyList({ eventHeaderId: 9 })
+      this.replyList = rows || []
+    }
+  }
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -86,6 +136,10 @@ const handleChange = (value) => {
     min-width: 60px;
     margin-right: 80px;
     font-weight: 400;
+  }
+  .content {
+    padding: 16px 12px;
+    border: 1px solid #ddd;
   }
   .item {
     padding: 16px 0;

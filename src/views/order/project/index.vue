@@ -6,12 +6,18 @@
       <el-button style="margin-left: auto" type="primary">保存</el-button>
     </header>
     <div class="content">
-      <!-- <el-button class="fixed" type="primary" size="small">服务工单</el-button> -->
       <el-form>
         <el-card class="spacing" title="项目基本信息">
           <div slot="header">
             <span>项目基本信息</span>
-            <el-button style="float: right; padding: 3px 0" type="text">服务工单</el-button>
+            <div style="float: right">
+              <el-button
+                style="padding: 3px 0"
+                type="text"
+                @click="$router.push({ name: 'order-list' })"
+              >服务工单</el-button>
+              <el-button style="padding: 3px 0" type="text" @click="sendOrder">发起工单</el-button>
+            </div>
           </div>
           <el-row>
             <el-col :span="4">
@@ -147,18 +153,33 @@
         </el-card>
       </el-form>
     </div>
+    <work-order-dialog type="add" :form="form" :dialogVisible.sync="dialogVisible"></work-order-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ProjectDetail",
-  data() {
-    return {
-      form: {},
-    };
-  },
-};
+  dicts: ["event_type", "event_urgency_level"]
+}
+</script>
+<script setup>
+import { ref } from "@vue/composition-api";
+import workOrderDialog from '../components/work-order-dialog'
+
+let dialogVisible = ref(false)
+const sendOrder = () => {
+  dialogVisible.value = true
+}
+
+let form = ref({
+  eventTitle: '',
+  eventType: '',
+  eventMsg: '',
+  eventHandler: '',
+  eventUrgencyLevel: '',
+  projectCode: ''
+})
+
 </script>
 
 <style lang="scss" scoped>

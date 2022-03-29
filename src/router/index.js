@@ -98,7 +98,8 @@ export const constantRoutes = [
         path: "send",
         component: () => import("@/views/order/send"),
         name: "send",
-        meta: { title: "工单发起", icon: "user" },
+        meta: { title: "工单详情", icon: "user" },
+        hidden: true,
       },
       {
         path: "details",
@@ -112,12 +113,25 @@ export const constantRoutes = [
         name: "list",
         meta: { title: "项目列表", icon: "user" },
       },
-
       {
         path: "monthly",
         component: () => import("@/views/order/monthly"),
         name: "monthly",
         meta: { title: "项目月报", icon: "user" },
+      },
+    ],
+  },
+  {
+    path: "/order-list",
+    component: Layout,
+    redirect: "order-list",
+    hidden: true,
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/order/order-list"),
+        name: "order-list",
+        meta: { title: "工单列表", icon: "user" },
       },
     ],
   },

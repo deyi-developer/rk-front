@@ -48,8 +48,8 @@ import BarChart from "./dashboard/BarChart";
 import LineChart from "./dashboard/LineChart";
 import PieChart from "./dashboard/PieChart";
 import PieChart2 from "./dashboard/PieChart2";
-import { ref, onMounted } from "@vue/composition-api";
-onMounted(() => {
+import { ref, created } from "@vue/composition-api";
+created(() => {
   console.log("mounted");
 });
 </script>
