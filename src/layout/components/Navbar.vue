@@ -7,11 +7,7 @@
       @toggleClick="toggleSideBar"
     />
 
-    <breadcrumb
-      id="breadcrumb-container"
-      class="breadcrumb-container"
-      v-if="!topNav"
-    />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!topNav" />
     <top-nav id="topmenu-container" class="topmenu-container" v-if="topNav" />
 
     <div class="right-menu">
@@ -20,10 +16,7 @@
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
 
-      <el-dropdown
-        class="msg-menu-wrapper right-menu-item hover-effect"
-        trigger="click"
-      >
+      <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
         <span style="line-height: 20px; height: 20px">
           <Badge :count="100" :overflow-count="99">
             <Icon type="ios-notifications-outline" size="22"></Icon>
@@ -33,7 +26,7 @@
           <div class="msg-drop-menu">
             <Tabs size="small">
               <TabPane label="站内消息">
-                <ul class="msg-list">
+                <!-- <ul class="msg-list">
                   <li class="msg-list-item">
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                     Voluptates dolorum in nesciunt modi eaque, autem
@@ -60,17 +53,14 @@
                     consequatur ad voluptates excepturi quisquam molestias
                     voluptatibus corporis non eaque obcaecati aliquam nesciunt?
                   </li>
-                </ul>
+                </ul>-->
               </TabPane>
             </Tabs>
           </div>
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
-        trigger="click"
-      >
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar" />
           <span class="user-name">{{ $store.state.user.name }}</span>
@@ -80,14 +70,20 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
             <el-dropdown-item>
-              <span><i class="el-icon-user"></i>个人中心</span>
+              <span>
+                <i class="el-icon-user"></i>个人中心
+              </span>
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item @click.native="setting = true">
-            <span><i class="el-icon-setting"></i>布局设置</span>
+            <span>
+              <i class="el-icon-setting"></i>布局设置
+            </span>
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span><i class="el-icon-switch-button"></i>退出登录</span>
+            <span>
+              <i class="el-icon-switch-button"></i>退出登录
+            </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -156,7 +152,7 @@ export default {
             location.href = "/index";
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="发起工单" width="70%" :visible.sync="dialogVisible">
+  <el-dialog title="发起工单" width="70%" :visible.sync="dialogVisible" :before-close="beforeClose">
     <el-form :model="form" label-width="100px">
       <el-form-item label="工单标题:">
         <el-input style="width: 80%;" v-model="form.eventTitle"></el-input>
@@ -131,6 +131,10 @@ const close = () => {
 /** 刷新父组件的列表 */
 const refresh = () => {
   emit('refresh')
+}
+
+const beforeClose = () => {
+  close()
 }
 
 /** 获取处理人数据 */

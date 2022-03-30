@@ -3,7 +3,7 @@ import request from "@/utils/request"
 // 发送工单
 export const send = (data) => {
   return request({
-    url: "/workOrder/header",
+    url: "/workOrder/header/add",
     method: "post",
     data,
   })
@@ -12,7 +12,7 @@ export const send = (data) => {
 // 编辑工单
 export const update = (data) => {
   return request({
-    url: "/workOrder/header",
+    url: "/workOrder/header/edit",
     method: "put",
     data,
   })
@@ -24,5 +24,13 @@ export const handlerList = (params) => {
     url: "/system/user/list",
     method: "get",
     params,
+  })
+}
+
+// 项目明细
+export const projectDetails = (projectCode) => {
+  return request({
+    url: `/projectDetail/findProjectDetail/${projectCode}`,
+    method: "get",
   })
 }

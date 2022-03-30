@@ -115,10 +115,16 @@ export const constantRoutes = [
         meta: { title: "项目清单", icon: "build" }
       },
       {
-        path: "monthly",
-        component: () => import("@/views/order/monthly"),
-        name: "monthly",
+        path: "monthly-project",
+        component: () => import("@/views/order/monthly-project"),
+        name: "monthly-project",
         meta: { title: "项目月报", icon: "user" }
+      },
+      {
+        path: "monthly-plan",
+        component: () => import("@/views/order/monthly-plan"),
+        name: "monthly-plan",
+        meta: { title: "月度计划", icon: "user" }
       }
     ]
   },
