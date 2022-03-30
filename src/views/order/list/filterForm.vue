@@ -26,37 +26,6 @@
             <el-input v-model="queryParams.pmName" clearable size="small" />
           </el-form-item>
         </el-col>
-
-        <el-col :span="6">
-          <div style="line-height: 36px">
-            <!-- <el-button
-              v-show="!more"
-              @click="more = !more"
-              size="small"
-              icon="el-icon-arrow-down"
-              >更多</el-button
-            > -->
-            <!-- <el-button
-              v-show="more"
-              @click="more = !more"
-              icon="el-icon-arrow-up"
-              size="small"
-              >收起</el-button
-            > -->
-            <el-button
-              type="primary"
-              size="small"
-              icon="el-icon-search"
-              @click="handleQuery"
-              >搜索</el-button
-            >
-            <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
-              >重置</el-button
-            >
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="24" v-show="more">
         <el-col :span="6">
           <el-form-item label="一级部门名称" prop="oneDeptName">
             <el-input
@@ -66,6 +35,8 @@
             />
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row :gutter="24" v-show="more">
         <el-col :span="6">
           <el-form-item label="开票风险等级" prop="invoicingRiskLevel">
             <el-select
@@ -116,6 +87,34 @@
               ></el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <div style="line-height: 36px">
+            <!-- <el-button
+              v-show="!more"
+              @click="more = !more"
+              size="small"
+              icon="el-icon-arrow-down"
+              >更多</el-button
+            > -->
+            <!-- <el-button
+              v-show="more"
+              @click="more = !more"
+              icon="el-icon-arrow-up"
+              size="small"
+              >收起</el-button
+            > -->
+            <el-button
+              type="primary"
+              size="small"
+              icon="el-icon-search"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
+              >重置</el-button
+            >
+          </div>
         </el-col>
       </el-row>
     </el-form>

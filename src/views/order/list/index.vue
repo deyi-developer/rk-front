@@ -1,13 +1,20 @@
 <template>
   <div class="project-list app-container">
     <div class="ds-flex title">
-      <h1>项目列表</h1>
+      <h1>项目清单</h1>
       <div class="fx-1 content">
-        <span>总项目数：121</span>
-        <span>无风险：121</span>
-        <span>中风险：121</span>
-        <span>高风险：121</span>
-        <span>法务接管：121</span>
+        <span>{{ `总项目数：${risk.totalProjectNum} ` }}</span>
+        <span>{{
+          `无风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
+        }}</span>
+        <span>{{
+          `中风险项目：${risk.mediumRiskProjectNum} (${risk.mediumRiskProjectRate}%)`
+        }}</span>
+        <span>{{
+          `高风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
+        }}</span>
+
+        <span>{{ `法务接管项目：未知` }}</span>
       </div>
     </div>
     <el-card>
@@ -38,7 +45,7 @@
         :loading="tableLodaing"
         :scroll-y="{ enabled: false, gt: 100 }"
         :scroll-x="{ enabled: false, gt: 10 }"
-        :edit-config="{ trigger: 'click', mode: 'cell' }"
+        :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
         :edit-rules="validRules"
         @cell-click="gotoDetail"
         @scroll="scrollHandle"
@@ -440,7 +447,7 @@
               <vxe-input
                 v-model="row.planRemark"
                 type="text"
-                placeholder="请输入数值"
+                placeholder="请输入备注信息"
               ></vxe-input>
             </template>
           </vxe-column>
@@ -521,7 +528,7 @@
 import { Tabs, TabPane } from "view-design";
 import { throttle } from "lodash-es";
 import filterForm from "./filterForm.vue";
-import { getList, saveData } from "./api";
+import { getList, saveData, getRiskNum } from "./api";
 
 /* 每列宽度125
     前面3列固定
@@ -549,13 +556,22 @@ const fifthLeft =
 
 export default {
   dicts: ["risk_level"],
-  name: "ProjectList",
+  name: "projectList",
   components: { Tabs, TabPane, filterForm },
   data() {
     return {
       activeName: "first",
       tableLodaing: true,
       dataSource: [],
+      risk: {
+        highRiskProjectNum: 0,
+        highRiskProjectRate: 0,
+        mediumRiskProjectNum: 0,
+        mediumRiskProjectRate: 0,
+        noRiskProjectNum: 0,
+        noRiskProjectRate: 0,
+        totalProjectNum: 827
+      },
       page: {
         pageSize: 20,
         pageNum: 1,
@@ -575,8 +591,17 @@ export default {
   mounted() {
     this.fetchData();
   },
+  activated() {
+    this.fetchData();
+  },
   methods: {
+    // 获取数据
     async fetchData(page) {
+      const risk = await getRiskNum();
+      if (risk) {
+        this.risk = risk;
+      }
+
       this.tableLodaing = true;
       const formVal = this.$refs.form.queryParams;
       const params = { ...formVal, ...this.page, ...page };
@@ -618,7 +643,10 @@ export default {
     // 提交行
     async saveRowEvent(row) {
       saveData([row]).then((res) => {
-        this.$modal.notifySuccess(res.msg);
+        if (res.code == "200") {
+          this.$modal.notifySuccess(res.msg);
+          this.fetchData();
+        }
       });
     },
     //table 点击事件
@@ -642,7 +670,10 @@ export default {
         console.log("不通过");
       } else {
         saveData(this.dataSource).then((res) => {
-          this.$modal.notifySuccess(res.msg);
+          if (res.code == "200") {
+            this.$modal.notifySuccess(res.msg);
+            this.fetchData();
+          }
         });
       }
     },

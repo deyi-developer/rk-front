@@ -70,7 +70,7 @@ export const constantRoutes = [
         path: "index",
         component: () => import("@/views/index"),
         name: "Index",
-        meta: { title: "首页", icon: "dashboard", affix: true }
+        meta: { title: "项目概览", icon: "dashboard", affix: true }
       }
     ]
   },
@@ -91,14 +91,14 @@ export const constantRoutes = [
   {
     path: "/order",
     component: Layout,
-    meta: { title: "工单发起", icon: "user" },
-    redirect: "/order/send",
+    meta: { title: "项目管理", icon: "user" },
+    // redirect: "/order/send",
     children: [
       {
         path: "send",
         component: () => import("@/views/order/send"),
         name: "send",
-        meta: { title: "工单详情", icon: "user" },
+        meta: { title: "工单详情", icon: "build" },
         hidden: true
       },
       {
@@ -111,8 +111,8 @@ export const constantRoutes = [
       {
         path: "list",
         component: () => import("@/views/order/list"),
-        name: "list",
-        meta: { title: "项目列表", icon: "user" }
+        name: "projectList",
+        meta: { title: "项目清单", icon: "build" }
       },
       {
         path: "monthly",

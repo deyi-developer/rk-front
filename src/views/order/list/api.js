@@ -9,6 +9,14 @@ export function getList(query) {
   });
 }
 
+// 查询参数列表
+export function getRiskNum() {
+  return request({
+    url: "/reportdata/reportdata/risk-num",
+    method: "get"
+  });
+}
+
 export function saveData(data) {
   return request({
     url: "/projectDetail/saveProjectDetail",
