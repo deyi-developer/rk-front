@@ -8,3 +8,11 @@ export function getList(query) {
     params: query
   });
 }
+
+export function saveData(data) {
+  return request({
+    url: "/projectDetail/saveProjectDetail",
+    method: "put",
+    data
+  });
+}

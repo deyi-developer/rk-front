@@ -103,6 +103,7 @@ export const constantRoutes = [
       },
       {
         path: "details",
+        hidden: true,
         component: () => import("@/views/order/project"),
         name: "details",
         meta: { title: "项目明细", icon: "user" },
