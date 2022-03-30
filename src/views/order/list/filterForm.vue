@@ -29,20 +29,20 @@
 
         <el-col :span="6">
           <div style="line-height: 36px">
-            <el-button
+            <!-- <el-button
               v-show="!more"
               @click="more = !more"
               size="small"
               icon="el-icon-arrow-down"
               >更多</el-button
-            >
-            <el-button
+            > -->
+            <!-- <el-button
               v-show="more"
               @click="more = !more"
               icon="el-icon-arrow-up"
               size="small"
               >收起</el-button
-            >
+            > -->
             <el-button
               type="primary"
               size="small"
@@ -100,6 +100,23 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="毛利风险等级" prop="grossProfitRiskLevel">
+            <el-select
+              class="block"
+              v-model="queryParams.grossProfitRiskLevel"
+              clearable
+              size="small"
+            >
+              <el-option
+                v-for="dict in dict.type.risk_level"
+                :key="dict.value"
+                :value="dict.value"
+                :label="dict.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
   </div>
@@ -110,7 +127,7 @@ export default {
   dicts: ["risk_level"],
   data() {
     return {
-      more: false,
+      more: true,
       // 查询参数
       queryParams: {}
     };
