@@ -3,7 +3,7 @@ import request from "@/utils/request"
 // 工单详情
 export const detail = (eventHeaderId) => {
   return request({
-    url: `/workOrder/header/${eventHeaderId}`,
+    url: `/workOrder/header/info/${eventHeaderId}`,
     method: "get",
   })
 }
@@ -11,7 +11,7 @@ export const detail = (eventHeaderId) => {
 // 回复
 export const reply = (data) => {
   return request({
-    url: `/workOrder/line`,
+    url: `/workOrder/line/add`,
     method: "post",
     data,
   })
