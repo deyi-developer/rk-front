@@ -133,7 +133,7 @@ export default {
 };
 </script>
 <script setup>
-import {} from "@vue/composition-api";
+import { defineProps } from "@vue/composition-api";
 defineProps({
   // 非ts专有声明
 

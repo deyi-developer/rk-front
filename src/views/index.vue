@@ -1,7 +1,7 @@
 <template>
   <div class="app-container home">
     <PanelGroup :data="state.risk" />
-    <TableDesc :data="state.risk" />
+    <TableDesc :data="state.summary" />
 
     <el-row type="flex" :gutter="20">
       <el-col :span="8">
@@ -63,7 +63,8 @@ const state = reactive({
     noRiskProjectNum: 0,
     noRiskProjectRate: 0,
     totalProjectNum: 0
-  }
+  },
+  summary: {}
 });
 function fetchData() {
   getRiskNum().then((res) => {
@@ -71,7 +72,11 @@ function fetchData() {
       state.risk = res;
     }
   });
-  getSummary().then((res) => {});
+  getSummary().then((res) => {
+    if (res) {
+      state.summary = res;
+    }
+  });
 }
 </script>
 
