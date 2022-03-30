@@ -1,6 +1,17 @@
 <template>
   <div class="project-list app-container">
+    <div class="ds-flex title">
+      <h1>项目列表</h1>
+      <div class="fx-1 content">
+        <span>总项目数：121</span>
+        <span>无风险：121</span>
+        <span>中风险：121</span>
+        <span>高风险：121</span>
+        <span>法务接管：121</span>
+      </div>
+    </div>
     <el-card>
+      <filterForm @search="fetchData" ref="form" />
       <Tabs v-model="activeName" @on-click="handleClick">
         <TabPane label="项目基本信息" name="first"></TabPane>
         <TabPane label="项目开票信息" name="second"></TabPane>
@@ -8,47 +19,56 @@
         <TabPane label="项目计划" name="fourth"></TabPane>
         <TabPane label="其他指标" name="fifth"></TabPane>
         <template #extra>
-          <el-button type="primary" size="small">全部保存</el-button>
+          <el-button type="primary" size="small" @click="validAllEvent"
+            >整页提交</el-button
+          >
         </template>
       </Tabs>
 
       <vxe-table
-        ref="tableList"
+        ref="xTable"
         border
         align="center"
-        height="550"
+        max-height="550"
         show-overflow
+        keep-source
         size="small"
         id="projectCode"
+        :data="dataSource"
         :loading="tableLodaing"
-        :data="tableData"
-        :scroll-y="{ gt: 100, oSize: 10 }"
-        :scroll-x="{ gt: 10 }"
-        :edit-config="{
-          trigger: 'click',
-          mode: 'cell'
-        }"
+        :scroll-y="{ enabled: false, gt: 100 }"
+        :scroll-x="{ enabled: false, gt: 10 }"
+        :edit-config="{ trigger: 'click', mode: 'cell' }"
+        :edit-rules="validRules"
         @scroll="scrollHandle"
       >
-        <vxe-column
+        <!-- <vxe-column
           type="seq"
+          field="seq"
           fixed="left"
           title="序号"
           width="60"
-        ></vxe-column>
+        ></vxe-column> -->
         <!-- 项目基本信息 -->
         <vxe-column
           field="projectCode"
           fixed="left"
           width="125"
           title="项目编码"
-        ></vxe-column>
+        >
+          <template #default="{ row }">
+            <el-button size="mini" type="text" @click="gotoDetail(row)">{{
+              row.projectCode
+            }}</el-button>
+          </template>
+        </vxe-column>
         <vxe-column
           field="projectName"
           fixed="left"
           width="125"
           title="项目名称"
-        ></vxe-column>
+        >
+        </vxe-column>
 
         <vxe-colgroup title="项目基本信息">
           <vxe-column
@@ -119,7 +139,6 @@
           ></vxe-column>
         </vxe-colgroup>
 
-        <!-- 项目开票 -->
         <vxe-colgroup title="项目开票信息">
           <vxe-column
             class-name="bg-inv"
@@ -204,10 +223,26 @@
             class-name="bg-inv"
             width="125"
             title="开票风险等级"
-          ></vxe-column>
+            :edit-render="{}"
+          >
+            <template #default="{ row }">
+              <span>{{
+                selectDictLabel(dict.type.risk_level, row.invoicingRiskLevel)
+              }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.invoicingRiskLevel" transfer>
+                <vxe-option
+                  v-for="dict in dict.type.risk_level"
+                  :key="dict.value"
+                  :value="dict.value"
+                  :label="dict.label"
+                ></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
         </vxe-colgroup>
 
-        <!-- 项目收款 -->
         <vxe-colgroup title="项目收款信息">
           <vxe-column
             field="totalAlreadyBillingMoney"
@@ -292,10 +327,26 @@
             class-name="bg-collection"
             width="125"
             title="收款风险等级"
-          ></vxe-column>
+            :edit-render="{}"
+          >
+            <template #default="{ row }">
+              <span>{{
+                selectDictLabel(dict.type.risk_level, row.receiveRiskLevel)
+              }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.receiveRiskLevel" transfer>
+                <vxe-option
+                  v-for="dict in dict.type.risk_level"
+                  :key="dict.value"
+                  :value="dict.value"
+                  :label="dict.label"
+                ></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
         </vxe-colgroup>
 
-        <!-- 项目计划 -->
         <vxe-colgroup title="项目计划">
           <vxe-column
             field="totalShouldNotBillingMoney"
@@ -353,7 +404,6 @@
           ></vxe-column>
         </vxe-colgroup>
 
-        <!-- 其他指标 -->
         <vxe-colgroup title="其他指标">
           <vxe-column
             field="grossProfit"
@@ -367,68 +417,199 @@
             width="125"
             title="毛利率"
           ></vxe-column>
-          <!-- <vxe-column
-            field="name"
-            class-name="bg-other"
-            width="125"
-            title="平均月开票计划完成率"
-          ></vxe-column>
-          <vxe-column
-            field="name"
-            class-name="bg-other"
-            width="125"
-            title="平均月收款计划完成率"
-          ></vxe-column> -->
+
           <vxe-column
             field="grossProfitRiskLevel"
             class-name="bg-other"
             width="125"
             title="毛利风险等级"
-          ></vxe-column>
+            :edit-render="{}"
+          >
+            <template #default="{ row }">
+              <span>{{
+                selectDictLabel(dict.type.risk_level, row.grossProfitRiskLevel)
+              }}</span>
+            </template>
+            <template #edit="{ row }">
+              <vxe-select v-model="row.grossProfitRiskLevel" transfer>
+                <vxe-option
+                  v-for="dict in dict.type.risk_level"
+                  :key="dict.value"
+                  :value="dict.value"
+                  :label="dict.label"
+                ></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
         </vxe-colgroup>
 
-        <!-- <vxe-column width="100" title="操作" fixed="right">
+        <vxe-column width="100" title="操作" fixed="right">
           <template #default="{ row }">
             <vxe-button
               icon="fa fa-save"
               type="text"
               status="primary"
-              content="保存"
+              content="提交"
               @click="saveRowEvent(row)"
             ></vxe-button>
           </template>
-        </vxe-column> -->
+        </vxe-column>
       </vxe-table>
+      <vxe-pager
+        :current-page="page.pageNum"
+        :page-size="page.pageSize"
+        :total="page.total"
+        @page-change="pageChange"
+        :layouts="[
+          'PrevJump',
+          'PrevPage',
+          'Number',
+          'NextPage',
+          'NextJump',
+          'Sizes',
+          'FullJump',
+          'Total'
+        ]"
+      >
+      </vxe-pager>
     </el-card>
   </div>
 </template>
 <script>
 import { Tabs, TabPane } from "view-design";
 import { throttle } from "lodash-es";
-import { getList } from "./api";
+import filterForm from "./filterForm.vue";
+import { getList, saveData } from "./api";
+
+/* 每列宽度125
+    前面3列固定
+    项目基本信息 12个字段
+    项目开票 14个字段
+    项目收款 15个字段
+    项目计划 9个字段
+    其他指标 3个字段
+   */
+
+const w = 125; // 列宽度
+const fixedWidth = w * 2; //固定列
+const firstWidth = w * 11;
+const secondWidth = w * 14;
+const thirdWidth = w * 14;
+const fourthWidth = w * 9;
+const fifthWidth = w * 3;
+//列   距离
+const firstLeft = 0;
+const secondLeft = firstWidth;
+const thirdLeft = firstWidth + secondWidth;
+const fourthLeft = firstWidth + secondWidth + thirdWidth;
+const fifthLeft =
+  fixedWidth + firstWidth + secondWidth + thirdWidth + fourthWidth;
+
 export default {
+  dicts: ["risk_level"],
   name: "ProjectList",
-  components: { Tabs, TabPane },
+  components: { Tabs, TabPane, filterForm },
   data() {
     return {
       activeName: "first",
       tableLodaing: true,
-      tableData: []
+      dataSource: [],
+      page: {
+        pageSize: 20,
+        pageNum: 1,
+        total: 0
+      },
+      validRules: {
+        grossProfitRiskLevel: [{ required: true, message: "风险级别必须填写" }],
+        invoicingRiskLevel: [{ required: true, message: "风险级别必须填写" }],
+        receiveRiskLevel: [{ required: true, message: "风险级别必须填写" }]
+      }
     };
   },
-  created() {
-    getList({
-      pageSize: 9999,
-      page: 1
-    })
-      .then((res) => {
-        this.tableData = res.rows;
-      })
-      .finally(() => (this.tableLodaing = false));
+  mounted() {
+    this.fetchData();
   },
   methods: {
-    handleClick: (name) => {
-      console.log(name);
+    async fetchData(page) {
+      this.tableLodaing = true;
+      const formVal = this.$refs.form.queryParams;
+      const params = { ...formVal, ...this.page, ...page };
+      const res = await getList(params);
+      this.page.total = res.total;
+      this.page.pageNum = res.pageNum;
+      this.page.pageSize = res.pageSize;
+      this.dataSource = res.rows;
+      this.tableLodaing = false;
+    },
+    // 点击tab 滚动列表
+    handleClick(name) {
+      const $table = this.$refs.xTable;
+      let left = 0;
+      switch (name) {
+        case "first":
+          left = firstLeft;
+          break;
+        case "second":
+          left = secondLeft;
+          break;
+        case "third":
+          left = thirdLeft;
+          break;
+        case "fourth":
+          left = fourthLeft;
+          break;
+        case "fifth":
+          left = fifthLeft;
+          break;
+      }
+      $table.scrollTo(left + 5);
+    },
+    search(params) {},
+    // 提交行
+    async saveRowEvent(row) {
+      const errMap = await this.$refs.xTable
+        .validate([row])
+        .catch((errMap) => errMap);
+      if (errMap) {
+        console.log("不通过");
+      } else {
+        saveData([row]).then((res) => {
+          console.log(res);
+        });
+      }
+    },
+    gotoDetail({ projectCode }) {
+      this.$router.push({
+        name: "details",
+        query: {
+          projectCode
+        }
+      });
+    },
+    //提交全部
+    async validAllEvent() {
+      const $table = this.$refs.xTable;
+      const errMap = await $table.validate(true).catch((errMap) => errMap);
+      if (errMap) {
+        console.log("不通过");
+      } else {
+        saveData(this.dataSource).then((res) => {
+          console.log(res);
+        });
+      }
+    },
+    pageChange({ currentPage: pageNum, pageSize }) {
+      const $table = this.$refs.xTable;
+      const updateRecords = $table.getUpdateRecords();
+      if (updateRecords.length > 0) {
+        this.$modal
+          .confirm("有修改未提交数据，是否放弃填写")
+          .then(function () {})
+          .then(() => {})
+          .catch(() => {});
+      } else {
+        this.fetchData({ pageNum, pageSize });
+      }
     },
     scrollHandle: throttle(function ({
       isX,
@@ -436,29 +617,6 @@ export default {
       scrollLeft,
       scrollWidth
     }) {
-      /* 每列宽度125
-    前面3列固定
-    项目基本信息 12个字段
-    项目开票 14个字段
-    项目收款 15个字段
-    项目计划 9个字段
-    其他指标 5个字段
-   */
-      // 列宽度
-      const fixedWidth = 125 * 3 + 60; //固定列
-      const firstWidth = 125 * 12 - 60 - fixedWidth;
-      const secondWidth = 125 * 14;
-      const thirdWidth = 125 * 15;
-      const fourthWidth = 125 * 9;
-      const fifthWidth = 125 * 5;
-      //列   距离
-      const firstLeft = 0;
-      const secondLeft = firstWidth;
-      const thirdLeft = firstWidth + secondWidth;
-      const fourthLeft = firstWidth + secondWidth + thirdWidth;
-      const fifthLeft =
-        fixedWidth + firstWidth + secondWidth + thirdWidth + fourthWidth;
-
       if (isX) {
         if (scrollLeft >= firstLeft && scrollLeft <= firstLeft + firstWidth) {
           this.activeName = "first";
@@ -495,19 +653,50 @@ export default {
 </script>
 
 <style lang="scss">
-.bg-base {
-  background-color: #ecf5ff;
-}
-.bg-inv {
-  background-color: #f0f9eb;
-}
-.bg-collection {
-  background-color: #fdf6ec;
-}
-.bg-plan {
-  background-color: #fef0f0;
-}
-.bg-other {
-  background-color: #f4f4f5;
+.project-list {
+  .title {
+    height: 31px;
+    margin-bottom: 15px;
+  }
+  .content {
+    height: 100%;
+    margin-left: 20px;
+    span {
+      padding-left: 20px;
+      display: table-cell;
+      vertical-align: bottom;
+      height: 31px;
+      &:nth-of-type(1) {
+        color: #409eff;
+      }
+      &:nth-of-type(2) {
+        color: #67c23a;
+      }
+      &:nth-of-type(3) {
+        color: #e6a23c;
+      }
+      &:nth-of-type(4) {
+        color: #f56c6c;
+      }
+      &:nth-of-type(5) {
+        color: #909399;
+      }
+    }
+  }
+  .bg-base {
+    background-color: #ecf5ff;
+  }
+  .bg-inv {
+    background-color: #f0f9eb;
+  }
+  .bg-collection {
+    background-color: #fdf6ec;
+  }
+  .bg-plan {
+    background-color: #fef0f0;
+  }
+  .bg-other {
+    background-color: #f4f4f5;
+  }
 }
 </style>
