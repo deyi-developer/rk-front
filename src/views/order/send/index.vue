@@ -9,7 +9,8 @@
         </el-col>
         <el-col :span="12">
           <label class="space">工单类型:</label>
-          <span>{{ info.eventType }}</span>
+
+          <span>{{ selectDictLabel(dict.type.event_type, info.eventType) }}</span>
         </el-col>
       </el-row>
       <el-divider content-position="left">内容</el-divider>
@@ -80,6 +81,7 @@
   </div>
 </template>
 <script>
+
 import { mapActions } from 'vuex'
 import { debounce } from "lodash-es";
 import { detail, reply, replyList } from './api'
@@ -89,6 +91,7 @@ export default {
   components: {
     editor
   },
+  dicts: ["event_type"],
 
   data() {
     return {
