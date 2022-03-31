@@ -133,13 +133,12 @@ export default {
 };
 </script>
 <script setup>
-import { defineProps } from "@vue/composition-api";
 defineProps({
-  // 非ts专有声明
-
   data: {
     type: Object,
-    default: {}
+    default() {
+      return {};
+    }
   }
 });
 </script>

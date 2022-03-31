@@ -16,7 +16,11 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD开票率"
-            >{{ data.billingRateOfTotalPjtd }}%</el-descriptions-item
+            >{{
+              data.billingRateOfTotalPjtd
+                ? `${data.billingRateOfTotalPjtd}%`
+                : ""
+            }}</el-descriptions-item
           >
 
           <el-descriptions-item
@@ -27,12 +31,18 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD收款率"
-            >{{ data.receivedRateOfTotalPjtd }}%</el-descriptions-item
+            >{{
+              data.receivedRateOfTotalPjtd
+                ? `${data.receivedRateOfTotalPjtd}%`
+                : ""
+            }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对总开票收款率"
-            >{{ data.totalBillingRate }}%</el-descriptions-item
+            >{{
+              data.totalBillingRate ? `${data.totalBillingRate}%` : ""
+            }}</el-descriptions-item
           >
           <el-descriptions-item :contentStyle="{ textAlign: 'right' }" label="-"
             >-</el-descriptions-item
@@ -97,12 +107,20 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对应收收款率"
-              >{{ data.relativeReceivableRate }}%</el-descriptions-item
+              >{{
+                data.relativeReceivableRate
+                  ? `${data.relativeReceivableRate}%`
+                  : ""
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对已开收款率"
-              >{{ data.relativeOpenedCollectionRate }}%</el-descriptions-item
+              >{{
+                data.relativeOpenedCollectionRate
+                  ? `${data.relativeOpenedCollectionRate}%`
+                  : ""
+              }}</el-descriptions-item
             >
           </el-descriptions>
         </el-row>
@@ -112,11 +130,12 @@
 </template>
 
 <script setup>
-import { defineProps } from "@vue/composition-api";
 defineProps({
   data: {
     type: Object,
-    default: {}
+    default() {
+      return {};
+    }
   }
 });
 </script>
