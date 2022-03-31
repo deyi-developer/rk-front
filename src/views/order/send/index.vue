@@ -53,6 +53,7 @@
         placeholder="请选择工单处理人"
         :filter-method="getHandlers"
         :loading="handlerLoding"
+        clearable
       >
         <el-option
           v-for="item in handlers"
@@ -79,6 +80,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import { debounce } from "lodash-es";
 import { detail, reply, replyList } from './api'
 import { mapGetters } from 'vuex'
@@ -97,9 +99,16 @@ export default {
     }
   },
 
+  watch: {
+    '$route'() {
+      const { query: { id } } = this.$route
+      this.getDetailInfo(id)
+      this.Messages()
+    }
+  },
+
   computed: {
     ...mapGetters(['usersInfo']),
-
     avatar() {
       return process.env.VUE_APP_BASE_API + this.usersInfo.avatar
     }
@@ -107,10 +116,15 @@ export default {
 
   created() {
     const { query: { id } } = this.$route
-    this.getDetailInfo(id)
+    if (id) {
+      this.getDetailInfo(id)
+      this.Messages()
+    }
   },
 
   methods: {
+    ...mapActions(['Messages']),
+
     /** 获取详情数据 */
     async getDetailInfo(id) {
       const { data } = await detail(id)

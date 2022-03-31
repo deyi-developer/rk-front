@@ -18,7 +18,7 @@
 
       <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
         <span style="line-height: 20px; height: 20px">
-          <Badge :count="100" :overflow-count="messageList.length">
+          <Badge :count="100" :overflow-count="unread">
             <Icon type="ios-notifications-outline" size="22"></Icon>
           </Badge>
         </span>
@@ -29,8 +29,14 @@
                 <ul class="msg-list">
                   <li
                     class="msg-list-item"
-                    v-for="(item, index) in messageList"
-                  >{{ item.messageContent }}</li>
+                    v-for="(item, index) in messages"
+                    :key="index"
+                    @click="$router.push({ name: 'send', query: { id: item.busiKey } })"
+                  >
+                    <span>{{ item.messageContent }}</span>
+                    <!-- readFlag 0：未读, 1: 已读 -->
+                    <span class="spot" v-if="!item.readFlag"></span>
+                  </li>
                 </ul>
               </TabPane>
             </Tabs>
@@ -69,7 +75,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { Badge, Icon, Tabs, TabPane } from "view-design";
 import Breadcrumb from "@/components/Breadcrumb";
 import TopNav from "@/components/TopNav";
@@ -79,7 +85,6 @@ import SizeSelect from "@/components/SizeSelect";
 import Search from "@/components/HeaderSearch";
 import RuoYiGit from "@/components/RuoYi/Git";
 import RuoYiDoc from "@/components/RuoYi/Doc";
-import { list } from '@/api/message'
 
 export default {
   components: {
@@ -102,7 +107,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"]),
+    ...mapGetters(["sidebar", "avatar", "device", 'messages', 'unread']),
     setting: {
       get() {
         return this.$store.state.settings.showSettings;
@@ -124,6 +129,7 @@ export default {
     this.getList()
   },
   methods: {
+    ...mapActions(['Messages']),
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -144,8 +150,9 @@ export default {
      * 消息列表
      */
     async getList() {
-      const { rows } = await list()
-      this.messageList = rows
+      this.Messages()
+      // const { rows } = await list()
+      // this.messageList = rows
     }
   }
 };
@@ -259,6 +266,8 @@ export default {
   .msg-list {
     max-width: 500px;
     li.msg-list-item {
+      display: flex;
+      align-items: center;
       border-bottom: 1px solid #eee;
       padding: 5px 10px;
       white-space: nowrap;
@@ -268,6 +277,14 @@ export default {
       cursor: pointer;
       &:hover {
         color: #409eff;
+      }
+      .spot {
+        display: inline-block;
+        margin-left: 8px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgb(237, 10, 10);
       }
     }
   }
