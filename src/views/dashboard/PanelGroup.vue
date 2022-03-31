@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <el-row :gutter="12" style="margin-bottom: 10px">
+  <!-- <el-row :gutter="12" style="margin-bottom: 10px">
     <el-col :span="6">
       <el-card shadow="always">
         <div class="ds-flex">
@@ -117,7 +117,7 @@
         </div>
       </el-card>
     </el-col>
-  </el-row>
+  </el-row> -->
 </template>
 
 <script>
@@ -136,9 +136,11 @@ export default {
 import { defineProps } from "@vue/composition-api";
 
 defineProps({
-  risk: Object,
-  default() {
-    return {};
+  risk: {
+    type: Object,
+    default() {
+      return {};
+    }
   }
 });
 </script>

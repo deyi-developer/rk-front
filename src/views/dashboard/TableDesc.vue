@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="10">
+  <!-- <el-row :gutter="10">
     <el-col :span="12">
       <el-card shadow="always" class="box-card">
         <el-descriptions :column="2" title="基础指标" border>
@@ -126,16 +126,18 @@
         </el-row>
       </el-card>
     </el-col>
-  </el-row>
+  </el-row> -->
 </template>
 
 <script setup>
 import { defineProps } from "@vue/composition-api";
 
 defineProps({
-  summary: Object,
-  default() {
-    return {};
+  summary: {
+    type: Object,
+    default() {
+      return {};
+    }
   }
 });
 </script>
