@@ -1,7 +1,11 @@
 <template>
   <div class="wrap">
     <el-card>
-      <el-table :data="tableData" style="width: 100%">
+      <div slot="header">
+        <span>工单列表</span>
+      </div>
+      <filter-form @search="getList" ref="form"></filter-form>
+      <el-table class="table" :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" align="center" width="100px"></el-table-column>
         <el-table-column prop="eventTitle" label="工单标题" width="180"></el-table-column>
         <el-table-column prop="eventType" label="工单类型" width="180">
@@ -34,6 +38,13 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <pagination
+      v-show="totals > 0"
+      :total="totals"
+      :page.sync="params.pageNum"
+      :limit.sync="params.pageSize"
+      @pagination="getList"
+    />
     <work-order-dialog
       type="update"
       :form="form"
@@ -43,47 +54,63 @@
   </div>
 </template>
 <script>
-export default {
-  dicts: ["event_type", "event_urgency_level"]
-}
-</script>
-<script setup>
-import { ref, onMounted } from "@vue/composition-api";
 import { list } from './api'
 import workOrderDialog from '../components/work-order-dialog'
+import filterForm from '../list/filterForm'
+export default {
+  dicts: ["event_type", "event_urgency_level"],
+  components: {
+    workOrderDialog,
+    filterForm
+  },
+  data() {
+    return {
+      dialogVisible: false,
+      form: {},
+      params: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      tableData: [],
+      totals: 0
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    async getList(query) {
+      this.params = {
+        ...this.params,
+        ...query
+      }
+      const { total, rows } = await list(this.params)
+      this.tableData = rows
+      this.totals = total
+    },
 
-onMounted(() => {
-  getList()
-})
-
-let tableData = ref([])
-const getList = async () => {
-  const { rows } = await list()
-  tableData.value = rows
+    update(row) {
+      this.form = row
+      this.dialogVisible = true
+    }
+  }
 }
-
-let form = ref({
-  eventTitle: '',
-  eventType: '',
-  eventMsg: '',
-  eventHandler: '',
-  eventUrgencyLevel: '',
-  projectCode: ''
-})
-
-let dialogVisible = ref(false)
-const update = (row) => {
-  form.value = { ...row }
-  dialogVisible.value = true
-}
-
-const detail = (id) => {
-
-}
-
 </script>
 <style lang="scss" scoped>
 .wrap {
   margin: 20px;
+  ::v-deep .el-table__body-wrapper {
+    height: 52vh;
+    overflow-y: auto;
+    border-bottom: none;
+    border-radius: 0;
+  }
+  .pagination-container {
+    display: flex;
+    align-items: center;
+    padding: 32px 12px !important;
+    margin: 0;
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  }
 }
 </style>

@@ -13,7 +13,7 @@ export const send = (data) => {
 export const update = (data) => {
   return request({
     url: "/workOrder/header/edit",
-    method: "put",
+    method: "post",
     data,
   })
 }
@@ -32,5 +32,14 @@ export const projectDetails = (projectCode) => {
   return request({
     url: `/projectDetail/findProjectDetail/${projectCode}`,
     method: "get",
+  })
+}
+
+// 项目保存
+export const projectUpdate = (data) => {
+  return request({
+    url: `/projectDetail/saveProjectDetail`,
+    method: "put",
+    data,
   })
 }

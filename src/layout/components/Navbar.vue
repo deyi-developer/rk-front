@@ -18,7 +18,7 @@
 
       <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
         <span style="line-height: 20px; height: 20px">
-          <Badge :count="100" :overflow-count="99">
+          <Badge :count="100" :overflow-count="unread">
             <Icon type="ios-notifications-outline" size="22"></Icon>
           </Badge>
         </span>
@@ -26,34 +26,18 @@
           <div class="msg-drop-menu">
             <Tabs size="small">
               <TabPane label="站内消息">
-                <!-- <ul class="msg-list">
-                  <li class="msg-list-item">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Voluptates dolorum in nesciunt modi eaque, autem
-                    necessitatibus? Voluptatem et iure accusamus deleniti
-                    dignissimos repellendus perferendis sunt, voluptatum commodi
-                    omnis ducimus atque.
+                <ul class="msg-list">
+                  <li
+                    class="msg-list-item"
+                    v-for="(item, index) in messages"
+                    :key="index"
+                    @click="$router.push({ name: 'send', query: { id: item.busiKey } })"
+                  >
+                    <span>{{ item.messageContent }}</span>
+                    <!-- readFlag 0：未读, 1: 已读 -->
+                    <span class="spot" v-if="!item.readFlag"></span>
                   </li>
-                  <li class="msg-list-item">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Sapiente itaque quibusdam laboriosam. At nam veritatis atque
-                    mollitia pariatur odio? Rerum est assumenda vel nobis
-                    distinctio laboriosam dolor perferendis odit cum.
-                  </li>
-                  <li class="msg-list-item">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Vitae, earum facilis! Magnam, voluptatum. Error sed
-                    voluptatibus laborum delectus, repudiandae repellendus
-                    molestiae suscipit, magnam consequatur labore velit quia
-                    amet perspiciatis tenetur.
-                  </li>
-                  <li class="msg-list-item">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Qui dolores sit illo porro odio? Itaque repellat, molestiae
-                    consequatur ad voluptates excepturi quisquam molestias
-                    voluptatibus corporis non eaque obcaecati aliquam nesciunt?
-                  </li>
-                </ul>-->
+                </ul>
               </TabPane>
             </Tabs>
           </div>
@@ -64,7 +48,6 @@
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar" />
           <span class="user-name">{{ $store.state.user.name }}</span>
-
           <i class="el-icon-arrow-down el-icon--right"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -92,7 +75,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { Badge, Icon, Tabs, TabPane } from "view-design";
 import Breadcrumb from "@/components/Breadcrumb";
 import TopNav from "@/components/TopNav";
@@ -118,8 +101,13 @@ export default {
     Tabs,
     TabPane
   },
+  data() {
+    return {
+      messageList: []
+    }
+  },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"]),
+    ...mapGetters(["sidebar", "avatar", "device", 'messages', 'unread']),
     setting: {
       get() {
         return this.$store.state.settings.showSettings;
@@ -137,7 +125,11 @@ export default {
       }
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
+    ...mapActions(['Messages']),
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -153,6 +145,14 @@ export default {
           });
         })
         .catch(() => { });
+    },
+    /**
+     * 消息列表
+     */
+    async getList() {
+      this.Messages()
+      // const { rows } = await list()
+      // this.messageList = rows
     }
   }
 };
@@ -266,6 +266,8 @@ export default {
   .msg-list {
     max-width: 500px;
     li.msg-list-item {
+      display: flex;
+      align-items: center;
       border-bottom: 1px solid #eee;
       padding: 5px 10px;
       white-space: nowrap;
@@ -275,6 +277,14 @@ export default {
       cursor: pointer;
       &:hover {
         color: #409eff;
+      }
+      .spot {
+        display: inline-block;
+        margin-left: 8px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgb(237, 10, 10);
       }
     }
   }

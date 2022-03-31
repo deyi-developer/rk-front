@@ -17,5 +17,8 @@ const getters = {
   lightLevel: (state) => state.screen.lightLevel,
   msgCount: (state) => state.msg.msgArr.length,
   usersInfo: (state) => state.user.user,
+  messages: (state) => state.user.messages, // 消息列表
+  unread: (state) =>
+    state.user.messages.filter((item) => !item.readFlag).length, //未读数量
 }
 export default getters

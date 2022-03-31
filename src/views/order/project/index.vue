@@ -3,10 +3,11 @@
     <header class="header">
       <h1>项目明细</h1>
       <p style="margin-left: 9%">开票中风险，收款高风险</p>
-      <el-button style="margin-left: auto" type="primary">保存</el-button>
+      <el-button style="margin-left: auto" type="primary" @click="save">保存</el-button>
     </header>
+    <!-- <filter-form @search="getData"></filter-form> -->
     <div class="content">
-      <el-form>
+      <el-form :model="updateData">
         <el-card class="spacing" title="项目基本信息">
           <div slot="header">
             <span>项目基本信息</span>
@@ -14,7 +15,7 @@
               <el-button
                 style="padding: 3px 0"
                 type="text"
-                @click="$router.push({ name: 'order-list' })"
+                @click="$router.push({ name: 'order-list', query: { projectCode: projectData.projectCode } })"
               >服务工单</el-button>
               <el-button style="padding: 3px 0" type="text" @click="sendOrder">发起工单</el-button>
             </div>
@@ -39,13 +40,26 @@
               <el-form-item label="项目状态:">{{ projectData.projectStatus }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="项目结算类型:">{{ projectData.projectChargeType }}</el-form-item>
+              <el-form-item label="项目结算类型:">{{ updateData.projectChargeType }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="项目结算周期:">{{ projectData.projectChargePeriod }}</el-form-item>
+              <!-- <el-form-item label="项目结算周期:">{{ projectData.projectChargePeriod }}</el-form-item> -->
+              <el-form-item label="项目结算周期:">
+                <el-input-number
+                  style="width: 60%"
+                  v-model="updateData.projectChargePeriod"
+                  size="small"
+                ></el-input-number>
+              </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="账务账期:">{{ projectData.projectInvoicePeriod }}</el-form-item>
+              <el-form-item label="账务账期:">
+                <el-input-number
+                  style="width: 60%"
+                  v-model="updateData.projectInvoicePeriod"
+                  size="small"
+                ></el-input-number>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
@@ -74,8 +88,85 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-form-item label="最终客户:">{{ projectData.customName }}</el-form-item>
-            <el-form-item label="项目备注:">{{ projectData.describeMsg }}</el-form-item>
+            <el-col :span="6">
+              <el-form-item label="开票风险等级:">
+                <!-- <el-input v-model="updateData.invoicingRiskLevel"></el-input> -->
+                <el-select
+                  style="width: 70%;"
+                  placeholder="请选择工单级别"
+                  v-model="updateData.invoicingRiskLevel"
+                  clearable
+                >
+                  <el-option
+                    v-for="dict in dict.type.risk_level"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="收款风险等级:">
+                <!-- <el-input v-model="updateData.receiveRiskLevel"></el-input> -->
+                <el-select
+                  style="width: 70%;"
+                  placeholder="请选择工单级别"
+                  v-model="updateData.receiveRiskLevel"
+                  clearable
+                >
+                  <el-option
+                    v-for="dict in dict.type.risk_level"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="毛利风险等级:">
+                <!-- <el-input v-model="updateData.grossProfitRiskLevel"></el-input> -->
+                <el-select
+                  style="width: 70%;"
+                  placeholder="请选择工单级别"
+                  v-model="updateData.grossProfitRiskLevel"
+                  clearable
+                >
+                  <el-option
+                    v-for="dict in dict.type.risk_level"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="计划开票金额:">
+                <el-input style="width: 70%;" v-model="updateData.planBillingMoney"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="计划收款金额:">
+                <el-input style="width: 70%;" v-model="updateData.planReceiptsMoney"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="最终客户:">{{ projectData.customName }}</el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-form-item label="项目备注:">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="updateData.planRemark"
+              ></el-input>
+            </el-form-item>
           </el-row>
         </el-card>
         <el-card class="spacing">
@@ -152,23 +243,80 @@
         </el-card>
       </el-form>
     </div>
-    <work-order-dialog type="add" :form="form" :dialogVisible.sync="dialogVisible"></work-order-dialog>
+    <work-order-dialog type="add" :form="workOrderform" :dialogVisible.sync="dialogVisible"></work-order-dialog>
   </div>
 </template>
 
 <script>
+import { projectDetails, projectUpdate } from './api'
+import filterForm from '../list/filterForm'
 export default {
-  dicts: ["event_type", "event_urgency_level"]
+  dicts: ["event_type", "event_urgency_level", "risk_level"],
+  components: {
+    filterForm
+  },
+  data() {
+    return {
+      projectData: {},
+      updateData: { // 可编辑内容
+        projectInvoicePeriod: '',
+        invoicingRiskLevel: '',
+        receiveRiskLevel: '',
+        grossProfitRiskLevel: '',
+        projectChargePeriod: '',
+        planBillingMoney: '',
+        planReceiptsMoney: '',
+        planRemark: '',
+        projectCode: '',
+      },
+      // 工单内容
+      workOrderform: {
+        eventTitle: '',
+        eventType: '',
+        eventMsg: '',
+        eventHandler: '',
+        eventUrgencyLevel: '',
+        projectCode: this.$route.query.projectCode
+      }
+    }
+  },
+  created() {
+    const { query: { projectCode } } = this.$route
+    this.getData(projectCode)
+  },
+  methods: {
+    /** 页面数据 */
+    async getData(projectCode) {
+      const { data } = await projectDetails(projectCode)
+      const obj = Object.assign({}, this.$route, { title: data.projectCode })
+      this.$tab.updatePage(obj);
+      this.projectData = data
+      this.setUpdata(data)
+    },
+    /** 保存 */
+    async save() {
+      this.updateData.projectCode = this.projectData.projectCode
+      const { code, msg } = await projectUpdate([this.updateData])
+      if (code === 200) {
+        this.$modal.msgSuccess(msg)
+      } else {
+        this.$modal.msgError(msg)
+      }
+    },
+    /** 设置回显数据 */
+    setUpdata(data) {
+      Object.keys(data).forEach(key => {
+        if (this.updateData.hasOwnProperty(key)) {
+          this.updateData[key] = data[key]
+        }
+      })
+    }
+  }
 }
 </script>
 <script setup>
 import { ref, onMounted } from "@vue/composition-api";
-import { projectDetails } from './api'
 import workOrderDialog from '../components/work-order-dialog'
-
-onMounted(() => {
-  getData()
-})
 
 let dialogVisible = ref(false)
 const sendOrder = () => {
@@ -183,12 +331,6 @@ let form = ref({
   eventUrgencyLevel: '',
   projectCode: ''
 })
-
-let projectData = ref({})
-const getData = async () => {
-  const { data } = await projectDetails("1000SP0220180927-Z01")
-  projectData.value = data || {}
-}
 
 </script>
 
