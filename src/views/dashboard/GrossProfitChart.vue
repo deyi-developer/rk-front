@@ -11,7 +11,7 @@
         @change="changeHandle"
       >
       </el-date-picker>
-      <span style="margin: 0 15px">对比</span>
+      <span style="margin: 0 15px; color: #909399">vs</span>
       <el-date-picker
         size="mini"
         v-model="blue"
@@ -161,14 +161,15 @@ export default {
             data: red.date
           }
         ],
-        yAxis: [
-          {
-            type: "value"
+        yAxis: {
+          type: "value",
+          axisLabel: {
+            formatter: "{value}%"
           }
-        ],
+        },
         series: [
           {
-            name: `毛利${blueYear}`,
+            name: `毛利率-${blueYear}年`,
             type: "line",
             xAxisIndex: 1,
             smooth: true,
@@ -178,7 +179,7 @@ export default {
             data: blue.data
           },
           {
-            name: `毛利${redYear}`,
+            name: `毛利率-${redYear}年`,
             type: "line",
             smooth: true,
             emphasis: {

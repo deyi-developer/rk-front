@@ -1,35 +1,11 @@
-<!-- 达成率 -->
+<!-- 人天 -->
 <template>
-  <div>
-    <div class="datepicker-wrap">
-      <el-select
-        size="mini"
-        v-model="type"
-        placeholder="请选择"
-        @change="changeHandle"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-    </div>
-
-    <div
-      ref="dom"
-      style="margin-top: 10px"
-      :class="className"
-      :style="{ height: height, width: width }"
-    />
-  </div>
+  <div ref="dom" :class="className" :style="{ height: height, width: width }" />
 </template>
 
 <script>
 import resize from "./mixins/resize";
-import { getReach } from "./api";
+import { getReportAmount } from "./api";
 const animationDuration = 6000;
 
 export default {
@@ -45,7 +21,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "400px"
     }
   },
   data() {
@@ -74,7 +50,7 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      getReach(this.type).then((res) => {
+      getReportAmount().then((res) => {
         const data = res.data.data;
         this.$nextTick(() => {
           this.initChart(data);
@@ -82,12 +58,13 @@ export default {
       });
     },
     initChart(dataSource) {
-      const { dateList, percentList } = dataSource;
+      const { dateList, incomeList, invoiceList, receiveList } = dataSource;
       const option = {
+        legend: {},
         dataZoom: [
           {
-            startValue: "2022-1",
-            endValue: "2022-4"
+            startValue: dateList[dateList.length - 12],
+            endValue: dateList[dateList.length]
           },
           {
             type: "inside"
@@ -99,14 +76,14 @@ export default {
             type: "cross"
           }
         },
-        // aria: {
-        //   enabled: true,
-        //   decal: {
-        //     show: true
-        //   }
-        // },
+        aria: {
+          enabled: true,
+          decal: {
+            show: true
+          }
+        },
         title: {
-          text: "达成率"
+          text: "逐月含税收入，开票，收款分布"
         },
         xAxis: {
           type: "category",
@@ -115,26 +92,29 @@ export default {
         yAxis: {
           type: "value",
           axisLabel: {
-            formatter: "{value}%"
+            formatter: function (value, index) {
+              return value / 10000 + "万元";
+            }
           }
         },
         series: [
           {
-            data: percentList,
+            name: "含税收入",
+            data: incomeList,
             type: "line",
-            smooth: true,
-            areaStyle: {
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: "rgba(63,177,227,0.8)"
-                },
-                {
-                  offset: 1,
-                  color: "rgba(63,177,227,0.1)"
-                }
-              ])
-            }
+            smooth: true
+          },
+          {
+            name: "开票",
+            data: invoiceList,
+            type: "line",
+            smooth: true
+          },
+          {
+            name: "收款",
+            data: receiveList,
+            type: "line",
+            smooth: true
           }
         ]
       };
