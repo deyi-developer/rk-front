@@ -15,7 +15,6 @@
         </el-select>
       </el-form-item>
       <el-form-item label="工单内容:">
-        <!-- <el-input style="width: 80%;" v-model="form.eventContext"></el-input> -->
         <template v-slot="scope">
           <editor v-model="form.eventContext" style="width: 80%;" :height="100"></editor>
         </template>
@@ -94,9 +93,6 @@ const props = defineProps({
 
 /** emit */
 const emit = defineEmits(['dialogVisible', 'refresh'])
-
-onMounted(() => {
-})
 
 /** 提交 */
 const submit = async () => {

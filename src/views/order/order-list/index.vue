@@ -54,61 +54,54 @@
   </div>
 </template>
 <script>
-export default {
-  dicts: ["event_type", "event_urgency_level"],
-}
-</script>
-<script setup>
-import router from '@/router/index';
-import { ref, reactive, onMounted } from "@vue/composition-api";
 import { list } from './api'
 import workOrderDialog from '../components/work-order-dialog'
 import filterForm from '../list/filterForm'
+export default {
+  dicts: ["event_type", "event_urgency_level"],
+  components: {
+    workOrderDialog,
+    filterForm
+  },
+  data() {
+    return {
+      dialogVisible: false,
+      form: {},
+      params: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      tableData: [],
+      totals: 0
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    async getList(query) {
+      this.params = {
+        ...this.params,
+        ...query
+      }
+      const { total, rows } = await list(this.params)
+      this.tableData = rows
+      this.totals = total
+    },
 
-onMounted(() => {
-  const projectCode = router.currentRoute.query.projectCode
-  // getList({ projectCode })
-  getList()
-})
-
-let params = reactive({
-  pageNum: 1,
-  pageSize: 10,
-})
-let tableData = ref([])
-let totals = ref(0)
-const getList = async (query) => {
-  params = {
-    ...params,
-    ...query
+    update(row) {
+      this.form = row
+      this.dialogVisible = true
+    }
   }
-  const { total, rows } = await list(params)
-  tableData.value = rows
-  totals.value = total
 }
-
-let form = ref({
-  eventTitle: '',
-  eventType: '',
-  eventMsg: '',
-  eventHandler: '',
-  eventUrgencyLevel: '',
-  projectCode: ''
-})
-
-let dialogVisible = ref(false)
-const update = (row) => {
-  form.value = { ...row }
-  dialogVisible.value = true
-}
-
 </script>
 <style lang="scss" scoped>
 .wrap {
   margin: 20px;
-  .table {
-    height: 58vh;
-    overflow: auto;
+  ::v-deep .el-table__body-wrapper {
+    height: 52vh;
+    overflow-y: auto;
     border-bottom: none;
     border-radius: 0;
   }
