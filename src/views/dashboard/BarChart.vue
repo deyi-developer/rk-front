@@ -50,8 +50,8 @@ export default {
           }
         },
         title: {
-          text: "Waterfall Chart",
-          subtext: "Living Expenses in Shenzhen"
+          text: "总收入（未税）"
+          // subtext: "比率：%"
         },
         tooltip: {
           trigger: "axis",
@@ -63,23 +63,11 @@ export default {
             return tar.name + "<br/>" + tar.seriesName + " : " + tar.value;
           }
         },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
+        grid: {},
         xAxis: {
           type: "category",
           splitLine: { show: false },
-          data: [
-            "Total",
-            "Rent",
-            "Utilities",
-            "Transportation",
-            "Meals",
-            "Other"
-          ]
+          data: ["总收入", "人天成本", "外协成本", "实施费用", "毛利额"]
         },
         yAxis: {
           type: "value"
@@ -99,7 +87,7 @@ export default {
                 color: "transparent"
               }
             },
-            data: [0, 1700, 1400, 1200, 300, 0]
+            data: [0, 1700, 1400, 1200, 0]
           },
           {
             name: "Life Cost",
@@ -109,7 +97,7 @@ export default {
               show: true,
               position: "inside"
             },
-            data: [2900, 1200, 300, 200, 900, 300]
+            data: [2900, 1200, 300, 200, 900]
           }
         ]
       };

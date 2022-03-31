@@ -21,6 +21,10 @@ export default {
     height: {
       type: String,
       default: "300px"
+    },
+    options: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -49,36 +53,42 @@ export default {
             show: true
           }
         },
+        title: {
+          text: "Referer of a Website",
+          subtext: "Fake Data"
+        },
         tooltip: {
           trigger: "item"
         },
+        // legend: {
+        //   bottom: "0",
+        //   left: "center"
+        // },
         series: [
           {
             name: "Access From",
             type: "pie",
-            radius: ["40%", "70%"],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: "#fff",
-              borderWidth: 2
-            },
-            label: {
-              position: "inner"
-            },
-            labelLine: {
-              show: false
-            },
+            radius: "50%",
+
             data: [
-              { value: 1048, name: "Search Engine" },
-              { value: 735, name: "Direct" },
-              { value: 580, name: "Email" },
-              { value: 484, name: "Union Ads" },
-              { value: 300, name: "Video Ads" }
-            ]
+              { value: 1048, name: "已开" },
+              { value: 735, name: "超90天应开未开" },
+              { value: 580, name: "超60-90天应开未开" },
+              { value: 484, name: "超30-60天应开未开" },
+              { value: 300, name: "超30天应开未开" }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            }
           }
-        ]
+        ],
+        ...this.options
       };
+
       this.chart = this.$echarts.init(this.$el, "walden");
 
       this.chart.setOption(option);

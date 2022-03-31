@@ -24,7 +24,7 @@ export default {
     },
     options: {
       type: Object,
-      default: () => { }
+      default: () => {}
     }
   },
   data() {
@@ -54,7 +54,7 @@ export default {
           }
         },
         title: {
-          text: "Referer of a Website",
+          text: "应开总额",
           subtext: "Fake Data"
         },
         tooltip: {

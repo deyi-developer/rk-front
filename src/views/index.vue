@@ -2,38 +2,7 @@
   <div class="app-container home">
     <PanelGroup :risk="risk" />
     <TableDesc :summary="summary" />
-
-    <el-row type="flex" :gutter="20">
-      <el-col :span="8">
-        <div class="echarts-panel">
-          <el-row type="flex">
-            <BarChart />
-          </el-row>
-          <el-row type="flex">
-            <PieChart2 />
-          </el-row>
-        </div>
-      </el-col>
-
-      <el-col :span="16" class="echarts-panel">
-        <el-row type="flex">
-          <el-col :span="12">
-            <PieChart />
-          </el-col>
-          <el-col :span="12">
-            <PieChart />
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :span="12">
-            <PieChart />
-          </el-col>
-          <el-col :span="12">
-            <PieChart />
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
+    <ChartsGroup />
   </div>
 </template>
 <script>
@@ -43,12 +12,9 @@ export default {
 </script>
 <script setup>
 import { getSummary, getRiskNum } from "./dashboard/api";
+import ChartsGroup from "./dashboard/ChartsGroup.vue";
 import PanelGroup from "./dashboard/PanelGroup.vue";
 import TableDesc from "./dashboard/TableDesc.vue";
-import BarChart from "./dashboard/BarChart";
-import LineChart from "./dashboard/LineChart";
-import PieChart from "./dashboard/PieChart";
-import PieChart2 from "./dashboard/PieChart2";
 import { ref, onMounted } from "@vue/composition-api";
 onMounted(() => {
   fetchData();
@@ -57,6 +23,7 @@ onMounted(() => {
 const risk = ref({});
 
 const summary = ref({});
+
 function fetchData() {
   getRiskNum().then((res) => {
     if (res) {

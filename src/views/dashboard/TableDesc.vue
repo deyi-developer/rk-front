@@ -1,5 +1,5 @@
 <template>
-  <!-- <el-row :gutter="10">
+  <el-row :gutter="10">
     <el-col :span="12">
       <el-card shadow="always" class="box-card">
         <el-descriptions :column="2" title="基础指标" border>
@@ -44,16 +44,28 @@
               summary.totalBillingRate ? `${summary.totalBillingRate}%` : ""
             }}</el-descriptions-item
           >
-          <el-descriptions-item :contentStyle="{ textAlign: 'right' }" label="-"
+          <el-descriptions-item
+            :contentStyle="{ textAlign: 'center' }"
+            :labelStyle="{ textAlign: 'center' }"
+            label="-"
             >-</el-descriptions-item
           >
-          <el-descriptions-item :contentStyle="{ textAlign: 'right' }" label="-"
+          <el-descriptions-item
+            :contentStyle="{ textAlign: 'center' }"
+            :labelStyle="{ textAlign: 'center' }"
+            label="-"
             >-</el-descriptions-item
           >
-          <el-descriptions-item :contentStyle="{ textAlign: 'right' }" label="-"
+          <el-descriptions-item
+            :contentStyle="{ textAlign: 'center' }"
+            :labelStyle="{ textAlign: 'center' }"
+            label="-"
             >-</el-descriptions-item
           >
-          <el-descriptions-item :contentStyle="{ textAlign: 'right' }" label="-"
+          <el-descriptions-item
+            :contentStyle="{ textAlign: 'center' }"
+            :labelStyle="{ textAlign: 'center' }"
+            label="-"
             >-</el-descriptions-item
           >
         </el-descriptions>
@@ -126,7 +138,7 @@
         </el-row>
       </el-card>
     </el-col>
-  </el-row> -->
+  </el-row>
 </template>
 
 <script setup>
