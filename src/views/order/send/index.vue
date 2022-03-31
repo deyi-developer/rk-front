@@ -4,7 +4,7 @@
       <h1 style="font-weight: 500;">{{ info.eventTitle }}</h1>
       <el-row>
         <el-col :span="12">
-          <label class="space">项目:</label>
+          <label class="space">项目编码:</label>
           <span>{{ info.projectCode }}</span>
         </el-col>
         <el-col :span="12">
@@ -45,6 +45,22 @@
       </li>
     </ul>
     <el-card v-show="editorVisible" style="margin: 12px 0">
+      <span>交接人：</span>
+      <el-select
+        style="width: 30%; margin-bottom: 12px;"
+        v-model="eventHandler"
+        filterable
+        placeholder="请选择工单处理人"
+        :filter-method="getHandlers"
+        :loading="handlerLoding"
+      >
+        <el-option
+          v-for="item in handlers"
+          :key="item.userId"
+          :label="item.nickName"
+          :value="item.userId"
+        ></el-option>
+      </el-select>
       <editor
         v-model="info.eventMsg"
         style="margin-bottom: 12px"
@@ -63,6 +79,7 @@
   </div>
 </template>
 <script>
+import { debounce } from "lodash-es";
 import { detail, reply, replyList } from './api'
 import { mapGetters } from 'vuex'
 import editor from "@/components/Editor"
@@ -75,7 +92,8 @@ export default {
     return {
       info: {},
       replyList: [],
-      editorVisible: true
+      editorVisible: true,
+      eventHandler: ''
     }
   },
 
@@ -97,12 +115,15 @@ export default {
     async getDetailInfo(id) {
       const { data } = await detail(id)
       this.info = data
-      this.info.eventHandler = this.usersInfo.userId // 默认自己能搞定补转接
-      this.getReplyList()
+      this.info.eventHandler = this.usersInfo.userId // 默认自己能搞定不转接
+      this.info.forwardFlag = 0
+      this.getReplyList(id)
     },
 
     /** 回复 */
     async submit() {
+      this.info.eventHandler = this.eventHandler // 选择了交接人
+      this.info.forwardFlag = 1
       const { code, msg } = await reply(this.info)
       if (code === 200) {
         this.$modal.msgSuccess(msg);
@@ -112,12 +133,30 @@ export default {
     },
 
     /** 获取回复列表 */
-    async getReplyList() {
-      const { rows } = await replyList({ eventHeaderId: 9 })
+    async getReplyList(id) {
+      const { rows } = await replyList({ eventHeaderId: id })
       this.replyList = rows || []
-    }
+    },
   }
 }
+</script>
+<script setup>
+import { handlerList } from "../project/api"
+import { ref } from "@vue/composition-api";
+
+let handlers = ref([])
+let handlerLoding = ref(false)
+const getHandlers = debounce(async (value) => {
+  handlerLoding.value = true
+  const params = {
+    pageSize: 10, // 只显示十条，如果用户找不到会输入更详细名称
+    userName: value
+  }
+  const { rows } = await handlerList(params)
+  handlers.value = rows || []
+  handlerLoding.value = false
+}, 500)
+
 </script>
 
 <style lang="scss" scoped>

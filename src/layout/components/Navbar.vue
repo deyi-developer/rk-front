@@ -18,7 +18,7 @@
 
       <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
         <span style="line-height: 20px; height: 20px">
-          <Badge :count="100" :overflow-count="99">
+          <Badge :count="100" :overflow-count="messageList.length">
             <Icon type="ios-notifications-outline" size="22"></Icon>
           </Badge>
         </span>
@@ -26,34 +26,12 @@
           <div class="msg-drop-menu">
             <Tabs size="small">
               <TabPane label="站内消息">
-                <!-- <ul class="msg-list">
-                  <li class="msg-list-item">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Voluptates dolorum in nesciunt modi eaque, autem
-                    necessitatibus? Voluptatem et iure accusamus deleniti
-                    dignissimos repellendus perferendis sunt, voluptatum commodi
-                    omnis ducimus atque.
-                  </li>
-                  <li class="msg-list-item">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Sapiente itaque quibusdam laboriosam. At nam veritatis atque
-                    mollitia pariatur odio? Rerum est assumenda vel nobis
-                    distinctio laboriosam dolor perferendis odit cum.
-                  </li>
-                  <li class="msg-list-item">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Vitae, earum facilis! Magnam, voluptatum. Error sed
-                    voluptatibus laborum delectus, repudiandae repellendus
-                    molestiae suscipit, magnam consequatur labore velit quia
-                    amet perspiciatis tenetur.
-                  </li>
-                  <li class="msg-list-item">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Qui dolores sit illo porro odio? Itaque repellat, molestiae
-                    consequatur ad voluptates excepturi quisquam molestias
-                    voluptatibus corporis non eaque obcaecati aliquam nesciunt?
-                  </li>
-                </ul>-->
+                <ul class="msg-list">
+                  <li
+                    class="msg-list-item"
+                    v-for="(item, index) in messageList"
+                  >{{ item.messageContent }}</li>
+                </ul>
               </TabPane>
             </Tabs>
           </div>
@@ -64,7 +42,6 @@
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar" />
           <span class="user-name">{{ $store.state.user.name }}</span>
-
           <i class="el-icon-arrow-down el-icon--right"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -102,6 +79,7 @@ import SizeSelect from "@/components/SizeSelect";
 import Search from "@/components/HeaderSearch";
 import RuoYiGit from "@/components/RuoYi/Git";
 import RuoYiDoc from "@/components/RuoYi/Doc";
+import { list } from '@/api/message'
 
 export default {
   components: {
@@ -117,6 +95,11 @@ export default {
     RuoYiDoc,
     Tabs,
     TabPane
+  },
+  data() {
+    return {
+      messageList: []
+    }
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
@@ -137,6 +120,9 @@ export default {
       }
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
@@ -153,6 +139,13 @@ export default {
           });
         })
         .catch(() => { });
+    },
+    /**
+     * 消息列表
+     */
+    async getList() {
+      const { rows } = await list()
+      this.messageList = rows
     }
   }
 };

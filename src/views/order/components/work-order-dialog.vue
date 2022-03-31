@@ -54,9 +54,9 @@
           </el-select>
         </el-form-item>
       </div>
-      <el-form-item label="关联项目:">
+      <!-- <el-form-item label="关联项目:">
         <el-input style="width: 80%;" v-model="form.projectCode"></el-input>
-      </el-form-item>
+      </el-form-item>-->
     </el-form>
     <div slot="footer">
       <el-button @click="close">取 消</el-button>
@@ -66,10 +66,11 @@
 </template>
 <script>
 export default {
-  dicts: ["event_type", "event_urgency_level"]
+  dicts: ["event_type", "event_urgency_level"],
 }
 </script>
 <script setup>
+import vm from 'vue'
 import { debounce } from "lodash-es";
 import { send, update, handlerList } from "../project/api"
 import { ref, reactive, defineProps, defineEmits, onMounted } from "@vue/composition-api";
@@ -94,7 +95,8 @@ const props = defineProps({
 /** emit */
 const emit = defineEmits(['dialogVisible', 'refresh'])
 
-onMounted(() => { })
+onMounted(() => {
+})
 
 /** 提交 */
 const submit = async () => {
@@ -112,6 +114,7 @@ const sendWorkOrder = async () => {
     close()
     refresh()
   }
+  message(code, msg)
 }
 
 /** 修改 */
@@ -121,6 +124,7 @@ const updateWorkOrder = async () => {
     close()
     refresh()
   }
+  message(code, msg)
 }
 
 /** 关闭弹窗 */
@@ -131,6 +135,15 @@ const close = () => {
 /** 刷新父组件的列表 */
 const refresh = () => {
   emit('refresh')
+}
+
+/** 提示 */
+const message = (code, msg) => {
+  if (code === 200) {
+    vm.prototype.$modal.msgSuccess(msg)
+  } else {
+    vm.prototype.$modal.msgError(msg)
+  }
 }
 
 const beforeClose = () => {
