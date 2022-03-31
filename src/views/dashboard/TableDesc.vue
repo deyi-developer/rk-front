@@ -134,7 +134,9 @@ import { defineProps } from "@vue/composition-api";
 
 defineProps({
   summary: Object,
-  default: () => {}
+  default() {
+    return {};
+  }
 });
 </script>
 <style lang="scss" scoped>

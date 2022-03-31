@@ -137,7 +137,9 @@ import { defineProps } from "@vue/composition-api";
 
 defineProps({
   risk: Object,
-  default: () => {}
+  default() {
+    return {};
+  }
 });
 </script>
 

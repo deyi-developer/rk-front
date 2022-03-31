@@ -54,15 +54,7 @@ onMounted(() => {
   fetchData();
 });
 
-const risk = ref({
-  highRiskProjectNum: 0,
-  highRiskProjectRate: 0,
-  mediumRiskProjectNum: 0,
-  mediumRiskProjectRate: 0,
-  noRiskProjectNum: 0,
-  noRiskProjectRate: 0,
-  totalProjectNum: 0
-});
+const risk = ref({});
 
 const summary = ref({});
 function fetchData() {
