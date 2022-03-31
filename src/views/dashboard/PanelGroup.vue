@@ -4,25 +4,23 @@
     <el-col :span="6">
       <el-card shadow="always">
         <div class="ds-flex">
-          <i-circle :percent="state.noRiskProjectRate" stroke-color="#19be6b">
-            <span class="demo-Circle-inner"
-              >{{ state.noRiskProjectRate }}%</span
-            >
+          <i-circle :percent="risk.noRiskProjectRate" stroke-color="#19be6b">
+            <span class="demo-Circle-inner">{{ risk.noRiskProjectRate }}%</span>
           </i-circle>
           <div class="circel-desc">
             <p class="circel-desc-title">无风险项目</p>
             <div class="circel-desc-content">
               <countTo
                 :startVal="0"
-                :endVal="state.noRiskProjectNum"
+                :endVal="risk.noRiskProjectNum"
                 :duration="1000"
               ></countTo
-              >/{{ state.totalProjectNum }}
+              >/{{ risk.totalProjectNum }}
             </div>
             <p class="tooltip-icon-wrap">
               <Tooltip
                 class="tooltip-icon"
-                :content="`项目数：${state.noRiskProjectNum}，总项目数：${state.totalProjectNum}`"
+                :content="`项目数：${risk.noRiskProjectNum}，总项目数：${risk.totalProjectNum}`"
               >
                 <i style="font-size: 16px" class="el-icon-warning-outline"></i>
               </Tooltip>
@@ -35,11 +33,11 @@
       <el-card shadow="always">
         <div class="ds-flex">
           <i-circle
-            :percent="state.mediumRiskProjectRate"
+            :percent="risk.mediumRiskProjectRate"
             stroke-color="#ff9900"
           >
             <span class="demo-Circle-inner"
-              >{{ state.mediumRiskProjectRate }}%</span
+              >{{ risk.mediumRiskProjectRate }}%</span
             >
           </i-circle>
           <div class="circel-desc">
@@ -47,15 +45,15 @@
             <div class="circel-desc-content">
               <countTo
                 :startVal="0"
-                :endVal="state.mediumRiskProjectNum"
+                :endVal="risk.mediumRiskProjectNum"
                 :duration="1000"
               ></countTo
-              >/{{ state.totalProjectNum }}
+              >/{{ risk.totalProjectNum }}
             </div>
             <p class="tooltip-icon-wrap">
               <Tooltip
                 class="tooltip-icon"
-                :content="`项目数：${state.mediumRiskProjectNum}，总项目数：${state.totalProjectNum}`"
+                :content="`项目数：${risk.mediumRiskProjectNum}，总项目数：${risk.totalProjectNum}`"
               >
                 <i style="font-size: 16px" class="el-icon-warning-outline"></i>
               </Tooltip>
@@ -67,9 +65,9 @@
     <el-col :span="6">
       <el-card shadow="always">
         <div class="ds-flex">
-          <i-circle :percent="state.highRiskProjectRate" stroke-color="#ed4014">
+          <i-circle :percent="risk.highRiskProjectRate" stroke-color="#ed4014">
             <span class="demo-Circle-inner"
-              >{{ state.highRiskProjectRate }}%</span
+              >{{ risk.highRiskProjectRate }}%</span
             >
           </i-circle>
           <div class="circel-desc">
@@ -77,15 +75,15 @@
             <div class="circel-desc-content">
               <countTo
                 :startVal="0"
-                :endVal="state.highRiskProjectNum"
+                :endVal="risk.highRiskProjectNum"
                 :duration="1000"
               ></countTo
-              >/{{ state.totalProjectNum }}
+              >/{{ risk.totalProjectNum }}
             </div>
             <p class="tooltip-icon-wrap">
               <Tooltip
                 class="tooltip-icon"
-                :content="`项目数：${state.highRiskProjectNum}，总项目数：${state.totalProjectNum}`"
+                :content="`项目数：${risk.highRiskProjectNum}，总项目数：${risk.totalProjectNum}`"
               >
                 <i style="font-size: 16px" class="el-icon-warning-outline"></i>
               </Tooltip>
@@ -104,13 +102,13 @@
             <p class="circel-desc-title">法务接管项目</p>
             <div class="circel-desc-content">
               <countTo :startVal="0" :endVal="0" :duration="1000"></countTo>/{{
-                state.totalProjectNum
+                risk.totalProjectNum
               }}
             </div>
             <p class="tooltip-icon-wrap">
               <Tooltip
                 class="tooltip-icon"
-                :content="`项目数：0，总项目数：${state.totalProjectNum}`"
+                :content="`项目数：0，总项目数：${risk.totalProjectNum}`"
               >
                 <i style="font-size: 16px" class="el-icon-warning-outline"></i>
               </Tooltip>
@@ -138,7 +136,7 @@ export default {
 import { defineProps } from "@vue/composition-api";
 
 defineProps({
-  state: Object,
+  risk: Object,
   default: () => {}
 });
 </script>

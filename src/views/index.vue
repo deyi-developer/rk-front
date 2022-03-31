@@ -1,7 +1,7 @@
 <template>
   <div class="app-container home">
-    <PanelGroup :state="risk" />
-    <TableDesc :state="summary" />
+    <PanelGroup :risk="risk" />
+    <TableDesc :summary="summary" />
 
     <el-row type="flex" :gutter="20">
       <el-col :span="8">

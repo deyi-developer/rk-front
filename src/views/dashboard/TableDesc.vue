@@ -6,19 +6,19 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="PJTD含税总收入"
-            >{{ state.pjtdTotalMoney }}</el-descriptions-item
+            >{{ summary.pjtdTotalMoney }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="总开票"
-            >{{ state.totalBilling }}</el-descriptions-item
+            >{{ summary.totalBilling }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD开票率"
             >{{
-              state.billingRateOfTotalPjtd
-                ? `${state.billingRateOfTotalPjtd}%`
+              summary.billingRateOfTotalPjtd
+                ? `${summary.billingRateOfTotalPjtd}%`
                 : ""
             }}</el-descriptions-item
           >
@@ -26,14 +26,14 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="总收款"
-            >{{ state.totalReceipts }}</el-descriptions-item
+            >{{ summary.totalReceipts }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD收款率"
             >{{
-              state.receivedRateOfTotalPjtd
-                ? `${state.receivedRateOfTotalPjtd}%`
+              summary.receivedRateOfTotalPjtd
+                ? `${summary.receivedRateOfTotalPjtd}%`
                 : ""
             }}</el-descriptions-item
           >
@@ -41,7 +41,7 @@
             :contentStyle="{ textAlign: 'right' }"
             label="相对总开票收款率"
             >{{
-              state.totalBillingRate ? `${state.totalBillingRate}%` : ""
+              summary.totalBillingRate ? `${summary.totalBillingRate}%` : ""
             }}</el-descriptions-item
           >
           <el-descriptions-item :contentStyle="{ textAlign: 'right' }" label="-"
@@ -66,50 +66,50 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应开金额"
-              >{{ state.totalShouldBillingMoney }}</el-descriptions-item
+              >{{ summary.totalShouldBillingMoney }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总已开金额"
-              >{{ state.totalAlreadyBillingMoney }}</el-descriptions-item
+              >{{ summary.totalAlreadyBillingMoney }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应开未开"
-              >{{ state.totalShouldNotBillingMoney }}</el-descriptions-item
+              >{{ summary.totalShouldNotBillingMoney }}</el-descriptions-item
             >
 
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对应开开票率"
-              >{{ state.correspondingBillingRate }}</el-descriptions-item
+              >{{ summary.correspondingBillingRate }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收金额"
-              >{{ state.totalShouldReceiptsMoney }}</el-descriptions-item
+              >{{ summary.totalShouldReceiptsMoney }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总已收金额"
-              >{{ state.totalReceiptssMoney }}</el-descriptions-item
+              >{{ summary.totalReceiptssMoney }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收未收（相对应收）"
-              >{{ state.totalShouldNotReceiptsMoney }}</el-descriptions-item
+              >{{ summary.totalShouldNotReceiptsMoney }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收未收（相对已开）"
-              >{{ state.totalShouldNotReceiptsBilling }}</el-descriptions-item
+              >{{ summary.totalShouldNotReceiptsBilling }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对应收收款率"
               >{{
-                state.relativeReceivableRate
-                  ? `${state.relativeReceivableRate}%`
+                summary.relativeReceivableRate
+                  ? `${summary.relativeReceivableRate}%`
                   : ""
               }}</el-descriptions-item
             >
@@ -117,8 +117,8 @@
               :contentStyle="{ textAlign: 'right' }"
               label="相对已开收款率"
               >{{
-                state.relativeOpenedCollectionRate
-                  ? `${state.relativeOpenedCollectionRate}%`
+                summary.relativeOpenedCollectionRate
+                  ? `${summary.relativeOpenedCollectionRate}%`
                   : ""
               }}</el-descriptions-item
             >
@@ -133,7 +133,7 @@
 import { defineProps } from "@vue/composition-api";
 
 defineProps({
-  state: Object,
+  summary: Object,
   default: () => {}
 });
 </script>
