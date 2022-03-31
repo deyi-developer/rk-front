@@ -7,7 +7,11 @@
       @toggleClick="toggleSideBar"
     />
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!topNav" />
+    <breadcrumb
+      id="breadcrumb-container"
+      class="breadcrumb-container"
+      v-if="!topNav"
+    />
     <top-nav id="topmenu-container" class="topmenu-container" v-if="topNav" />
 
     <div class="right-menu">
@@ -16,7 +20,10 @@
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
 
-      <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
+      <el-dropdown
+        class="msg-menu-wrapper right-menu-item hover-effect"
+        trigger="click"
+      >
         <span style="line-height: 20px; height: 20px">
           <Badge :count="100" :overflow-count="unread">
             <Icon type="ios-notifications-outline" size="22"></Icon>
@@ -31,7 +38,12 @@
                     class="msg-list-item"
                     v-for="(item, index) in messages"
                     :key="index"
-                    @click="$router.push({ name: 'send', query: { id: item.busiKey } })"
+                    @click="
+                      $router.push({
+                        name: 'send',
+                        query: { id: item.busiKey }
+                      })
+                    "
                   >
                     <span>{{ item.messageContent }}</span>
                     <!-- readFlag 0：未读, 1: 已读 -->
@@ -44,7 +56,10 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <el-dropdown
+        class="avatar-container right-menu-item hover-effect"
+        trigger="click"
+      >
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar" />
           <span class="user-name">{{ $store.state.user.name }}</span>
@@ -53,20 +68,14 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
             <el-dropdown-item>
-              <span>
-                <i class="el-icon-user"></i>个人中心
-              </span>
+              <span> <i class="el-icon-user"></i>个人中心 </span>
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item @click.native="setting = true">
-            <span>
-              <i class="el-icon-setting"></i>布局设置
-            </span>
+            <span> <i class="el-icon-setting"></i>布局设置 </span>
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span>
-              <i class="el-icon-switch-button"></i>退出登录
-            </span>
+            <span> <i class="el-icon-switch-button"></i>退出登录 </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -104,10 +113,10 @@ export default {
   data() {
     return {
       messageList: []
-    }
+    };
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device", 'messages', 'unread']),
+    ...mapGetters(["sidebar", "avatar", "device", "messages", "unread"]),
     setting: {
       get() {
         return this.$store.state.settings.showSettings;
@@ -126,10 +135,10 @@ export default {
     }
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
-    ...mapActions(['Messages']),
+    ...mapActions(["Messages"]),
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -141,16 +150,16 @@ export default {
       })
         .then(() => {
           this.$store.dispatch("LogOut").then(() => {
-            location.href = "/index";
+            this.$router.replace("/login");
           });
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     /**
      * 消息列表
      */
     async getList() {
-      this.Messages()
+      this.Messages();
       // const { rows } = await list()
       // this.messageList = rows
     }
