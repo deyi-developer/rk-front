@@ -1,7 +1,7 @@
 <template>
   <div class="app-container home">
-    <PanelGroup :data="state.risk" />
-    <TableDesc :data="state.summary" />
+    <PanelGroup :state="risk" />
+    <TableDesc :state="summary" />
 
     <el-row type="flex" :gutter="20">
       <el-col :span="8">
@@ -49,32 +49,31 @@ import BarChart from "./dashboard/BarChart";
 import LineChart from "./dashboard/LineChart";
 import PieChart from "./dashboard/PieChart";
 import PieChart2 from "./dashboard/PieChart2";
-import { reactive, onMounted } from "@vue/composition-api";
+import { ref, onMounted } from "@vue/composition-api";
 onMounted(() => {
   fetchData();
 });
 
-const state = reactive({
-  risk: {
-    highRiskProjectNum: 0,
-    highRiskProjectRate: 0,
-    mediumRiskProjectNum: 0,
-    mediumRiskProjectRate: 0,
-    noRiskProjectNum: 0,
-    noRiskProjectRate: 0,
-    totalProjectNum: 0
-  },
-  summary: {}
+const risk = ref({
+  highRiskProjectNum: 0,
+  highRiskProjectRate: 0,
+  mediumRiskProjectNum: 0,
+  mediumRiskProjectRate: 0,
+  noRiskProjectNum: 0,
+  noRiskProjectRate: 0,
+  totalProjectNum: 0
 });
+
+const summary = ref({});
 function fetchData() {
   getRiskNum().then((res) => {
     if (res) {
-      state.risk = res;
+      risk.value = res;
     }
   });
   getSummary().then((res) => {
     if (res) {
-      state.summary = res;
+      summary.value = res;
     }
   });
 }
