@@ -71,7 +71,7 @@ export default {
           }
         ],
         tooltip: {
-          trigger: "none",
+          trigger: "axis",
           axisPointer: {
             type: "cross"
           }
@@ -83,7 +83,8 @@ export default {
           }
         },
         title: {
-          text: "逐月含税收入，开票，收款分布"
+          text: "逐月含税收入，开票，收款分布",
+          subtext: "单位（元）"
         },
         xAxis: {
           type: "category",

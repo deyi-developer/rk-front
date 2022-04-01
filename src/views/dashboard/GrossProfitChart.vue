@@ -94,7 +94,7 @@ export default {
       const [red, blue] = dataSource;
       const option = {
         tooltip: {
-          trigger: "none",
+          trigger: "axis",
           axisPointer: {
             type: "cross"
           }
@@ -106,7 +106,8 @@ export default {
           }
         },
         title: {
-          text: "毛利同比对照"
+          text: "毛利同比对照",
+          subtext: "单位（%）"
         },
         legend: {},
         grid: {

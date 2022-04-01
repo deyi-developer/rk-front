@@ -5,15 +5,15 @@
       <div class="fx-1 content">
         <span>{{ `总项目数：${risk.totalProjectNum} ` }}</span>
         <span>{{
-          `无风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
+          `无风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
         }}</span>
         <span>{{
           `中风险项目：${risk.mediumRiskProjectNum} (${risk.mediumRiskProjectRate}%)`
         }}</span>
-        <span>{{
-          `高风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
-        }}</span>
 
+        <span>{{
+          `高风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
+        }}</span>
         <span>{{ `法务接管项目：未知` }}</span>
       </div>
     </div>
@@ -530,8 +530,8 @@ import { throttle } from "lodash-es";
 import filterForm from "./filterForm.vue";
 import { getList, saveData, getRiskNum } from "./api";
 
-/* 每列宽度125
-    前面3列固定
+/* 每列宽度150
+    前面2列固定
     项目基本信息 12个字段
     项目开票 14个字段
     项目收款 15个字段
@@ -665,11 +665,15 @@ export default {
     //提交全部
     async validAllEvent() {
       const $table = this.$refs.xTable;
+
       const errMap = await $table.validate(true).catch((errMap) => errMap);
+
       if (errMap) {
         console.log("不通过");
       } else {
-        saveData(this.dataSource).then((res) => {
+        const data = $table.getData();
+        console.log(data);
+        saveData(data).then((res) => {
           if (res.code == "200") {
             this.$modal.notifySuccess(res.msg);
             this.fetchData();
@@ -681,6 +685,7 @@ export default {
     pageChange({ currentPage: pageNum, pageSize }) {
       const $table = this.$refs.xTable;
       const updateRecords = $table.getUpdateRecords();
+
       if (updateRecords.length > 0) {
         this.$modal
           .confirm("有修改未提交数据，是否放弃填写")

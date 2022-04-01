@@ -94,7 +94,7 @@ export default {
           }
         ],
         tooltip: {
-          trigger: "none",
+          trigger: "axis",
           axisPointer: {
             type: "cross"
           }
@@ -106,7 +106,8 @@ export default {
         //   }
         // },
         title: {
-          text: "达成率"
+          text: "达成率",
+          subtext: "单位（%）"
         },
         xAxis: {
           type: "category",

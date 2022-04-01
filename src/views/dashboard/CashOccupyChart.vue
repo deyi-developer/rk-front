@@ -65,19 +65,20 @@ export default {
           }
         ],
         tooltip: {
-          trigger: "none",
+          trigger: "axis",
           axisPointer: {
             type: "cross"
           }
         },
-        aria: {
-          enabled: true,
-          decal: {
-            show: true
-          }
-        },
+        // aria: {
+        //   enabled: true,
+        //   decal: {
+        //     show: true
+        //   }
+        // },
         title: {
-          text: "逐月累积现金占用趋势"
+          text: "逐月累积现金占用趋势",
+          subtext: "单位（元）"
         },
         xAxis: {
           type: "category",
@@ -95,7 +96,19 @@ export default {
           {
             data: cashOccupyList,
             type: "line",
-            smooth: true
+            smooth: true,
+            areaStyle: {
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "rgba(63,177,227,0.7)"
+                },
+                {
+                  offset: 1,
+                  color: "rgba(63,177,227,0.1)"
+                }
+              ])
+            }
           }
         ]
       };

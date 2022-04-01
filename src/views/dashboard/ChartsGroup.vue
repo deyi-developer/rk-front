@@ -58,11 +58,7 @@
     </el-row>
   </div>
 </template>
-<script>
-export default {
-  props: ["projectCode"]
-};
-</script>
+
 <script setup>
 import BarChart from "./BarChart";
 import BarChart2 from "./BarChart2";
@@ -74,18 +70,32 @@ import ReachChart from "./ReachChart.vue";
 import PieChart from "./PieChart";
 import PieChart2 from "./PieChart2";
 import { getSummary } from "./api.js";
-import { ref, onMounted } from "@vue/composition-api";
+import { ref, onMounted, defineProps } from "@vue/composition-api";
+import { isEmpty } from "lodash-es";
+const props = defineProps({
+  projectCode: {
+    type: String
+  },
+  projectData: {
+    type: Object
+  }
+});
 onMounted(() => {
   fetchData();
 });
 const summary = ref({});
 
 function fetchData() {
-  getSummary().then((res) => {
-    if (res) {
-      summary.value = res;
-    }
-  });
+  console.log(isEmpty(props.projectData));
+  if (isEmpty(props.projectData)) {
+    getSummary().then((res) => {
+      if (res) {
+        summary.value = res;
+      }
+    });
+  } else {
+    summary.value = props.projectData;
+  }
 }
 </script>
 <style lang="scss" scoped>
