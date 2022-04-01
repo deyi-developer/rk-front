@@ -41,7 +41,7 @@
                     <span>{{ item.messageContent }}</span>
                     <!-- readFlag 0：未读, 1: 已读 -->
                     <span class="spot" v-show="!item.readFlag"></span>
-                    <span>{{ item.readFlag }}</span>
+                    <!-- <span>{{ item.readFlag }}</span> -->
                   </li>
                 </ul>
               </TabPane>

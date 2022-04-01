@@ -13,7 +13,7 @@
             <span>{{ selectDictLabel(dict.type.event_type, scope.row.eventType) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="eventContext" label="工单内容">
+        <el-table-column show-overflow-tooltip prop="eventContext" label="工单内容">
           <template v-slot="scope">
             <span v-html="scope.row.eventContext"></span>
           </template>

@@ -22,9 +22,11 @@ import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import { getToken } from "@/utils/auth";
+import emitter from "element-ui/src/mixins/emitter";
 
 export default {
   name: "Editor",
+  mixins: [emitter],
   props: {
     /* 编辑器的内容 */
     value: {
@@ -112,6 +114,7 @@ export default {
   watch: {
     value: {
       handler(val) {
+        this.dispatch("ElFormItem", "el.form.change", [val]);
         if (val !== this.currentValue) {
           this.currentValue = val === null ? "" : val;
           if (this.Quill) {

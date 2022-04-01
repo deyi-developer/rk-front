@@ -1,10 +1,10 @@
 <template>
   <el-dialog title="发起工单" width="70%" :visible.sync="dialogVisible" :before-close="beforeClose">
-    <el-form :model="form" label-width="100px">
-      <el-form-item label="工单标题:">
+    <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
+      <el-form-item label="工单标题:" prop="eventTitle">
         <el-input style="width: 80%;" v-model="form.eventTitle"></el-input>
       </el-form-item>
-      <el-form-item label="工单类型:">
+      <el-form-item label="工单类型:" prop="eventType">
         <el-select style="width: 80%;" placeholder="请选择工单类型" v-model="form.eventType" clearable>
           <el-option
             v-for="dict in dict.type.event_type"
@@ -14,13 +14,13 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="工单内容:">
+      <el-form-item label="工单内容:" prop="eventContext">
         <template v-slot="scope">
           <editor v-model="form.eventContext" style="width: 80%;" :height="100"></editor>
         </template>
       </el-form-item>
       <div v-if="type === 'add'">
-        <el-form-item label="工单级别:">
+        <el-form-item label="工单级别:" prop="eventUrgencyLevel">
           <el-select
             style="width: 80%;"
             placeholder="请选择工单级别"
@@ -35,7 +35,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="工单处理人:">
+        <el-form-item label="工单处理人:" prop="eventHandler">
           <el-select
             style="width: 80%;"
             v-model="form.eventHandler"
@@ -95,6 +95,24 @@ const props = defineProps({
 /** emit */
 const emit = defineEmits(['dialogVisible', 'refresh'])
 
+const rules = ref({
+  eventTitle: [
+    { required: true, message: '请输入工单标题', trigger: 'change' },
+  ],
+  eventType: [
+    { required: true, message: '请输入选择工单类型', trigger: 'change' },
+  ],
+  eventContext: [
+    { required: true, message: '请输入工单内容', trigger: 'change' },
+  ],
+  eventUrgencyLevel: [
+    { required: true, message: '请选择工单级别', trigger: 'change' },
+  ],
+  eventHandler: [
+    { required: true, message: '请选择工单处理人', trigger: 'change' },
+  ]
+})
+
 /** 提交 */
 const submit = async () => {
   if (props.type === 'add') {
@@ -105,29 +123,39 @@ const submit = async () => {
 }
 
 /** 新增 */
-const sendWorkOrder = async () => {
-  const { code, msg } = await send(props.form)
-  if (code == 200) {
-    close()
-    refresh()
-    router.push({ name: 'order-list' })
-  }
-  message(code, msg)
+const formRef = ref(null)
+const sendWorkOrder = () => {
+  formRef.value.validate(async valid => {
+    if (valid) {
+      const { code, msg } = await send(props.form)
+      if (code == 200) {
+        close()
+        refresh()
+        router.push({ name: 'order-list' })
+      }
+      message(code, msg)
+    }
+  })
 }
 
 /** 修改 */
 const updateWorkOrder = async () => {
-  const { code, msg } = await update(props.form)
-  if (code == 200) {
-    close()
-    refresh()
-  }
-  message(code, msg)
+  formRef.value.validate(async valid => {
+    if (valid) {
+      const { code, msg } = await update(props.form)
+      if (code == 200) {
+        close()
+        refresh()
+      }
+      message(code, msg)
+    }
+  })
 }
 
 /** 关闭弹窗 */
 const close = () => {
   emit('update:dialogVisible', false)
+  formRef.value.resetFields();
 }
 
 /** 刷新父组件的列表 */

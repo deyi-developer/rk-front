@@ -87,10 +87,10 @@
               <el-form-item label="项目结束日期:">{{ projectData.projectEndDate }}</el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <!-- 风控专员才显示 -->
+          <el-row v-if="userRolse.includes('risker')">
             <el-col :span="6">
               <el-form-item label="开票风险等级:">
-                <!-- <el-input v-model="updateData.invoicingRiskLevel"></el-input> -->
                 <el-select
                   style="width: 70%;"
                   placeholder="请选择工单级别"
@@ -108,7 +108,6 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="收款风险等级:">
-                <!-- <el-input v-model="updateData.receiveRiskLevel"></el-input> -->
                 <el-select
                   style="width: 70%;"
                   placeholder="请选择工单级别"
@@ -126,7 +125,6 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="毛利风险等级:">
-                <!-- <el-input v-model="updateData.grossProfitRiskLevel"></el-input> -->
                 <el-select
                   style="width: 70%;"
                   placeholder="请选择工单级别"
@@ -251,6 +249,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { projectDetails, projectUpdate } from './api'
 import ChartsGroup from "../../dashboard/ChartsGroup";
 import filterForm from '../list/filterForm'
@@ -284,7 +283,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['userRolse'])
+  },
   created() {
+    console.log(this.userRolse)
     const { query: { projectCode } } = this.$route
     this.getData(projectCode)
   },
