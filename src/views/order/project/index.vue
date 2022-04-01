@@ -242,18 +242,22 @@
           </el-row>-->
         </el-card>
       </el-form>
+
+      <ChartsGroup :projectData="projectData" :projectCode="$route.query.projectCode"></ChartsGroup>
     </div>
+
     <work-order-dialog type="add" :form="workOrderform" :dialogVisible.sync="dialogVisible"></work-order-dialog>
   </div>
 </template>
 
 <script>
 import { projectDetails, projectUpdate } from './api'
+import ChartsGroup from "../../dashboard/ChartsGroup";
 import filterForm from '../list/filterForm'
 export default {
   dicts: ["event_type", "event_urgency_level", "risk_level"],
   components: {
-    filterForm
+    filterForm,
   },
   data() {
     return {

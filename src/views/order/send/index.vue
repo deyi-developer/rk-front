@@ -41,6 +41,10 @@
           <p class="name">{{ usersInfo.userName }}</p>
           <p class="time">2019-07-11 18:44:44</p>
           <p class="reply" @click="editorVisible = !editorVisible">回复</p>
+          <div style="margin-left: auto;" v-if="item.showFlagButton">
+            <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
+            <el-button size="mini" @click="edit(item, 3)">未完成</el-button>
+          </div>
         </div>
         <div class="bottom" v-html="item.eventMsg"></div>
       </li>
@@ -51,7 +55,7 @@
         style="width: 30%; margin-bottom: 12px;"
         v-model="eventHandler"
         filterable
-        placeholder="请选择工单处理人"
+        placeholder="请选择工单交接人"
         :filter-method="getHandlers"
         :loading="handlerLoding"
         clearable
@@ -84,7 +88,7 @@
 
 import { mapActions } from 'vuex'
 import { debounce } from "lodash-es";
-import { detail, reply, replyList } from './api'
+import { detail, reply, replyList, update } from './api'
 import { mapGetters } from 'vuex'
 import editor from "@/components/Editor"
 export default {
@@ -144,6 +148,7 @@ export default {
       const { code, msg } = await reply(this.info)
       if (code === 200) {
         this.$modal.msgSuccess(msg);
+        this.getReplyList(this.$route.query.id)
       } else {
         this.$modal.msgError(msg);
       }
@@ -154,6 +159,21 @@ export default {
       const { rows } = await replyList({ eventHeaderId: id })
       this.replyList = rows || []
     },
+
+    /** 修改 */
+    async edit(item, id) {
+      const params = {
+        eventHeaderId: item.eventHeaderId,
+        eventLineId: item.eventLineId,
+        eventCompleteStutas: id
+      }
+      const { code, res } = await update(params)
+      if (code === 200) {
+        this.$modal.msgSuccess(msg);
+      } else {
+        this.$modal.msgError(msg);
+      }
+    }
   }
 }
 </script>
@@ -166,8 +186,9 @@ let handlerLoding = ref(false)
 const getHandlers = debounce(async (value) => {
   handlerLoding.value = true
   const params = {
+    pageNum: 1,
     pageSize: 10, // 只显示十条，如果用户找不到会输入更详细名称
-    userName: value
+    nickName: value
   }
   const { rows } = await handlerList(params)
   handlers.value = rows || []

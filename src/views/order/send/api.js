@@ -25,3 +25,12 @@ export const replyList = (params) => {
     params,
   })
 }
+
+// 修改
+export const update = (data) => {
+  return request({
+    url: `/workOrder/line/edit`,
+    method: "post",
+    data,
+  })
+}

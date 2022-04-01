@@ -5,20 +5,12 @@
       <el-row :gutter="24">
         <el-col :span="6">
           <el-form-item label="项目编码" prop="projectCode">
-            <el-input
-              v-model="queryParams.projectCode"
-              clearable
-              size="small"
-            />
+            <el-input v-model="queryParams.projectCode" clearable size="small" />
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="项目名称" prop="projectName">
-            <el-input
-              v-model="queryParams.projectName"
-              clearable
-              size="small"
-            />
+            <el-input v-model="queryParams.projectName" clearable size="small" />
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -28,11 +20,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="一级部门名称" prop="oneDeptName">
-            <el-input
-              v-model="queryParams.oneDeptName"
-              clearable
-              size="small"
-            />
+            <el-input v-model="queryParams.oneDeptName" clearable size="small" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -56,12 +44,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="收款风险等级" prop="receiveRiskLevel">
-            <el-select
-              class="block"
-              v-model="queryParams.receiveRiskLevel"
-              clearable
-              size="small"
-            >
+            <el-select class="block" v-model="queryParams.receiveRiskLevel" clearable size="small">
               <el-option
                 v-for="dict in dict.type.risk_level"
                 :key="dict.value"
@@ -96,24 +79,16 @@
               size="small"
               icon="el-icon-arrow-down"
               >更多</el-button
-            > -->
+            >-->
             <!-- <el-button
               v-show="more"
               @click="more = !more"
               icon="el-icon-arrow-up"
               size="small"
               >收起</el-button
-            > -->
-            <el-button
-              type="primary"
-              size="small"
-              icon="el-icon-search"
-              @click="handleQuery"
-              >搜索</el-button
-            >
-            <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
-              >重置</el-button
-            >
+            >-->
+            <el-button type="primary" size="small" icon="el-icon-search" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
           </div>
         </el-col>
       </el-row>
@@ -124,12 +99,21 @@
 <script>
 export default {
   dicts: ["risk_level"],
+  props: {
+    projectCode: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       more: true,
       // 查询参数
       queryParams: {}
     };
+  },
+  mounted() {
+    this.$set(this.queryParams, 'projectCode', this.projectCode)
   },
   methods: {
     /** 搜索按钮操作 */

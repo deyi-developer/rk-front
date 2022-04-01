@@ -4,10 +4,10 @@
       <div slot="header">
         <span>工单列表</span>
       </div>
-      <filter-form @search="getList" ref="form"></filter-form>
+      <filter-form :projectCode="$route.query.projectCode" @search="getList" ref="form"></filter-form>
       <el-table class="table" :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" align="center" width="100px"></el-table-column>
-        <el-table-column prop="eventTitle" label="工单标题" width="180"></el-table-column>
+        <el-table-column show-overflow-tooltip prop="eventTitle" label="工单标题" width="180"></el-table-column>
         <el-table-column prop="eventType" label="工单类型" width="180">
           <template v-slot="scope">
             <span>{{ selectDictLabel(dict.type.event_type, scope.row.eventType) }}</span>
@@ -76,7 +76,8 @@ export default {
     }
   },
   created() {
-    this.getList()
+    const { query } = this.$route
+    this.getList(query)
   },
   methods: {
     async getList(query) {

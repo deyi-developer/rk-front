@@ -70,6 +70,7 @@ export default {
 </script>
 <script setup>
 import vm from 'vue'
+import router from '@/router/index';
 import { debounce } from "lodash-es";
 import { send, update, handlerList } from "../project/api"
 import { ref, reactive, defineProps, defineEmits, onMounted } from "@vue/composition-api";
@@ -109,6 +110,7 @@ const sendWorkOrder = async () => {
   if (code == 200) {
     close()
     refresh()
+    router.push({ name: 'order-list' })
   }
   message(code, msg)
 }
@@ -152,8 +154,9 @@ let handlerLoding = ref(false)
 const getHandlers = debounce(async (value) => {
   handlerLoding.value = true
   const params = {
+    pageNum: 1,
     pageSize: 10, // 只显示十条，如果用户找不到会输入更详细名称
-    userName: value
+    nickName: value
   }
   const { rows } = await handlerList(params)
   handlers.value = rows || []

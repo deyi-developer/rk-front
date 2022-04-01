@@ -35,7 +35,8 @@
                   >
                     <span>{{ item.messageContent }}</span>
                     <!-- readFlag 0：未读, 1: 已读 -->
-                    <span class="spot" v-if="!item.readFlag"></span>
+                    <span class="spot" v-show="!item.readFlag"></span>
+                    <span>{{ item.readFlag }}</span>
                   </li>
                 </ul>
               </TabPane>
@@ -149,7 +150,7 @@ export default {
     /**
      * 消息列表
      */
-    async getList() {
+    getList() {
       this.Messages()
       // const { rows } = await list()
       // this.messageList = rows
