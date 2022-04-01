@@ -54,7 +54,9 @@ export default {
     initChart(dataSource) {
       const { dateList, avgAmountList, avgUnitPriceList } = dataSource;
       const option = {
-        legend: {},
+        legend: {
+          top: "25"
+        },
         dataZoom: [
           {
             startValue: dateList[dateList.length - 12],
@@ -77,7 +79,8 @@ export default {
           }
         },
         title: {
-          text: "逐月平均人天结算单价和平均人天成本"
+          text: "逐月平均人天结算单价和平均人天成本",
+          subtext: "单位（元）"
         },
         xAxis: {
           type: "category",

@@ -74,7 +74,7 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      getReach(this.type).then((res) => {
+      getReach({ type: this.type }).then((res) => {
         const data = res.data.data;
         this.$nextTick(() => {
           this.initChart(data);

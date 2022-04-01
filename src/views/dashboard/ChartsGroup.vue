@@ -5,10 +5,10 @@
       <el-col :span="8">
         <el-card>
           <el-row type="flex">
-            <PieChart :projectCode="projectCode" />
+            <PieChart :projectCode="projectCode" :summary="summary" />
           </el-row>
           <el-row type="flex">
-            <PieChart :projectCode="projectCode" />
+            <PieChart2 :projectCode="projectCode" :summary="summary" />
           </el-row>
         </el-card>
       </el-col>
@@ -66,14 +66,27 @@ export default {
 <script setup>
 import BarChart from "./BarChart";
 import BarChart2 from "./BarChart2";
-
 import CostChart from "./CostChart.vue";
 import AmountChart from "./AmountChart.vue";
 import CashOccupyChart from "./CashOccupyChart.vue";
 import GrossProfitChart from "./GrossProfitChart.vue";
 import ReachChart from "./ReachChart.vue";
 import PieChart from "./PieChart";
-// import PieChart2 from "./PieChart2";
+import PieChart2 from "./PieChart2";
+import { getSummary } from "./api.js";
+import { ref, onMounted } from "@vue/composition-api";
+onMounted(() => {
+  fetchData();
+});
+const summary = ref({});
+
+function fetchData() {
+  getSummary().then((res) => {
+    if (res) {
+      summary.value = res;
+    }
+  });
+}
 </script>
 <style lang="scss" scoped>
 .mb-10 {

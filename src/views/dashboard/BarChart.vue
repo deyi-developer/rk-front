@@ -4,7 +4,7 @@
 
 <script>
 import resize from "./mixins/resize";
-
+import { getReportReceive } from "./api";
 const animationDuration = 6000;
 
 export default {
@@ -29,9 +29,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
+    this.fetchData();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -41,7 +39,23 @@ export default {
     this.chart = null;
   },
   methods: {
-    initChart() {
+    fetchData() {
+      getReportReceive().then((res) => {
+        const { data } = res;
+        this.$nextTick(() => {
+          this.initChart(data);
+        });
+      });
+    },
+    initChart(dataSource) {
+      const {
+        expenseCost,
+        expenseOutSource,
+        expensePractice,
+        grossProfit,
+        income
+      } = dataSource;
+
       const option = {
         aria: {
           enabled: true,
@@ -50,8 +64,8 @@ export default {
           }
         },
         title: {
-          text: "总收入（未税）"
-          // subtext: "比率：%"
+          text: "总收入（未税）:" + (income / 10000).toFixed(2) + "万元",
+          subtext: "单位（元）"
         },
         tooltip: {
           trigger: "axis",
@@ -60,7 +74,14 @@ export default {
           },
           formatter: function (params) {
             var tar = params[1];
-            return tar.name + "<br/>" + tar.seriesName + " : " + tar.value;
+            return (
+              tar.name +
+              "<br/>" +
+              tar.value +
+              "<br/>" +
+              ((tar.value / income) * 100).toFixed(2) +
+              "%"
+            );
           }
         },
         grid: {},
@@ -70,7 +91,12 @@ export default {
           data: ["总收入", "人天成本", "外协成本", "实施费用", "毛利额"]
         },
         yAxis: {
-          type: "value"
+          type: "value",
+          axisLabel: {
+            formatter: function (value, index) {
+              return value / 10000 + "万元";
+            }
+          }
         },
         series: [
           {
@@ -87,7 +113,13 @@ export default {
                 color: "transparent"
               }
             },
-            data: [0, 1700, 1400, 1200, 0]
+            data: [
+              0,
+              income - expenseCost,
+              income - expenseCost - expenseOutSource,
+              income - expenseCost - expenseOutSource - expensePractice,
+              0
+            ]
           },
           {
             name: "Life Cost",
@@ -95,9 +127,15 @@ export default {
             stack: "Total",
             label: {
               show: true,
-              position: "inside"
+              position: "top"
             },
-            data: [2900, 1200, 300, 200, 900]
+            data: [
+              income,
+              expenseCost,
+              expenseOutSource,
+              expensePractice,
+              grossProfit
+            ]
           }
         ]
       };

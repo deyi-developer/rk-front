@@ -10,6 +10,10 @@ const animationDuration = 6000;
 export default {
   mixins: [resize],
   props: {
+    summary: {
+      type: Object,
+      default: () => {}
+    },
     className: {
       type: String,
       default: "chart"
@@ -32,6 +36,11 @@ export default {
       chart: null
     };
   },
+  watch: {
+    summary() {
+      this.initChart();
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       this.initChart();
@@ -46,6 +55,14 @@ export default {
   },
   methods: {
     initChart() {
+      const {
+        totalShouldBillingMoney = 0,
+        totalAlreadyBillingMoney = 0,
+        billingMoney30Day = 0,
+        billingMoney30to60Day = 0,
+        billingMoney60to90Day = 0,
+        billingMoney90Day = 0
+      } = this.summary;
       const option = {
         aria: {
           enabled: true,
@@ -54,16 +71,21 @@ export default {
           }
         },
         title: {
-          text: "应开总额",
-          subtext: "Fake Data"
+          text:
+            "应开总额:" + (totalShouldBillingMoney / 10000).toFixed(2) + "万",
+          subtext: "单位（元）"
         },
         tooltip: {
-          trigger: "item"
+          trigger: "item",
+          formatter: function (params) {
+            const {
+              percent,
+              data: { name, value }
+            } = params;
+
+            return `${name}<br/>比率：${percent}%<br/>数值：${value}<br/>`;
+          }
         },
-        // legend: {
-        //   bottom: "0",
-        //   left: "center"
-        // },
         series: [
           {
             name: "Access From",
@@ -71,11 +93,23 @@ export default {
             radius: "50%",
 
             data: [
-              { value: 1048, name: "已开" },
-              { value: 735, name: "超90天应开未开" },
-              { value: 580, name: "超60-90天应开未开" },
-              { value: 484, name: "超30-60天应开未开" },
-              { value: 300, name: "超30天应开未开" }
+              { value: totalAlreadyBillingMoney, name: "已开" },
+              {
+                value: billingMoney90Day,
+                name: "超90天应开未开"
+              },
+              {
+                value: billingMoney60to90Day,
+                name: "超60-90天应开未开"
+              },
+              {
+                value: billingMoney30to60Day,
+                name: "超30-60天应开未开"
+              },
+              {
+                value: billingMoney30Day,
+                name: "超30天内应开未开"
+              }
             ],
             emphasis: {
               itemStyle: {

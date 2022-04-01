@@ -70,7 +70,8 @@ export default {
           }
         },
         title: {
-          text: "逐月累积现金占用趋势"
+          text: "逐月累积现金占用趋势",
+          subtext: "单位（元）"
         },
         legend: {},
         dataZoom: [

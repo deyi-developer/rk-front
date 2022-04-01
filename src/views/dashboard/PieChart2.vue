@@ -9,7 +9,12 @@ const animationDuration = 6000;
 
 export default {
   mixins: [resize],
+
   props: {
+    summary: {
+      type: Object,
+      default: () => {}
+    },
     className: {
       type: String,
       default: "chart"
@@ -32,6 +37,11 @@ export default {
       chart: null
     };
   },
+  watch: {
+    summary() {
+      this.initChart();
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       this.initChart();
@@ -46,6 +56,14 @@ export default {
   },
   methods: {
     initChart() {
+      const {
+        totalShouldReceiptsMoney = 0,
+        totalReceiptssMoney = 0,
+        receiptsMoney30Day = 0,
+        receiptsMoney30to60Day = 0,
+        receiptsMoney60to90Day = 0,
+        receiptsMoney90Day = 0
+      } = this.summary;
       const option = {
         aria: {
           enabled: true,
@@ -54,11 +72,20 @@ export default {
           }
         },
         title: {
-          text: "Referer of a Website",
-          subtext: "Fake Data"
+          text:
+            "应收总额:" + (totalShouldReceiptsMoney / 10000).toFixed(2) + "万",
+          subtext: "单位（元）"
         },
         tooltip: {
-          trigger: "item"
+          trigger: "item",
+          formatter: function (params) {
+            const {
+              percent,
+              data: { name, value }
+            } = params;
+            // const percent = (value / totalShouldReceiptsMoney).toFixed(2);
+            return `${name}<br/>比率：${percent}%<br/>数值：${value}<br/>`;
+          }
         },
         // legend: {
         //   bottom: "0",
@@ -71,11 +98,11 @@ export default {
             radius: "50%",
 
             data: [
-              { value: 1048, name: "已开" },
-              { value: 735, name: "超90天应开未开" },
-              { value: 580, name: "超60-90天应开未开" },
-              { value: 484, name: "超30-60天应开未开" },
-              { value: 300, name: "超30天应开未开" }
+              { value: totalReceiptssMoney, name: "已收" },
+              { value: receiptsMoney90Day, name: "超90天应收未收" },
+              { value: receiptsMoney60to90Day, name: "超60-90天应收未收" },
+              { value: receiptsMoney30to60Day, name: "超30-60天应收未收" },
+              { value: receiptsMoney30Day, name: "超30天应收未收" }
             ],
             emphasis: {
               itemStyle: {
