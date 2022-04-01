@@ -522,7 +522,7 @@
       >
       </vxe-pager>
     </el-card>
-    <ChartsGroup />
+    <!-- <ChartsGroup /> -->
   </div>
 </template>
 <script>

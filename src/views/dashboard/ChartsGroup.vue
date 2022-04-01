@@ -58,8 +58,8 @@
     </el-row>
   </div>
 </template>
-
-<script setup>
+<script>
+import { getSummary, projectDetails } from "./api.js";
 import BarChart from "./BarChart";
 import BarChart2 from "./BarChart2";
 import CostChart from "./CostChart.vue";
@@ -69,36 +69,49 @@ import GrossProfitChart from "./GrossProfitChart.vue";
 import ReachChart from "./ReachChart.vue";
 import PieChart from "./PieChart";
 import PieChart2 from "./PieChart2";
-import { getSummary, projectDetails } from "./api.js";
-import { ref, onMounted, defineProps } from "@vue/composition-api";
-
-const props = defineProps({
-  projectCode: {
-    type: String
-  }
-});
-
-onMounted(() => {
-  fetchData();
-});
-
-const summary = ref({});
-
-function fetchData() {
-  if (props.projectCode) {
-    projectDetails(props.projectCode).then((res) => {
-      if (res) {
-        summary.value = res.data;
+export default {
+  components: {
+    BarChart,
+    BarChart2,
+    CostChart,
+    AmountChart,
+    CashOccupyChart,
+    GrossProfitChart,
+    ReachChart,
+    PieChart,
+    PieChart2
+  },
+  data() {
+    return {
+      summary: {}
+    };
+  },
+  props: {
+    projectCode: {
+      type: String
+    }
+  },
+  created() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      if (this.projectCode) {
+        projectDetails(props.projectCode).then((res) => {
+          if (res) {
+            this.summary = res.data;
+          }
+        });
+      } else {
+        getSummary().then((res) => {
+          if (res) {
+            this.summary = res;
+          }
+        });
       }
-    });
-  } else {
-    getSummary().then((res) => {
-      if (res) {
-        summary.value = res;
-      }
-    });
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .mb-10 {
