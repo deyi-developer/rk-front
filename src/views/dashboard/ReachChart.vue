@@ -53,9 +53,9 @@ export default {
   },
   data() {
     return {
-      type: 1,
+      type: 2,
       options: [
-        { label: "工单收款达成率", value: 1 },
+        { label: "工单完工达成率", value: 1 },
         { label: "开票收款达成率", value: 2 }
       ],
 

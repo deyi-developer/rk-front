@@ -36,7 +36,7 @@
         ref="xTable"
         border
         align="center"
-        max-height="550"
+        height="550"
         show-overflow
         keep-source
         size="small"
