@@ -97,7 +97,7 @@ export default {
   methods: {
     getData() {
       if (this.projectCode) {
-        projectDetails(props.projectCode).then((res) => {
+        projectDetails(this.projectCode).then((res) => {
           if (res) {
             this.summary = res.data;
           }
