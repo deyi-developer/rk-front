@@ -21,42 +21,55 @@ export function getRiskNum() {
  */
 
 // 查询现金分布
-export function getReportCash() {
+export function getReportReceive(projectCode = "") {
+  return request({
+    url: "report/receive",
+    method: "get",
+    query: { projectCode }
+  });
+}
+// 查询现金分布
+export function getReportCash(projectCode = "") {
   return request({
     url: "report/cash",
-    method: "get"
+    method: "get",
+    query: { projectCode }
   });
 }
 
 // 人天
-export function getReportCost() {
+export function getReportCost(projectCode = "") {
   return request({
     url: "report/cost",
-    method: "get"
+    method: "get",
+    query: { projectCode }
   });
 }
 
 // 开票收款收入
-export function getReportAmount() {
+export function getReportAmount(projectCode = "") {
   return request({
     url: "report/amount",
-    method: "get"
+    method: "get",
+    query: { projectCode }
   });
 }
 
 // 查询现金占用
-export function getReportCashOccupy() {
+export function getReportCashOccupy(projectCode = "") {
   return request({
     url: "report/cash/occupy",
-    method: "get"
+    method: "get",
+    query: { projectCode }
   });
 }
 
 // 查询毛利
-export function getReach(type = 1) {
+export function getReach({ type = 1, projectCode = "" }) {
   return request({
     url: `report/reach/${type}`,
-    method: "get"
+    method: "get",
+    query: { projectCode }
   });
 }
 

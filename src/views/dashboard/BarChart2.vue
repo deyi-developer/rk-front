@@ -41,13 +41,21 @@ export default {
   methods: {
     fetchData() {
       getReportCash().then((res) => {
-        const data = res.rows;
+        const data = res.data.data;
         this.$nextTick(() => {
           this.initChart(data);
         });
       });
     },
     initChart(dataSource) {
+      const {
+        date,
+        expenseCostList,
+        expenseOutSourceList,
+        expensePracticeList,
+        grossProfitList,
+        incomeList
+      } = dataSource;
       const option = {
         tooltip: {
           trigger: "axis",
@@ -62,13 +70,14 @@ export default {
           }
         },
         title: {
-          text: "逐月累积现金占用趋势"
+          text: "逐月累积现金占用趋势",
+          subtext: "单位（元）"
         },
         legend: {},
         dataZoom: [
           {
-            startValue: "2022-1",
-            endValue: "2022-4"
+            startValue: date[date.length - 12],
+            endValue: date[date.length]
           },
           {
             type: "inside"
@@ -78,45 +87,48 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: ["2022-1", "2022-2", "2022-3", "2022-4", "2022-5", "2022-6"]
+            data: date
           }
         ],
-        yAxis: [
-          {
-            type: "value"
+        yAxis: {
+          type: "value",
+          axisLabel: {
+            formatter: function (value, index) {
+              return value / 10000 + "万元";
+            }
           }
-        ],
+        },
         series: [
           {
             name: "当月收入",
             type: "bar",
-            data: [320, 332, 301, 334, 390, 330, 320]
+            data: incomeList
           },
           {
             name: "人天成本",
             type: "bar",
             stack: "Ad",
 
-            data: [120, 132, 101, 134, 90, 230, 210]
+            data: expenseCostList
           },
           {
             name: "外协成本",
             type: "bar",
             stack: "Ad",
 
-            data: [220, 182, 191, 234, 290, 330, 310]
+            data: expenseOutSourceList
           },
           {
             name: "实施费用",
             type: "bar",
             stack: "Ad",
 
-            data: [150, 232, 201, 154, 190, 330, 410]
+            data: expensePracticeList
           },
           {
             name: "当月毛利额",
             type: "bar",
-            data: [862, 1018, 964, 1026, 1679, 1600, 1570]
+            data: grossProfitList
           }
         ]
       };

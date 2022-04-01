@@ -31,7 +31,12 @@
                     class="msg-list-item"
                     v-for="(item, index) in messages"
                     :key="index"
-                    @click="$router.push({ name: 'send', query: { id: item.busiKey } })"
+                    @click="
+                      $router.push({
+                        name: 'send',
+                        query: { id: item.busiKey }
+                      })
+                    "
                   >
                     <span>{{ item.messageContent }}</span>
                     <!-- readFlag 0：未读, 1: 已读 -->
@@ -105,10 +110,10 @@ export default {
   data() {
     return {
       messageList: []
-    }
+    };
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device", 'messages', 'unread']),
+    ...mapGetters(["sidebar", "avatar", "device", "messages", "unread"]),
     setting: {
       get() {
         return this.$store.state.settings.showSettings;
@@ -127,10 +132,10 @@ export default {
     }
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
-    ...mapActions(['Messages']),
+    ...mapActions(["Messages"]),
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -142,7 +147,7 @@ export default {
       })
         .then(() => {
           this.$store.dispatch("LogOut").then(() => {
-            location.href = "/index";
+            this.$router.replace("/login");
           });
         })
         .catch(() => { });
