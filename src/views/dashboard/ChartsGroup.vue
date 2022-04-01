@@ -36,7 +36,7 @@
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
         <el-col :span="12">
-          <CostChart />
+          <CostChart :projectCode="projectCode" />
         </el-col>
         <el-col :span="12">
           <CashOccupyChart :projectCode="projectCode" />
@@ -69,32 +69,34 @@ import GrossProfitChart from "./GrossProfitChart.vue";
 import ReachChart from "./ReachChart.vue";
 import PieChart from "./PieChart";
 import PieChart2 from "./PieChart2";
-import { getSummary } from "./api.js";
+import { getSummary, projectDetails } from "./api.js";
 import { ref, onMounted, defineProps } from "@vue/composition-api";
-import { isEmpty } from "lodash-es";
+
 const props = defineProps({
   projectCode: {
     type: String
-  },
-  projectData: {
-    type: Object
   }
 });
+
 onMounted(() => {
   fetchData();
 });
+
 const summary = ref({});
 
 function fetchData() {
-  console.log(isEmpty(props.projectData));
-  if (isEmpty(props.projectData)) {
+  if (props.projectCode) {
+    projectDetails(props.projectCode).then((res) => {
+      if (res) {
+        summary.value = res.data;
+      }
+    });
+  } else {
     getSummary().then((res) => {
       if (res) {
         summary.value = res;
       }
     });
-  } else {
-    summary.value = props.projectData;
   }
 }
 </script>

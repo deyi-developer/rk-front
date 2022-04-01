@@ -25,7 +25,7 @@ export function getReportReceive(projectCode = "") {
   return request({
     url: "report/receive",
     method: "get",
-    query: { projectCode }
+    params: { projectCode }
   });
 }
 // 查询现金分布
@@ -33,7 +33,7 @@ export function getReportCash(projectCode = "") {
   return request({
     url: "report/cash",
     method: "get",
-    query: { projectCode }
+    params: { projectCode }
   });
 }
 
@@ -42,7 +42,7 @@ export function getReportCost(projectCode = "") {
   return request({
     url: "report/cost",
     method: "get",
-    query: { projectCode }
+    params: { projectCode }
   });
 }
 
@@ -51,7 +51,7 @@ export function getReportAmount(projectCode = "") {
   return request({
     url: "report/amount",
     method: "get",
-    query: { projectCode }
+    params: { projectCode }
   });
 }
 
@@ -60,7 +60,7 @@ export function getReportCashOccupy(projectCode = "") {
   return request({
     url: "report/cash/occupy",
     method: "get",
-    query: { projectCode }
+    params: { projectCode }
   });
 }
 
@@ -69,7 +69,7 @@ export function getReach({ type = 1, projectCode = "" }) {
   return request({
     url: `report/reach/${type}`,
     method: "get",
-    query: { projectCode }
+    params: { projectCode }
   });
 }
 
@@ -81,3 +81,11 @@ export function getMaori(query) {
     params: query
   });
 }
+
+// 项目明细
+export const projectDetails = (projectCode) => {
+  return request({
+    url: `/projectDetail/findProjectDetail/${projectCode}`,
+    method: "get"
+  });
+};

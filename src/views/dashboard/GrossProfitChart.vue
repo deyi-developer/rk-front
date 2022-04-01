@@ -41,6 +41,9 @@ const animationDuration = 6000;
 export default {
   mixins: [resize],
   props: {
+    projectCode: {
+      type: String
+    },
     className: {
       type: String,
       default: "chart"
@@ -81,7 +84,11 @@ export default {
     fetchData() {
       const redYear = this.red;
       const blueYear = this.blue;
-      getMaori({ redLine: redYear, blueLine: blueYear }).then((res) => {
+      getMaori({
+        redLine: redYear,
+        blueLine: blueYear,
+        projectCode: this.projectCode
+      }).then((res) => {
         const data = res.rows;
         this.$nextTick(() => {
           this.initChart(data);

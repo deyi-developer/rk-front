@@ -35,6 +35,9 @@ const animationDuration = 6000;
 export default {
   mixins: [resize],
   props: {
+    projectCode: {
+      type: String
+    },
     className: {
       type: String,
       default: "chart"
@@ -74,12 +77,14 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      getReach({ type: this.type }).then((res) => {
-        const data = res.data.data;
-        this.$nextTick(() => {
-          this.initChart(data);
-        });
-      });
+      getReach({ type: this.type, projectCode: this.projectCode }).then(
+        (res) => {
+          const data = res.data.data;
+          this.$nextTick(() => {
+            this.initChart(data);
+          });
+        }
+      );
     },
     initChart(dataSource) {
       const { dateList, percentList } = dataSource;

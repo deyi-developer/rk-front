@@ -522,6 +522,7 @@
       >
       </vxe-pager>
     </el-card>
+    <ChartsGroup />
   </div>
 </template>
 <script>
@@ -529,7 +530,7 @@ import { Tabs, TabPane } from "view-design";
 import { throttle } from "lodash-es";
 import filterForm from "./filterForm.vue";
 import { getList, saveData, getRiskNum } from "./api";
-
+import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 /* 每列宽度150
     前面2列固定
     项目基本信息 12个字段
@@ -557,7 +558,7 @@ const fifthLeft =
 export default {
   dicts: ["risk_level"],
   name: "projectList",
-  components: { Tabs, TabPane, filterForm },
+  components: { Tabs, TabPane, filterForm, ChartsGroup },
   data() {
     return {
       activeName: "first",

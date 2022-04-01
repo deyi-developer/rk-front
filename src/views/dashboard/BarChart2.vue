@@ -10,6 +10,9 @@ const animationDuration = 6000;
 export default {
   mixins: [resize],
   props: {
+    projectCode: {
+      type: String
+    },
     className: {
       type: String,
       default: "chart"
@@ -40,7 +43,7 @@ export default {
   },
   methods: {
     fetchData() {
-      getReportCash().then((res) => {
+      getReportCash(this.projectCode).then((res) => {
         const data = res.data.data;
         this.$nextTick(() => {
           this.initChart(data);
