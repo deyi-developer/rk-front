@@ -33,9 +33,20 @@
           <TabPane label="项目计划" name="fourth"></TabPane>
           <TabPane label="其他指标" name="fifth"></TabPane>
           <template #extra>
-            <el-button type="primary" size="small" @click="validAllEvent"
-              >整页提交</el-button
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="此功能会校验数据必填项"
+              placement="top-start"
             >
+              <el-button
+                v-hasPermi="['order:list:valid']"
+                type="primary"
+                size="small"
+                @click="validAllEvent"
+                >整页提交</el-button
+              >
+            </el-tooltip>
           </template>
         </Tabs>
 
@@ -509,7 +520,12 @@
             </vxe-column>
           </vxe-colgroup>
 
-          <vxe-column width="100" title="操作" fixed="right">
+          <vxe-column
+            v-if="checkPermi(['order:list:save'])"
+            width="100"
+            title="操作"
+            fixed="right"
+          >
             <template #default="{ row }">
               <vxe-button
                 icon="fa fa-save"
@@ -548,6 +564,8 @@ import { throttle } from "lodash-es";
 import filterForm from "./filterForm.vue";
 import { getList, saveData, getRiskNum } from "./api";
 import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
+
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 /* 每列宽度150
     前面2列固定
     项目基本信息 12个字段
@@ -596,15 +614,19 @@ export default {
         total: 0
       },
       validRules: {
-        grossProfitRiskLevel: [{ required: true, message: "风险级别必须填写" }],
-        invoicingRiskLevel: [{ required: true, message: "风险级别必须填写" }],
-        receiveRiskLevel: [{ required: true, message: "风险级别必须填写" }],
+        // grossProfitRiskLevel: [
+        //   { required: true, message: "风险级别必须填写" }],
+        // invoicingRiskLevel: [{ required: true, message: "风险级别必须填写" }],
+        // receiveRiskLevel: [{ required: true, message: "风险级别必须填写" }],
         projectChargePeriod: [{ required: true, message: "必须填写" }],
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
         planReceiptsMoney: [{ required: true, message: "必须填写" }]
       }
     };
+  },
+  created() {
+    console.log(checkRole(["boss", "risker"]));
   },
   mounted() {
     this.fetchData();
@@ -613,6 +635,7 @@ export default {
     this.fetchData();
   },
   methods: {
+    checkPermi,
     // 获取数据
     async fetchData(page) {
       const risk = await getRiskNum();
@@ -630,8 +653,11 @@ export default {
       this.dataSource = res.rows;
       this.tableLodaing = false;
       this.$nextTick(() => {
-        const $table = this.$refs.xTable;
-        $table.validate(true).catch((errMap) => errMap);
+        // pm角色 更新数据后 要提醒他填写数据
+        if (checkRole(["pm"])) {
+          const $table = this.$refs.xTable;
+          $table.validate(true).catch((errMap) => errMap);
+        }
       });
     },
     // 点击tab 滚动列表
@@ -685,12 +711,15 @@ export default {
       const $table = this.$refs.xTable;
 
       const errMap = await $table.validate(true).catch((errMap) => errMap);
-
-      if (errMap) {
-        console.log("不通过");
+      // 有必填项未填 且为pm身份就提示报错
+      if (errMap && checkRole(["pm"])) {
+        this.$notify({
+          type: "warning",
+          message: "请检查数据是否填写完整！"
+        });
       } else {
         const data = $table.getData();
-        console.log(data);
+
         saveData(data).then((res) => {
           if (res.code == "200") {
             this.$modal.notifySuccess(res.msg);
