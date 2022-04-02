@@ -26,7 +26,6 @@
       </el-row>-->
       <el-row style="padding-top: 0;">
         <el-col>
-          <!-- <label class="space">内容</label> -->
           <div class="content">
             <span v-html="info.eventContext"></span>
           </div>
@@ -39,7 +38,7 @@
         <div class="top">
           <img class="avatar" :src="avatar" />
           <p class="name">{{ usersInfo.userName }}</p>
-          <p class="time">2019-07-11 18:44:44</p>
+          <p class="time">{{ formatDate(item.createDate) }}</p>
           <p class="reply" @click="editorVisible = !editorVisible">回复</p>
           <div style="margin-left: auto;" v-if="!item.eventCompleteStutas && item.showFlagButton">
             <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
@@ -89,7 +88,7 @@
   </div>
 </template>
 <script>
-
+import { formatDate } from '@/utils'
 import { mapActions } from 'vuex'
 import { debounce } from "lodash-es";
 import { detail, reply, replyList, update } from './api'
@@ -166,7 +165,7 @@ export default {
 
     /** 修改 */
     edit(item, id) {
-      this.$modal.confirm('确定吗？').then(async () => {
+      this.$modal.confirm(`确定标记为${id === 1 ? '已完成' : '未完成'}吗？`).then(async () => {
         const params = {
           eventHeaderId: item.eventHeaderId,
           eventLineId: item.eventLineId,
