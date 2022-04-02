@@ -42,12 +42,12 @@
               <el-form-item label="项目结算类型:">{{ updateData.projectChargeType }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <!-- <el-form-item label="项目结算周期:">{{ projectData.projectChargePeriod }}</el-form-item> -->
               <el-form-item label="项目结算周期:">
                 <el-input-number
                   style="width: 60%"
                   v-model="updateData.projectChargePeriod"
                   size="small"
+                  :disabled="isBoss"
                 ></el-input-number>
                 <span>月</span>
               </el-form-item>
@@ -58,6 +58,7 @@
                   style="width: 60%"
                   v-model="updateData.projectInvoicePeriod"
                   size="small"
+                  :disabled="isBoss"
                 ></el-input-number>
                 <span>天</span>
               </el-form-item>
@@ -145,12 +146,20 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="计划开票金额:">
-                <el-input style="width: 70%;" v-model="updateData.planBillingMoney"></el-input>
+                <el-input
+                  style="width: 70%;"
+                  v-model="updateData.planBillingMoney"
+                  :disabled="isBoss"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="计划收款金额:">
-                <el-input style="width: 70%;" v-model="updateData.planReceiptsMoney"></el-input>
+                <el-input
+                  style="width: 70%;"
+                  v-model="updateData.planReceiptsMoney"
+                  :disabled="isBoss"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -164,6 +173,7 @@
                 :rows="2"
                 placeholder="请输入内容"
                 v-model="updateData.planRemark"
+                :disabled="isBoss"
               ></el-input>
             </el-form-item>
           </el-row>
@@ -285,7 +295,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userRolse'])
+    ...mapGetters(['userRolse']),
+    // boss没有任何编辑权限
+    isBoss() {
+      if (this.userRolse.length === 1) {
+        return this.userRolse.includes('boss')
+      }
+    }
   },
   created() {
     console.log(this.userRolse)
