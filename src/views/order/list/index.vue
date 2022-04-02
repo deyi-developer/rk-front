@@ -4,16 +4,22 @@
       <h1>项目清单</h1>
       <div class="fx-1 content">
         <span>{{ `总项目数：${risk.totalProjectNum} ` }}</span>
-        <span>{{
-          `无风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
-        }}</span>
-        <span>{{
-          `中风险项目：${risk.mediumRiskProjectNum} (${risk.mediumRiskProjectRate}%)`
-        }}</span>
+        <span>
+          {{
+            `无风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
+          }}
+        </span>
+        <span>
+          {{
+            `中风险项目：${risk.mediumRiskProjectNum} (${risk.mediumRiskProjectRate}%)`
+          }}
+        </span>
 
-        <span>{{
-          `高风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
-        }}</span>
+        <span>
+          {{
+            `高风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
+          }}
+        </span>
         <span>{{ `法务接管项目：未知` }}</span>
       </div>
     </div>
@@ -26,9 +32,7 @@
         <TabPane label="项目计划" name="fourth"></TabPane>
         <TabPane label="其他指标" name="fifth"></TabPane>
         <template #extra>
-          <el-button type="primary" size="small" @click="validAllEvent"
-            >整页提交</el-button
-          >
+          <el-button type="primary" size="small" @click="validAllEvent">整页提交</el-button>
         </template>
       </Tabs>
 
@@ -56,7 +60,7 @@
           fixed="left"
           title="序号"
           width="60"
-        ></vxe-column> -->
+        ></vxe-column>-->
         <!-- 项目基本信息 -->
         <vxe-column
           field="projectCode"
@@ -64,92 +68,25 @@
           width="150"
           title="项目编码"
           class-name="link-color"
-        >
-        </vxe-column>
-        <vxe-column
-          field="projectName"
-          fixed="left"
-          width="150"
-          title="项目名称"
-        >
-        </vxe-column>
+        ></vxe-column>
+        <vxe-column field="projectName" fixed="left" width="150" title="项目名称"></vxe-column>
 
         <vxe-colgroup title="项目基本信息">
-          <vxe-column
-            field="projectChargeType"
-            class-name="bg-base"
-            width="150"
-            title="项目类型"
-          ></vxe-column>
-          <vxe-column
-            field="parentProjectCode"
-            class-name="bg-base"
-            width="150"
-            title="对外项目编码"
-          ></vxe-column>
-          <vxe-column
-            field="parentProjectName"
-            class-name="bg-base"
-            width="150"
-            title="对外项目名称"
-          ></vxe-column>
-          <vxe-column
-            field="projectManagerEmpNum"
-            class-name="bg-base"
-            width="150"
-            title="项目经理工号"
-          ></vxe-column>
-          <vxe-column
-            field="pmName"
-            class-name="bg-base"
-            width="150"
-            title="项目经理姓名"
-          ></vxe-column>
-          <vxe-column
-            field="oneDeptName"
-            class-name="bg-base"
-            width="150"
-            title="一级部门"
-          ></vxe-column>
-          <vxe-column
-            field="deptName"
-            class-name="bg-base"
-            width="150"
-            title="项目部门"
-          ></vxe-column>
-          <vxe-column
-            field="projectCreateDate"
-            class-name="bg-base"
-            width="150"
-            title="项目创建日期"
-          ></vxe-column>
-          <vxe-column
-            field="projectStartDate"
-            class-name="bg-base"
-            width="150"
-            title="项目开始日期"
-          ></vxe-column>
-          <vxe-column
-            field="projectEndDate"
-            class-name="bg-base"
-            width="150"
-            title="项目结束日期"
-          ></vxe-column>
-          <vxe-column
-            field="customName"
-            class-name="bg-base"
-            width="150"
-            title="最终用户"
-          ></vxe-column>
+          <vxe-column field="projectChargeType" class-name="bg-base" width="150" title="项目类型"></vxe-column>
+          <vxe-column field="parentProjectCode" class-name="bg-base" width="150" title="对外项目编码"></vxe-column>
+          <vxe-column field="parentProjectName" class-name="bg-base" width="150" title="对外项目名称"></vxe-column>
+          <vxe-column field="projectManagerEmpNum" class-name="bg-base" width="150" title="项目经理工号"></vxe-column>
+          <vxe-column field="pmName" class-name="bg-base" width="150" title="项目经理姓名"></vxe-column>
+          <vxe-column field="oneDeptName" class-name="bg-base" width="150" title="一级部门"></vxe-column>
+          <vxe-column field="deptName" class-name="bg-base" width="150" title="项目部门"></vxe-column>
+          <vxe-column field="projectCreateDate" class-name="bg-base" width="150" title="项目创建日期"></vxe-column>
+          <vxe-column field="projectStartDate" class-name="bg-base" width="150" title="项目开始日期"></vxe-column>
+          <vxe-column field="projectEndDate" class-name="bg-base" width="150" title="项目结束日期"></vxe-column>
+          <vxe-column field="customName" class-name="bg-base" width="150" title="最终用户"></vxe-column>
         </vxe-colgroup>
 
         <vxe-colgroup title="项目开票信息">
-          <vxe-column
-            class-name="bg-inv"
-            field="pjtdTotalMoney"
-            width="150"
-            title="总收入"
-          ></vxe-column>
+          <vxe-column class-name="bg-inv" field="pjtdTotalMoney" width="150" title="总收入"></vxe-column>
           <vxe-column
             class-name="bg-inv"
             field="projectChargePeriod"
@@ -158,37 +95,13 @@
             :edit-render="{}"
           >
             <template #edit="{ row }">
-              <vxe-input
-                v-model="row.projectChargePeriod"
-                type="number"
-                placeholder="请输入数值"
-              ></vxe-input>
+              <vxe-input v-model="row.projectChargePeriod" type="number" placeholder="请输入数值"></vxe-input>
             </template>
           </vxe-column>
-          <vxe-column
-            class-name="bg-inv"
-            field="billingDeadline"
-            width="150"
-            title="开票截止期间"
-          ></vxe-column>
-          <vxe-column
-            class-name="bg-inv"
-            field="totalShouldBillingMoney"
-            width="150"
-            title="应开总额"
-          ></vxe-column>
-          <vxe-column
-            class-name="bg-inv"
-            field="billingRate"
-            width="150"
-            title="应开比例"
-          ></vxe-column>
-          <vxe-column
-            class-name="bg-inv"
-            field="totalAlreadyBillingMoney"
-            width="150"
-            title="已开总额"
-          ></vxe-column>
+          <vxe-column class-name="bg-inv" field="billingDeadline" width="150" title="开票截止期间"></vxe-column>
+          <vxe-column class-name="bg-inv" field="totalShouldBillingMoney" width="150" title="应开总额"></vxe-column>
+          <vxe-column class-name="bg-inv" field="billingRate" width="150" title="应开比例"></vxe-column>
+          <vxe-column class-name="bg-inv" field="totalAlreadyBillingMoney" width="150" title="已开总额"></vxe-column>
           <vxe-column
             field="billingRateOfTotalPjtd"
             class-name="bg-inv"
@@ -207,12 +120,7 @@
             width="150"
             title="超账期应开未开总额"
           ></vxe-column>
-          <vxe-column
-            field="billingMoney30Day"
-            class-name="bg-inv"
-            width="150"
-            title="超账期30天内应开未开"
-          ></vxe-column>
+          <vxe-column field="billingMoney30Day" class-name="bg-inv" width="150" title="超账期30天内应开未开"></vxe-column>
           <vxe-column
             field="billingMoney30to60Day"
             class-name="bg-inv"
@@ -239,9 +147,11 @@
             :edit-render="{}"
           >
             <template #default="{ row }">
-              <span>{{
-                selectDictLabel(dict.type.risk_level, row.invoicingRiskLevel)
-              }}</span>
+              <span>
+                {{
+                  selectDictLabel(dict.type.risk_level, row.invoicingRiskLevel)
+                }}
+              </span>
             </template>
             <template #edit="{ row }">
               <vxe-select v-model="row.invoicingRiskLevel" transfer>
@@ -271,19 +181,10 @@
             :edit-render="{}"
           >
             <template #edit="{ row }">
-              <vxe-input
-                v-model="row.projectInvoicePeriod"
-                type="number"
-                placeholder="请输入数值"
-              ></vxe-input>
+              <vxe-input v-model="row.projectInvoicePeriod" type="number" placeholder="请输入数值"></vxe-input>
             </template>
           </vxe-column>
-          <vxe-column
-            field="receivedEndTime"
-            width="150"
-            class-name="bg-collection"
-            title="收款截止日期"
-          ></vxe-column>
+          <vxe-column field="receivedEndTime" width="150" class-name="bg-collection" title="收款截止日期"></vxe-column>
           <vxe-column
             field="totalShouldReceiptsMoney"
             class-name="bg-collection"
@@ -352,9 +253,11 @@
             :edit-render="{}"
           >
             <template #default="{ row }">
-              <span>{{
-                selectDictLabel(dict.type.risk_level, row.receiveRiskLevel)
-              }}</span>
+              <span>
+                {{
+                  selectDictLabel(dict.type.risk_level, row.receiveRiskLevel)
+                }}
+              </span>
             </template>
             <template #edit="{ row }">
               <vxe-select v-model="row.receiveRiskLevel" transfer>
@@ -384,19 +287,10 @@
             :edit-render="{}"
           >
             <template #edit="{ row }">
-              <vxe-input
-                v-model="row.planBillingMoney"
-                type="number"
-                placeholder="请输入数值"
-              ></vxe-input>
+              <vxe-input v-model="row.planBillingMoney" type="number" placeholder="请输入数值"></vxe-input>
             </template>
           </vxe-column>
-          <vxe-column
-            field="billingThisMonth"
-            class-name="bg-plan"
-            width="150"
-            title="本月实开总额"
-          ></vxe-column>
+          <vxe-column field="billingThisMonth" class-name="bg-plan" width="150" title="本月实开总额"></vxe-column>
           <vxe-column
             field="compleBillingThisMonth"
             class-name="bg-plan"
@@ -417,19 +311,10 @@
             :edit-render="{}"
           >
             <template #edit="{ row }">
-              <vxe-input
-                v-model="row.planReceiptsMoney"
-                type="number"
-                placeholder="请输入数值"
-              ></vxe-input>
+              <vxe-input v-model="row.planReceiptsMoney" type="number" placeholder="请输入数值"></vxe-input>
             </template>
           </vxe-column>
-          <vxe-column
-            field="receiptsThisMonth"
-            class-name="bg-plan"
-            width="150"
-            title="本月实收总额"
-          ></vxe-column>
+          <vxe-column field="receiptsThisMonth" class-name="bg-plan" width="150" title="本月实收总额"></vxe-column>
           <vxe-column
             field="compleReceiptsThisMonth"
             width="150"
@@ -444,28 +329,14 @@
             :edit-render="{}"
           >
             <template #edit="{ row }">
-              <vxe-input
-                v-model="row.planRemark"
-                type="text"
-                placeholder="请输入备注信息"
-              ></vxe-input>
+              <vxe-input v-model="row.planRemark" type="text" placeholder="请输入备注信息"></vxe-input>
             </template>
           </vxe-column>
         </vxe-colgroup>
 
         <vxe-colgroup title="其他指标">
-          <vxe-column
-            field="grossProfit"
-            class-name="bg-other"
-            width="150"
-            title="毛利额"
-          ></vxe-column>
-          <vxe-column
-            field="grossProfitRate"
-            class-name="bg-other"
-            width="150"
-            title="毛利率"
-          ></vxe-column>
+          <vxe-column field="grossProfit" class-name="bg-other" width="150" title="毛利额"></vxe-column>
+          <vxe-column field="grossProfitRate" class-name="bg-other" width="150" title="毛利率"></vxe-column>
 
           <vxe-column
             field="grossProfitRiskLevel"
@@ -475,9 +346,11 @@
             :edit-render="{}"
           >
             <template #default="{ row }">
-              <span>{{
-                selectDictLabel(dict.type.risk_level, row.grossProfitRiskLevel)
-              }}</span>
+              <span>
+                {{
+                  selectDictLabel(dict.type.risk_level, row.grossProfitRiskLevel)
+                }}
+              </span>
             </template>
             <template #edit="{ row }">
               <vxe-select v-model="row.grossProfitRiskLevel" transfer>
@@ -519,8 +392,7 @@
           'FullJump',
           'Total'
         ]"
-      >
-      </vxe-pager>
+      ></vxe-pager>
     </el-card>
     <!-- <ChartsGroup /> -->
   </div>
@@ -656,7 +528,7 @@ export default {
       const { field } = column;
       if (field == "projectCode") {
         this.$router.push({
-          name: "details",
+          path: "/order/details",
           query: {
             projectCode
           }
@@ -693,8 +565,8 @@ export default {
           .then(() => {
             this.fetchData({ pageNum, pageSize });
           })
-          .then(() => {})
-          .catch(() => {});
+          .then(() => { })
+          .catch(() => { });
       } else {
         this.fetchData({ pageNum, pageSize });
       }
@@ -736,7 +608,7 @@ export default {
         }
       }
     },
-    150)
+      150)
   }
 };
 </script>

@@ -15,7 +15,7 @@
               <el-button
                 style="padding: 3px 0"
                 type="text"
-                @click="$router.push({ name: 'order-list', query: { projectCode: projectData.projectCode } })"
+                @click="$router.push({ path: '/order/order-list', query: { projectCode: projectData.projectCode } })"
               >服务工单</el-button>
               <el-button style="padding: 3px 0" type="text" @click="sendOrder">发起工单</el-button>
             </div>
@@ -27,7 +27,6 @@
             <el-col :span="6">
               <el-form-item label="对外项目编码:">{{ projectData.parentProjectCode }}</el-form-item>
             </el-col>
-
             <el-col :span="6">
               <el-form-item label="项目名称:">{{ projectData.projectName }}</el-form-item>
             </el-col>
@@ -50,6 +49,7 @@
                   v-model="updateData.projectChargePeriod"
                   size="small"
                 ></el-input-number>
+                <span>月</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -59,6 +59,7 @@
                   v-model="updateData.projectInvoicePeriod"
                   size="small"
                 ></el-input-number>
+                <span>天</span>
               </el-form-item>
             </el-col>
           </el-row>
