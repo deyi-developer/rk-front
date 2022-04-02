@@ -574,7 +574,7 @@ const fifthLeft =
 
 export default {
   dicts: ["risk_level"],
-  name: "projectList",
+  name: "List",
   components: { Tabs, TabPane, filterForm, ChartsGroup },
   data() {
     return {
@@ -705,8 +705,15 @@ export default {
       const updateRecords = $table.getUpdateRecords();
 
       if (updateRecords.length > 0) {
-        this.$modal
-          .confirm("有修改未提交数据，是否放弃填写")
+        let msg = "以下项目有修改但未提交数据：<br/>";
+
+        for (let index = 0; index < updateRecords.length; index++) {
+          const item = updateRecords[index];
+          msg = msg + item.projectName + "，<br/>";
+        }
+        this.$confirm(msg + "是否放弃填写?", "提示", {
+          dangerouslyUseHTMLString: true
+        })
           .then(() => {
             this.fetchData({ pageNum, pageSize });
           })
