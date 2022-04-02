@@ -1,8 +1,10 @@
 <template>
-  <div class="app-container home">
-    <PanelGroup :risk="risk" />
-    <TableDesc :summary="summary" />
-    <ChartsGroup />
+  <div class="page-bg">
+    <div class="app-container home">
+      <PanelGroup :risk="risk" />
+      <TableDesc :summary="summary" />
+      <ChartsGroup />
+    </div>
   </div>
 </template>
 <script>
