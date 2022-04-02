@@ -2,7 +2,7 @@
 <template>
   <el-row :gutter="12" style="margin-bottom: 10px">
     <el-col :span="6">
-      <el-card shadow="always">
+      <el-card shadow="always" class="click-handle">
         <div class="ds-flex">
           <i-circle :percent="risk.noRiskProjectRate" stroke-color="#19be6b">
             <span class="demo-Circle-inner">{{ risk.noRiskProjectRate }}%</span>
@@ -30,7 +30,7 @@
       </el-card>
     </el-col>
     <el-col :span="6">
-      <el-card shadow="always">
+      <el-card shadow="always" class="click-handle">
         <div class="ds-flex">
           <i-circle
             :percent="risk.mediumRiskProjectRate"
@@ -63,7 +63,7 @@
       </el-card>
     </el-col>
     <el-col :span="6">
-      <el-card shadow="always">
+      <el-card shadow="always" class="click-handle">
         <div class="ds-flex">
           <i-circle :percent="risk.highRiskProjectRate" stroke-color="#ed4014">
             <span class="demo-Circle-inner"
@@ -93,7 +93,7 @@
       </el-card>
     </el-col>
     <el-col :span="6">
-      <el-card shadow="always">
+      <el-card shadow="always" class="click-handle">
         <div class="ds-flex">
           <i-circle :percent="0" stroke-color="#808695">
             <span class="demo-Circle-inner">0%</span>
@@ -146,6 +146,9 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
+.click-handle {
+  // cursor: pointer;
+}
 .circel-desc {
   display: inline-block;
   vertical-align: top;
