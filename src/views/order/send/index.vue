@@ -152,6 +152,8 @@ export default {
       if (code === 200) {
         this.$modal.msgSuccess(msg);
         this.getReplyList(this.$route.query.id)
+        this.info = {}
+        this.eventHandler = ''
       } else {
         this.$modal.msgError(msg);
       }
