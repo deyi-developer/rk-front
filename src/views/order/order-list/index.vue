@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap page-bg">
     <el-card>
       <div slot="header">
         <span>工单列表</span>
@@ -24,14 +24,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="eventHandler" label="工单处理人"></el-table-column>-->
-        <el-table-column prop="projectCode" label="关联项目"></el-table-column>
+        <el-table-column prop="projectCode" label="项目编码"></el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
             <div>
               <el-button size="small" @click="update(scope.row)">修改</el-button>
               <el-button
                 size="small"
-                @click="() => $router.push({ name: 'send', query: { id: scope.row.eventHeaderId } })"
+                @click="() => $router.push({ path: '/order/send', query: { id: scope.row.eventHeaderId } })"
               >详情</el-button>
             </div>
           </template>
@@ -56,7 +56,7 @@
 <script>
 import { list } from './api'
 import workOrderDialog from '../components/work-order-dialog'
-import filterForm from '../list/filterForm'
+import filterForm from './filterForm'
 export default {
   dicts: ["event_type", "event_urgency_level"],
   components: {

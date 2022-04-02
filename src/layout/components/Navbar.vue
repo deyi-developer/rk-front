@@ -18,7 +18,7 @@
 
       <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
         <span style="line-height: 20px; height: 20px">
-          <Badge :count="100" :overflow-count="unread">
+          <Badge :count="unread" :overflow-count="unread">
             <Icon type="ios-notifications-outline" size="22"></Icon>
           </Badge>
         </span>

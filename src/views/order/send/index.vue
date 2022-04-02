@@ -1,5 +1,5 @@
 <template>
-  <div class="work-order">
+  <div class="work-order page-bg">
     <header>
       <h1 style="font-weight: 500;">{{ info.eventTitle }}</h1>
       <el-row>
@@ -41,9 +41,13 @@
           <p class="name">{{ usersInfo.userName }}</p>
           <p class="time">2019-07-11 18:44:44</p>
           <p class="reply" @click="editorVisible = !editorVisible">回复</p>
-          <div style="margin-left: auto;" v-if="item.showFlagButton">
+          <div style="margin-left: auto;" v-if="!item.eventCompleteStutas && item.showFlagButton">
             <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
             <el-button size="mini" @click="edit(item, 3)">未完成</el-button>
+          </div>
+          <div style="margin-left: auto;" v-else>
+            <label>状态：</label>
+            <span>{{ item.eventCompleteStutas === 1 ? '已完成' : '未完成' }}</span>
           </div>
         </div>
         <div class="bottom" v-html="item.eventMsg"></div>
@@ -161,18 +165,23 @@ export default {
     },
 
     /** 修改 */
-    async edit(item, id) {
-      const params = {
-        eventHeaderId: item.eventHeaderId,
-        eventLineId: item.eventLineId,
-        eventCompleteStutas: id
-      }
-      const { code, res } = await update(params)
-      if (code === 200) {
-        this.$modal.msgSuccess(msg);
-      } else {
-        this.$modal.msgError(msg);
-      }
+    edit(item, id) {
+      this.$modal.confirm('确定吗？').then(async () => {
+        const params = {
+          eventHeaderId: item.eventHeaderId,
+          eventLineId: item.eventLineId,
+          eventCompleteStutas: id
+        }
+        const { code, msg } = await update(params)
+        if (code === 200) {
+          this.$modal.msgSuccess(msg);
+          this.getReplyList(this.$route.query.id)
+        } else {
+          this.$modal.msgError(msg);
+        }
+      }).catch(() => {
+        console.log('catch')
+      })
     }
   }
 }
