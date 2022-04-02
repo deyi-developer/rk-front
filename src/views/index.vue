@@ -1,5 +1,5 @@
 <template>
-  <div class="page-bg" v-loading.fullscreen.lock="loading">
+  <div class="page-bg">
     <div class="app-container home">
       <div class="dept-select">
         当前数据范围：
@@ -34,6 +34,12 @@
       <PanelGroup :risk="risk" />
       <TableDesc :summary="summary" />
       <ChartsGroup :oneDeptId="oneDeptId" />
+      <transition name="fade">
+        <div class="loading-mask" v-show="loading">
+          <i class="el-icon-loading"></i>
+          <p style="font-size: 14px">加载中</p>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -165,6 +171,20 @@ export default {
   .echarts-panel {
     background: #fff;
     padding: 20px;
+  }
+  .loading-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #409eff;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
   }
 }
 </style>
