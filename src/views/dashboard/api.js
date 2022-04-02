@@ -1,18 +1,20 @@
 import request from "@/utils/request";
 
 // 查询
-export function getSummary() {
+export function getSummary(params) {
   return request({
     url: "/reportdata/reportdata/summary",
-    method: "get"
+    method: "get",
+    params
   });
 }
 
 // 查询参数列表
-export function getRiskNum() {
+export function getRiskNum(params) {
   return request({
     url: "/reportdata/reportdata/risk-num",
-    method: "get"
+    method: "get",
+    params
   });
 }
 

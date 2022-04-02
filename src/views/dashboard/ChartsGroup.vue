@@ -17,12 +17,12 @@
         <el-card>
           <el-row type="flex">
             <el-col :span="24">
-              <BarChart :projectCode="projectCode" />
+              <BarChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
             </el-col>
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <BarChart2 :projectCode="projectCode" />
+              <BarChart2 :projectCode="projectCode" :oneDeptId="oneDeptId" />
             </el-col>
           </el-row>
         </el-card>
@@ -30,16 +30,16 @@
     </el-row>
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
-        <AmountChart :projectCode="projectCode" />
+        <AmountChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
       </el-row>
     </el-card>
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
         <el-col :span="12">
-          <CostChart :projectCode="projectCode" />
+          <CostChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-col>
         <el-col :span="12">
-          <CashOccupyChart :projectCode="projectCode" />
+          <CashOccupyChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-col>
       </el-row>
     </el-card>
@@ -47,12 +47,12 @@
     <el-row type="flex" :gutter="10">
       <el-col :span="12">
         <el-card>
-          <GrossProfitChart :projectCode="projectCode" />
+          <GrossProfitChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card>
-          <ReachChart :projectCode="projectCode" />
+          <ReachChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-card>
       </el-col>
     </el-row>
@@ -89,6 +89,9 @@ export default {
   props: {
     projectCode: {
       type: String
+    },
+    oneDeptId: {
+      type: [String, Number]
     }
   },
   created() {
@@ -103,7 +106,10 @@ export default {
           }
         });
       } else {
-        getSummary().then((res) => {
+        const parmas = {
+          oneDeptId: this.oneDeptId
+        };
+        getSummary(parmas).then((res) => {
           if (res) {
             this.summary = res;
           }
