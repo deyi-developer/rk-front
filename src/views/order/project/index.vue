@@ -264,10 +264,14 @@ import { mapGetters } from 'vuex'
 import { projectDetails, projectUpdate } from './api'
 import ChartsGroup from "../../dashboard/ChartsGroup";
 import filterForm from '../list/filterForm'
+import workOrderDialog from '../components/work-order-dialog'
+
 export default {
   dicts: ["event_type", "event_urgency_level", "risk_level"],
   components: {
     filterForm,
+    workOrderDialog,
+    ChartsGroup
   },
   data() {
     return {
@@ -291,7 +295,8 @@ export default {
         eventHandler: '',
         eventUrgencyLevel: '',
         projectCode: this.$route.query.projectCode
-      }
+      },
+      dialogVisible: false
     }
   },
   computed: {
@@ -304,7 +309,6 @@ export default {
     }
   },
   created() {
-    console.log(this.userRolse)
     const { query: { projectCode } } = this.$route
     this.getData(projectCode)
   },
@@ -334,12 +338,17 @@ export default {
           this.updateData[key] = data[key]
         }
       })
+    },
+
+    /** 发起工单 */
+    sendOrder() {
+      this.dialogVisible = true
     }
   }
 }
 </script>
-<script setup>
-import { ref, onMounted } from "@vue/composition-api";
+<!-- <script setup>
+import { ref } from "@vue/composition-api";
 import workOrderDialog from '../components/work-order-dialog'
 
 let dialogVisible = ref(false)
@@ -356,7 +365,7 @@ let form = ref({
   projectCode: ''
 })
 
-</script>
+</script> -->
 
 <style lang="scss" scoped>
 .order {
