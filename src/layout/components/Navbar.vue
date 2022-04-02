@@ -33,7 +33,7 @@
                     :key="index"
                     @click="
                       $router.push({
-                        data: '/order/send',
+                        path: '/order/send',
                         query: { id: item.busiKey }
                       })
                     "
