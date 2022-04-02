@@ -90,9 +90,10 @@
 <script>
 import { formatDate } from '@/utils'
 import { mapActions } from 'vuex'
-import { debounce } from "lodash-es";
 import { detail, reply, replyList, update } from './api'
 import { mapGetters } from 'vuex'
+import { handlerList } from "../project/api"
+import { debounce } from "lodash-es";
 import editor from "@/components/Editor"
 export default {
   components: {
@@ -105,7 +106,10 @@ export default {
       info: {},
       replyList: [],
       editorVisible: true,
-      eventHandler: ''
+      eventHandler: '',
+      handlers: [],
+      handlerLoding: false,
+      formatDate
     }
   },
 
@@ -183,28 +187,17 @@ export default {
       }).catch(() => {
         console.log('catch')
       })
-    }
+    },
+
+    getHandlers: debounce(async function (value) {
+      this.handlerLoding = true
+      const params = { pageNum: 1, pageSize: 10, nickName: value }
+      const { rows } = await handlerList(params)
+      this.handlers = rows
+      this.handlerLoding = false
+    }, 500)
   }
 }
-</script>
-<script setup>
-import { handlerList } from "../project/api"
-import { ref } from "@vue/composition-api";
-
-let handlers = ref([])
-let handlerLoding = ref(false)
-const getHandlers = debounce(async (value) => {
-  handlerLoding.value = true
-  const params = {
-    pageNum: 1,
-    pageSize: 10, // 只显示十条，如果用户找不到会输入更详细名称
-    nickName: value
-  }
-  const { rows } = await handlerList(params)
-  handlers.value = rows || []
-  handlerLoding.value = false
-}, 500)
-
 </script>
 
 <style lang="scss" scoped>
