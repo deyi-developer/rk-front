@@ -63,10 +63,16 @@
           :loading="tableLodaing"
           :scroll-y="{ enabled: false, gt: 100 }"
           :scroll-x="{ enabled: false, gt: 10 }"
-          :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
+          :edit-config="{
+            trigger: 'click',
+            mode: 'cell',
+            showStatus: true,
+            activeMethod: activeCellMethod
+          }"
           :edit-rules="validRules"
           @cell-click="gotoDetail"
           @scroll="scrollHandle"
+          @edit-disabled="editDisabledEvent"
         >
           <!-- <vxe-column
           type="seq"
@@ -625,9 +631,6 @@ export default {
       }
     };
   },
-  created() {
-    console.log(checkRole(["boss", "risker"]));
-  },
   mounted() {
     this.fetchData();
   },
@@ -751,6 +754,43 @@ export default {
       } else {
         this.fetchData({ pageNum, pageSize });
       }
+    },
+    // 设置填写权限
+    activeCellMethod({ column }) {
+      const { field } = column;
+      // boss不能编辑
+      if (checkRole(["boss"])) {
+        return false;
+      }
+      // pm不能编辑这个字段
+      if (checkRole(["pm"])) {
+        if (
+          [
+            "grossProfitRiskLevel",
+            "invoicingRiskLevel",
+            "receiveRiskLevel"
+          ].includes(field)
+        ) {
+          return false;
+        }
+      }
+      // 风控不能编辑这个字段
+      if (checkRole(["risker"])) {
+        if (
+          [
+            "projectChargePeriod",
+            "projectInvoicePeriod",
+            "planBillingMoney",
+            "planReceiptsMoney"
+          ].includes(field)
+        ) {
+          return false;
+        }
+      }
+      return true;
+    },
+    editDisabledEvent() {
+      this.$message.error("您的角色没有编辑此字段权限");
     },
     // 滚动事件
     scrollHandle: throttle(function ({
