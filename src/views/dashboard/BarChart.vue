@@ -13,6 +13,9 @@ export default {
     projectCode: {
       type: String
     },
+    oneDeptId: {
+      type: [String, Number]
+    },
     className: {
       type: String,
       default: "chart"
@@ -26,6 +29,7 @@ export default {
       default: "300px"
     }
   },
+
   data() {
     return {
       chart: null
@@ -41,9 +45,18 @@ export default {
     this.chart.dispose();
     this.chart = null;
   },
+  watch: {
+    oneDeptId() {
+      this.fetchData();
+    }
+  },
   methods: {
     fetchData() {
-      getReportReceive(this.projectCode).then((res) => {
+      const params = {
+        projectCode: this.projectCode,
+        oneDeptId: this.oneDeptId
+      };
+      getReportReceive(params).then((res) => {
         const { data } = res;
         this.$nextTick(() => {
           this.initChart(data);

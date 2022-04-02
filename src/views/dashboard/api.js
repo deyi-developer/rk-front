@@ -23,55 +23,55 @@ export function getRiskNum(params) {
  */
 
 // 查询现金分布
-export function getReportReceive(projectCode = "") {
+export function getReportReceive(params) {
   return request({
     url: "report/receive",
     method: "get",
-    params: { projectCode }
+    params
   });
 }
 // 查询现金分布
-export function getReportCash(projectCode = "") {
+export function getReportCash(params) {
   return request({
     url: "report/cash",
     method: "get",
-    params: { projectCode }
+    params
   });
 }
 
 // 人天
-export function getReportCost(projectCode = "") {
+export function getReportCost(params) {
   return request({
     url: "report/cost",
     method: "get",
-    params: { projectCode }
+    params
   });
 }
 
 // 开票收款收入
-export function getReportAmount(projectCode = "") {
+export function getReportAmount(params) {
   return request({
     url: "report/amount",
     method: "get",
-    params: { projectCode }
+    params
   });
 }
 
 // 查询现金占用
-export function getReportCashOccupy(projectCode = "") {
+export function getReportCashOccupy(params) {
   return request({
     url: "report/cash/occupy",
     method: "get",
-    params: { projectCode }
+    params
   });
 }
 
 // 查询毛利
-export function getReach({ type = 1, projectCode = "" }) {
+export function getReach({ type = 1, ...params }) {
   return request({
     url: `report/reach/${type}`,
     method: "get",
-    params: { projectCode }
+    params
   });
 }
 

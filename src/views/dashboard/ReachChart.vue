@@ -38,6 +38,9 @@ export default {
     projectCode: {
       type: String
     },
+    oneDeptId: {
+      type: [String, Number]
+    },
     className: {
       type: String,
       default: "chart"
@@ -72,19 +75,27 @@ export default {
     this.chart.dispose();
     this.chart = null;
   },
+  watch: {
+    oneDeptId() {
+      this.fetchData();
+    }
+  },
   methods: {
     changeHandle() {
       this.fetchData();
     },
     fetchData() {
-      getReach({ type: this.type, projectCode: this.projectCode }).then(
-        (res) => {
-          const data = res.data.data;
-          this.$nextTick(() => {
-            this.initChart(data);
-          });
-        }
-      );
+      const params = {
+        type: this.type,
+        projectCode: this.projectCode,
+        oneDeptId: this.oneDeptId
+      };
+      getReach(params).then((res) => {
+        const data = res.data.data;
+        this.$nextTick(() => {
+          this.initChart(data);
+        });
+      });
     },
     initChart(dataSource) {
       const { dateList, percentList } = dataSource;

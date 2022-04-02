@@ -11,7 +11,7 @@
         >
           <el-select
             :disabled="checkRole(['pm'])"
-            v-model="oneDeptId"
+            v-model="selectDeptId"
             size="small"
             placeholder="请选择部门"
           >
@@ -27,7 +27,7 @@
           </p>
 
           <span slot="reference" class="dept-select-name">
-            {{ oneDeptName }} <i class="el-icon-arrow-down"></i
+            {{ selectDeptName }} <i class="el-icon-arrow-down"></i
           ></span>
         </el-popover>
       </div>
@@ -49,9 +49,10 @@ export default {
   components: { PanelGroup, TableDesc, ChartsGroup },
   data() {
     return {
-      oneDeptId: "",
+      oneDeptId: "", //一级部门id
       oneDeptName: "默认",
-      selectDeptName: "",
+      selectDeptName: "默认",
+      selectDeptId: "",
       deptList: [],
       visible: false,
       loading: true,
@@ -112,10 +113,12 @@ export default {
     checkRole,
     selectDept() {
       const obj = this.deptList.find(
-        (item) => item.oneDeptId == this.oneDeptId
+        (item) => item.oneDeptId == this.selectDeptId
       );
       if (obj) {
+        this.selectDeptName = obj.oneDeptName;
         this.oneDeptName = obj.oneDeptName;
+        this.oneDeptId = obj.oneDeptId;
       }
       this.visible = false;
       this.getData();

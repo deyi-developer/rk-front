@@ -44,6 +44,9 @@ export default {
     projectCode: {
       type: String
     },
+    oneDeptId: {
+      type: [String, Number]
+    },
     className: {
       type: String,
       default: "chart"
@@ -75,6 +78,11 @@ export default {
     this.chart.dispose();
     this.chart = null;
   },
+  watch: {
+    oneDeptId() {
+      this.fetchData();
+    }
+  },
   methods: {
     changeHandle(val) {
       if (this.red && this.blue) {
@@ -84,11 +92,13 @@ export default {
     fetchData() {
       const redYear = this.red;
       const blueYear = this.blue;
-      getMaori({
+      const params = {
         redLine: redYear,
         blueLine: blueYear,
-        projectCode: this.projectCode
-      }).then((res) => {
+        projectCode: this.projectCode,
+        oneDeptId: this.oneDeptId
+      };
+      getMaori(params).then((res) => {
         const data = res.rows;
         this.$nextTick(() => {
           this.initChart(data);
