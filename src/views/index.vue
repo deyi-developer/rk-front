@@ -113,7 +113,7 @@ export default {
     });
   },
   activated() {
-    this.getData();
+    // this.getData();
   },
   methods: {
     checkRole,

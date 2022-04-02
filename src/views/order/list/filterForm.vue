@@ -26,7 +26,7 @@
             <el-input v-model="queryParams.pmName" clearable size="small" />
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" v-if="checkRole(['pm'])">
           <el-form-item label="一级部门" prop="oneDeptId">
             <el-select
               class="block"
@@ -131,7 +131,7 @@
 
 <script>
 import { getDeptList } from "@/api/common";
-
+import { checkRole } from "@/utils/permission"; // 权限判断函数
 export default {
   dicts: ["risk_level"],
   props: {
@@ -158,6 +158,7 @@ export default {
     this.$set(this.queryParams, "projectCode", this.projectCode);
   },
   methods: {
+    checkRole,
     /** 搜索按钮操作 */
     handleQuery() {
       this.$emit("search", this.queryParams);
