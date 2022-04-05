@@ -100,7 +100,11 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对应开开票率"
-              >{{ summary.correspondingBillingRate }}</el-descriptions-item
+              >{{
+                summary.correspondingBillingRate
+                  ? `${summary.correspondingBillingRate}%`
+                  : ""
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
