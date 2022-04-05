@@ -72,13 +72,9 @@ export default {
         },
         title: {
           text:
-            "应开总额:" +
-            (totalShouldBillingMoney / 10000).toFixed(2) +
-            "万｜" +
-            "已开:" +
-            (totalAlreadyBillingMoney / 10000).toFixed(2) +
-            "万",
-          subtext: "单位（元）"
+            "应开总额:" + (totalShouldBillingMoney / 10000).toFixed(2) + "万",
+          subtext:
+            "已开:" + (totalAlreadyBillingMoney / 10000).toFixed(2) + "万"
         },
         tooltip: {
           trigger: "item",

@@ -73,13 +73,8 @@ export default {
         },
         title: {
           text:
-            "应收总额:" +
-            (totalShouldReceiptsMoney / 10000).toFixed(2) +
-            "万｜" +
-            "已收:" +
-            (totalReceiptssMoney / 10000).toFixed(2) +
-            "万",
-          subtext: "单位（元）"
+            "应收总额:" + (totalShouldReceiptsMoney / 10000).toFixed(2) + "万",
+          subtext: "已收:" + (totalReceiptssMoney / 10000).toFixed(2) + "万"
         },
         tooltip: {
           trigger: "item",
