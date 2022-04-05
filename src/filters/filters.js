@@ -1,3 +1,4 @@
+import currency from "currency.js";
 const install = function (Vue) {
   // 性别
   Vue.filter("sex", (value) => {
@@ -11,7 +12,7 @@ const install = function (Vue) {
     }
     const typeMap = {
       0: "男",
-      1: "女",
+      1: "女"
     };
     return typeMap[value];
   });
@@ -32,7 +33,7 @@ const install = function (Vue) {
       shuoshi: "硕士",
       benke: "本科",
       dazhuan: "大专",
-      gaozhong: "高中",
+      gaozhong: "高中"
     };
 
     return typeMap[value];
@@ -67,7 +68,7 @@ const install = function (Vue) {
     const typeMap = {
       phone: "电话",
       wechat: "微信",
-      qq: "QQ",
+      qq: "QQ"
     };
 
     return typeMap[value];
@@ -87,10 +88,15 @@ const install = function (Vue) {
     const typeMap = {
       PASS: "通过",
       FAILED: "不通过",
-      INTERVIEWING: "面试中",
+      INTERVIEWING: "面试中"
     };
 
     return typeMap[value];
+  });
+
+  // 金额
+  Vue.filter("currency", (value) => {
+    return currency(value, { symbol: "", separator: "," }).format();
   });
 
   // 关联需求

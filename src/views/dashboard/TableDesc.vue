@@ -6,12 +6,12 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="PJTD含税总收入"
-            >{{ summary.pjtdTotalMoney }}</el-descriptions-item
+            >{{ summary.pjtdTotalMoney | currency }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="总开票"
-            >{{ summary.totalBilling }}</el-descriptions-item
+            >{{ summary.totalBilling | currency }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
@@ -26,7 +26,7 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="总收款"
-            >{{ summary.totalReceipts }}</el-descriptions-item
+            >{{ summary.totalReceipts | currency }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
@@ -78,17 +78,23 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应开金额"
-              >{{ summary.totalShouldBillingMoney }}</el-descriptions-item
+              >{{
+                summary.totalShouldBillingMoney | currency
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总已开金额"
-              >{{ summary.totalAlreadyBillingMoney }}</el-descriptions-item
+              >{{
+                summary.totalAlreadyBillingMoney | currency
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应开未开"
-              >{{ summary.totalShouldNotBillingMoney }}</el-descriptions-item
+              >{{
+                summary.totalShouldNotBillingMoney | currency
+              }}</el-descriptions-item
             >
 
             <el-descriptions-item
@@ -99,22 +105,30 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收金额"
-              >{{ summary.totalShouldReceiptsMoney }}</el-descriptions-item
+              >{{
+                summary.totalShouldReceiptsMoney | currency
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总已收金额"
-              >{{ summary.totalReceiptssMoney }}</el-descriptions-item
+              >{{
+                summary.totalReceiptssMoney | currency
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收未收（相对应收）"
-              >{{ summary.totalShouldNotReceiptsMoney }}</el-descriptions-item
+              >{{
+                summary.totalShouldNotReceiptsMoney | currency
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收未收（相对已开）"
-              >{{ summary.totalShouldNotReceiptsBilling }}</el-descriptions-item
+              >{{
+                summary.totalShouldNotReceiptsBilling | currency
+              }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
