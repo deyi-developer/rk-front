@@ -73,7 +73,12 @@ export default {
         },
         title: {
           text:
-            "应收总额:" + (totalShouldReceiptsMoney / 10000).toFixed(2) + "万",
+            "应收总额:" +
+            (totalShouldReceiptsMoney / 10000).toFixed(2) +
+            "万｜" +
+            "已收:" +
+            (totalReceiptssMoney / 10000).toFixed(2) +
+            "万",
           subtext: "单位（元）"
         },
         tooltip: {
@@ -98,7 +103,7 @@ export default {
             radius: "50%",
 
             data: [
-              { value: totalReceiptssMoney, name: "已收" },
+              // { value: totalReceiptssMoney, name: "已收" },
               { value: receiptsMoney90Day, name: "超90天应收未收" },
               { value: receiptsMoney60to90Day, name: "超60-90天应收未收" },
               { value: receiptsMoney30to60Day, name: "超30-60天应收未收" },

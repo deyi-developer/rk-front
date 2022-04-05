@@ -72,7 +72,12 @@ export default {
         },
         title: {
           text:
-            "应开总额:" + (totalShouldBillingMoney / 10000).toFixed(2) + "万",
+            "应开总额:" +
+            (totalShouldBillingMoney / 10000).toFixed(2) +
+            "万｜" +
+            "已开:" +
+            (totalAlreadyBillingMoney / 10000).toFixed(2) +
+            "万",
           subtext: "单位（元）"
         },
         tooltip: {
@@ -93,7 +98,7 @@ export default {
             radius: "50%",
 
             data: [
-              { value: totalAlreadyBillingMoney, name: "已开" },
+              // { value: totalAlreadyBillingMoney, name: "已开" },
               {
                 value: billingMoney90Day,
                 name: "超90天应开未开"
