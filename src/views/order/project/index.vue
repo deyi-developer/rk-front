@@ -184,6 +184,9 @@
             <el-col :span="6">
               <el-form-item label="最终客户:">{{ projectData.customName }}</el-form-item>
             </el-col>
+            <!-- <el-col :span="6">
+              <el-form-item label="项目结算类型:">{{ projectData.projectChargeType }}</el-form-item>
+            </el-col>-->
           </el-row>
           <el-row>
             <el-form-item label="项目备注:">
@@ -310,6 +313,7 @@ export default {
         planReceiptsMoney: '',
         planRemark: '',
         projectCode: '',
+        projectChargeType: ''
       },
       // 工单内容
       workOrderform: {
