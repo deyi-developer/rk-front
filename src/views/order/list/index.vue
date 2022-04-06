@@ -42,7 +42,7 @@
               type="primary"
               size="small"
               @click="initData"
-              >更新</el-button
+              >数据重算</el-button
             >
             <el-tooltip
               class="item"
