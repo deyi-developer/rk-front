@@ -99,7 +99,7 @@ export default {
         oneDeptId: this.oneDeptId
       };
       getMaori(params).then((res) => {
-        const data = res.rows;
+        const data = res.data;
         this.$nextTick(() => {
           this.initChart(data);
         });
