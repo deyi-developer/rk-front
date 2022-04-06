@@ -61,7 +61,11 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      getReportAmount(this.projectCode).then((res) => {
+      const params = {
+        projectCode: this.projectCode,
+        oneDeptId: this.oneDeptId
+      };
+      getReportAmount(params).then((res) => {
         const data = res.data.data;
         this.$nextTick(() => {
           this.initChart(data);

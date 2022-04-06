@@ -42,7 +42,7 @@
               type="primary"
               size="small"
               @click="initData"
-              >初始化</el-button
+              >更新</el-button
             >
             <el-tooltip
               class="item"
@@ -84,6 +84,7 @@
           @cell-click="gotoDetail"
           @scroll="scrollHandle"
           @edit-disabled="editDisabledEvent"
+          @filter-change="filterChangeEvent"
         >
           <!-- <vxe-column
           type="seq"
@@ -96,14 +97,14 @@
           <vxe-column
             field="projectCode"
             fixed="left"
-            width="150"
+            width="200"
             title="项目编码"
             class-name="link-color"
           ></vxe-column>
           <vxe-column
             field="projectName"
             fixed="left"
-            width="150"
+            width="200"
             title="项目名称"
           ></vxe-column>
 
@@ -111,67 +112,67 @@
             <vxe-column
               field="projectChargeType"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目类型"
             ></vxe-column>
             <vxe-column
               field="parentProjectCode"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="对外项目编码"
             ></vxe-column>
             <vxe-column
               field="parentProjectName"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="对外项目名称"
             ></vxe-column>
             <vxe-column
               field="projectManagerEmpNum"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目经理工号"
             ></vxe-column>
             <vxe-column
               field="pmName"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目经理姓名"
             ></vxe-column>
             <vxe-column
               field="oneDeptName"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="一级部门"
             ></vxe-column>
             <vxe-column
               field="deptName"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目部门"
             ></vxe-column>
             <vxe-column
               field="projectCreateDate"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目创建日期"
             ></vxe-column>
             <vxe-column
               field="projectStartDate"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目开始日期"
             ></vxe-column>
             <vxe-column
               field="projectEndDate"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="项目结束日期"
             ></vxe-column>
             <vxe-column
               field="customName"
               class-name="bg-base"
-              width="150"
+              width="200"
               title="最终用户"
             ></vxe-column>
           </vxe-colgroup>
@@ -180,14 +181,20 @@
             <vxe-column
               class-name="bg-inv"
               field="pjtdTotalMoney"
-              width="150"
+              width="200"
               title="总收入"
             ></vxe-column>
             <vxe-column
               class-name="bg-inv"
               field="projectChargePeriod"
-              width="150"
+              width="200"
               title="结算周期（月）"
+              :filters="[
+                { label: '数据非空', value: '1' },
+                { label: '数据为空', value: '0' }
+              ]"
+              :filter-multiple="false"
+              :filter-method="filterNameMethod"
               :edit-render="{}"
             >
               <template #edit="{ row }">
@@ -201,73 +208,73 @@
             <vxe-column
               class-name="bg-inv"
               field="billingDeadline"
-              width="150"
+              width="200"
               title="开票截止期间"
             ></vxe-column>
             <vxe-column
               class-name="bg-inv"
               field="totalShouldBillingMoney"
-              width="150"
+              width="200"
               title="应开总额"
             ></vxe-column>
             <vxe-column
               class-name="bg-inv"
               field="billingRate"
-              width="150"
+              width="200"
               title="应开比例"
             ></vxe-column>
             <vxe-column
               class-name="bg-inv"
               field="totalAlreadyBillingMoney"
-              width="150"
+              width="200"
               title="已开总额"
             ></vxe-column>
             <vxe-column
               field="billingRateOfTotalPjtd"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="相对总收入开票率"
             ></vxe-column>
             <vxe-column
               field="correspondingBillingRate"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="相对应开开票率"
             ></vxe-column>
             <vxe-column
               field="totalShouldNotBillingMoney"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="超账期应开未开总额"
             ></vxe-column>
             <vxe-column
               field="billingMoney30Day"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="超账期30天内应开未开"
             ></vxe-column>
             <vxe-column
               field="billingMoney30to60Day"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="超账期30-60天应开未开"
             ></vxe-column>
             <vxe-column
               field="billingMoney60to90Day"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="超账期60-90天应开未开"
             ></vxe-column>
             <vxe-column
               field="billingMoney90Day"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="超账期90天以上应开未开"
             ></vxe-column>
             <vxe-column
               field="invoicingRiskLevel"
               class-name="bg-inv"
-              width="150"
+              width="200"
               title="开票风险等级"
               :edit-render="{}"
             >
@@ -297,15 +304,21 @@
           <vxe-colgroup title="项目收款信息">
             <vxe-column
               field="totalAlreadyBillingMoney"
-              width="150"
+              width="200"
               class-name="bg-collection"
               title="已开总额"
             ></vxe-column>
             <vxe-column
               field="projectInvoicePeriod"
-              width="150"
+              width="200"
               class-name="bg-collection"
               title="发票账期（天）"
+              :filters="[
+                { label: '数据非空', value: '1' },
+                { label: '数据为空', value: '0' }
+              ]"
+              :filter-method="filterNameMethod"
+              :filter-multiple="false"
               :edit-render="{}"
             >
               <template #edit="{ row }">
@@ -318,74 +331,74 @@
             </vxe-column>
             <vxe-column
               field="receivedEndTime"
-              width="150"
+              width="200"
               class-name="bg-collection"
               title="收款截止日期"
             ></vxe-column>
             <vxe-column
               field="totalShouldReceiptsMoney"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="账期内应收总额"
             ></vxe-column>
             <vxe-column
               field="shouldReceiverRate"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="应收比例"
             ></vxe-column>
             <vxe-column
               field="totalReceiptssMoney"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="已收总额"
             ></vxe-column>
             <vxe-column
               field="receivedRateOfTotalPjtd"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="相对总收入收款率"
             ></vxe-column>
             <vxe-column
               field="relativeReceivableRate"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="相对应收款率"
             ></vxe-column>
             <vxe-column
               field="totalShouldNotReceiptsMoney"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="超账期应收未收总额"
             ></vxe-column>
             <vxe-column
               field="receiptsMoney30Day"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="超账期30天内应收未收"
             ></vxe-column>
             <vxe-column
               field="receiptsMoney30to60Day"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="超账期30-60天应收未收"
             ></vxe-column>
             <vxe-column
               field="receiptsMoney60to90Day"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="超账期60-90天应收未收"
             ></vxe-column>
             <vxe-column
               field="receiptsMoney90Day"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="超账期90天以上应收未收"
             ></vxe-column>
             <vxe-column
               field="receiveRiskLevel"
               class-name="bg-collection"
-              width="150"
+              width="200"
               title="收款风险等级"
               :edit-render="{}"
             >
@@ -413,13 +426,13 @@
             <vxe-column
               field="totalShouldNotBillingMoney"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="超帐期应开未开总额"
             ></vxe-column>
             <vxe-column
               field="planBillingMoney"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="本月计划开票额"
               :edit-render="{}"
             >
@@ -434,24 +447,24 @@
             <vxe-column
               field="billingThisMonth"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="本月实开总额"
             ></vxe-column>
             <vxe-column
               field="compleBillingThisMonth"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="本月开票完成率"
             ></vxe-column>
             <vxe-column
               field="totalShouldNotReceiptsMoney"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="超帐期应收未收总额"
             ></vxe-column>
             <vxe-column
               field="planReceiptsMoney"
-              width="150"
+              width="200"
               class-name="bg-plan"
               title="本月计划收款额"
               :edit-render="{}"
@@ -467,19 +480,19 @@
             <vxe-column
               field="receiptsThisMonth"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="本月实收总额"
             ></vxe-column>
             <vxe-column
               field="compleReceiptsThisMonth"
-              width="150"
+              width="200"
               class-name="bg-plan"
               title="本月收款完成率"
             ></vxe-column>
             <vxe-column
               field="planRemark"
               class-name="bg-plan"
-              width="150"
+              width="200"
               title="备注"
               :edit-render="{}"
             >
@@ -497,20 +510,20 @@
             <vxe-column
               field="grossProfit"
               class-name="bg-other"
-              width="150"
+              width="200"
               title="毛利额"
             ></vxe-column>
             <vxe-column
               field="grossProfitRate"
               class-name="bg-other"
-              width="150"
+              width="200"
               title="毛利率"
             ></vxe-column>
 
             <vxe-column
               field="grossProfitRiskLevel"
               class-name="bg-other"
-              width="150"
+              width="200"
               title="毛利风险等级"
               :edit-render="{}"
             >
@@ -538,7 +551,7 @@
             <vxe-column
               field="riskLevel"
               class-name="bg-other"
-              width="150"
+              width="200"
               title="法务接管"
             >
               <template #default="{ row }">
@@ -593,7 +606,7 @@ import { getList, saveData, getRiskNum, initData } from "./api";
 import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
-/* 每列宽度150
+/* 每列宽度200
     前面2列固定
     项目基本信息 12个字段
     项目开票 14个字段
@@ -602,7 +615,7 @@ import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函�
     其他指标 3个字段
    */
 
-const w = 150; // 列宽度
+const w = 200; // 列宽度
 const fixedWidth = w * 2; //固定列
 const firstWidth = w * 11;
 const secondWidth = w * 14;
@@ -636,7 +649,7 @@ export default {
         totalProjectNum: 827
       },
       page: {
-        pageSize: 20,
+        pageSize: 100,
         pageNum: 1,
         total: 0
       },
@@ -690,6 +703,17 @@ export default {
           $table.validate(true).catch((errMap) => errMap);
         }
       });
+    },
+    filterChangeEvent({ column, property, values }) {
+      // console.log(property, values);
+    },
+    filterNameMethod({ value, row, column }) {
+      const { field } = column;
+      if (value == "1") {
+        return row[field];
+      } else {
+        return !row[field];
+      }
     },
     // 点击tab 滚动列表
     handleClick(name) {
