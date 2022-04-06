@@ -47,7 +47,10 @@
           </el-row>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="项目状态:">{{ projectData.projectStatus }}</el-form-item>
+              <el-form-item label="项目状态:">
+                {{ projectData.projectStatus }}
+                <!-- {{ selectDictLabel(dict.type.event_type, info.eventType) }} -->
+              </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="项目结算类型:">{{ updateData.projectChargeType }}</el-form-item>
@@ -98,6 +101,11 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="项目结束日期:">{{ projectData.projectEndDate }}</el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item
+                label="项目风险状态:"
+              >{{ selectDictLabel(dict.type.risk_level, projectData.riskLevel) }}</el-form-item>
             </el-col>
           </el-row>
           <!-- 风控专员才显示 -->
@@ -265,7 +273,13 @@
       <ChartsGroup :projectData="projectData" :projectCode="$route.query.projectCode"></ChartsGroup>
     </div>
 
-    <work-order-dialog type="add" :form="workOrderform" :dialogVisible.sync="dialogVisible"></work-order-dialog>
+    <work-order-dialog
+      type="add"
+      :isPm="isPm"
+      :pmName="projectData.pmName"
+      :form="workOrderform"
+      :dialogVisible.sync="dialogVisible"
+    ></work-order-dialog>
   </div>
 </template>
 
@@ -310,13 +324,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userRolse', 'sidebar']),
+    ...mapGetters(['userRolse', 'sidebar', 'usersInfo']),
     // boss没有任何编辑权限
     isBoss() {
       if (this.userRolse.length === 1) {
         return this.userRolse.includes('boss')
       }
     },
+    // 登录人员是否是此项目项目经理
+    isPm() {
+      return this.usersInfo.userId == this.projectData.pmUserId
+    }
   },
   created() {
     const { query: { projectCode } } = this.$route
@@ -349,7 +367,6 @@ export default {
         }
       })
     },
-
     /** 发起工单 */
     sendOrder() {
       this.dialogVisible = true

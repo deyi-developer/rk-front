@@ -114,9 +114,10 @@ export default {
   watch: {
     value: {
       handler(val) {
+        console.log('val', val)
         this.dispatch("ElFormItem", "el.form.change", [val]);
         if (val !== this.currentValue) {
-          this.currentValue = val === null ? "" : val;
+          this.currentValue = val === null ? null : val;
           if (this.Quill) {
             this.Quill.pasteHTML(this.currentValue);
           }

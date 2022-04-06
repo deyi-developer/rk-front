@@ -81,7 +81,15 @@ export default {
     type: { // 新增或编辑,编辑不显示工单级别
       type: String,
       default: 'add'
+    },
+    /** 如果登录人员不是项目经理，负责人需要默认显示此项目的项目经理, nickName用于接口请求 */
+    isPm: {
+      type: Boolean,
+    },
+    pmName: {
+      type: String
     }
+    /** end */
   },
   data() {
     return {
@@ -106,9 +114,17 @@ export default {
       handlerLoding: false
     }
   },
-
+  watch: {
+    pmName(n) {
+      this.defaultHandler(n)
+    }
+  },
   created() {
-    this.getHandlers()
+    if (this.isPm) { // 一切如常，无事发生
+      this.getHandlers()
+    } else { // 走默认显示的路子
+      this.defaultHandler(this.pmName)
+    }
   },
 
   methods: {
@@ -170,12 +186,23 @@ export default {
       this.close()
     },
 
+    async defaultHandler(nickName) {
+      if (!nickName) return
+      const params = {
+        pageNum: 1,
+        nickName: nickName,
+      }
+      const { rows } = await handlerList(params)
+      this.handlers = rows || []
+      this.form.eventHandler = rows[0].userId
+    },
+
     getHandlers: debounce(async function (value) {
       this.handlerLoding = true
       const params = {
         pageNum: 1,
         pageSize: 100,
-        nickName: value || ''
+        nickName: value || '',
       }
       const { rows } = await handlerList(params)
       this.handlers = rows || []
