@@ -4,6 +4,7 @@
 
 <script>
 import resize from "./mixins/resize";
+import currency from "currency.js";
 
 const animationDuration = 6000;
 
@@ -84,7 +85,10 @@ export default {
               data: { name, value }
             } = params;
             // const percent = (value / totalShouldReceiptsMoney).toFixed(2);
-            return `${name}<br/>比率：${percent}%<br/>数值：${value}<br/>`;
+            return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
+              symbol: "",
+              separator: ","
+            }).format()}<br/>`;
           }
         },
         // legend: {

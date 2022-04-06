@@ -158,19 +158,19 @@
     </el-col>
   </el-row>
 </template>
-
-<script setup>
-import { defineProps } from "@vue/composition-api";
-
-defineProps({
-  summary: {
-    type: Object,
-    default() {
-      return {};
+<script>
+export default {
+  props: {
+    summary: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
   }
-});
+};
 </script>
+
 <style lang="scss" scoped>
 .box-card {
   margin-bottom: 10px;

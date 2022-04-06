@@ -5,6 +5,8 @@
 <script>
 import resize from "./mixins/resize";
 import { getReportReceive } from "./api";
+import currency from "currency.js";
+
 const animationDuration = 6000;
 
 export default {
@@ -81,7 +83,7 @@ export default {
         },
         title: {
           text: "总收入（未税）:" + (income / 10000).toFixed(2) + "万元",
-          subtext: "单位（元）"
+          subtext: "单位（万元）"
         },
         tooltip: {
           trigger: "axis",
@@ -93,7 +95,10 @@ export default {
             return (
               tar.name +
               "<br/>" +
-              tar.value +
+              currency(tar.value, {
+                symbol: "",
+                separator: ","
+              }).format() +
               "<br/>" +
               ((tar.value / income) * 100).toFixed(2) +
               "%"
@@ -143,7 +148,13 @@ export default {
             stack: "Total",
             label: {
               show: true,
-              position: "top"
+              position: "top",
+              formatter: ({ value }) => {
+                return currency(value, {
+                  symbol: "",
+                  separator: ","
+                }).format();
+              }
             },
             data: [
               income,

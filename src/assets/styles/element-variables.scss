@@ -21,28 +21,27 @@ $--table-border:1px solid #dfe6ec;
 
 
 /// color|1|Font Color|2
-$--color-text-placeholder: #C0C4CC !default;
+$--color-text-placeholder: #C0C4CC ;
 /// color|1|Border Color|3
-$--border-color-base: #DCDFE6 !default;
+$--border-color-base: #DCDFE6 ;
 /* Border
 -------------------------- */
-$--border-width-base: 1px !default;
-$--border-style-base: solid !default;
-$--border-color-hover: $--color-text-placeholder !default;
-$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+$--border-width-base: 1px;
+$--border-style-base: solid;
+$--border-color-hover: $--color-text-placeholder;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base;
 /// borderRadius|1|Radius|0
-$--border-radius-base: 0px !default;
+$--border-radius-base: 0px;
 /// borderRadius|1|Radius|0
-$--border-radius-small: 0px !default;
+$--border-radius-small: 0px;
 /// borderRadius|1|Radius|0
-$--border-radius-circle: 100% !default;
+$--border-radius-circle: 100%;
 /// borderRadius|1|Radius|0
-$--border-radius-zero: 0 !default;
-$--card-border-radius: 0px !default;
-$--tag-border-radius: 0px !default;
-$--pagination-border-radius: 0px !default;
-/*size*/
-$vxe-border-radius: 0px !default;
+$--border-radius-zero: 0;
+$--card-border-radius: 0px;
+$--tag-border-radius: 0px;
+$--pagination-border-radius: 0px;
+
 
 /* icon font path, required */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';

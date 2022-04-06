@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueCompositionAPI from "@vue/composition-api";
+// import VueCompositionAPI from "@vue/composition-api";
 import Cookies from "js-cookie";
 
 import Element from "element-ui";
@@ -55,12 +55,14 @@ import sex from "@/views/components/sex.vue";
 
 import "xe-utils";
 import VXETable from "vxe-table";
-import "vxe-table/lib/style.css";
+import "./assets/styles/vxe-var.scss";
+
+// import "vxe-table/lib/style.css";
 
 require("./assets/walden"); // echarts theme
 // require("./assets/westeros"); // echarts theme
 // require("echarts/theme/walden");
-Vue.use(VueCompositionAPI);
+// Vue.use(VueCompositionAPI);
 Vue.use(VXETable);
 
 // 全局方法挂载

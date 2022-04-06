@@ -87,7 +87,7 @@ export default {
         },
         title: {
           text: "逐月含税收入，开票，收款分布",
-          subtext: "单位（元）"
+          subtext: "单位（万元）"
         },
         xAxis: {
           type: "category",

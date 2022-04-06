@@ -125,24 +125,20 @@ import { Circle, Tooltip } from "view-design";
 import CountTo from "vue-count-to";
 
 export default {
+  props: {
+    risk: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
   components: {
     CountTo,
     iCircle: Circle,
     Tooltip
   }
 };
-</script>
-<script setup>
-import { defineProps } from "@vue/composition-api";
-
-defineProps({
-  risk: {
-    type: Object,
-    default() {
-      return {};
-    }
-  }
-});
 </script>
 
 <style lang="scss" scoped>

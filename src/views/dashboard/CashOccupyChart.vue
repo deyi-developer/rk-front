@@ -93,7 +93,7 @@ export default {
         // },
         title: {
           text: "逐月累积现金占用趋势",
-          subtext: "单位（元）"
+          subtext: "单位（万元）"
         },
         xAxis: {
           type: "category",
