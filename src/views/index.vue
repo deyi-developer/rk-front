@@ -135,17 +135,21 @@ export default {
       const params = {
         oneDeptId: this.oneDeptId
       };
-      await getRiskNum(params).then((res) => {
-        if (res) {
-          this.risk = res;
-        }
-      });
-      await getSummary(params).then((res) => {
-        if (res) {
-          this.summary = res;
-        }
-      });
-      this.loading = false;
+      try {
+        await getRiskNum(params).then((res) => {
+          if (res) {
+            this.risk = res;
+          }
+        });
+        await getSummary(params).then((res) => {
+          if (res) {
+            this.summary = res;
+          }
+        });
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+      }
     }
   }
 };

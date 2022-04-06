@@ -22,7 +22,11 @@
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <BarChart2 :projectCode="projectCode" :oneDeptId="oneDeptId" />
+              <!-- <BarChart2 :projectCode="projectCode" :oneDeptId="oneDeptId" /> -->
+              <InvoiceReceivePercent
+                :projectCode="projectCode"
+                :oneDeptId="oneDeptId"
+              />
             </el-col>
           </el-row>
         </el-card>
@@ -39,11 +43,13 @@
         </el-col>
       </el-row>
     </el-card>
+
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
         <AmountChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
       </el-row>
     </el-card>
+
     <el-row type="flex" :gutter="10">
       <el-col :span="12">
         <el-card>
@@ -61,9 +67,10 @@
 <script>
 import { getSummary, projectDetails } from "./api.js";
 import BarChart from "./BarChart";
-import BarChart2 from "./BarChart2";
+// import BarChart2 from "./BarChart2";
 import CostChart from "./CostChart.vue";
 import AmountChart from "./AmountChart.vue";
+import InvoiceReceivePercent from "./InvoiceReceivePercent.vue";
 import CashOccupyChart from "./CashOccupyChart.vue";
 import GrossProfitChart from "./GrossProfitChart.vue";
 import ReachChart from "./ReachChart.vue";
@@ -72,7 +79,8 @@ import PieChart2 from "./PieChart2";
 export default {
   components: {
     BarChart,
-    BarChart2,
+    InvoiceReceivePercent,
+    // BarChart2,
     CostChart,
     AmountChart,
     CashOccupyChart,

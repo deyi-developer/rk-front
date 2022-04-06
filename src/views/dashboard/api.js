@@ -84,6 +84,14 @@ export function getMaori(query) {
   });
 }
 
+// 查询毛利
+export function getInvoiceReceivePercent(query) {
+  return request({
+    url: "/report/invoiceReceivePercent",
+    method: "get",
+    params: query
+  });
+}
 // 项目明细
 export const projectDetails = (projectCode) => {
   return request({

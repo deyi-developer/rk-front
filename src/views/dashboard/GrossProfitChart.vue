@@ -106,10 +106,19 @@ export default {
       });
     },
     initChart(dataSource) {
-      const redYear = this.red;
-      const blueYear = this.blue;
-      const [red, blue] = dataSource;
+      // const redYear = this.red;
+      // const blueYear = this.blue;
+      const { dateList, dataList } = dataSource;
       const option = {
+        dataZoom: [
+          {
+            startValue: dateList[dateList.length - 12],
+            endValue: dateList[dateList.length]
+          },
+          {
+            type: "inside"
+          }
+        ],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -131,6 +140,7 @@ export default {
           top: 70,
           bottom: 50
         },
+
         xAxis: [
           {
             type: "category",
@@ -152,31 +162,7 @@ export default {
                 }
               }
             },
-            // prettier-ignore
-            data:blue.date
-          },
-          {
-            type: "category",
-            axisTick: {
-              alignWithLabel: true
-            },
-            axisLine: {
-              onZero: false
-            },
-            axisPointer: {
-              label: {
-                formatter: function (params) {
-                  return (
-                    params.value +
-                    (params.seriesData.length
-                      ? "：" + params.seriesData[0].data + "%"
-                      : "")
-                  );
-                }
-              }
-            },
-            // prettier-ignore
-            data: red.date
+            data: dateList
           }
         ],
         yAxis: {
@@ -187,13 +173,9 @@ export default {
         },
         series: [
           {
-            name: `毛利率-${blueYear}年`,
+            name: `毛利率`,
             type: "line",
-            xAxisIndex: 1,
             smooth: true,
-            emphasis: {
-              focus: "series"
-            },
             areaStyle: {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
@@ -206,17 +188,8 @@ export default {
                 }
               ])
             },
-            data: blue.data
+            data: dataList
           }
-          // {
-          //   name: `毛利率-${redYear}年`,
-          //   type: "line",
-          //   smooth: true,
-          //   emphasis: {
-          //     focus: "series"
-          //   },
-          //   data: red.data
-          // }
         ]
       };
       this.chart = this.$echarts.init(this.$refs.dom, "walden");
