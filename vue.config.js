@@ -62,9 +62,9 @@ module.exports = {
       }
     },
     plugins: [
-      ScriptSetup({
-        /* options */
-      }),
+      // ScriptSetup({
+
+      // }),
       // http://doc.ruoyi.vip/ruoyi-vue/other/faq.html#使用gzip解压缩静态文件
       new CompressionPlugin({
         test: /\.(js|css|html)?$/i, // 压缩文件格式
