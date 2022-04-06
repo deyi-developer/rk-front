@@ -95,20 +95,28 @@
     <el-col :span="6">
       <el-card shadow="always" class="click-handle">
         <div class="ds-flex">
-          <i-circle :percent="0" stroke-color="#808695">
-            <span class="demo-Circle-inner">0%</span>
+          <i-circle
+            :percent="risk.lawsuitRiskProjectRate"
+            stroke-color="#808695"
+          >
+            <span class="demo-Circle-inner"
+              >{{ risk.lawsuitRiskProjectRate }}%</span
+            >
           </i-circle>
           <div class="circel-desc">
             <p class="circel-desc-title">法务接管项目</p>
             <div class="circel-desc-content">
-              <countTo :startVal="0" :endVal="0" :duration="1000"></countTo>/{{
-                risk.totalProjectNum
-              }}
+              <countTo
+                :startVal="0"
+                :endVal="risk.lawsuitRiskProjectNum"
+                :duration="1000"
+              ></countTo
+              >/{{ risk.totalProjectNum }}
             </div>
             <p class="tooltip-icon-wrap">
               <Tooltip
                 class="tooltip-icon"
-                :content="`项目数：0，总项目数：${risk.totalProjectNum}`"
+                :content="`项目数：${risk.lawsuitRiskProjectNum}，总项目数：${risk.totalProjectNum}`"
               >
                 <i style="font-size: 16px" class="el-icon-warning-outline"></i>
               </Tooltip>

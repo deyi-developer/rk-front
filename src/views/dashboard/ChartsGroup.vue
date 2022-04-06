@@ -36,7 +36,7 @@
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
         <el-col :span="12">
-          <CostChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
+          <GrossProfitChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-col>
         <el-col :span="12">
           <CashOccupyChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
@@ -47,7 +47,7 @@
     <el-row type="flex" :gutter="10">
       <el-col :span="12">
         <el-card>
-          <GrossProfitChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
+          <CostChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-card>
       </el-col>
       <el-col :span="12">

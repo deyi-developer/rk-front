@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="datepicker-wrap">
+    <!-- <div class="datepicker-wrap">
       <el-date-picker
         size="mini"
         v-model="red"
@@ -22,7 +22,7 @@
         @change="changeHandle"
       >
       </el-date-picker>
-    </div>
+    </div> -->
 
     <div
       ref="dom"
@@ -93,8 +93,8 @@ export default {
       const redYear = this.red;
       const blueYear = this.blue;
       const params = {
-        redLine: redYear,
-        blueLine: blueYear,
+        // redLine: redYear,
+        // blueLine: blueYear,
         projectCode: this.projectCode,
         oneDeptId: this.oneDeptId
       };
@@ -194,17 +194,29 @@ export default {
             emphasis: {
               focus: "series"
             },
-            data: blue.data
-          },
-          {
-            name: `毛利率-${redYear}年`,
-            type: "line",
-            smooth: true,
-            emphasis: {
-              focus: "series"
+            areaStyle: {
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "rgba(63,177,227,0.7)"
+                },
+                {
+                  offset: 1,
+                  color: "rgba(63,177,227,0.1)"
+                }
+              ])
             },
-            data: red.data
+            data: blue.data
           }
+          // {
+          //   name: `毛利率-${redYear}年`,
+          //   type: "line",
+          //   smooth: true,
+          //   emphasis: {
+          //     focus: "series"
+          //   },
+          //   data: red.data
+          // }
         ]
       };
       this.chart = this.$echarts.init(this.$refs.dom, "walden");

@@ -10,10 +10,11 @@ export function getList(query) {
 }
 
 // 查询参数列表
-export function getRiskNum() {
+export function getRiskNum(params) {
   return request({
     url: "/reportdata/reportdata/risk-num",
-    method: "get"
+    method: "get",
+    params
   });
 }
 
@@ -21,6 +22,14 @@ export function saveData(data) {
   return request({
     url: "/projectDetail/saveProjectDetail",
     method: "put",
+    data
+  });
+}
+
+export function initData(data) {
+  return request({
+    url: "/reportdata/reportdata/init-data",
+    method: "post",
     data
   });
 }

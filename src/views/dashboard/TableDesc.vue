@@ -84,7 +84,7 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总已开金额"
+              label="总开票"
               >{{
                 summary.totalAlreadyBillingMoney | currency
               }}</el-descriptions-item
@@ -115,7 +115,7 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总已收金额"
+              label="总收款"
               >{{
                 summary.totalReceiptssMoney | currency
               }}</el-descriptions-item

@@ -21,7 +21,11 @@
               `高风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
             }}
           </span>
-          <span>{{ `法务接管项目：未知` }}</span>
+          <span>
+            {{
+              `法务接管项目：${risk.lawsuitRiskProjectNum} (${risk.lawsuitRiskProjectRate}%)`
+            }}</span
+          >
         </div>
       </div>
       <el-card>
@@ -33,6 +37,13 @@
           <TabPane label="项目计划" name="fourth"></TabPane>
           <TabPane label="其他指标" name="fifth"></TabPane>
           <template #extra>
+            <el-button
+              v-hasPermi="['order:list:init']"
+              type="primary"
+              size="small"
+              @click="initData"
+              >初始化</el-button
+            >
             <el-tooltip
               class="item"
               effect="dark"
@@ -524,6 +535,16 @@
                 </vxe-select>
               </template>
             </vxe-column>
+            <vxe-column
+              field="riskLevel"
+              class-name="bg-other"
+              width="150"
+              title="法务接管"
+            >
+              <template #default="{ row }">
+                {{ row.riskLevel ? "是" : "否" }}
+              </template>
+            </vxe-column>
           </vxe-colgroup>
 
           <vxe-column
@@ -568,7 +589,7 @@
 import { Tabs, TabPane } from "view-design";
 import { throttle } from "lodash-es";
 import filterForm from "./filterForm.vue";
-import { getList, saveData, getRiskNum } from "./api";
+import { getList, saveData, getRiskNum, initData } from "./api";
 import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
@@ -587,7 +608,7 @@ const firstWidth = w * 11;
 const secondWidth = w * 14;
 const thirdWidth = w * 14;
 const fourthWidth = w * 9;
-const fifthWidth = w * 3;
+const fifthWidth = w * 4;
 //列   距离
 const firstLeft = 0;
 const secondLeft = firstWidth;
@@ -639,22 +660,29 @@ export default {
   },
   methods: {
     checkPermi,
+    //初始化按钮
+    initData() {
+      initData().then((res) => {
+        this.$message.warning("初始化完成，请刷新页面");
+      });
+    },
     // 获取数据
     async fetchData(page) {
-      const risk = await getRiskNum();
-      if (risk) {
-        this.risk = risk;
-      }
-
       this.tableLodaing = true;
       const formVal = this.$refs.form.queryParams;
       const params = { ...formVal, ...this.page, ...page };
+      //获取列表
       const res = await getList(params);
       this.page.total = res.total;
       this.page.pageNum = res.pageNum;
       this.page.pageSize = res.pageSize;
       this.dataSource = res.rows;
       this.tableLodaing = false;
+      // 获取顶部风险项目
+      const risk = await getRiskNum(params);
+      if (risk) {
+        this.risk = risk;
+      }
       this.$nextTick(() => {
         // pm角色 更新数据后 要提醒他填写数据
         if (checkRole(["pm"])) {

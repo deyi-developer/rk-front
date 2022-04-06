@@ -124,6 +124,7 @@ export default {
           {
             name: "Placeholder",
             type: "bar",
+            barMaxWidth: "30",
             stack: "Total",
             itemStyle: {
               borderColor: "transparent",
@@ -147,6 +148,7 @@ export default {
             name: "Life Cost",
             type: "bar",
             stack: "Total",
+            barMaxWidth: "30",
             label: {
               show: true,
               position: "top",
