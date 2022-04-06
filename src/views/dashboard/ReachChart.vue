@@ -102,8 +102,8 @@ export default {
       const option = {
         dataZoom: [
           {
-            startValue: "2022-1",
-            endValue: "2022-4"
+            startValue: dateList[dateList.length - 12],
+            endValue: dateList[dateList.length]
           },
           {
             type: "inside"

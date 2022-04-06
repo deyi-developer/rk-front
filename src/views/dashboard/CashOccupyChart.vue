@@ -103,7 +103,8 @@ export default {
           type: "value",
           axisLabel: {
             formatter: function (value, index) {
-              return value / 10000 + "万元";
+              // return value / 10000 + "万元";
+              return value + "万元";
             }
           }
         },
