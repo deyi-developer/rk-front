@@ -13,9 +13,9 @@
             <span>{{ selectDictLabel(dict.type.event_type, scope.row.eventType) }}</span>
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip prop="eventContext" label="工单内容">
+        <el-table-column show-overflow-tooltip prop="eventContext" label="工单内容" width="500">
           <template v-slot="scope">
-            <span v-html="scope.row.eventContext"></span>
+            <div class="content" v-html="scope.row.eventContext"></div>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="eventUrgencyLevel" label="工单级别">
@@ -25,7 +25,7 @@
         </el-table-column>
         <el-table-column prop="eventHandler" label="工单处理人"></el-table-column>-->
         <el-table-column prop="projectCode" label="项目编码"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="240">
           <template v-slot="scope">
             <div>
               <el-button size="small" @click="update(scope.row)">修改</el-button>
@@ -113,5 +113,12 @@ export default {
     margin: 0;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   }
+  // .content {
+  //   width: 180px;
+  //   height: 54px;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  //   white-space: nowrap;
+  // }
 }
 </style>

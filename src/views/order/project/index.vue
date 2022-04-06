@@ -1,9 +1,18 @@
 <template>
   <div class="order">
-    <header class="header">
-      <h1>项目明细</h1>
+    <header class="header" :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']">
+      <div>
+        <h1>项目明细</h1>
+        <p class="title">项目编码：{{ projectData.projectCode }} 项目名称: {{ projectData.projectName }}</p>
+      </div>
       <p style="margin-left: 9%">开票中风险，收款高风险</p>
-      <el-button style="margin-left: auto" type="primary" @click="save">保存</el-button>
+      <el-button style="margin-left: auto" type="text" @click="save">保存</el-button>
+      <el-button
+        style="padding: 3px 0"
+        type="text"
+        @click="$router.push({ path: '/order/order-list', query: { projectCode: projectData.projectCode } })"
+      >服务工单</el-button>
+      <el-button style="padding: 3px 0" type="text" @click="sendOrder">发起工单</el-button>
     </header>
     <!-- <filter-form @search="getData"></filter-form> -->
     <div class="content">
@@ -11,14 +20,7 @@
         <el-card class="spacing" title="项目基本信息">
           <div slot="header">
             <span>项目基本信息</span>
-            <div style="float: right">
-              <el-button
-                style="padding: 3px 0"
-                type="text"
-                @click="$router.push({ path: '/order/order-list', query: { projectCode: projectData.projectCode } })"
-              >服务工单</el-button>
-              <el-button style="padding: 3px 0" type="text" @click="sendOrder">发起工单</el-button>
-            </div>
+            <div style="float: right"></div>
           </div>
           <el-row>
             <el-col :span="6">
@@ -28,7 +30,16 @@
               <el-form-item label="对外项目编码:">{{ projectData.parentProjectCode }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="项目名称:">{{ projectData.projectName }}</el-form-item>
+              <div class="ellisips">
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="projectData.projectName"
+                  placement="top"
+                >
+                  <el-form-item class="ellipsis" label="项目名称:">{{ projectData.projectName }}</el-form-item>
+                </el-tooltip>
+              </div>
             </el-col>
             <el-col :span="6">
               <el-form-item label="对外项目名称:">{{ projectData.parentProjectName }}</el-form-item>
@@ -251,7 +262,6 @@
           </el-row>-->
         </el-card>
       </el-form>
-
       <ChartsGroup :projectData="projectData" :projectCode="$route.query.projectCode"></ChartsGroup>
     </div>
 
@@ -300,13 +310,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userRolse']),
+    ...mapGetters(['userRolse', 'sidebar']),
     // boss没有任何编辑权限
     isBoss() {
       if (this.userRolse.length === 1) {
         return this.userRolse.includes('boss')
       }
-    }
+    },
   },
   created() {
     const { query: { projectCode } } = this.$route
@@ -369,8 +379,9 @@ let form = ref({
 
 <style lang="scss" scoped>
 .order {
-  position: relative;
+  // position: relative;
   .content {
+    margin-top: 80px;
     padding: 20px;
   }
   .el-form-item {
@@ -388,17 +399,31 @@ let form = ref({
   .header {
     display: flex;
     align-items: center;
-    // margin-bottom: 12px;
     padding: 12px 24px;
     border-bottom: 1px solid #ddd;
     background: #fff;
+    // z-index: 999;
+    .title {
+      margin-top: 6px;
+      font-size: 12px;
+    }
   }
-  .fixed {
-    position: absolute;
-    top: 110px;
-    right: 40px;
-    cursor: pointer;
+  .fixed-header-wide,
+  .fixed-header-narrow {
+    position: fixed;
+    top: 84px;
+    left: 0;
+    background: #fff;
     z-index: 999;
+    transition: all 0.28s;
+  }
+  .fixed-header-wide {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+  .fixed-header-narrow {
+    margin-left: 54px;
+    width: calc(100% - 54px);
   }
   .spacing {
     margin-bottom: 12px;

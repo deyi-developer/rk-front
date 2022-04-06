@@ -64,127 +64,11 @@
   </el-dialog>
 </template>
 <script>
-import { debounce } from "lodash-es";
-import { send, update, handlerList } from "../project/api"
-// import editor from "@/components/Editor";
 export default {
   dicts: ["event_type", "event_urgency_level"],
-  props: {
-    form: {
-      type: Object,
-      default: () => { }
-    },
-    dialogVisible: {
-      type: Boolean,
-      default: false
-    },
-    type: { // 新增或编辑,编辑不显示工单级别
-      type: String,
-      default: 'add'
-    }
-  },
-  data() {
-    return {
-      rules: {
-        eventTitle: [
-          { required: true, message: '请输入工单标题', trigger: 'change' },
-        ],
-        eventType: [
-          { required: true, message: '请输入选择工单类型', trigger: 'change' },
-        ],
-        eventContext: [
-          { required: true, message: '请输入工单内容', trigger: 'change' },
-        ],
-        eventUrgencyLevel: [
-          { required: true, message: '请选择工单级别', trigger: 'change' },
-        ],
-        eventHandler: [
-          { required: true, message: '请选择工单处理人', trigger: 'change' },
-        ]
-      },
-      handlers: [],
-      handlerLoding: false
-    }
-  },
-
-  created() {
-    this.getHandlers()
-  },
-
-  methods: {
-    submit() {
-      if (this.type === 'add') {
-        this.sendWorkOrder()
-      } else {
-        this.updateWorkOrder()
-      }
-    },
-
-    sendWorkOrder() {
-      this.$refs.formRef.validate(async valid => {
-        if (valid) {
-          const { code, msg } = await send(this.form)
-          if (code == 200) {
-            this.close()
-            this.refresh()
-            this.$router.push({ path: '/order/order-list' })
-          }
-          this.message(code, msg)
-        }
-      })
-    },
-
-    updateWorkOrder() {
-      this.$refs.formRef.validate(async valid => {
-        if (valid) {
-          const { code, msg } = await update(this.form)
-          if (code == 200) {
-            this.close()
-            this.refresh()
-          }
-          this.message(code, msg)
-        }
-      })
-    },
-
-    close() {
-      this.$emit('update:dialogVisible', false)
-      this.$refs.formRef.resetFields();
-    },
-
-    /** 刷新父组件的列表 */
-    refresh() {
-      this.$emit('refresh')
-    },
-
-    /** 提示 */
-    message(code, msg) {
-      if (code === 200) {
-        this.$modal.msgSuccess(msg)
-      } else {
-        this.$modal.msgError(msg)
-      }
-    },
-
-    beforeClose() {
-      this.close()
-    },
-
-    getHandlers: debounce(async function (value) {
-      this.handlerLoding = true
-      const params = {
-        pageNum: 1,
-        pageSize: 100,
-        nickName: value || ''
-      }
-      const { rows } = await handlerList(params)
-      this.handlers = rows || []
-      this.handlerLoding = false
-    })
-  }
 }
 </script>
-<!-- <script setup>
+<script setup>
 import vm from 'vue'
 import router from '@/router/index';
 import { debounce } from "lodash-es";
@@ -311,4 +195,4 @@ const getHandlers = debounce(async (value) => {
   handlerLoding.value = false
 }, 500)
 
-</script> -->
+</script>
