@@ -28,11 +28,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-card class="mb-10">
-      <el-row type="flex" :gutter="10">
-        <AmountChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
-      </el-row>
-    </el-card>
+
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
         <el-col :span="12">
@@ -43,7 +39,11 @@
         </el-col>
       </el-row>
     </el-card>
-
+    <el-card class="mb-10">
+      <el-row type="flex" :gutter="10">
+        <AmountChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
+      </el-row>
+    </el-card>
     <el-row type="flex" :gutter="10">
       <el-col :span="12">
         <el-card>

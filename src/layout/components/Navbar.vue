@@ -7,7 +7,11 @@
       @toggleClick="toggleSideBar"
     />
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!topNav" />
+    <breadcrumb
+      id="breadcrumb-container"
+      class="breadcrumb-container"
+      v-if="!topNav"
+    />
     <top-nav id="topmenu-container" class="topmenu-container" v-if="topNav" />
 
     <div class="right-menu">
@@ -16,7 +20,10 @@
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
 
-      <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
+      <el-dropdown
+        class="msg-menu-wrapper right-menu-item hover-effect"
+        trigger="click"
+      >
         <span style="line-height: 20px; height: 20px">
           <Badge :count="unread" :overflow-count="unread">
             <Icon type="ios-notifications-outline" size="22"></Icon>
@@ -50,29 +57,26 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <el-dropdown
+        class="avatar-container right-menu-item hover-effect"
+        trigger="click"
+      >
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar" />
-          <span class="user-name">{{ $store.state.user.name }}</span>
+          <span class="user-name">{{ $store.state.user.user.nickName }}</span>
           <i class="el-icon-arrow-down el-icon--right"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
             <el-dropdown-item>
-              <span>
-                <i class="el-icon-user"></i>个人中心
-              </span>
+              <span> <i class="el-icon-user"></i>个人中心 </span>
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item @click.native="setting = true">
-            <span>
-              <i class="el-icon-setting"></i>布局设置
-            </span>
+            <span> <i class="el-icon-setting"></i>布局设置 </span>
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span>
-              <i class="el-icon-switch-button"></i>退出登录
-            </span>
+            <span> <i class="el-icon-switch-button"></i>退出登录 </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -150,13 +154,13 @@ export default {
             this.$router.replace("/login");
           });
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     /**
      * 消息列表
      */
     getList() {
-      this.Messages()
+      this.Messages();
       // const { rows } = await list()
       // this.messageList = rows
     }
