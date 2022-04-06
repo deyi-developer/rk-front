@@ -14,6 +14,9 @@ export default {
     projectCode: {
       type: String
     },
+    oneDeptId: {
+      type: [String, Number]
+    },
     className: {
       type: String,
       default: "chart"
@@ -37,6 +40,11 @@ export default {
 
       chart: null
     };
+  },
+  watch: {
+    oneDeptId() {
+      this.fetchData();
+    }
   },
   mounted() {
     this.fetchData();
