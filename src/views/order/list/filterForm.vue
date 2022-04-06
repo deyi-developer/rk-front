@@ -26,7 +26,7 @@
             <el-input v-model="queryParams.pmName" clearable size="small" />
           </el-form-item>
         </el-col>
-        <el-col :span="6" v-if="checkRole(['pm'])">
+        <el-col :span="6" v-if="checkRole(['risker'])">
           <el-form-item label="一级部门" prop="oneDeptId">
             <el-select
               class="block"
