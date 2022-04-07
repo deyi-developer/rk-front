@@ -89,65 +89,6 @@ export const constantRoutes = [
       }
     ]
   }
-  // {
-  //   path: "/order",
-  //   component: Layout,
-  //   meta: { title: "项目管理", icon: "user" },
-  //   // redirect: "/order/send",
-  //   children: [
-  //     {
-  //       path: "send",
-  //       component: () => import("@/views/order/send"),
-  //       name: "send",
-  //       meta: { title: "工单详情", icon: "build" },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: "details",
-  //       hidden: true,
-  //       component: () => import("@/views/order/project"),
-  //       name: "details",
-  //       meta: { title: "项目明细", icon: "user" }
-  //     },
-  //     {
-  //       path: "list",
-  //       component: () => import("@/views/order/list"),
-  //       name: "projectList",
-  //       meta: { title: "项目清单", icon: "build" }
-  //     },
-  //     {
-  //       path: "monthly-project",
-  //       component: () => import("@/views/order/monthly-project"),
-  //       name: "monthly-project",
-  //       meta: { title: "项目月报", icon: "user" }
-  //     },
-  //     {
-  //       path: "monthly-plan",
-  //       component: () => import("@/views/order/monthly-plan"),
-  //       name: "monthly-plan",
-  //       meta: { title: "月度计划", icon: "user" }
-  //     },
-  //     {
-  //       path: "order-list",
-  //       component: () => import("@/views/order/order-list"),
-  //       name: "order-list",
-  //       meta: { title: "工单列表", icon: "user" }
-  //     }
-  //   ]
-  // }
-  // {
-  //   path: "/order",
-  //   component: Layout,
-  //   meta: { title: "工单管理", icon: "user" },
-  //   children: [
-  //     {
-  //       path: "order-list",
-  //       component: () => import("@/views/order/order-list"),
-  //       name: "order-list",
-  //       meta: { title: "工单列表", icon: "user" },
-  //     },
-  //   ],
-  // },
 ];
 
 // 动态路由，基于用户权限动态去加载
