@@ -25,7 +25,7 @@
 <script>
 import ColumnChart from "../../dashboard/ColumnChart";
 export default {
-  name: "Monthly-plan",
+  name: "Monthly-dept",
   components: {
     ColumnChart
   },
