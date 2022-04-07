@@ -8,9 +8,9 @@
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="date" label="日期" width="180">
           <template slot-scope="{ row }">
-            <router-link :to="'/monthly/dept/' + row.id" class="link-type">
-              <span>{{ row.date }}</span>
-            </router-link>
+            <div @click="gotoDept(row)">
+              {{ row.date }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="name" label="姓名" width="180"></el-table-column>

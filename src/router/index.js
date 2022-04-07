@@ -162,6 +162,34 @@ export const dynamicRoutes = [
         meta: { title: "修改生成配置", activeMenu: "/tool/gen" }
       }
     ]
+  },
+  {
+    path: "/tool/gen-edit",
+    component: Layout,
+    hidden: true,
+    permissions: ["tool:gen:edit"],
+    children: [
+      {
+        path: "index/:tableId(\\d+)",
+        component: () => import("@/views/tool/gen/editTable"),
+        name: "GenEdit",
+        meta: { title: "修改生成配置", activeMenu: "/tool/gen" }
+      }
+    ]
+  },
+  {
+    path: "/monthly",
+    component: Layout,
+    hidden: true,
+    permissions: ["order:plan:list"],
+    children: [
+      {
+        path: "dept/:id(\\d+)",
+        component: () => import("@/views/order/monthly-dept"),
+        name: "GenEdit",
+        meta: { title: "部门当月计划", activeMenu: "/order/monthly-plan" }
+      }
+    ]
   }
 ];
 
