@@ -81,7 +81,10 @@ export default {
           text:
             "应开总额:" + (totalShouldBillingMoney / 10000).toFixed(2) + "万",
           subtext:
-            "已开:" + (totalAlreadyBillingMoney / 10000).toFixed(2) + "万"
+            "单位（万元）    " +
+            "已开:" +
+            (totalAlreadyBillingMoney / 10000).toFixed(2) +
+            "万"
         },
         tooltip: {
           trigger: "axis",
@@ -105,7 +108,7 @@ export default {
             rotate: 30,
             formatter: function (value, index) {
               // return value / 10000 + "万元";
-              return value + "万";
+              return value;
             }
           }
         },
