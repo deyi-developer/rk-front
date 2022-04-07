@@ -65,7 +65,7 @@
           ref="xTable"
           border
           align="center"
-          height="550"
+          :height="height"
           show-overflow
           keep-source
           size="small"
@@ -552,10 +552,27 @@
               field="riskLevel"
               class-name="bg-other"
               width="200"
-              title="法务接管"
+              title="项目风险状态"
             >
               <template #default="{ row }">
-                {{ row.riskLevel ? "是" : "否" }}
+                <span>
+                  {{
+                    selectDictLabel(
+                      dict.type.risk_level,
+                      row.grossProfitRiskLevel
+                    )
+                  }}
+                </span>
+              </template>
+              <template #edit="{ row }">
+                <vxe-select v-model="row.grossProfitRiskLevel" transfer>
+                  <vxe-option
+                    v-for="dict in dict.type.risk_level"
+                    :key="dict.value"
+                    :value="dict.value"
+                    :label="dict.label"
+                  ></vxe-option>
+                </vxe-select>
               </template>
             </vxe-column>
           </vxe-colgroup>
@@ -639,6 +656,7 @@ export default {
       activeName: "first",
       tableLodaing: true,
       dataSource: [],
+      height: document.body.clientHeight - 425,
       risk: {
         highRiskProjectNum: 0,
         highRiskProjectRate: 0,
@@ -649,7 +667,7 @@ export default {
         totalProjectNum: 827
       },
       page: {
-        pageSize: 100,
+        pageSize: 50,
         pageNum: 1,
         total: 0
       },

@@ -125,14 +125,14 @@ export default {
             type: "cross"
           }
         },
-        aria: {
-          enabled: true,
-          decal: {
-            show: true
-          }
-        },
+        // aria: {
+        //   enabled: true,
+        //   decal: {
+        //     show: true
+        //   }
+        // },
         title: {
-          text: "毛利同比对照",
+          text: "毛利率",
           subtext: "单位（%）"
         },
         legend: {},

@@ -61,8 +61,12 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      getInvoiceReceivePercent(this.projectCode).then((res) => {
-        const data = res.data.data;
+      const params = {
+        projectCode: this.projectCode,
+        oneDeptId: this.oneDeptId
+      };
+      getInvoiceReceivePercent(params).then((res) => {
+        const data = res.data;
         this.$nextTick(() => {
           this.initChart(data);
         });
@@ -70,7 +74,7 @@ export default {
     },
     initChart(dataSource) {
       const {
-        dateList,
+        dateList = [],
         invoicePjtdList,
         invoiceShouldInvoiceList,
         receivePjtdList,
@@ -79,7 +83,10 @@ export default {
         receiveShouldReceiveList
       } = dataSource;
       const option = {
-        legend: {},
+        legend: {
+          top: 20,
+          right: 0
+        },
         dataZoom: [
           {
             startValue: dateList[dateList.length - 12],
