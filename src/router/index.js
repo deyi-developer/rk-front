@@ -186,7 +186,7 @@ export const dynamicRoutes = [
       {
         path: "dept/:id(\\d+)",
         component: () => import("@/views/order/monthly-dept"),
-        name: "GenEdit",
+        name: "MonthlyDept",
         meta: { title: "部门当月计划", activeMenu: "/order/monthly-plan" }
       }
     ]

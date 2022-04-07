@@ -82,7 +82,7 @@ export default {
           }
         },
         title: {
-          text: "总收入（未税）:" + income + "万元",
+          text: "总收入:" + income + "万元",
           subtext: "单位（万元）"
         },
         tooltip: {

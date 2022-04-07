@@ -3,7 +3,7 @@
   <div class="filter-form">
     <el-form :model="queryParams" ref="queryForm" label-width="100px">
       <el-row :gutter="24">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="项目编码" prop="projectCode">
             <el-input
               v-model="queryParams.projectCode"
@@ -20,12 +20,12 @@
               size="small"
             />
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <!-- <el-col :span="6">
           <el-form-item label="项目经理" prop="pmName">
             <el-input v-model="queryParams.pmName" clearable size="small" />
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="6" v-if="checkRole(['risker'])">
           <el-form-item label="一级部门" prop="oneDeptId">
             <el-select
@@ -43,9 +43,37 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <div style="line-height: 36px">
+            <!-- <el-button
+              v-show="!more"
+              @click="more = !more"
+              size="small"
+              icon="el-icon-arrow-down"
+              >更多</el-button
+            >-->
+            <!-- <el-button
+              v-show="more"
+              @click="more = !more"
+              icon="el-icon-arrow-up"
+              size="small"
+              >收起</el-button
+            >-->
+            <el-button
+              type="primary"
+              size="small"
+              icon="el-icon-search"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
+              >重置</el-button
+            >
+          </div>
+        </el-col>
       </el-row>
       <el-row :gutter="24" v-show="more">
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="开票风险等级" prop="invoicingRiskLevel">
             <el-select
               v-model="queryParams.invoicingRiskLevel"
@@ -95,35 +123,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <div style="line-height: 36px">
-            <!-- <el-button
-              v-show="!more"
-              @click="more = !more"
-              size="small"
-              icon="el-icon-arrow-down"
-              >更多</el-button
-            >-->
-            <!-- <el-button
-              v-show="more"
-              @click="more = !more"
-              icon="el-icon-arrow-up"
-              size="small"
-              >收起</el-button
-            >-->
-            <el-button
-              type="primary"
-              size="small"
-              icon="el-icon-search"
-              @click="handleQuery"
-              >搜索</el-button
-            >
-            <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
-              >重置</el-button
-            >
-          </div>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form>
   </div>

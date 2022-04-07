@@ -24,7 +24,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "350px"
     },
     options: {
       type: Object,
@@ -63,6 +63,13 @@ export default {
         billingMoney60to90Day = 0,
         billingMoney90Day = 0
       } = this.summary;
+
+      const total =
+        (billingMoney30Day +
+          billingMoney30to60Day +
+          billingMoney60to90Day +
+          billingMoney90Day) /
+        10000;
       const option = {
         aria: {
           enabled: true,
@@ -77,49 +84,81 @@ export default {
             "已开:" + (totalAlreadyBillingMoney / 10000).toFixed(2) + "万"
         },
         tooltip: {
-          trigger: "item",
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          },
           formatter: function (params) {
-            const {
-              percent,
-              data: { name, value }
-            } = params;
-
+            const { name, value } = params[0];
+            const percent = ((value / total) * 100).toFixed(2);
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
               symbol: "",
               separator: ","
             }).format()}<br/>`;
           }
         },
+        yAxis: {
+          type: "value",
+          position: "right",
+          axisLabel: {
+            interval: 0,
+            rotate: 30,
+            formatter: function (value, index) {
+              // return value / 10000 + "万元";
+              return value + "万";
+            }
+          }
+        },
+        xAxis: {
+          type: "category",
+          splitLine: { show: false },
+
+          data: [
+            "超30天内\n应开未开",
+            "超30-60天\n应开未开",
+            "超60-90天\n应开未开",
+            "超90天\n应开未开"
+          ]
+        },
         series: [
           {
-            name: "Access From",
-            type: "pie",
-            radius: "50%",
-
+            type: "bar",
+            barWidth: "30",
             data: [
-              // { value: totalAlreadyBillingMoney, name: "已开" },
               {
-                value: billingMoney90Day,
-                name: "超90天应开未开"
+                value: billingMoney30Day / 10000
               },
               {
-                value: billingMoney60to90Day,
-                name: "超60-90天应开未开"
+                value: billingMoney30to60Day / 10000,
+                itemStyle: {
+                  color: "#6be6c1"
+                }
               },
               {
-                value: billingMoney30to60Day,
-                name: "超30-60天应开未开"
+                value: billingMoney90Day / 10000,
+                itemStyle: {
+                  color: "#626c91"
+                }
               },
               {
-                value: billingMoney30Day,
-                name: "超30天内应开未开"
+                value: billingMoney60to90Day / 10000,
+                itemStyle: {
+                  color: "#a0a7e6"
+                }
               }
             ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
+            showBackground: true,
+            backgroundStyle: {
+              color: "rgba(180, 180, 180, 0.2)"
+            },
+            label: {
+              show: true,
+              position: "top",
+              formatter: ({ value }) => {
+                return currency(value, {
+                  symbol: "",
+                  separator: ","
+                }).format();
               }
             }
           }

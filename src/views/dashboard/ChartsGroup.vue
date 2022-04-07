@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-row type="flex" :gutter="10" class="mb-10">
-      <el-col :span="8">
+      <el-col :span="10">
         <el-card>
           <el-row type="flex">
             <PieChart :projectCode="projectCode" :summary="summary" />
@@ -13,7 +13,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="16">
+      <el-col :span="14">
         <el-card>
           <el-row type="flex">
             <el-col :span="24">
@@ -22,16 +22,21 @@
           </el-row>
           <el-row type="flex">
             <el-col :span="24">
-              <!-- <BarChart2 :projectCode="projectCode" :oneDeptId="oneDeptId" /> -->
-              <InvoiceReceivePercent
-                :projectCode="projectCode"
-                :oneDeptId="oneDeptId"
-              />
+              <AmountChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
             </el-col>
           </el-row>
         </el-card>
       </el-col>
     </el-row>
+
+    <el-card class="mb-10">
+      <el-row type="flex" :gutter="10">
+        <InvoiceReceivePercent
+          :projectCode="projectCode"
+          :oneDeptId="oneDeptId"
+        />
+      </el-row>
+    </el-card>
 
     <el-card class="mb-10">
       <el-row type="flex" :gutter="10">
@@ -41,12 +46,6 @@
         <el-col :span="12">
           <CashOccupyChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
         </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card class="mb-10">
-      <el-row type="flex" :gutter="10">
-        <AmountChart :projectCode="projectCode" :oneDeptId="oneDeptId" />
       </el-row>
     </el-card>
 

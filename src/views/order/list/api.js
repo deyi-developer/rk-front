@@ -33,3 +33,11 @@ export function initData(data) {
     data
   });
 }
+
+export function toggle(data) {
+  return request({
+    url: "/reportdata/reportdata/toggle",
+    method: "put",
+    data
+  });
+}

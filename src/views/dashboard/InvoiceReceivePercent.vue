@@ -27,7 +27,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "450px"
     }
   },
   data() {
@@ -100,6 +100,16 @@ export default {
           trigger: "axis",
           axisPointer: {
             type: "cross"
+          },
+          formatter: function (params) {
+            let tip = "";
+            let { axisValue } = params[0];
+            tip += axisValue;
+            params.forEach((item) => {
+              const { marker, seriesName, value } = item;
+              tip += "<br/>" + marker + seriesName + "   " + value + "%";
+            });
+            return tip;
           }
         },
         aria: {
@@ -109,7 +119,7 @@ export default {
           }
         },
         title: {
-          text: "开票收款率",
+          text: "开票/收款率",
           subtext: "单位（%）"
         },
         xAxis: {
@@ -118,6 +128,7 @@ export default {
         },
         yAxis: {
           type: "value",
+
           axisLabel: {
             formatter: function (value, index) {
               return value + "%";

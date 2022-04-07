@@ -71,7 +71,7 @@
 import { getCurrentMonth } from './api';
 import ColumnChart from "./columnChart";
 export default {
-  name: "monthly-dept",
+  name: "Monthly-dept",
   components: {
     ColumnChart
   },

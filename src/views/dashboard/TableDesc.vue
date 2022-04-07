@@ -18,7 +18,7 @@
             label="相对PJTD开票率"
             >{{
               summary.billingRateOfTotalPjtd
-                ? `${summary.billingRateOfTotalPjtd}%`
+                ? `${summary.billingRateOfTotalPjtd * 100}%`
                 : ""
             }}</el-descriptions-item
           >
@@ -33,15 +33,17 @@
             label="相对PJTD收款率"
             >{{
               summary.receivedRateOfTotalPjtd
-                ? `${summary.receivedRateOfTotalPjtd}%`
+                ? `${summary.receivedRateOfTotalPjtd * 100}%`
                 : ""
             }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
-            label="相对总开票收款率"
+            label="收款率(相对已开)"
             >{{
-              summary.totalBillingRate ? `${summary.totalBillingRate}%` : ""
+              summary.totalBillingRate
+                ? `${summary.totalBillingRate * 100}%`
+                : ""
             }}</el-descriptions-item
           >
           <el-descriptions-item
@@ -102,7 +104,7 @@
               label="相对应开开票率"
               >{{
                 summary.correspondingBillingRate
-                  ? `${summary.correspondingBillingRate}%`
+                  ? `${summary.correspondingBillingRate * 100}%`
                   : ""
               }}</el-descriptions-item
             >
@@ -122,14 +124,14 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总应收未收（相对应收）"
+              label="总应收未收(相对应收)"
               >{{
                 summary.totalShouldNotReceiptsMoney | currency
               }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总应收未收（相对已开）"
+              label="总应收未收(相对已开)"
               >{{
                 summary.totalShouldNotReceiptsBilling | currency
               }}</el-descriptions-item
@@ -139,7 +141,7 @@
               label="相对应收收款率"
               >{{
                 summary.relativeReceivableRate
-                  ? `${summary.relativeReceivableRate}%`
+                  ? `${summary.relativeReceivableRate * 100}%`
                   : ""
               }}</el-descriptions-item
             >
@@ -148,7 +150,7 @@
               label="相对已开收款率"
               >{{
                 summary.relativeOpenedCollectionRate
-                  ? `${summary.relativeOpenedCollectionRate}%`
+                  ? `${summary.relativeOpenedCollectionRate * 100}%`
                   : ""
               }}</el-descriptions-item
             >
