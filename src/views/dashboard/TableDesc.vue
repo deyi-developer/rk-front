@@ -39,7 +39,7 @@
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
-            label="相对总开票收款率"
+            label="收款率(相对已开)"
             >{{
               summary.totalBillingRate ? `${summary.totalBillingRate}%` : ""
             }}</el-descriptions-item
@@ -122,14 +122,14 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总应收未收（相对应收）"
+              label="总应收未收(相对应收)"
               >{{
                 summary.totalShouldNotReceiptsMoney | currency
               }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总应收未收（相对已开）"
+              label="总应收未收(相对已开)"
               >{{
                 summary.totalShouldNotReceiptsBilling | currency
               }}</el-descriptions-item

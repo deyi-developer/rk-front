@@ -27,7 +27,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "450px"
     }
   },
   data() {
@@ -109,7 +109,7 @@ export default {
           }
         },
         title: {
-          text: "开票收款率",
+          text: "开票/收款率",
           subtext: "单位（%）"
         },
         xAxis: {
@@ -118,6 +118,7 @@ export default {
         },
         yAxis: {
           type: "value",
+
           axisLabel: {
             formatter: function (value, index) {
               return value + "%";

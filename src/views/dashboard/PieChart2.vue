@@ -26,7 +26,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "350px"
     },
     options: {
       type: Object,
@@ -65,6 +65,12 @@ export default {
         receiptsMoney60to90Day = 0,
         receiptsMoney90Day = 0
       } = this.summary;
+      const total =
+        (receiptsMoney30Day +
+          receiptsMoney30to60Day +
+          receiptsMoney60to90Day +
+          receiptsMoney90Day) /
+        10000;
       const option = {
         aria: {
           enabled: true,
@@ -78,43 +84,70 @@ export default {
           subtext: "已收:" + (totalReceiptssMoney / 10000).toFixed(2) + "万"
         },
         tooltip: {
-          trigger: "item",
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          },
           formatter: function (params) {
-            const {
-              percent,
-              data: { name, value }
-            } = params;
-            // const percent = (value / totalShouldReceiptsMoney).toFixed(2);
+            console.log(params);
+            const { name, value } = params[0];
+            const percent = ((value / total) * 100).toFixed(2);
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
               symbol: "",
               separator: ","
             }).format()}<br/>`;
           }
         },
-        // legend: {
-        //   bottom: "0",
-        //   left: "center"
-        // },
+        xAxis: {
+          type: "category",
+          splitLine: { show: false },
+
+          data: [
+            "超30天内\n应收未收",
+            "超30-60天\n应收未收",
+            "超60-90天\n应收未收",
+            "超90天\n应收未收"
+          ]
+        },
+        yAxis: {
+          type: "value",
+          position: "right",
+          axisLabel: {
+            interval: 0,
+            rotate: 30,
+            formatter: function (value, index) {
+              // return value / 10000 + "万元";
+              return value + "万";
+            }
+          }
+        },
         series: [
           {
             name: "Access From",
-            type: "pie",
-            radius: "50%",
-
+            type: "bar",
+            barWidth: "30",
             data: [
               // { value: totalReceiptssMoney, name: "已收" },
-              { value: receiptsMoney90Day, name: "超90天应收未收" },
-              { value: receiptsMoney60to90Day, name: "超60-90天应收未收" },
-              { value: receiptsMoney30to60Day, name: "超30-60天应收未收" },
-              { value: receiptsMoney30Day, name: "超30天应收未收" }
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
+              { value: receiptsMoney90Day / 10000, name: "超90天应收未收" },
+              {
+                value: receiptsMoney60to90Day / 10000,
+                itemStyle: {
+                  color: "#6be6c1"
+                }
+              },
+              {
+                value: receiptsMoney30to60Day / 10000,
+                itemStyle: {
+                  color: "#626c91"
+                }
+              },
+              {
+                value: receiptsMoney30Day / 10000,
+                itemStyle: {
+                  color: "#a0a7e6"
+                }
               }
-            }
+            ]
           }
         ],
         ...this.options
