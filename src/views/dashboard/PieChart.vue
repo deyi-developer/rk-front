@@ -89,7 +89,6 @@ export default {
             type: "shadow"
           },
           formatter: function (params) {
-            console.log(params);
             const { name, value } = params[0];
             const percent = ((value / total) * 100).toFixed(2);
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {

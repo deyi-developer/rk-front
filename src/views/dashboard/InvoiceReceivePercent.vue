@@ -100,6 +100,16 @@ export default {
           trigger: "axis",
           axisPointer: {
             type: "cross"
+          },
+          formatter: function (params) {
+            let tip = "";
+            let { axisValue } = params[0];
+            tip += axisValue;
+            params.forEach((item) => {
+              const { marker, seriesName, value } = item;
+              tip += "<br/>" + marker + seriesName + "   " + value + "%";
+            });
+            return tip;
           }
         },
         aria: {
