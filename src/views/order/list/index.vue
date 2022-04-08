@@ -751,7 +751,8 @@ import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函�
     项目开票 14个字段
     项目收款 15个字段
     项目计划 9个字段
-    其他指标 3个字段
+    其他指标 4个字段
+    操作字段 2个
    */
 
 const w = 200; // 列宽度
@@ -760,14 +761,13 @@ const firstWidth = w * 11;
 const secondWidth = w * 14;
 const thirdWidth = w * 14;
 const fourthWidth = w * 9;
-const fifthWidth = w * 4;
+const fifthWidth = w * 5;
 //列   距离
 const firstLeft = 0;
 const secondLeft = firstWidth;
 const thirdLeft = firstWidth + secondWidth;
 const fourthLeft = firstWidth + secondWidth + thirdWidth;
-const fifthLeft =
-  fixedWidth + firstWidth + secondWidth + thirdWidth + fourthWidth;
+const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth;
 
 export default {
   dicts: ["risk_level", "risk_status"],
