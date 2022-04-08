@@ -63,7 +63,8 @@ export default {
         billingMoney30Day = 0,
         billingMoney30to60Day = 0,
         billingMoney60to90Day = 0,
-        billingMoney90Day = 0
+        billingMoney90Day = 0,
+        totalShouldNotBillingMoney = 0
       } = this.summary;
 
       const total =
@@ -86,6 +87,9 @@ export default {
             "单位（万元）    " +
             "已开:" +
             (totalAlreadyBillingMoney / 10000).toFixed(2) +
+            "万     " +
+            "总应开未开：" +
+            (totalShouldNotBillingMoney / 10000).toFixed(2) +
             "万"
         },
         tooltip: {

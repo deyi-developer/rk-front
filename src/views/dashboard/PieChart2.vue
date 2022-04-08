@@ -65,7 +65,8 @@ export default {
         receiptsMoney30Day = 0,
         receiptsMoney30to60Day = 0,
         receiptsMoney60to90Day = 0,
-        receiptsMoney90Day = 0
+        receiptsMoney90Day = 0,
+        totalShouldNotReceiptsMoney = 0
       } = this.summary;
       const total =
         (receiptsMoney30Day +
@@ -87,6 +88,9 @@ export default {
             "单位（万元）    " +
             "已收:" +
             (totalReceiptssMoney / 10000).toFixed(2) +
+            "万     " +
+            "总应收未收：" +
+            (totalShouldNotReceiptsMoney / 10000).toFixed(2) +
             "万"
         },
         tooltip: {
