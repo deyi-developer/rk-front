@@ -17,9 +17,7 @@
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD开票率"
             >{{
-              summary.billingRateOfTotalPjtd
-                ? `${summary.billingRateOfTotalPjtd * 100}%`
-                : ""
+              summary.billingRateOfTotalPjtd | percent
             }}</el-descriptions-item
           >
 
@@ -32,19 +30,13 @@
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD收款率"
             >{{
-              summary.receivedRateOfTotalPjtd
-                ? `${summary.receivedRateOfTotalPjtd * 100}%`
-                : ""
+              summary.receivedRateOfTotalPjtd | percent
             }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="收款率(相对已开)"
-            >{{
-              summary.totalBillingRate
-                ? `${summary.totalBillingRate * 100}%`
-                : ""
-            }}</el-descriptions-item
+            >{{ summary.totalBillingRate | percent }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
@@ -106,9 +98,7 @@
               :contentStyle="{ textAlign: 'right' }"
               label="相对应开开票率"
               >{{
-                summary.correspondingBillingRate
-                  ? `${summary.correspondingBillingRate * 100}%`
-                  : ""
+                summary.correspondingBillingRate | percent
               }}</el-descriptions-item
             >
             <el-descriptions-item
@@ -143,18 +133,14 @@
               :contentStyle="{ textAlign: 'right' }"
               label="相对应收收款率"
               >{{
-                summary.relativeReceivableRate
-                  ? `${summary.relativeReceivableRate * 100}%`
-                  : ""
+                summary.relativeReceivableRate | percent
               }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对已开收款率"
               >{{
-                summary.relativeOpenedCollectionRate
-                  ? `${summary.relativeOpenedCollectionRate * 100}%`
-                  : ""
+                summary.relativeOpenedCollectionRate | percent
               }}</el-descriptions-item
             >
           </el-descriptions>

@@ -294,7 +294,7 @@
               title="应开比率"
             >
               <template #default="{ row }">
-                {{ row.billingRate * 100 }}%
+                {{ row.billingRate | percent }}
               </template>
             </vxe-column>
             <vxe-column
@@ -313,7 +313,7 @@
               title="相对总收入开票率"
             >
               <template #default="{ row }">
-                {{ row.billingRateOfTotalPjtd * 100 }}%
+                {{ row.billingRateOfTotalPjtd | percent }}
               </template>
             </vxe-column>
             <vxe-column
@@ -322,7 +322,7 @@
               title="相对应开开票率"
             >
               <template #default="{ row }">
-                {{ row.correspondingBillingRate * 100 }}%
+                {{ row.correspondingBillingRate | percent }}
               </template>
             </vxe-column>
             <vxe-column
@@ -457,7 +457,7 @@
               title="应收比率"
             >
               <template #default="{ row }">
-                {{ row.shouldReceiverRate * 100 }}%
+                {{ row.shouldReceiverRate | percent }}
               </template>
             </vxe-column>
             <vxe-column
@@ -474,42 +474,70 @@
               field="receivedRateOfTotalPjtd"
               class-name="bg-collection"
               title="相对总收入收款率"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.receivedRateOfTotalPjtd | percent }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="relativeReceivableRate"
               class-name="bg-collection"
               title="相对应收款率"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.relativeReceivableRate | percent }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="totalShouldNotReceiptsMoney"
               class-name="bg-collection"
               title="超账期应收未收总额"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.totalShouldNotReceiptsMoney | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="receiptsMoney30Day"
               class-name="bg-collection"
               title="超账期30天内应收未收"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.receiptsMoney30Day | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="receiptsMoney30to60Day"
               class-name="bg-collection"
               title="超账期30-60天应收未收"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.receiptsMoney30to60Day | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="receiptsMoney60to90Day"
               class-name="bg-collection"
               title="超账期60-90天应收未收"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.receiptsMoney60to90Day | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="receiptsMoney90Day"
               class-name="bg-collection"
               title="超账期90天以上应收未收"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.receiptsMoney90Day | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="receiveRiskLevel"
               class-name="bg-collection"
@@ -544,7 +572,11 @@
               class-name="bg-plan"
               title="超帐期应开未开总额"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.totalShouldNotBillingMoney | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="planBillingMoney"
               class-name="bg-plan"
@@ -564,18 +596,30 @@
               class-name="bg-plan"
               title="本月实开总额"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.billingThisMonth | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="compleBillingThisMonth"
               class-name="bg-plan"
               title="本月开票完成率"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.compleBillingThisMonth | percent }}
+              </template></vxe-column
+            >
             <vxe-column
               field="totalShouldNotReceiptsMoney"
               class-name="bg-plan"
               title="超帐期应收未收总额"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.totalShouldNotReceiptsMoney | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="planReceiptsMoney"
               class-name="bg-plan"
@@ -595,12 +639,20 @@
               class-name="bg-plan"
               title="本月实收总额"
               align="right"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.receiptsThisMonth | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="compleReceiptsThisMonth"
               class-name="bg-plan"
               title="本月收款完成率"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.compleReceiptsThisMonth | percent }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="planRemark"
               class-name="bg-plan"
@@ -622,12 +674,20 @@
               field="grossProfit"
               class-name="bg-other"
               title="毛利额"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.grossProfit | currency }}
+              </template>
+            </vxe-column>
             <vxe-column
               field="grossProfitRate"
               class-name="bg-other"
               title="毛利率"
-            ></vxe-column>
+            >
+              <template #default="{ row }">
+                {{ row.grossProfitRate | percent }}
+              </template>
+            </vxe-column>
 
             <vxe-column
               field="grossProfitRiskLevel"
