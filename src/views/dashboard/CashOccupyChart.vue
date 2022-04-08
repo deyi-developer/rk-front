@@ -67,6 +67,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const { dateList, cashOccupyList } = dataSource;
       const option = {
         legend: {},

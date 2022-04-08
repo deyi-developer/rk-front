@@ -63,6 +63,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const {
         date,
         expenseCostList,

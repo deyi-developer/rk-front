@@ -101,9 +101,18 @@ export default {
       type: [String, Number]
     }
   },
-  created() {
+  mounted() {
     this.getData();
   },
+  watch: {
+    projectCode() {
+      this.getData();
+    },
+    oneDeptId() {
+      this.getData();
+    }
+  },
+
   methods: {
     getData() {
       if (this.projectCode) {

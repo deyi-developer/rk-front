@@ -4,8 +4,8 @@
       <div class="ds-flex title">
         <h1>项目清单</h1>
         <div class="fx-1 content">
-          <span >{{ `总项目数：${risk.totalProjectNum} ` }}</span>
-          <span class="pointer"> 
+          <span>{{ `总项目数：${risk.totalProjectNum} ` }}</span>
+          <span class="pointer">
             {{
               `无风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
             }}
@@ -87,6 +87,7 @@
           show-overflow
           keep-source
           size="small"
+          :cell-class-name="cellClass"
           id="projectCode"
           :data="dataSource"
           :loading="tableLodaing"
@@ -809,7 +810,7 @@ export default {
         oneDeptId: null
       },
       page: {
-        pageSize: 50,
+        pageSize: 20,
         pageNum: 1,
         total: 0
       },
@@ -1002,6 +1003,29 @@ export default {
         this.fetchData({ pageNum, pageSize });
       }
     },
+    cellClass({ row, column }) {
+      const { field } = column;
+      const val = row[field];
+      let className = "";
+
+      switch (val) {
+        case "lawsuit":
+          className = "cell-lawsuit";
+          break;
+        case "Red":
+          className = "cell-red";
+          break;
+        case "Yellow":
+          className = "cell-yellow";
+          break;
+        case "Green":
+          className = "cell-green";
+          break;
+      }
+
+      return className;
+    },
+
     // 设置填写权限
     activeCellMethod({ column }) {
       const { field } = column;
@@ -1084,7 +1108,7 @@ export default {
 
 <style lang="scss">
 .project-list {
-  .pointer{
+  .pointer {
     cursor: pointer;
   }
   .filter-input {
@@ -1118,6 +1142,18 @@ export default {
         color: #909399;
       }
     }
+  }
+  .cell-red {
+    background-color: #f56c6c !important;
+    color: #f0f9eb;
+  }
+  .cell-lawsuit {
+    background-color: #f56c6c !important;
+    color: #f0f9eb;
+  }
+  .cell-yellow {
+    background-color: #e6a23c !important;
+    color: #f0f9eb;
   }
   .link-color {
     color: #409eff;

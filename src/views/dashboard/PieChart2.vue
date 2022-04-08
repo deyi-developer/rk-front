@@ -39,15 +39,14 @@ export default {
     };
   },
   watch: {
-    summary() {
-      this.initChart();
+    summary: {
+      handler() {
+        this.initChart();
+      },
+      depp: true
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
-  },
+
   beforeDestroy() {
     if (!this.chart) {
       return;
@@ -57,6 +56,9 @@ export default {
   },
   methods: {
     initChart() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const {
         totalShouldReceiptsMoney = 0,
         totalReceiptssMoney = 0,
