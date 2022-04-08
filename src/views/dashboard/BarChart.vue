@@ -66,6 +66,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const {
         expenseCost,
         expenseOutSource,
@@ -92,6 +95,10 @@ export default {
           },
           formatter: function (params) {
             var tar = params[1];
+            console.log(tar.value, income);
+            const percent = income
+              ? ((tar.value / income) * 100).toFixed(2)
+              : 0;
             return (
               tar.name +
               "<br/>" +
@@ -100,7 +107,7 @@ export default {
                 separator: ","
               }).format() +
               "<br/>" +
-              ((tar.value / income) * 100).toFixed(2) +
+              percent +
               "%"
             );
           }
@@ -116,7 +123,7 @@ export default {
           axisLabel: {
             formatter: function (value, index) {
               // return value / 10000 + "万元";
-              return value + "万元";
+              return value;
             }
           }
         },

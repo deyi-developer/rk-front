@@ -73,6 +73,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const {
         dateList = [],
         invoicePjtdList,
@@ -84,7 +87,7 @@ export default {
       } = dataSource;
       const option = {
         legend: {
-          top: 20,
+          // top: 20,
           right: 0
         },
         dataZoom: [

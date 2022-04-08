@@ -99,6 +99,15 @@ const install = function (Vue) {
     return currency(value, { symbol: "", separator: "," }).format();
   });
 
+  // 浮点数转百分号
+  Vue.filter("percent", (value) => {
+    if (value) {
+      return (value * 100).toFixed(0) + "%";
+    } else {
+      return "";
+    }
+  });
+
   // 关联需求
   // Vue.filter("needs", (value, types) => {
   //   if (

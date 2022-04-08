@@ -98,6 +98,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const { dateList, percentList } = dataSource;
       const option = {
         dataZoom: [
@@ -125,10 +128,30 @@ export default {
           text: "达成率",
           subtext: "单位（%）"
         },
-        xAxis: {
-          type: "category",
-          data: dateList
-        },
+        xAxis: [
+          {
+            type: "category",
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLine: {
+              onZero: false
+            },
+            axisPointer: {
+              label: {
+                formatter: function (params) {
+                  return (
+                    params.value +
+                    (params.seriesData.length
+                      ? "：" + params.seriesData[0].data + "%"
+                      : "")
+                  );
+                }
+              }
+            },
+            data: dateList
+          }
+        ],
         yAxis: {
           type: "value",
           axisLabel: {

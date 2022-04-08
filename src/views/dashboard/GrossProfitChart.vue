@@ -106,6 +106,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       // const redYear = this.red;
       // const blueYear = this.blue;
       const { dateList, dataList } = dataSource;

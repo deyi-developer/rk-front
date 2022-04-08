@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="10">
+  <el-row :gutter="10" class="table-desc">
     <el-col :span="12">
       <el-card shadow="always" class="box-card">
         <el-descriptions :column="2" title="基础指标" border>
@@ -10,59 +10,56 @@
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
-            label="总开票"
+            label="总已开金额"
             >{{ summary.totalBilling | currency }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD开票率"
             >{{
-              summary.billingRateOfTotalPjtd
-                ? `${summary.billingRateOfTotalPjtd * 100}%`
-                : ""
+              summary.billingRateOfTotalPjtd | percent
             }}</el-descriptions-item
           >
 
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
-            label="总收款"
+            label="总已收金额"
             >{{ summary.totalReceipts | currency }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD收款率"
             >{{
-              summary.receivedRateOfTotalPjtd
-                ? `${summary.receivedRateOfTotalPjtd * 100}%`
-                : ""
+              summary.receivedRateOfTotalPjtd | percent
             }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="收款率(相对已开)"
+            >{{ summary.totalBillingRate | percent }}</el-descriptions-item
+          >
+          <el-descriptions-item
+            :contentStyle="{ textAlign: 'right' }"
+            label="未开票金额(相对PJTD)"
             >{{
-              summary.totalBillingRate
-                ? `${summary.totalBillingRate * 100}%`
-                : ""
+              formatVal(summary.pjtdTotalMoney - summary.totalBilling)
+                | currency
             }}</el-descriptions-item
           >
           <el-descriptions-item
-            :contentStyle="{ textAlign: 'center' }"
-            :labelStyle="{ textAlign: 'center' }"
-            label="-"
-            >-</el-descriptions-item
+            :contentStyle="{ textAlign: 'right' }"
+            label="未收款金额(相对PJTD)"
+            >{{
+              formatVal(summary.pjtdTotalMoney - summary.totalReceipts)
+                | currency
+            }}</el-descriptions-item
           >
           <el-descriptions-item
-            :contentStyle="{ textAlign: 'center' }"
-            :labelStyle="{ textAlign: 'center' }"
-            label="-"
-            >-</el-descriptions-item
-          >
-          <el-descriptions-item
-            :contentStyle="{ textAlign: 'center' }"
-            :labelStyle="{ textAlign: 'center' }"
-            label="-"
-            >-</el-descriptions-item
+            :contentStyle="{ textAlign: 'right' }"
+            label="未收款金额(相对已开)"
+            >{{
+              formatVal(summary.totalBilling - summary.totalReceipts) | currency
+            }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'center' }"
@@ -86,7 +83,7 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总开票"
+              label="总已开金额"
               >{{
                 summary.totalAlreadyBillingMoney | currency
               }}</el-descriptions-item
@@ -103,9 +100,7 @@
               :contentStyle="{ textAlign: 'right' }"
               label="相对应开开票率"
               >{{
-                summary.correspondingBillingRate
-                  ? `${summary.correspondingBillingRate * 100}%`
-                  : ""
+                summary.correspondingBillingRate | percent
               }}</el-descriptions-item
             >
             <el-descriptions-item
@@ -117,7 +112,7 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总收款"
+              label="总已收金额"
               >{{
                 summary.totalReceiptssMoney | currency
               }}</el-descriptions-item
@@ -140,18 +135,14 @@
               :contentStyle="{ textAlign: 'right' }"
               label="相对应收收款率"
               >{{
-                summary.relativeReceivableRate
-                  ? `${summary.relativeReceivableRate * 100}%`
-                  : ""
+                summary.relativeReceivableRate | percent
               }}</el-descriptions-item
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对已开收款率"
               >{{
-                summary.relativeOpenedCollectionRate
-                  ? `${summary.relativeOpenedCollectionRate * 100}%`
-                  : ""
+                summary.relativeOpenedCollectionRate | percent
               }}</el-descriptions-item
             >
           </el-descriptions>
@@ -169,6 +160,15 @@ export default {
         return {};
       }
     }
+  },
+  methods: {
+    formatVal(a, b) {
+      if (!a || !b) {
+        return 0;
+      } else {
+        return a - b;
+      }
+    }
   }
 };
 </script>
@@ -178,4 +178,11 @@ export default {
   margin-bottom: 10px;
 }
 </style>
-<style lang="scss"></style>
+<style lang="scss">
+.table-desc {
+  .el-descriptions-row {
+    th {
+    }
+  }
+}
+</style>

@@ -37,15 +37,14 @@ export default {
     };
   },
   watch: {
-    summary() {
-      this.initChart();
+    summary: {
+      handler() {
+        this.initChart();
+      },
+      depp: true
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
-  },
+
   beforeDestroy() {
     if (!this.chart) {
       return;
@@ -55,13 +54,17 @@ export default {
   },
   methods: {
     initChart() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const {
         totalShouldBillingMoney = 0,
         totalAlreadyBillingMoney = 0,
         billingMoney30Day = 0,
         billingMoney30to60Day = 0,
         billingMoney60to90Day = 0,
-        billingMoney90Day = 0
+        billingMoney90Day = 0,
+        totalShouldNotBillingMoney = 0
       } = this.summary;
 
       const total =
@@ -81,7 +84,13 @@ export default {
           text:
             "应开总额:" + (totalShouldBillingMoney / 10000).toFixed(2) + "万",
           subtext:
-            "已开:" + (totalAlreadyBillingMoney / 10000).toFixed(2) + "万"
+            "单位（万元）    " +
+            "已开:" +
+            (totalAlreadyBillingMoney / 10000).toFixed(2) +
+            "万     " +
+            "总应开未开：" +
+            (totalShouldNotBillingMoney / 10000).toFixed(2) +
+            "万"
         },
         tooltip: {
           trigger: "axis",
@@ -90,7 +99,7 @@ export default {
           },
           formatter: function (params) {
             const { name, value } = params[0];
-            const percent = ((value / total) * 100).toFixed(2);
+            const percent = total ? ((value / total) * 100).toFixed(2) : 0;
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
               symbol: "",
               separator: ","
@@ -105,7 +114,7 @@ export default {
             rotate: 30,
             formatter: function (value, index) {
               // return value / 10000 + "万元";
-              return value + "万";
+              return value;
             }
           }
         },

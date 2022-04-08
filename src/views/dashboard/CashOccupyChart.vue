@@ -67,6 +67,9 @@ export default {
       });
     },
     initChart(dataSource) {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const { dateList, cashOccupyList } = dataSource;
       const option = {
         legend: {},
@@ -104,7 +107,7 @@ export default {
           axisLabel: {
             formatter: function (value, index) {
               // return value / 10000 + "万元";
-              return value + "万元";
+              return value;
             }
           }
         },

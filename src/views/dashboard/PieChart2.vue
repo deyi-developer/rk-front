@@ -39,15 +39,14 @@ export default {
     };
   },
   watch: {
-    summary() {
-      this.initChart();
+    summary: {
+      handler() {
+        this.initChart();
+      },
+      depp: true
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
-  },
+
   beforeDestroy() {
     if (!this.chart) {
       return;
@@ -57,13 +56,17 @@ export default {
   },
   methods: {
     initChart() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       const {
         totalShouldReceiptsMoney = 0,
         totalReceiptssMoney = 0,
         receiptsMoney30Day = 0,
         receiptsMoney30to60Day = 0,
         receiptsMoney60to90Day = 0,
-        receiptsMoney90Day = 0
+        receiptsMoney90Day = 0,
+        totalShouldNotReceiptsMoney = 0
       } = this.summary;
       const total =
         (receiptsMoney30Day +
@@ -81,7 +84,14 @@ export default {
         title: {
           text:
             "应收总额:" + (totalShouldReceiptsMoney / 10000).toFixed(2) + "万",
-          subtext: "已收:" + (totalReceiptssMoney / 10000).toFixed(2) + "万"
+          subtext:
+            "单位（万元）    " +
+            "已收:" +
+            (totalReceiptssMoney / 10000).toFixed(2) +
+            "万     " +
+            "总应收未收：" +
+            (totalShouldNotReceiptsMoney / 10000).toFixed(2) +
+            "万"
         },
         tooltip: {
           trigger: "axis",
@@ -90,7 +100,7 @@ export default {
           },
           formatter: function (params) {
             const { name, value } = params[0];
-            const percent = ((value / total) * 100).toFixed(2);
+            const percent = total ? ((value / total) * 100).toFixed(2) : 0;
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
               symbol: "",
               separator: ","
@@ -116,7 +126,7 @@ export default {
             rotate: 30,
             formatter: function (value, index) {
               // return value / 10000 + "万元";
-              return value + "万";
+              return value;
             }
           }
         },
@@ -125,6 +135,10 @@ export default {
             name: "Access From",
             type: "bar",
             barWidth: "30",
+            showBackground: true,
+            backgroundStyle: {
+              color: "rgba(180, 180, 180, 0.2)"
+            },
             data: [
               // { value: totalReceiptssMoney, name: "已收" },
               { value: receiptsMoney90Day / 10000, name: "超90天应收未收" },
@@ -146,7 +160,17 @@ export default {
                   color: "#a0a7e6"
                 }
               }
-            ]
+            ],
+            label: {
+              show: true,
+              position: "top",
+              formatter: ({ value }) => {
+                return currency(value, {
+                  symbol: "",
+                  separator: ","
+                }).format();
+              }
+            }
           }
         ],
         ...this.options
