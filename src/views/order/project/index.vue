@@ -3,7 +3,9 @@
     <header class="header" :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']">
       <div>
         <h1>项目明细</h1>
-        <p class="title">项目编码：{{ projectData.projectCode }} 项目名称: {{ projectData.projectName }}</p>
+        <p
+          class="header-title"
+        >项目编码：{{ projectData.projectCode }} 项目名称: {{ projectData.projectName }}</p>
       </div>
       <p style="margin-left: 9%">开票中风险，收款高风险</p>
       <el-button style="margin-left: auto" type="text" @click="save">保存</el-button>
@@ -322,6 +324,7 @@ export default {
         eventMsg: '',
         eventHandler: '',
         eventUrgencyLevel: '',
+        eventHandleDate: '',
         projectCode: this.$route.query.projectCode
       },
       dialogVisible: false
@@ -424,7 +427,7 @@ let form = ref({
     border-bottom: 1px solid #ddd;
     background: #fff;
     // z-index: 999;
-    .title {
+    .header-title {
       margin-top: 6px;
       font-size: 12px;
     }

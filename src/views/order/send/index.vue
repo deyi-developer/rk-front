@@ -1,29 +1,25 @@
 <template>
   <div class="work-order page-bg">
     <header>
-      <h1 style="font-weight: 500;">{{ info.eventTitle }}</h1>
-      <el-row>
-        <el-col :span="12">
-          <label class="space">项目编码:</label>
-          <span>{{ info.projectCode }}</span>
-        </el-col>
-        <el-col :span="12">
-          <label class="space">工单类型:</label>
-
-          <span>{{ selectDictLabel(dict.type.event_type, info.eventType) }}</span>
-        </el-col>
-      </el-row>
-      <el-divider content-position="left">内容</el-divider>
-      <!-- <el-row>
-        <el-col :span="12">
-          <label class="space">服务目录:</label>
-          <span>万里悲秋常作客</span>
-        </el-col>
-        <el-col :span="12">
+      <h1 style="font-weight: 500; color: #000;">{{ info.projectCode }} {{ info.eventTitle }}</h1>
+      <ul class="order-info">
+        <li class="order-item">
           <label class="space">状态:</label>
-          <span>百年多病独登台</span>
-        </el-col>
-      </el-row>-->
+          <span class="value">{{ info.projectCode }}</span>
+        </li>
+        <li class="order-item">
+          <label class="space">优先级:</label>
+          <span class="value">{{ selectDictLabel(dict.type.event_type, info.eventType) }}</span>
+        </li>
+        <li class="order-item">
+          <label class="space">提出人:</label>
+          <span class="value">{{ selectDictLabel(dict.type.event_type, info.eventType) }}</span>
+        </li>
+        <li class="order-item">
+          <label class="space">提单时间:</label>
+          <span class="value">{{ info.createTime }}</span>
+        </li>
+      </ul>
       <el-row style="padding-top: 0;">
         <el-col>
           <div class="content">
@@ -31,28 +27,14 @@
           </div>
         </el-col>
       </el-row>
-      <el-divider content-position="left">回复</el-divider>
+      <div
+        style="display: flex; align-items: center; cursor: pointer;"
+        @click="editorVisible = !editorVisible"
+      >
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
+      </div>
     </header>
-    <ul class="list">
-      <li class="item" v-for="(item, index) in replyList" :key="index">
-        <div class="top">
-          <img class="avatar" :src="avatar" />
-          <p class="name">{{ usersInfo.userName }}</p>
-          <p class="time">{{ formatDate(item.createDate) }}</p>
-          <p class="reply" @click="editorVisible = !editorVisible">回复</p>
-          <div style="margin-left: auto;" v-if="!item.eventCompleteStutas && item.showFlagButton">
-            <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
-            <el-button size="mini" @click="edit(item, 3)">未完成</el-button>
-          </div>
-          <div style="margin-left: auto;" v-else>
-            <label>状态：</label>
-            <span>{{ item.eventCompleteStutas === 1 ? '已完成' : '未完成' }}</span>
-          </div>
-        </div>
-        <div class="bottom" v-html="item.eventMsg"></div>
-      </li>
-    </ul>
-    <el-card v-show="editorVisible" style="margin: 12px 0">
+    <div v-show="editorVisible" style="margin: 12px 0">
       <span>交接人：</span>
       <el-select
         style="width: 30%; margin-bottom: 12px;"
@@ -70,21 +52,28 @@
           :value="item.userId"
         ></el-option>
       </el-select>
-      <editor
-        v-model="info.eventMsg"
-        style="margin-bottom: 12px"
-        placeholder="请输入回复内容"
-        :height="200"
-      ></editor>
-      <el-button type="primary" size="small" @click="submit">确定</el-button>
-    </el-card>
-    <!-- <el-divider content-position="left">解决方案</el-divider>
-    <el-row>
-      <el-col>
-        <label class="space">解决方案</label>
-        <el-input type="textarea"></el-input>
-      </el-col>
-    </el-row>-->
+      <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="200"></editor>
+      <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
+      <ul class="list">
+        <li class="item" v-for="(item, index) in replyList" :key="index">
+          <div class="top">
+            <img class="avatar" :src="avatar" />
+            <p class="name">{{ usersInfo.nickName }}</p>
+            <p class="time">{{ formatDate(item.createDate) }}</p>
+            <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
+            <div style="margin-left: auto;" v-if="!item.eventCompleteStutas && item.showFlagButton">
+              <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
+              <el-button size="mini" @click="edit(item, 3)">未完成</el-button>
+            </div>
+            <div style="margin-left: auto;" v-else>
+              <label>状态：</label>
+              <span>{{ item.eventCompleteStutas === 1 ? '已完成' : '未完成' }}</span>
+            </div>
+          </div>
+          <div class="bottom" v-html="item.eventMsg"></div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -134,6 +123,7 @@ export default {
       this.getDetailInfo(id)
       this.Messages()
     }
+    this.getHandlers()
   },
 
   methods: {
@@ -203,7 +193,6 @@ export default {
 <style lang="scss" scoped>
 .work-order {
   margin: 20px;
-  padding: 24px;
   background: #fff;
   .el-row {
     padding: 16px 0;
@@ -211,56 +200,85 @@ export default {
   .el-divider__text {
     font-weight: bold;
   }
-  .space {
-    display: inline-block;
-    min-width: 60px;
-    margin-right: 80px;
-    font-weight: 400;
+  .order-info {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin: 16px 0;
+    .order-item {
+      list-style: none;
+      .space {
+        display: inline-block;
+        // min-width: 60px;
+        margin-right: 6px;
+        font-weight: 400;
+      }
+      .value {
+        color: #000;
+      }
+    }
   }
   .content {
-    padding: 16px 12px;
+    padding: 16px 0px;
     border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
   }
-  .item {
-    padding: 16px 0;
-    padding-bottom: 0;
-    list-style: none;
-    .top {
-      display: flex;
-      align-items: center;
-      .avatar {
-        align-self: flex-start;
-        width: 32px;
-        height: 32px;
-        color: #fff;
-        text-align: center;
-        line-height: 32px;
-        border-radius: 50%;
-        background: rgb(4, 80, 143);
-      }
-      .name {
-        margin: 0 8px;
-      }
-      .reply,
-      .time {
-        color: rgb(194, 189, 189);
-      }
-      .reply {
-        display: none;
-        margin-left: 8px;
-        cursor: pointer;
-      }
-      &:hover {
+  .list {
+    .item {
+      padding: 12px;
+      list-style: none;
+      border: 1px solid #e4e8f1;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      .top {
+        display: flex;
+        align-items: center;
+        .avatar {
+          align-self: flex-start;
+          width: 24px;
+          height: 24px;
+          color: #fff;
+          text-align: center;
+          border-radius: 50%;
+          background: rgb(4, 80, 143);
+        }
+        .name {
+          margin: 0 8px;
+        }
+        .reply,
+        .time {
+          color: rgb(194, 189, 189);
+        }
         .reply {
-          display: block;
+          display: none;
+          margin-left: 8px;
+          cursor: pointer;
+        }
+        &:hover {
+          .reply {
+            display: block;
+          }
         }
       }
+      .bottom {
+        margin-left: 32px;
+      }
     }
-    .bottom {
-      padding-bottom: 16px;
-      margin-left: 40px;
-      border-bottom: 1px solid #ccc;
-    }
+  }
+  .triangle-down,
+  .triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    margin-right: 4px;
+  }
+  .triangle-up {
+    border-bottom: 8px solid #000;
+  }
+  .triangle-down {
+    border-top: 8px solid #000;
   }
 }
 </style>

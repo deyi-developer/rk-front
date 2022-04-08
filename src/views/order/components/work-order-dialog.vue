@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="发起工单" width="70%" :visible.sync="dialogVisible" :before-close="beforeClose">
-    <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
+    <el-form :model="form" :rules="rules" ref="formRef" label-width="150px">
       <el-form-item label="工单标题:" prop="eventTitle">
         <el-input style="width: 80%;" v-model="form.eventTitle"></el-input>
       </el-form-item>
@@ -19,40 +19,48 @@
           <editor v-model="form.eventContext" style="width: 80%;" :height="100"></editor>
         </template>
       </el-form-item>
-      <div v-if="type === 'add'">
-        <el-form-item label="工单级别:" prop="eventUrgencyLevel">
-          <el-select
-            style="width: 80%;"
-            placeholder="请选择工单级别"
-            v-model="form.eventUrgencyLevel"
-            clearable
-          >
-            <el-option
-              v-for="dict in dict.type.event_urgency_level"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="工单处理人:" prop="eventHandler">
-          <el-select
-            style="width: 80%;"
-            v-model="form.eventHandler"
-            filterable
-            placeholder="请选择工单处理人"
-            :filter-method="getHandlers"
-            :loading="handlerLoding"
-          >
-            <el-option
-              v-for="item in handlers"
-              :key="item.userId"
-              :label="item.nickName"
-              :value="item.userId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </div>
+      <el-form-item label="工单级别:" prop="eventUrgencyLevel">
+        <el-select
+          style="width: 80%;"
+          placeholder="请选择工单级别"
+          v-model="form.eventUrgencyLevel"
+          clearable
+        >
+          <el-option
+            v-for="dict in dict.type.event_urgency_level"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="工单处理人:" prop="eventHandler">
+        <el-select
+          style="width: 80%;"
+          v-model="form.eventHandler"
+          filterable
+          placeholder="请选择工单处理人"
+          :filter-method="getHandlers"
+          :loading="handlerLoding"
+        >
+          <el-option
+            v-for="item in handlers"
+            :key="item.userId"
+            :label="item.nickName"
+            :value="item.userId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="工单完成截止日期" prop="eventHandleDate">
+        <el-date-picker
+          style="width: 80%;"
+          v-model="form.eventHandleDate"
+          type="date"
+          placeholder="选择日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
+      </el-form-item>
       <!-- <el-form-item label="关联项目:">
         <el-input style="width: 80%;" v-model="form.projectCode"></el-input>
       </el-form-item>-->
@@ -108,6 +116,9 @@ export default {
         ],
         eventHandler: [
           { required: true, message: '请选择工单处理人', trigger: 'change' },
+        ],
+        eventHandleDate: [
+          { required: true, message: '请选择工单完成截止日期', trigger: 'change' },
         ]
       },
       handlers: [],
@@ -211,131 +222,3 @@ export default {
   }
 }
 </script>
-<!-- <script setup>
-import vm from 'vue'
-import router from '@/router/index';
-import { debounce } from "lodash-es";
-import { send, update, handlerList } from "../project/api"
-import { ref, defineProps, defineEmits, onMounted } from "@vue/composition-api";
-import editor from "@/components/Editor";
-
-onMounted(() => {
-  getHandlers()
-})
-
-/** props */
-const props = defineProps({
-  form: {
-    type: Object,
-    default: () => { }
-  },
-  dialogVisible: {
-    type: Boolean,
-    default: false
-  },
-  type: { // 新增或编辑,编辑不显示工单级别
-    type: String,
-    default: 'add'
-  }
-})
-
-/** emit */
-const emit = defineEmits(['dialogVisible', 'refresh'])
-
-const rules = ref({
-  eventTitle: [
-    { required: true, message: '请输入工单标题', trigger: 'change' },
-  ],
-  eventType: [
-    { required: true, message: '请输入选择工单类型', trigger: 'change' },
-  ],
-  eventContext: [
-    { required: true, message: '请输入工单内容', trigger: 'change' },
-  ],
-  eventUrgencyLevel: [
-    { required: true, message: '请选择工单级别', trigger: 'change' },
-  ],
-  eventHandler: [
-    { required: true, message: '请选择工单处理人', trigger: 'change' },
-  ]
-})
-
-/** 提交 */
-const submit = async () => {
-  if (props.type === 'add') {
-    sendWorkOrder()
-  } else {
-    updateWorkOrder()
-  }
-}
-
-/** 新增 */
-const formRef = ref(null)
-const sendWorkOrder = () => {
-  formRef.value.validate(async valid => {
-    if (valid) {
-      const { code, msg } = await send(props.form)
-      if (code == 200) {
-        close()
-        refresh()
-        router.push({ path: '/order/order-list' })
-      }
-      message(code, msg)
-    }
-  })
-}
-
-/** 修改 */
-const updateWorkOrder = async () => {
-  formRef.value.validate(async valid => {
-    if (valid) {
-      const { code, msg } = await update(props.form)
-      if (code == 200) {
-        close()
-        refresh()
-      }
-      message(code, msg)
-    }
-  })
-}
-
-/** 关闭弹窗 */
-const close = () => {
-  emit('update:dialogVisible', false)
-  formRef.value.resetFields();
-}
-
-/** 刷新父组件的列表 */
-const refresh = () => {
-  emit('refresh')
-}
-
-/** 提示 */
-const message = (code, msg) => {
-  if (code === 200) {
-    vm.prototype.$modal.msgSuccess(msg)
-  } else {
-    vm.prototype.$modal.msgError(msg)
-  }
-}
-
-const beforeClose = () => {
-  close()
-}
-
-/** 获取处理人数据 */
-let handlers = ref([])
-let handlerLoding = ref(false)
-const getHandlers = debounce(async (value) => {
-  handlerLoding.value = true
-  const params = {
-    pageNum: 1,
-    pageSize: 100,
-    nickName: value || ''
-  }
-  const { rows } = await handlerList(params)
-  handlers.value = rows || []
-  handlerLoding.value = false
-}, 500)
-
-</script> -->
