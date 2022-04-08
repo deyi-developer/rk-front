@@ -125,10 +125,30 @@ export default {
           text: "达成率",
           subtext: "单位（%）"
         },
-        xAxis: {
-          type: "category",
-          data: dateList
-        },
+        xAxis: [
+          {
+            type: "category",
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLine: {
+              onZero: false
+            },
+            axisPointer: {
+              label: {
+                formatter: function (params) {
+                  return (
+                    params.value +
+                    (params.seriesData.length
+                      ? "：" + params.seriesData[0].data + "%"
+                      : "")
+                  );
+                }
+              }
+            },
+            data: dateList
+          }
+        ],
         yAxis: {
           type: "value",
           axisLabel: {

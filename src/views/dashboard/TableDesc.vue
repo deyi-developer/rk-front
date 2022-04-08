@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="10">
+  <el-row :gutter="10" class="table-desc">
     <el-col :span="12">
       <el-card shadow="always" class="box-card">
         <el-descriptions :column="2" title="基础指标" border>
@@ -10,7 +10,7 @@
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
-            label="总开票"
+            label="总已开金额"
             >{{ summary.totalBilling | currency }}</el-descriptions-item
           >
           <el-descriptions-item
@@ -25,7 +25,7 @@
 
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
-            label="总收款"
+            label="总已收金额"
             >{{ summary.totalReceipts | currency }}</el-descriptions-item
           >
           <el-descriptions-item
@@ -47,22 +47,25 @@
             }}</el-descriptions-item
           >
           <el-descriptions-item
-            :contentStyle="{ textAlign: 'center' }"
-            :labelStyle="{ textAlign: 'center' }"
-            label="-"
-            >-</el-descriptions-item
+            :contentStyle="{ textAlign: 'right' }"
+            label="未开票金额(相对PJTD)"
+            >{{
+              (summary.pjtdTotalMoney - summary.totalBilling) | currency
+            }}</el-descriptions-item
           >
           <el-descriptions-item
-            :contentStyle="{ textAlign: 'center' }"
-            :labelStyle="{ textAlign: 'center' }"
-            label="-"
-            >-</el-descriptions-item
+            :contentStyle="{ textAlign: 'right' }"
+            label="未收款金额(相对PJTD)"
+            >{{
+              (summary.pjtdTotalMoney - summary.totalReceipts) | currency
+            }}</el-descriptions-item
           >
           <el-descriptions-item
-            :contentStyle="{ textAlign: 'center' }"
-            :labelStyle="{ textAlign: 'center' }"
-            label="-"
-            >-</el-descriptions-item
+            :contentStyle="{ textAlign: 'right' }"
+            label="未收款金额(相对已开)"
+            >{{
+              (summary.totalBilling - summary.totalReceipts) | currency
+            }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'center' }"
@@ -86,7 +89,7 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总开票"
+              label="总已开金额"
               >{{
                 summary.totalAlreadyBillingMoney | currency
               }}</el-descriptions-item
@@ -117,7 +120,7 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
-              label="总收款"
+              label="总已收金额"
               >{{
                 summary.totalReceiptssMoney | currency
               }}</el-descriptions-item
@@ -178,4 +181,11 @@ export default {
   margin-bottom: 10px;
 }
 </style>
-<style lang="scss"></style>
+<style lang="scss">
+.table-desc {
+  .el-descriptions-row {
+    th {
+    }
+  }
+}
+</style>
