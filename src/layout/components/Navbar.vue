@@ -14,18 +14,18 @@
       <template v-if="device !== 'mobile'">
         <search id="header-search" class="right-menu-item" />
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <Badge class="right-menu-item" :count="unread" :overflow-count="unread">
+          <Icon
+            size="22"
+            type="ios-notifications-outline"
+            @click="$router.push({ path: '/order/message-list' })"
+          ></Icon>
+        </Badge>
       </template>
-      <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
-        <span style="line-height: 20px; height: 20px">
-          <Badge :count="unread" :overflow-count="unread">
-            <Icon
-              size="22"
-              type="ios-notifications-outline"
-              @click="$router.push({ path: '/order/message-list' })"
-            ></Icon>
-          </Badge>
-        </span>
-        <!-- <el-dropdown-menu slot="dropdown">
+
+      <!-- <el-dropdown class="msg-menu-wrapper right-menu-item hover-effect" trigger="click">
+        <span style="line-height: 20px; height: 20px"></span>
+        <el-dropdown-menu slot="dropdown">
           <div class="msg-drop-menu">
             <Tabs size="small">
               <TabPane label="站内消息">
@@ -48,8 +48,8 @@
               </TabPane>
             </Tabs>
           </div>
-        </el-dropdown-menu>-->
-      </el-dropdown>
+        </el-dropdown-menu>
+      </el-dropdown>-->
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -302,5 +302,9 @@ export default {
 }
 .nbsp {
   width: 14px;
+}
+.ivu-badge-count {
+  top: 2px;
+  right: 6px;
 }
 </style>

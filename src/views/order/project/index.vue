@@ -1,5 +1,5 @@
 <template>
-  <div class="order">
+  <div class="order page-bg">
     <header class="header" :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']">
       <div>
         <h1>项目明细</h1>
@@ -16,9 +16,8 @@
       >服务工单</el-button>
       <el-button style="padding: 3px 0" type="text" @click="sendOrder">发起工单</el-button>
     </header>
-    <!-- <filter-form @search="getData"></filter-form> -->
     <div class="content">
-      <el-form :model="updateData">
+      <el-form :model="updateData" :rules="rules" ref="form">
         <el-card class="spacing" title="项目基本信息">
           <div slot="header">
             <span>项目基本信息</span>
@@ -32,19 +31,28 @@
               <el-form-item label="对外项目编码:">{{ projectData.parentProjectCode }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <div class="ellisips">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="projectData.projectName"
-                  placement="top"
-                >
-                  <el-form-item class="ellipsis" label="项目名称:">{{ projectData.projectName }}</el-form-item>
-                </el-tooltip>
-              </div>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="projectData.projectName"
+                placement="top"
+              >
+                <el-form-item label="项目名称:">
+                  <div class="ellipsis">{{ projectData.projectName }}</div>
+                </el-form-item>
+              </el-tooltip>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="对外项目名称:">{{ projectData.parentProjectName }}</el-form-item>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="projectData.parentProjectName"
+                placement="top"
+              >
+                <el-form-item label="对外项目名称:">
+                  <div class="ellipsis">{{ projectData.parentProjectName }}</div>
+                </el-form-item>
+              </el-tooltip>
             </el-col>
           </el-row>
           <el-row>
@@ -58,7 +66,7 @@
               <el-form-item label="项目结算类型:">{{ updateData.projectChargeType }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="项目结算周期:">
+              <el-form-item label="项目结算周期:" prop="projectChargePeriod">
                 <el-input-number
                   style="width: 60%"
                   v-model="updateData.projectChargePeriod"
@@ -69,7 +77,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="账务账期:">
+              <el-form-item label="账务账期:" prop="projectInvoicePeriod">
                 <el-input-number
                   style="width: 60%"
                   v-model="updateData.projectInvoicePeriod"
@@ -208,26 +216,26 @@
           </div>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="总开票:">{{ projectData.totalBilling }}</el-form-item>
+              <el-form-item label="总开票:">{{ projectData.totalBilling | currency }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="总收款:">{{ projectData.totalReceipts }}</el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="PJTD含税总收入:">{{ projectData.pjtdTotalMoney }}</el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="相对PJTD收款率:">{{ projectData.pjtdReceiptsRate }}</el-form-item>
+              <el-form-item label="总收款:">{{ projectData.totalReceipts | currency }}</el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="相对PJTD开票率:">{{ projectData.pjtdBillingRate }}</el-form-item>
+              <el-form-item label="PJTD含税总收入:">{{ projectData.pjtdTotalMoney | currency }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="相对总开票收款率:">{{ projectData.totalBillingRate }}</el-form-item>
+              <el-form-item label="相对PJTD收款率:">{{ projectData.pjtdReceiptsRate | percent }}</el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="相对PJTD开票率:">{{ projectData.pjtdBillingRate | percent }}</el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="相对总开票收款率:">{{ projectData.totalBillingRate | percent }}</el-form-item>
             </el-col>
           </el-row>
         </el-card>
@@ -237,18 +245,18 @@
           </div>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="总应开金额:">{{ projectData.totalShouldBillingMoney }}</el-form-item>
+              <el-form-item label="总应开金额:">{{ projectData.totalShouldBillingMoney | currency }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="总应收金额:">{{ projectData.totalShouldReceiptsMoney }}</el-form-item>
+              <el-form-item label="总应收金额:">{{ projectData.totalShouldReceiptsMoney | currency }}</el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="总已开金额:">{{ projectData.totalAlreadyBillingMoney }}</el-form-item>
+              <el-form-item label="总已开金额:">{{ projectData.totalAlreadyBillingMoney | currency }}</el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="总已收金额:">{{ projectData.totalInvoicedMoney }}</el-form-item>
+              <el-form-item label="总已收金额:">{{ projectData.totalInvoicedMoney | currency }}</el-form-item>
             </el-col>
           </el-row>
           <!-- <el-row>
@@ -303,14 +311,44 @@ export default {
     ChartsGroup
   },
   data() {
+    /** 项目结算周期 */
+    const projectChargePeriodRule = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入项目结算周期'))
+      } else {
+        if (this.projectData.projectChargeType == '里程碑') {
+          if (value !== 0) {
+            callback(new Error('里程碑状态下项目结算周期必须为0'))
+          } else {
+            callback()
+          }
+        } else {
+          if (value !== 0) {
+            callback()
+          } else {
+            callback(new Error('非里程碑状态下项目结算周期不能0'))
+          }
+        }
+      }
+    }
+    /** 账务账期 */
+    const projectInvoicePeriodRule = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入账务账期'))
+      } else if (value === 0 || value < 0) {
+        callback(new Error('账务账期必须大于0'))
+      } else {
+        callback()
+      }
+    }
     return {
       projectData: {},
       updateData: { // 可编辑内容
-        projectInvoicePeriod: '',
+        projectInvoicePeriod: 0,
         invoicingRiskLevel: '',
         receiveRiskLevel: '',
         grossProfitRiskLevel: '',
-        projectChargePeriod: '',
+        projectChargePeriod: 0,
         planBillingMoney: '',
         planReceiptsMoney: '',
         planRemark: '',
@@ -326,6 +364,14 @@ export default {
         eventUrgencyLevel: '',
         eventHandleDate: '',
         projectCode: this.$route.query.projectCode
+      },
+      rules: {
+        projectChargePeriod: [
+          { validator: projectChargePeriodRule, required: true }
+        ],
+        projectInvoicePeriod: [
+          { validator: projectInvoicePeriodRule, required: true }
+        ]
       },
       dialogVisible: false
     }
@@ -348,6 +394,7 @@ export default {
     this.getData(projectCode)
   },
   methods: {
+
     /** 页面数据 */
     async getData(projectCode) {
       const { data } = await projectDetails(projectCode)
@@ -355,17 +402,25 @@ export default {
       this.$tab.updatePage(obj);
       this.projectData = data
       this.setUpdata(data)
+      this.$refs['form'].validate()  // 请求完数据后即做一次验证
     },
+
     /** 保存 */
-    async save() {
-      this.updateData.projectCode = this.projectData.projectCode
-      const { code, msg } = await projectUpdate([this.updateData])
-      if (code === 200) {
-        this.$modal.msgSuccess(msg)
-      } else {
-        this.$modal.msgError(msg)
-      }
+    save() {
+      this.$refs['form'].validate(async valid => {
+        console.log('valid', valid)
+        if (valid) {
+          this.updateData.projectCode = this.projectData.projectCode
+          const { code, msg } = await projectUpdate([this.updateData])
+          if (code === 200) {
+            this.$modal.msgSuccess(msg)
+          } else {
+            this.$modal.msgError(msg)
+          }
+        }
+      })
     },
+
     /** 设置回显数据 */
     setUpdata(data) {
       Object.keys(data).forEach(key => {
@@ -374,6 +429,7 @@ export default {
         }
       })
     },
+
     /** 发起工单 */
     sendOrder() {
       this.dialogVisible = true
@@ -451,6 +507,12 @@ let form = ref({
   }
   .spacing {
     margin-bottom: 12px;
+  }
+  .ellipsis {
+    white-space: nowrap;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>

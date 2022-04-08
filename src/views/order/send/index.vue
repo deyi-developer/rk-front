@@ -1,19 +1,21 @@
 <template>
   <div class="work-order page-bg">
     <header>
-      <h1 style="font-weight: 500; color: #000;">{{ info.projectCode }} {{ info.eventTitle }}</h1>
+      <h1 style="font-weight: 500; color: #000;">{{ info.eventHeaderCode }} {{ info.eventTitle }}</h1>
       <ul class="order-info">
         <li class="order-item">
           <label class="space">状态:</label>
-          <span class="value">{{ info.projectCode }}</span>
+          <span class="value">{{ info.eventStatus ? '已关闭' : '未完成' }}</span>
         </li>
         <li class="order-item">
           <label class="space">优先级:</label>
-          <span class="value">{{ selectDictLabel(dict.type.event_type, info.eventType) }}</span>
+          <span
+            class="value"
+          >{{ selectDictLabel(dict.type.event_urgency_level, info.eventUrgencyLevel) }}</span>
         </li>
         <li class="order-item">
           <label class="space">提出人:</label>
-          <span class="value">{{ selectDictLabel(dict.type.event_type, info.eventType) }}</span>
+          <span class="value">{{ info.createName }}</span>
         </li>
         <li class="order-item">
           <label class="space">提单时间:</label>
@@ -88,7 +90,7 @@ export default {
   components: {
     editor
   },
-  dicts: ["event_type"],
+  dicts: ["event_type", "event_urgency_level"],
 
   data() {
     return {
@@ -192,7 +194,7 @@ export default {
 
 <style lang="scss" scoped>
 .work-order {
-  margin: 20px;
+  padding: 20px;
   background: #fff;
   .el-row {
     padding: 16px 0;

@@ -161,9 +161,9 @@ export default {
 <style lang="scss" scoped>
 .wrap {
   padding: 20px;
-  min-height: 100vh;
+  min-height: calc(100vh - 84px);
   ::v-deep .el-table__body-wrapper {
-    max-height: 52vh;
+    // max-height: 22vh;
     overflow-y: auto;
     border-bottom: none;
     border-radius: 0;
