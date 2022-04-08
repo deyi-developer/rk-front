@@ -95,6 +95,10 @@ export default {
           },
           formatter: function (params) {
             var tar = params[1];
+            console.log(tar.value, income);
+            const percent = income
+              ? ((tar.value / income) * 100).toFixed(2)
+              : 0;
             return (
               tar.name +
               "<br/>" +
@@ -103,7 +107,7 @@ export default {
                 separator: ","
               }).format() +
               "<br/>" +
-              ((tar.value / income) * 100).toFixed(2) +
+              percent +
               "%"
             );
           }

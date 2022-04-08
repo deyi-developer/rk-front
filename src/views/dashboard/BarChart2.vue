@@ -91,7 +91,9 @@ export default {
           text: "逐月累积现金占用趋势",
           subtext: "单位（万元）"
         },
-        legend: {},
+        legend: {
+          right: 0
+        },
         dataZoom: [
           {
             startValue: date[date.length - 12],

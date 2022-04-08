@@ -42,21 +42,23 @@
             :contentStyle="{ textAlign: 'right' }"
             label="未开票金额(相对PJTD)"
             >{{
-              (summary.pjtdTotalMoney - summary.totalBilling) | currency
+              formatVal(summary.pjtdTotalMoney - summary.totalBilling)
+                | currency
             }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="未收款金额(相对PJTD)"
             >{{
-              (summary.pjtdTotalMoney - summary.totalReceipts) | currency
+              formatVal(summary.pjtdTotalMoney - summary.totalReceipts)
+                | currency
             }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="未收款金额(相对已开)"
             >{{
-              (summary.totalBilling - summary.totalReceipts) | currency
+              formatVal(summary.totalBilling - summary.totalReceipts) | currency
             }}</el-descriptions-item
           >
           <el-descriptions-item
@@ -156,6 +158,15 @@ export default {
       type: Object,
       default() {
         return {};
+      }
+    }
+  },
+  methods: {
+    formatVal(a, b) {
+      if (!a || !b) {
+        return 0;
+      } else {
+        return a - b;
       }
     }
   }

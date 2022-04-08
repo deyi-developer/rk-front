@@ -92,37 +92,37 @@
 }
 
 // tooltips 颜色修改
-.el-tooltip__popper.is-dark {
-  background-color: #ecf5ff !important;
-  border: 1px solid #d9ecff;
-  color: #409eff !important;
-  max-width: 500px;
-}
+// .el-tooltip__popper.is-dark {
+//   background-color: #ecf5ff !important;
+//   border: 1px solid #d9ecff;
+//   color: #409eff !important;
+//   max-width: 500px;
+// }
 
-.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
-  border-top-color: #ecf5ff;
-}
-.el-tooltip__popper[x-placement^="top"] .popper__arrow {
-  border-top-color: #d9ecff;
-}
+// .el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+//   border-top-color: #ecf5ff;
+// }
+// .el-tooltip__popper[x-placement^="top"] .popper__arrow {
+//   border-top-color: #d9ecff;
+// }
 
-.el-tooltip__popper[x-placement^="left"] .popper__arrow:after {
-  border-left-color: #ecf5ff;
-}
-.el-tooltip__popper[x-placement^="left"] .popper__arrow {
-  border-left-color: #d9ecff;
-}
+// .el-tooltip__popper[x-placement^="left"] .popper__arrow:after {
+//   border-left-color: #ecf5ff;
+// }
+// .el-tooltip__popper[x-placement^="left"] .popper__arrow {
+//   border-left-color: #d9ecff;
+// }
 
-.el-tooltip__popper[x-placement^="right"] .popper__arrow:after {
-  border-right-color: #ecf5ff;
-}
-.el-tooltip__popper[x-placement^="right"] .popper__arrow {
-  border-right-color: #d9ecff;
-}
+// .el-tooltip__popper[x-placement^="right"] .popper__arrow:after {
+//   border-right-color: #ecf5ff;
+// }
+// .el-tooltip__popper[x-placement^="right"] .popper__arrow {
+//   border-right-color: #d9ecff;
+// }
 
-.el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
-  border-bottom-color: #ecf5ff;
-}
-.el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
-  border-bottom-color: #d9ecff;
-}
+// .el-tooltip__popper[x-placement^="bottom"] .popper__arrow:after {
+//   border-bottom-color: #ecf5ff;
+// }
+// .el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
+//   border-bottom-color: #d9ecff;
+// }

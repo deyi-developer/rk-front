@@ -78,7 +78,9 @@ export default {
       }
       const { dateList, incomeList, invoiceList, receiveList } = dataSource;
       const option = {
-        legend: {},
+        legend: {
+          right: 30
+        },
         dataZoom: [
           {
             startValue: dateList[dateList.length - 12],
@@ -101,7 +103,7 @@ export default {
           }
         },
         title: {
-          text: "逐月含税收入，开票，收款分布",
+          text: "逐月含税收入,开票,收款分布",
           subtext: "单位（万元）"
         },
         xAxis: {

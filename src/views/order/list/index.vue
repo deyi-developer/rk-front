@@ -763,6 +763,7 @@
             v-if="checkPermi(['order:list:save'])"
             width="100"
             title="操作"
+            fixed="right"
           >
             <template #default="{ row }">
               <vxe-button
@@ -1065,25 +1066,31 @@ export default {
     },
     cellClass({ row, column }) {
       const { field } = column;
-      const val = row[field];
-      let className = "";
-
-      switch (val) {
-        case "lawsuit":
-          className = "cell-lawsuit";
-          break;
-        case "Red":
-          className = "cell-red";
-          break;
-        case "Yellow":
-          className = "cell-yellow";
-          break;
-        case "Green":
+      if (field == "projectCode") {
+        let className = "";
+        const status = [
+          row["grossProfitRiskLevel"],
+          row["invoicingRiskLevel"],
+          row["receiveRiskLevel"],
+          row["riskStatus"]
+        ];
+        if (status.includes("Green")) {
           className = "cell-green";
-          break;
-      }
+        }
+        if (status.includes("Yellow")) {
+          className = "cell-yellow";
+        }
+        if (status.includes("Red")) {
+          className = "cell-red";
+        }
+        if (status.includes("lawsuit")) {
+          className = "cell-lawsuit";
+        }
 
-      return className;
+        return className;
+      } else {
+        return "";
+      }
     },
 
     // 设置填写权限
@@ -1204,16 +1211,31 @@ export default {
     }
   }
   .cell-red {
-    background-color: #f56c6c !important;
-    color: #f0f9eb;
+    background-color: #fef0f0 !important;
+    a {
+      color: #f56c6c !important;
+      &::after {
+        border-color: #f56c6c !important;
+      }
+    }
   }
   .cell-lawsuit {
-    background-color: #f56c6c !important;
-    color: #f0f9eb;
+    background-color: #fef0f0 !important;
+    a {
+      color: #f56c6c !important;
+      &::after {
+        border-color: #f56c6c !important;
+      }
+    }
   }
   .cell-yellow {
-    background-color: #e6a23c !important;
-    color: #f0f9eb;
+    background-color: #fdf6ec !important;
+    a {
+      color: #e6a23c !important;
+      &::after {
+        border-color: #e6a23c !important;
+      }
+    }
   }
   .link-color {
     color: #409eff;
