@@ -9,10 +9,12 @@
 
       <!-- table -->
       <el-table
-        border
+        ref="table1"
+        show-summary
         height="500"
+        :summary-method="getSummaries"
         v-loading="loading"
-        :data="currentMonthList"
+        :data="MonthList"
         style="width: 100%"
       >
         <el-table-column
@@ -22,16 +24,14 @@
           :label="item.label"
         >
           <!-- 如果为行标签，自定义行 -->
-          <template slot-scope="{ row, $index, column }">
+          <template slot-scope="{ row }">
             <router-link
-              v-if="item.prop === 'oneDeptName' && currentMonthList.length !== $index + 1"
-              :to="`/monthly/dept/${row.oneDeptId}`"
+              v-if="item.prop === 'oneDeptName'"
+              :to="`/monthly/dept/${row.oneDeptId}?title=${row.oneDeptName}`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>
             </router-link>
-
-            <span v-else-if="item.prop === 'oneDeptName'">{{ row[item.prop] }}</span>
 
             <span v-else>{{ row[item.prop] | currency }}</span>
           </template>
@@ -46,12 +46,13 @@
   </div>
 </template>
 <script>
-import { getCurrentMonth } from './api';
+import { getCurrentMonth } from "./api";
 import ColumnChart from "./columnChart";
+import currency from "currency.js";
 export default {
   name: "Monthly-plan",
   components: {
-    ColumnChart
+    ColumnChart,
   },
 
   data() {
@@ -60,39 +61,39 @@ export default {
         {
           prop: "oneDeptName",
           label: "行标签",
-          width: "180"
+          width: "180",
         },
         {
           prop: "planBillingMoney",
-          label: "求和项: 本月计划开票金额",
-          width: "180"
+          label: "本月计划开票金额",
+          width: "180",
         },
         {
           prop: "billingThisMonth",
-          label: "求和项: 本月实际开票金额",
-          width: "180"
+          label: "本月实际开票金额",
+          width: "180",
         },
         {
           prop: "planReceiptsMoney",
-          label: "求和项: 本月计划收款金额",
-          width: "180"
+          label: "本月计划收款金额",
+          width: "180",
         },
         {
           prop: "receiptsThisMonth",
-          label: "求和项: 本月实际收款金额",
-          width: "180"
-        }
+          label: "本月实际收款金额",
+          width: "180",
+        },
       ],
-      // 当前月度列表+合计
-      currentMonthList: [],
+      // 合计
+      currentMonthList: {},
       // 当前月度列表
       MonthList: [],
       // 加载
-      loading: false
+      loading: false,
     };
   },
   async created() {
-    this.loading = true
+    this.loading = true;
 
     // 获取当前月度
     const {
@@ -100,22 +101,36 @@ export default {
       totalBillThisMonth: billingThisMonth, // 本月实际开票总额
       totalPlanBilling: planBillingMoney, //本月计划开票总额
       totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
-      totalReceiptsThisMonth: receiptsThisMonth // 本月实际收款总额
-    } = await getCurrentMonth()
+      totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
+    } = await getCurrentMonth();
 
     // 当前月度列表
-    this.MonthList = planDtoList
+    this.MonthList = planDtoList;
 
     // 有总计项的当前月度列表
-    this.currentMonthList = [...planDtoList, {
-      oneDeptName: '总计',
-      planBillingMoney,
-      billingThisMonth,
-      planReceiptsMoney,
-      receiptsThisMonth
-    }]
+    this.currentMonthList = [
+      "总计",
+      this.currency(planBillingMoney),
+      this.currency(billingThisMonth),
+      this.currency(planReceiptsMoney),
+      this.currency(receiptsThisMonth),
+    ];
 
-    this.loading = false
+    this.loading = false;
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.$refs["table1"].doLayout();
+    });
+  },
+  methods: {
+    getSummaries() {
+      return this.currentMonthList;
+    },
+    currency(value){
+      return currency(value, { symbol: "", separator: "," }).format();
+    }
+    
   },
 };
 </script>
