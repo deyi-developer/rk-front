@@ -32,9 +32,8 @@
             </el-col>
             <el-col :span="6">
               <el-tooltip
-                class="item"
                 effect="dark"
-                :content="projectData.projectName"
+                :content="projectData.projectName && projectData.projectName"
                 placement="top"
               >
                 <el-form-item label="项目名称:">
@@ -44,9 +43,8 @@
             </el-col>
             <el-col :span="6">
               <el-tooltip
-                class="item"
                 effect="dark"
-                :content="projectData.parentProjectName"
+                :content="projectData.parentProjectName && projectData.parentProjectName"
                 placement="top"
               >
                 <el-form-item label="对外项目名称:">

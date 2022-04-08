@@ -192,12 +192,13 @@ export const dynamicRoutes = [
     ],
   },
   {
-    path: "/order/details",
+    path: "/order",
     component: Layout,
     hidden: true,
+    permissions: ["workOrder:header:edit"],
     children: [
       {
-        path: "details",
+        path: "details/:id",
         component: () => import("@/views/order/project"),
         name: "Details",
         meta: { title: "项目明细" },

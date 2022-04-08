@@ -788,14 +788,16 @@ export default {
     }, 500),
     //table 点击事件
     gotoDetail(row) {
-      const { projectCode } = row;
+      const { id, projectCode } = row;
       // const { field } = column;
       this.$router.push({
-        path: `/order/details`,
-        query: {
-          projectCode
-        }
+        // path: `/order/details/${projectCode}`,
+        path: `/order/details/${id}?projectCode=${projectCode}`,
+        // query: {
+        //   projectCode
+        // }
       });
+
       // if (field == "projectCode") {
 
       // }
