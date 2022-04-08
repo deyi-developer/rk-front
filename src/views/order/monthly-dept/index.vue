@@ -4,7 +4,7 @@
     <el-card class="space">
       <!-- title -->
       <div slot="header" class="clearfix2">
-        <span>{{this.$route.query.title}}计划明细</span>
+        <span>{{ this.$route.query.title }}计划明细</span>
         <el-button @click="clearFilter" type="primary" size="small"
           >清除所有过滤器</el-button
         >
@@ -87,7 +87,6 @@
 
           <!-- 自定义项内容-->
           <template slot-scope="{ row, $index }">
-
             <!-- 序号 -->
             <span v-if="item.prop === 'serialNumber'">{{ $index + 1 }}</span>
 
@@ -139,7 +138,7 @@ import { getCurrentMonth } from "./api";
 import ColumnChart from "./columnChart";
 import currency from "currency.js";
 export default {
-  name: "Monthly-dept",
+  name: "MonthlyDept",
   components: {
     ColumnChart,
   },
@@ -211,7 +210,10 @@ export default {
     };
   },
   created() {
-    this.$route.meta.title = `${this.$route.query.title}计划明细`
+    const obj = Object.assign({}, this.$route, {
+      title: `${this.$route.query.title}计划明细`,
+    });
+    this.$tab.updatePage(obj);
     this.getCurrentMonthInfo();
   },
   updated() {
@@ -220,8 +222,8 @@ export default {
     });
   },
   methods: {
-    getSummaries(){
-      return this.currentMonthList
+    getSummaries() {
+      return this.currentMonthList;
     },
     currency(value) {
       return currency(value, { symbol: "", separator: "," }).format();

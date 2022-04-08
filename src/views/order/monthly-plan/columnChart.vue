@@ -121,7 +121,7 @@ export default {
             start: 0, //数据窗口范围的起始百分比0-100
             end: 50, //数据窗口范围的结束百分比0-100
             xAxisIndex: [0], // 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
-            bottom: -10, //距离底部的距离
+            bottom: 10, //距离底部的距离
           },
           //2.在内部可以横向拖动
           {
