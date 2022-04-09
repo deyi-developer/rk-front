@@ -5,7 +5,7 @@
         <el-tab-pane label="已读列表" name="1"></el-tab-pane>
         <el-tab-pane label="未读列表" name="0"></el-tab-pane>
       </el-tabs>
-      <el-table size="small" border :data="activeName == 1 ? messages : noReadList">
+      <el-table size="small" height="500" border :data="activeName == 1 ? messages : noReadList">
         <el-table-column
           v-for="(item, index) in column"
           :key="index"
@@ -27,10 +27,18 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <pagination
+      v-show="totals > 0"
+      :total="totals"
+      :page.sync="params.pageNum"
+      :limit.sync="params.pageSize"
+      @pagination="getList"
+    />
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { list } from "@/api/message"
 export default {
   name: 'Message-list',
   data() {
@@ -49,7 +57,12 @@ export default {
           label: '更新时间',
           prop: 'updateTime'
         }
-      ]
+      ],
+      params: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      totals: 0,
     }
   },
   computed: {
@@ -63,8 +76,12 @@ export default {
   },
   methods: {
     ...mapActions(["Messages"]),
-    getList() {
-      this.Messages()
+    async getList(query) {
+      this.params = {
+        ...this.params,
+        ...query
+      }
+      this.Messages(this.params)
     },
     handleClick(value) {
       console.log(value)
@@ -72,7 +89,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .message-wrap {
   padding: 20px;
   min-height: calc(100vh - 84px);

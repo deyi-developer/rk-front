@@ -36,7 +36,7 @@
         <vxe-column align="center" title="创建时间" field="createTime" width="180"></vxe-column>
         <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
         <vxe-column align="center" title="当前处理人部门" field="handlerDeptName" width="180"></vxe-column>
-        <vxe-column align="center" title="最后更新时间" field="last_update_date" width="180"></vxe-column>
+        <vxe-column align="center" title="最后更新时间" field="lastUpdateDate" width="180"></vxe-column>
       </vxe-table>
     </el-card>
     <pagination
