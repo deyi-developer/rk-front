@@ -25,7 +25,7 @@ export default {
       receiptsThisMonthAll
     ) {
       const config = {
-        rotate: 90,
+        rotate: 45,
         align: "left",
         verticalAlign: "middle",
         position: "insideBottom",
@@ -65,7 +65,7 @@ export default {
           {
             type: "category",
             axisTick: { show: false },
-            axisLabel: { interval: 0 },
+            axisLabel: { interval: 0, rotate: 45, },
             data: oneDeptNameAll,
           },
         ],
@@ -113,24 +113,24 @@ export default {
             data: receiptsThisMonthAll,
           },
         ],
-        dataZoom: [
-          //1.横向使用滚动条
-          {
-            type: "slider", //有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
-            show: true, //是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
-            start: 0, //数据窗口范围的起始百分比0-100
-            end: 100, //数据窗口范围的结束百分比0-100
-            xAxisIndex: [0], // 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
-            bottom: 10, //距离底部的距离
-          },
-          //2.在内部可以横向拖动
-          {
-            type: "inside", // 内置于坐标系中
-            start: 0,
-            end: 30,
-            xAxisIndex: [0],
-          },
-        ],
+        // dataZoom: [
+        //   //1.横向使用滚动条
+        //   {
+        //     type: "slider", //有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
+        //     show: true, //是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+        //     start: 0, //数据窗口范围的起始百分比0-100
+        //     end: 100, //数据窗口范围的结束百分比0-100
+        //     xAxisIndex: [0], // 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
+        //     bottom: 10, //距离底部的距离
+        //   },
+        //   //2.在内部可以横向拖动
+        //   {
+        //     type: "inside", // 内置于坐标系中
+        //     start: 0,
+        //     end: 30,
+        //     xAxisIndex: [0],
+        //   },
+        // ],
       };
 
       // 初始化

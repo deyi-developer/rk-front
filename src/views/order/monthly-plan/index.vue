@@ -22,6 +22,7 @@
           :key="index"
           :prop="item.prop"
           :title="item.label"
+          :min-width="item.minWidth"
         >
           <!-- 如果为行标签，自定义行 -->
           <template #default="{ row }">
@@ -61,27 +62,27 @@ export default {
         {
           prop: "oneDeptName",
           label: "行标签",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "planBillingMoney",
           label: "本月计划开票金额",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "billingThisMonth",
           label: "本月实际开票金额",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "planReceiptsMoney",
           label: "本月计划收款金额",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "receiptsThisMonth",
           label: "本月实际收款金额",
-          width: "180",
+          minWidth: "180",
         },
       ],
       // 合计
