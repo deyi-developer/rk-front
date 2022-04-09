@@ -184,7 +184,7 @@ export const dynamicRoutes = [
     permissions: ["order:plan:list"],
     children: [
       {
-        path: "dept/:id(\\d+)",
+        path: "dept/:id",
         component: () => import("@/views/order/monthly-dept"),
         name: "MonthlyDept",
         meta: { title: "部门计划明细", activeMenu: "/order/monthly-plan" }
@@ -201,7 +201,7 @@ export const dynamicRoutes = [
         path: "details/:id",
         component: () => import("@/views/order/project"),
         name: "Details",
-        meta: { title: "项目明细" }
+        meta: { title: "项目明细", activeMenu: "/order/list" }
       }
     ]
   },
@@ -214,8 +214,8 @@ export const dynamicRoutes = [
       {
         path: "details/:id",
         component: () => import("@/views/order/send"),
-        name: "WorkOrderList",
-        meta: { title: "工单：" }
+        name: "Send",
+        meta: { title: "工单：", activeMenu: "/order/order-list" }
       }
     ]
   }

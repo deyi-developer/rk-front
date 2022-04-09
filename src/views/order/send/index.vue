@@ -4,8 +4,14 @@
       <div class="order-title">
         <span>{{ info.eventHeaderCode }}</span>
         <span>{{ info.eventTitle }}</span>
-        <span v-if="userRolse.includes('risker')" class="close-btn" style="float: right">
-          <el-button size="mini" type="danger" plain @click="closeOrder">关闭工单</el-button>
+        <span
+          v-if="userRolse.includes('risker')"
+          class="close-btn"
+          style="float: right"
+        >
+          <el-button size="mini" type="danger" plain @click="closeOrder"
+            >关闭工单</el-button
+          >
         </span>
       </div>
       <ul class="order-info">
@@ -57,7 +63,8 @@
         "
         @click="editorVisible = !editorVisible"
       >
-        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
+        >沟通历史
       </div>
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
@@ -79,12 +86,24 @@
           :value="item.userId"
         >
           <span style="float: left">{{ item.nickName }}</span>
-          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userId }}</span>
+          <span style="float: right; color: #8492a6; font-size: 13px">{{
+            item.userId
+          }}</span>
         </el-option>
       </el-select>
 
-      <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
-      <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
+      <editor
+        v-model="info.eventMsg"
+        placeholder="请输入回复内容"
+        :height="150"
+      ></editor>
+      <el-button
+        style="margin: 12px 0"
+        type="primary"
+        size="small"
+        @click="submit"
+        >发 布</el-button
+      >
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
@@ -95,12 +114,19 @@
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
             <div style="margin-left: auto" v-if="item.showFlagButton">
-              <el-button type="success" plain size="mini" @click="edit(item, 1)">已完成</el-button>
-              <el-button plain type="danger" size="mini" @click="edit(item, 3)">未完成</el-button>
+              <el-button type="success" plain size="mini" @click="edit(item, 1)"
+                >已完成</el-button
+              >
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
+                >未完成</el-button
+              >
             </div>
 
             <div style="margin-left: auto" v-if="item.showCompleteStutas">
-              <span style="color: #67c23a; font-size: 12px" v-if="item.eventCompleteStutas">
+              <span
+                style="color: #67c23a; font-size: 12px"
+                v-if="item.eventCompleteStutas"
+              >
                 <i class="el-icon-check"></i> 已完成
               </span>
               <span v-else style="color: #f56c6c; font-size: 12px">
@@ -126,6 +152,7 @@ import editor from "@/components/Editor";
 import { Tag, Icon, Badge } from "view-design";
 import defaultImg from "@/assets/images/avatar.png";
 export default {
+  name: "Send",
   components: {
     editor,
     Badge,
@@ -157,7 +184,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["usersInfo", 'userRolse']),
+    ...mapGetters(["usersInfo", "userRolse"]),
     avatar() {
       return process.env.VUE_APP_BASE_API + this.usersInfo.avatar;
     },
@@ -209,7 +236,9 @@ export default {
       this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
       this.info.forwardFlag = 0;
       this.getReplyList(id);
-      const obj = Object.assign({}, this.$route, { title: '工单：' + data.eventTitle })
+      const obj = Object.assign({}, this.$route, {
+        title: "工单：" + data.eventTitle
+      });
       this.$tab.updatePage(obj);
     },
     defImg() {
@@ -218,19 +247,17 @@ export default {
       img.onerror = null; //防止闪图
     },
     closeOrder() {
-      this.$modal
-        .confirm(`确定关闭此工单吗？`)
-        .then(async () => {
-          const { eventHeaderId } = this.info
-          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
-          if (code === 200) {
-            this.$modal.msgSuccess(msg)
-            // this.getList()
-          } else {
-            this.$modal.msgError(msg)
-          }
-        })
-
+      this.$modal.confirm(`确定关闭此工单吗？`).then(async () => {
+        const { eventHeaderId } = this.info;
+        const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 });
+        if (code === 200) {
+          this.$modal.msgSuccess(msg);
+          this.getDetailInfo(this.$route.query.id);
+          // this.getList()
+        } else {
+          this.$modal.msgError(msg);
+        }
+      });
     },
     /** 回复 */
     async submit() {

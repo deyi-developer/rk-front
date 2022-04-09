@@ -125,7 +125,7 @@ import { list, edit } from "./api";
 import workOrderDialog from "../components/work-order-dialog";
 import filterForm from "./filterForm";
 export default {
-  name: "WorkOrderList",
+  name: "Order-list",
   dicts: ["event_type", "event_urgency_level", "event_complete_stutas"],
   components: {
     workOrderDialog,
