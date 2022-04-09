@@ -69,7 +69,7 @@
             <!-- 项目编码 -->
             <router-link
               v-else-if="item.prop === 'projectCode'"
-              :to="`/order/details?projectCode=${row.projectCode}`"
+              :to="`/order/details/${rowIndex}?projectCode=${row.projectCode}`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>
