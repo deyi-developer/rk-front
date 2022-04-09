@@ -41,3 +41,10 @@ export function toggle(data) {
     data
   });
 }
+
+export function deleteCurrentMonth(type) {
+  return request({
+    url: `/report/deleteCurrentMonth/${type}`,
+    method: "delete"
+  });
+}

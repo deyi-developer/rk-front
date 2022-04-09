@@ -53,22 +53,42 @@
           <TabPane label="其他指标" name="fifth"></TabPane>
           <template #extra>
             <el-button plain size="small" @click="reset">重置筛选</el-button>
-            <el-tooltip class="item" effect="dark" content="此功能会校验数据必填项" placement="top-start">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="此功能会校验数据必填项"
+              placement="top-start"
+            >
               <el-button
                 plain
                 v-hasPermi="['order:list:valid']"
                 type="primary"
                 size="small"
                 @click="validAllEvent"
-              >整页提交</el-button>
+                >整页提交</el-button
+              >
             </el-tooltip>
-            <el-button
-              plain
-              v-hasPermi="['order:list:init']"
-              type="danger"
-              size="small"
-              @click="initData"
-            >数据重算</el-button>
+
+            <el-dropdown v-if="checkRole(['risker'])" @command="handleCommand">
+              <el-button
+                style="margin-left: 10px"
+                plain
+                type="danger"
+                size="small"
+                >风控操作<i class="el-icon-arrow-down el-icon--right"></i
+              ></el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="initData">数据重算</el-dropdown-item>
+
+                <el-dropdown-item
+                  v-for="dict in dict.type.deyi_project_amount_type"
+                  :key="dict.value"
+                  :command="dict.value"
+                  :label="dict.label"
+                  >{{ dict.label }}</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </el-dropdown>
           </template>
         </Tabs>
 
@@ -136,11 +156,17 @@
                 style="font-size: 12px"
                 @click="gotoDetail(row)"
                 type="primary"
-              >{{ row.projectCode }}</el-link>
+                >{{ row.projectCode }}</el-link
+              >
             </template>
           </vxe-column>
 
-          <vxe-column field="projectName" fixed="left" title="项目名称" :filters="[{ data: '' }]">
+          <vxe-column
+            field="projectName"
+            fixed="left"
+            title="项目名称"
+            :filters="[{ data: '' }]"
+          >
             <template #filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
                 <vxe-input
@@ -157,10 +183,26 @@
           </vxe-column>
 
           <vxe-colgroup title="项目基本信息">
-            <vxe-column field="projectChargeType" class-name="bg-base" title="项目类型"></vxe-column>
-            <vxe-column field="parentProjectCode" class-name="bg-base" title="对外项目编码"></vxe-column>
-            <vxe-column field="parentProjectName" class-name="bg-base" title="对外项目名称"></vxe-column>
-            <vxe-column field="projectManagerEmpNum" class-name="bg-base" title="项目经理工号"></vxe-column>
+            <vxe-column
+              field="projectChargeType"
+              class-name="bg-base"
+              title="项目类型"
+            ></vxe-column>
+            <vxe-column
+              field="parentProjectCode"
+              class-name="bg-base"
+              title="对外项目编码"
+            ></vxe-column>
+            <vxe-column
+              field="parentProjectName"
+              class-name="bg-base"
+              title="对外项目名称"
+            ></vxe-column>
+            <vxe-column
+              field="projectManagerEmpNum"
+              class-name="bg-base"
+              title="项目经理工号"
+            ></vxe-column>
             <vxe-column
               field="pmName"
               class-name="bg-base"
@@ -182,17 +224,48 @@
               </template>
             </vxe-column>
 
-            <vxe-column field="oneDeptName" class-name="bg-base" title="一级部门"></vxe-column>
-            <vxe-column field="deptName" class-name="bg-base" title="项目部门"></vxe-column>
-            <vxe-column field="projectCreateDate" class-name="bg-base" title="项目创建日期"></vxe-column>
-            <vxe-column field="projectStartDate" class-name="bg-base" title="项目开始日期"></vxe-column>
-            <vxe-column field="projectEndDate" class-name="bg-base" title="项目结束日期"></vxe-column>
-            <vxe-column field="customName" class-name="bg-base" title="最终用户"></vxe-column>
+            <vxe-column
+              field="oneDeptName"
+              class-name="bg-base"
+              title="一级部门"
+            ></vxe-column>
+            <vxe-column
+              field="deptName"
+              class-name="bg-base"
+              title="项目部门"
+            ></vxe-column>
+            <vxe-column
+              field="projectCreateDate"
+              class-name="bg-base"
+              title="项目创建日期"
+            ></vxe-column>
+            <vxe-column
+              field="projectStartDate"
+              class-name="bg-base"
+              title="项目开始日期"
+            ></vxe-column>
+            <vxe-column
+              field="projectEndDate"
+              class-name="bg-base"
+              title="项目结束日期"
+            ></vxe-column>
+            <vxe-column
+              field="customName"
+              class-name="bg-base"
+              title="最终用户"
+            ></vxe-column>
           </vxe-colgroup>
 
           <vxe-colgroup title="项目开票信息">
-            <vxe-column class-name="bg-inv" field="pjtdTotalMoney" title="总收入" align="right">
-              <template #default="{ row }">{{ row.pjtdTotalMoney | currency }}</template>
+            <vxe-column
+              class-name="bg-inv"
+              field="pjtdTotalMoney"
+              title="总收入"
+              align="right"
+            >
+              <template #default="{ row }">{{
+                row.pjtdTotalMoney | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               class-name="bg-inv"
@@ -206,20 +279,36 @@
               :edit-render="{}"
             >
               <template #edit="{ row }">
-                <vxe-input v-model="row.projectChargePeriod" type="number" placeholder="请输入数值"></vxe-input>
+                <vxe-input
+                  v-model="row.projectChargePeriod"
+                  type="number"
+                  placeholder="请输入数值"
+                ></vxe-input>
               </template>
             </vxe-column>
-            <vxe-column class-name="bg-inv" field="billingDeadline" title="开票截止期间"></vxe-column>
+            <vxe-column
+              class-name="bg-inv"
+              field="billingDeadline"
+              title="开票截止期间"
+            ></vxe-column>
             <vxe-column
               class-name="bg-inv"
               field="totalShouldBillingMoney"
               title="应开总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalShouldBillingMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalShouldBillingMoney | currency
+              }}</template>
             </vxe-column>
-            <vxe-column class-name="bg-inv" field="billingRate" title="应开比率">
-              <template #default="{ row }">{{ row.billingRate | percent }}</template>
+            <vxe-column
+              class-name="bg-inv"
+              field="billingRate"
+              title="应开比率"
+            >
+              <template #default="{ row }">{{
+                row.billingRate | percent
+              }}</template>
             </vxe-column>
             <vxe-column
               class-name="bg-inv"
@@ -227,13 +316,27 @@
               title="已开总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalAlreadyBillingMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalAlreadyBillingMoney | currency
+              }}</template>
             </vxe-column>
-            <vxe-column field="billingRateOfTotalPjtd" class-name="bg-inv" title="相对总收入开票率">
-              <template #default="{ row }">{{ row.billingRateOfTotalPjtd | percent }}</template>
+            <vxe-column
+              field="billingRateOfTotalPjtd"
+              class-name="bg-inv"
+              title="相对总收入开票率"
+            >
+              <template #default="{ row }">{{
+                row.billingRateOfTotalPjtd | percent
+              }}</template>
             </vxe-column>
-            <vxe-column field="correspondingBillingRate" class-name="bg-inv" title="相对应开开票率">
-              <template #default="{ row }">{{ row.correspondingBillingRate | percent }}</template>
+            <vxe-column
+              field="correspondingBillingRate"
+              class-name="bg-inv"
+              title="相对应开开票率"
+            >
+              <template #default="{ row }">{{
+                row.correspondingBillingRate | percent
+              }}</template>
             </vxe-column>
             <vxe-column
               field="totalShouldNotBillingMoney"
@@ -241,7 +344,9 @@
               title="超账期应开未开总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalShouldNotBillingMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalShouldNotBillingMoney | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="billingMoney30Day"
@@ -249,7 +354,9 @@
               title="超账期30天内应开未开"
               align="right"
             >
-              <template #default="{ row }">{{ row.billingMoney30Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.billingMoney30Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="billingMoney30to60Day"
@@ -257,7 +364,9 @@
               title="超账期30-60天应开未开"
               align="right"
             >
-              <template #default="{ row }">{{ row.billingMoney30to60Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.billingMoney30to60Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="billingMoney60to90Day"
@@ -265,7 +374,9 @@
               title="超账期60-90天应开未开"
               align="right"
             >
-              <template #default="{ row }">{{ row.billingMoney60to90Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.billingMoney60to90Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="billingMoney90Day"
@@ -273,7 +384,9 @@
               title="超账期90天以上应开未开"
               align="right"
             >
-              <template #default="{ row }">{{ row.billingMoney90Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.billingMoney90Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="invoicingRiskLevel"
@@ -313,7 +426,9 @@
               title="已开总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalAlreadyBillingMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalAlreadyBillingMoney | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="projectInvoicePeriod"
@@ -327,20 +442,36 @@
               :edit-render="{}"
             >
               <template #edit="{ row }">
-                <vxe-input v-model="row.projectInvoicePeriod" type="number" placeholder="请输入数值"></vxe-input>
+                <vxe-input
+                  v-model="row.projectInvoicePeriod"
+                  type="number"
+                  placeholder="请输入数值"
+                ></vxe-input>
               </template>
             </vxe-column>
-            <vxe-column field="receivedEndTime" class-name="bg-collection" title="收款截止日期"></vxe-column>
+            <vxe-column
+              field="receivedEndTime"
+              class-name="bg-collection"
+              title="收款截止日期"
+            ></vxe-column>
             <vxe-column
               field="totalShouldReceiptsMoney"
               class-name="bg-collection"
               title="账期内应收总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalShouldReceiptsMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalShouldReceiptsMoney | currency
+              }}</template>
             </vxe-column>
-            <vxe-column field="shouldReceiverRate" class-name="bg-collection" title="应收比率">
-              <template #default="{ row }">{{ row.shouldReceiverRate | percent }}</template>
+            <vxe-column
+              field="shouldReceiverRate"
+              class-name="bg-collection"
+              title="应收比率"
+            >
+              <template #default="{ row }">{{
+                row.shouldReceiverRate | percent
+              }}</template>
             </vxe-column>
             <vxe-column
               field="totalReceiptssMoney"
@@ -348,13 +479,27 @@
               title="已收总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalReceiptssMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalReceiptssMoney | currency
+              }}</template>
             </vxe-column>
-            <vxe-column field="receivedRateOfTotalPjtd" class-name="bg-collection" title="相对总收入收款率">
-              <template #default="{ row }">{{ row.receivedRateOfTotalPjtd | percent }}</template>
+            <vxe-column
+              field="receivedRateOfTotalPjtd"
+              class-name="bg-collection"
+              title="相对总收入收款率"
+            >
+              <template #default="{ row }">{{
+                row.receivedRateOfTotalPjtd | percent
+              }}</template>
             </vxe-column>
-            <vxe-column field="relativeReceivableRate" class-name="bg-collection" title="相对应收款率">
-              <template #default="{ row }">{{ row.relativeReceivableRate | percent }}</template>
+            <vxe-column
+              field="relativeReceivableRate"
+              class-name="bg-collection"
+              title="相对应收款率"
+            >
+              <template #default="{ row }">{{
+                row.relativeReceivableRate | percent
+              }}</template>
             </vxe-column>
             <vxe-column
               field="totalShouldNotReceiptsMoney"
@@ -362,7 +507,9 @@
               title="超账期应收未收总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalShouldNotReceiptsMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalShouldNotReceiptsMoney | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="receiptsMoney30Day"
@@ -370,7 +517,9 @@
               title="超账期30天内应收未收"
               align="right"
             >
-              <template #default="{ row }">{{ row.receiptsMoney30Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.receiptsMoney30Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="receiptsMoney30to60Day"
@@ -378,7 +527,9 @@
               title="超账期30-60天应收未收"
               align="right"
             >
-              <template #default="{ row }">{{ row.receiptsMoney30to60Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.receiptsMoney30to60Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="receiptsMoney60to90Day"
@@ -386,7 +537,9 @@
               title="超账期60-90天应收未收"
               align="right"
             >
-              <template #default="{ row }">{{ row.receiptsMoney60to90Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.receiptsMoney60to90Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="receiptsMoney90Day"
@@ -394,7 +547,9 @@
               title="超账期90天以上应收未收"
               align="right"
             >
-              <template #default="{ row }">{{ row.receiptsMoney90Day | currency }}</template>
+              <template #default="{ row }">{{
+                row.receiptsMoney90Day | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="receiveRiskLevel"
@@ -431,7 +586,9 @@
               title="超帐期应开未开总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalShouldNotBillingMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalShouldNotBillingMoney | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="planBillingMoney"
@@ -440,14 +597,31 @@
               :edit-render="{}"
             >
               <template #edit="{ row }">
-                <vxe-input v-model="row.planBillingMoney" type="number" placeholder="请输入数值"></vxe-input>
+                <vxe-input
+                  v-model="row.planBillingMoney"
+                  type="number"
+                  placeholder="请输入数值"
+                ></vxe-input>
               </template>
             </vxe-column>
-            <vxe-column field="billingThisMonth" class-name="bg-plan" title="本月实开总额" align="right">
-              <template #default="{ row }">{{ row.billingThisMonth | currency }}</template>
+            <vxe-column
+              field="billingThisMonth"
+              class-name="bg-plan"
+              title="本月实开总额"
+              align="right"
+            >
+              <template #default="{ row }">{{
+                row.billingThisMonth | currency
+              }}</template>
             </vxe-column>
-            <vxe-column field="compleBillingThisMonth" class-name="bg-plan" title="本月开票完成率">
-              <template #default="{ row }">{{ row.compleBillingThisMonth | percent }}</template>
+            <vxe-column
+              field="compleBillingThisMonth"
+              class-name="bg-plan"
+              title="本月开票完成率"
+            >
+              <template #default="{ row }">{{
+                row.compleBillingThisMonth | percent
+              }}</template>
             </vxe-column>
             <vxe-column
               field="totalShouldNotReceiptsMoney"
@@ -455,7 +629,9 @@
               title="超帐期应收未收总额"
               align="right"
             >
-              <template #default="{ row }">{{ row.totalShouldNotReceiptsMoney | currency }}</template>
+              <template #default="{ row }">{{
+                row.totalShouldNotReceiptsMoney | currency
+              }}</template>
             </vxe-column>
             <vxe-column
               field="planReceiptsMoney"
@@ -464,28 +640,66 @@
               :edit-render="{}"
             >
               <template #edit="{ row }">
-                <vxe-input v-model="row.planReceiptsMoney" type="number" placeholder="请输入数值"></vxe-input>
+                <vxe-input
+                  v-model="row.planReceiptsMoney"
+                  type="number"
+                  placeholder="请输入数值"
+                ></vxe-input>
               </template>
             </vxe-column>
-            <vxe-column field="receiptsThisMonth" class-name="bg-plan" title="本月实收总额" align="right">
-              <template #default="{ row }">{{ row.receiptsThisMonth | currency }}</template>
+            <vxe-column
+              field="receiptsThisMonth"
+              class-name="bg-plan"
+              title="本月实收总额"
+              align="right"
+            >
+              <template #default="{ row }">{{
+                row.receiptsThisMonth | currency
+              }}</template>
             </vxe-column>
-            <vxe-column field="compleReceiptsThisMonth" class-name="bg-plan" title="本月收款完成率">
-              <template #default="{ row }">{{ row.compleReceiptsThisMonth | percent }}</template>
+            <vxe-column
+              field="compleReceiptsThisMonth"
+              class-name="bg-plan"
+              title="本月收款完成率"
+            >
+              <template #default="{ row }">{{
+                row.compleReceiptsThisMonth | percent
+              }}</template>
             </vxe-column>
-            <vxe-column field="planRemark" class-name="bg-plan" title="备注" :edit-render="{}">
+            <vxe-column
+              field="planRemark"
+              class-name="bg-plan"
+              title="备注"
+              :edit-render="{}"
+            >
               <template #edit="{ row }">
-                <vxe-input v-model="row.planRemark" type="text" placeholder="请输入备注信息"></vxe-input>
+                <vxe-input
+                  v-model="row.planRemark"
+                  type="text"
+                  placeholder="请输入备注信息"
+                ></vxe-input>
               </template>
             </vxe-column>
           </vxe-colgroup>
 
           <vxe-colgroup title="其他指标">
-            <vxe-column field="grossProfit" class-name="bg-other" title="毛利额">
-              <template #default="{ row }">{{ row.grossProfit | currency }}</template>
+            <vxe-column
+              field="grossProfit"
+              class-name="bg-other"
+              title="毛利额"
+            >
+              <template #default="{ row }">{{
+                row.grossProfit | currency
+              }}</template>
             </vxe-column>
-            <vxe-column field="grossProfitRate" class-name="bg-other" title="毛利率">
-              <template #default="{ row }">{{ row.grossProfitRate | percent }}</template>
+            <vxe-column
+              field="grossProfitRate"
+              class-name="bg-other"
+              title="毛利率"
+            >
+              <template #default="{ row }">{{
+                row.grossProfitRate | percent
+              }}</template>
             </vxe-column>
 
             <vxe-column
@@ -517,9 +731,16 @@
                 </vxe-select>
               </template>
             </vxe-column>
-            <vxe-column field="riskStatus" class-name="bg-other" :edit-render="{}" title="项目风险状态">
+            <vxe-column
+              field="riskStatus"
+              class-name="bg-other"
+              :edit-render="{}"
+              title="项目风险状态"
+            >
               <template #default="{ row }">
-                <span>{{ selectDictLabel(dict.type.risk_status, row.riskStatus) }}</span>
+                <span>{{
+                  selectDictLabel(dict.type.risk_status, row.riskStatus)
+                }}</span>
               </template>
               <template #edit="{ row }">
                 <vxe-select v-model="row.riskStatus" transfer>
@@ -534,7 +755,12 @@
             </vxe-column>
           </vxe-colgroup>
 
-          <vxe-column field="openStatus" class-name="bg-other" width="100" title="风控永久关闭">
+          <vxe-column
+            field="openStatus"
+            class-name="bg-other"
+            width="100"
+            title="风控永久关闭"
+          >
             <template #default="{ row }">
               <vxe-switch
                 :disabled="!checkRole(['risker'])"
@@ -546,7 +772,12 @@
             </template>
           </vxe-column>
 
-          <vxe-column v-if="checkPermi(['order:list:save'])" width="100" title="操作" fixed="right">
+          <vxe-column
+            v-if="checkPermi(['order:list:save'])"
+            width="100"
+            title="操作"
+            fixed="right"
+          >
             <template #default="{ row }">
               <vxe-button
                 icon="fa fa-save"
@@ -613,7 +844,7 @@ const fourthLeft = firstWidth + secondWidth + thirdWidth;
 const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth;
 
 export default {
-  dicts: ["risk_level", "risk_status"],
+  dicts: ["risk_level", "risk_status", "deyi_project_amount_type"],
   name: "List",
   components: { Tabs, TabPane, filterForm, ChartsGroup },
   data() {
@@ -711,15 +942,27 @@ export default {
         }
       });
     },
-
+    handleCommand(command) {
+      this.$message("click on item " + command);
+      if (command == "initData") {
+        this.initData();
+      } else {
+        this.otherButtom(command);
+      }
+    },
     //重算按钮
     initData() {
       initData().then((res) => {
         this.$message.warning("初始化完成，请刷新页面");
       });
     },
+    async otherButtom(command) {
+      const res = deleteCurrentMonth(command);
+      if (res) {
+        this.$modal.notifySuccess(res.msg);
+      }
+    },
     oneDeptIdChange(val) {
-      console.log(val);
       this.filterParams["oneDeptId"] = val;
       // 重新请求
       this.fetchData({ pageNum: 1 });
@@ -782,7 +1025,7 @@ export default {
     // 项目开关
     openStatusChange: debounce(({ openStatus, projectCode }) => {
       toggle({ openStatus, projectCode })
-        .then(() => { })
+        .then(() => {})
         .finaly(() => this.fetchData());
       console.log(openStatus, projectCode);
     }, 500),
@@ -792,7 +1035,7 @@ export default {
       // const { field } = column;
       this.$router.push({
         // path: `/order/details/${projectCode}`,
-        path: `/order/details/${id}?projectCode=${projectCode}`,
+        path: `/order/details/${id}?projectCode=${projectCode}`
         // query: {
         //   projectCode
         // }
@@ -842,8 +1085,8 @@ export default {
           .then(() => {
             this.fetchData({ pageNum, pageSize });
           })
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       } else {
         this.fetchData({ pageNum, pageSize });
       }
@@ -952,7 +1195,7 @@ export default {
         }
       }
     },
-      150)
+    150)
   }
 };
 </script>
