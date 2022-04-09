@@ -523,7 +523,7 @@ let form = ref({
     top: 84px;
     left: 0;
     background: #fff;
-    z-index: 999;
+    z-index: 4;
     transition: all 0.28s;
   }
   .fixed-header-wide {

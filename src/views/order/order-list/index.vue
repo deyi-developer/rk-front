@@ -27,6 +27,7 @@
         <vxe-column align="center" title="状态" field="eventCompleteStutas" width="100">
           <template #default="{ row }">
             <el-tag
+              size="small"
               :type="setTagType(row.eventCompleteStutas)"
             >{{ selectDictLabel(dict.type.event_complete_stutas, row.eventCompleteStutas) || '未知' }}</el-tag>
           </template>
@@ -37,6 +38,11 @@
         <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
         <vxe-column align="center" title="当前处理人部门" field="handlerDeptName" width="180"></vxe-column>
         <vxe-column align="center" title="最后更新时间" field="lastUpdateDate" width="180"></vxe-column>
+        <vxe-column align="center" title="操作" width="120" fixed="right">
+          <template #default="{ row }">
+            <el-button size="mini" type="primary" @click="closeOrder(row)">关 闭</el-button>
+          </template>
+        </vxe-column>
       </vxe-table>
     </el-card>
     <pagination
@@ -55,7 +61,7 @@
   </div>
 </template>
 <script>
-import { list } from './api'
+import { list, edit } from './api'
 import workOrderDialog from '../components/work-order-dialog'
 import filterForm from './filterForm'
 export default {
@@ -84,6 +90,7 @@ export default {
   },
   methods: {
     async getList(query) {
+      console.log(query)
       this.loading = true
       this.params = {
         ...this.params,
@@ -93,6 +100,17 @@ export default {
       this.tableData = rows
       this.totals = total
       this.loading = false
+    },
+
+    async closeOrder(row) {
+      const { eventHeaderId } = row
+      const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
+      if (code === 200) {
+        this.$modal.msgSuccess(msg)
+        this.getList()
+      } else {
+        this.$modal.msgError(msg)
+      }
     },
 
     update(row) {
