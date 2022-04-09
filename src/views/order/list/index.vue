@@ -5,23 +5,23 @@
         <h1>项目清单</h1>
         <div class="fx-1 content">
           <span>{{ `总项目数：${risk.totalProjectNum} ` }}</span>
-          <span class="pointer">
+          <span>
             {{
               `无风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
             }}
           </span>
-          <span class="pointer">
+          <span>
             {{
               `中风险项目：${risk.mediumRiskProjectNum} (${risk.mediumRiskProjectRate}%)`
             }}
           </span>
 
-          <span class="pointer">
+          <span>
             {{
               `高风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
             }}
           </span>
-          <span class="pointer">
+          <span>
             {{
               `法务接管项目：${risk.lawsuitRiskProjectNum} (${risk.lawsuitRiskProjectRate}%)`
             }}
@@ -930,7 +930,7 @@ export default {
     this.fetchData();
   },
   activated() {
-    this.fetchData();
+    // this.fetchData();
   },
   methods: {
     checkPermi,
@@ -954,13 +954,13 @@ export default {
       if (risk) {
         this.risk = risk;
       }
-      this.$nextTick(() => {
-        // pm角色 更新数据后 要提醒他填写数据
-        if (checkRole(["pm"])) {
-          const $table = this.$refs.xTable;
-          $table.validate(true).catch((errMap) => errMap);
-        }
-      });
+      //this.$nextTick(() => {
+      // pm角色 更新数据后 要提醒他填写数据
+      // if (checkRole(["pm"])) {
+      //   const $table = this.$refs.xTable;
+      //   $table.validate(true).catch((errMap) => errMap);
+      // }
+      // });
     },
     handleCommand(command) {
       this.$message("click on item " + command);
@@ -1222,7 +1222,6 @@ export default {
 
 <style lang="scss">
 .project-list {
-
   .filter-input {
     margin: 5px;
   }
@@ -1234,10 +1233,11 @@ export default {
     height: 100%;
     margin-left: 20px;
     span {
-      padding-left: 20px;
+      padding-left: 15px;
       display: table-cell;
       vertical-align: bottom;
       height: 31px;
+      font-size: 12px;
       &:nth-of-type(1) {
         color: #409eff;
       }
