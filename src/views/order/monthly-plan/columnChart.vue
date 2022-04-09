@@ -79,7 +79,7 @@ export default {
             name: "计划开票额",
             type: "bar",
             barGap: 0,
-            label: labelOption,
+            // label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -88,7 +88,7 @@ export default {
           {
             name: "实际开票额",
             type: "bar",
-            label: labelOption,
+            // label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -97,7 +97,7 @@ export default {
           {
             name: "计划收款额",
             type: "bar",
-            label: labelOption,
+            // label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -106,7 +106,7 @@ export default {
           {
             name: "实际收款额",
             type: "bar",
-            label: labelOption,
+            // label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -119,7 +119,7 @@ export default {
             type: "slider", //有单独的滑动条，用户在滑动条上进行缩放或漫游。inside是直接可以是在内部拖动显示
             show: true, //是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
             start: 0, //数据窗口范围的起始百分比0-100
-            end: 50, //数据窗口范围的结束百分比0-100
+            end: 100, //数据窗口范围的结束百分比0-100
             xAxisIndex: [0], // 此处表示控制第一个xAxis，设置 dataZoom-slider 组件控制的 x轴 可是已数组[0,2]表示控制第一，三个；xAxisIndex: 2 ，表示控制第二个。yAxisIndex属性同理
             bottom: 10, //距离底部的距离
           },
