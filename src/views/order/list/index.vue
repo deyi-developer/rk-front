@@ -85,7 +85,7 @@
                   :key="dict.value"
                   :command="dict.value"
                   :label="dict.label"
-                  >{{ dict.label }}</el-dropdown-item
+                  >清空{{ dict.label }}</el-dropdown-item
                 >
               </el-dropdown-menu>
             </el-dropdown>
@@ -736,6 +736,8 @@
               class-name="bg-other"
               :edit-render="{}"
               title="项目风险状态"
+              :filters="riskStatusFilter"
+              :filter-multiple="false"
             >
               <template #default="{ row }">
                 <span>{{
@@ -851,6 +853,24 @@ export default {
     return {
       deptList: [],
       riskLevelFilter: [
+        {
+          label: "高风险",
+          value: "Red"
+        },
+        {
+          label: "中风险",
+          value: "Yellow"
+        },
+        {
+          label: "无风险",
+          value: "Green"
+        }
+      ],
+      riskStatusFilter: [
+        {
+          label: "法务接管",
+          value: "lawsuit"
+        },
         {
           label: "高风险",
           value: "Red"
