@@ -16,6 +16,7 @@
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
         <Badge class="right-menu-item" :count="unread" :overflow-count="unread">
           <Icon
+            style="cursor: pointer;"
             size="22"
             type="ios-notifications-outline"
             @click="$router.push({ path: '/order/message-list' })"

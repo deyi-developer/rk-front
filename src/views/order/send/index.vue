@@ -59,8 +59,9 @@
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
-            <img class="avatar" :src="avatar" />
-            <p class="name">{{ usersInfo.nickName }}</p>
+            <img class="avatar" :src="env + item.avatar" v-if="item.avatar" />
+            <div class="default-avatar" v-else>{{ item.nameOfRespondent.substr(0, 1) }}</div>
+            <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="time">{{ formatDate(item.createDate) }}</p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <div style="margin-left: auto;" v-if="!item.eventCompleteStutas && item.showFlagButton">
@@ -116,6 +117,9 @@ export default {
     ...mapGetters(['usersInfo']),
     avatar() {
       return process.env.VUE_APP_BASE_API + this.usersInfo.avatar
+    },
+    env() {
+      return process.env.VUE_APP_BASE_API
     }
   },
 
@@ -241,10 +245,16 @@ export default {
           align-self: flex-start;
           width: 24px;
           height: 24px;
-          color: #fff;
-          text-align: center;
-          border-radius: 50%;
+        }
+        .default-avatar {
+          align-self: flex-start;
+          width: 24px;
+          height: 24px;
+          line-height: 24px;
           background: rgb(4, 80, 143);
+          border-radius: 50%;
+          text-align: center;
+          color: #fff;
         }
         .name {
           margin: 0 8px;
