@@ -958,7 +958,7 @@ export default {
     },
     async otherButtom(command) {
       const res = deleteCurrentMonth(command);
-      if (res) {
+      if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
       }
     },
