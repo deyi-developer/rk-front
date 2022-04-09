@@ -4,87 +4,39 @@
       <div slot="header">
         <span>工单列表</span>
       </div>
-
       <filter-form :projectCode="$route.query.projectCode" @search="getList" ref="form"></filter-form>
-
-      <el-table
+      <vxe-table
         border
         size="small"
         class="table"
         :data="tableData"
         style="width: 100%"
+        show-overflow
         v-loading="loading"
       >
-        <el-table-column label="序号" type="index" align="center" width="60px" fixed></el-table-column>
-
-        <el-table-column label="工单编号" align="center" width="240px" fixed>
-          <template v-slot="scope">
+        <vxe-column title="序号" type="seq" align="center" width="60px" fixed="left"></vxe-column>
+        <vxe-column title="工单编号" align="center" width="240px" fixed="left">
+          <template #default="{ row }">
             <a
-              @click="() => $router.push({ path: '/order/send', query: { id: scope.row.eventHeaderId } })"
-            >{{ scope.row.eventHeaderCode }}</a>
+              @click="() => $router.push({ path: '/order/send', query: { id: row.eventHeaderId } })"
+            >{{ row.eventHeaderCode }}</a>
           </template>
-        </el-table-column>
-
-        <el-table-column
-          align="center"
-          show-overflow-tooltip
-          label="项目编码"
-          prop="projectCode"
-          width="180"
-        ></el-table-column>
-
-        <el-table-column align="center" label="状态" prop="eventCompleteStutas" width="100">
-          <template v-slot="scope">
+        </vxe-column>
+        <vxe-column align="center" title="项目编码" field="projectCode" width="180"></vxe-column>
+        <vxe-column align="center" title="状态" field="eventCompleteStutas" width="100">
+          <template #default="{ row }">
             <el-tag
-              :type="setTagType(scope.row.eventCompleteStutas)"
-            >{{ selectDictLabel(dict.type.event_complete_stutas, scope.row.eventCompleteStutas) }}</el-tag>
+              :type="setTagType(row.eventCompleteStutas)"
+            >{{ selectDictLabel(dict.type.event_complete_stutas, row.eventCompleteStutas) || '未知' }}</el-tag>
           </template>
-        </el-table-column>
-
-        <el-table-column
-          align="center"
-          show-overflow-tooltip
-          label="工单标题"
-          prop="eventTitle"
-          width="180"
-        ></el-table-column>
-        <el-table-column align="center" label="创建人" prop="createName" width="120"></el-table-column>
-        <el-table-column align="center" label="创建时间" prop="createTime" width="180"></el-table-column>
-        <el-table-column align="center" label="当前处理人" prop="handlerName" width="120"></el-table-column>
-        <el-table-column align="center" label="当前处理人部门" prop="handlerDeptName" width="180"></el-table-column>
-        <el-table-column align="center" label="最后更新时间" prop="last_update_date" width="180"></el-table-column>
-
-        <!-- <el-table-column prop="eventType" label="工单类型" width="180">
-          <template v-slot="scope">
-            <span>{{ selectDictLabel(dict.type.event_type, scope.row.eventType) }}</span>
-          </template>
-        </el-table-column>-->
-
-        <!-- <el-table-column show-overflow-tooltip prop="eventContext" label="工单内容" width="500">
-          <template v-slot="scope">
-            <div class="content" v-html="scope.row.eventContext"></div>
-          </template>
-        </el-table-column>-->
-
-        <!-- <el-table-column prop="eventUrgencyLevel" label="工单级别">
-          <template v-slot="scope">
-            <span>{{ selectDictLabel(dict.type.event_urgency_level, scope.row.eventUrgencyLevel) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="eventHandler" label="工单处理人"></el-table-column>-->
-        <!-- <el-table-column prop="projectCode" label="项目编码"></el-table-column> -->
-        <!-- <el-table-column label="操作" width="240">
-          <template v-slot="scope">
-            <div>
-              <el-button size="small" @click="update(scope.row)">修改</el-button>
-              <el-button
-                size="small"
-                @click="() => $router.push({ path: '/order/send', query: { id: scope.row.eventHeaderId } })"
-              >详情</el-button>
-            </div>
-          </template>
-        </el-table-column>-->
-      </el-table>
+        </vxe-column>
+        <vxe-column align="center" title="工单标题" field="eventTitle" width="180"></vxe-column>
+        <vxe-column align="center" title="创建人" field="createName" width="120"></vxe-column>
+        <vxe-column align="center" title="创建时间" field="createTime" width="180"></vxe-column>
+        <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
+        <vxe-column align="center" title="当前处理人部门" field="handlerDeptName" width="180"></vxe-column>
+        <vxe-column align="center" title="最后更新时间" field="last_update_date" width="180"></vxe-column>
+      </vxe-table>
     </el-card>
     <pagination
       v-show="totals > 0"
@@ -98,7 +50,7 @@
       :form="form"
       :dialogVisible.sync="dialogVisible"
       @refresh="() => getList()"
-    ></work-order-dialog>
+    />
   </div>
 </template>
 <script>
@@ -106,6 +58,7 @@ import { list } from './api'
 import workOrderDialog from '../components/work-order-dialog'
 import filterForm from './filterForm'
 export default {
+  name: 'OrderList',
   dicts: ["event_type", "event_urgency_level", "event_complete_stutas"],
   components: {
     workOrderDialog,
@@ -147,6 +100,7 @@ export default {
     },
 
     setTagType(type) {
+      if (!type) return 'info'
       const tgaMap = {
         0: 'warning',
         1: 'success',
@@ -175,12 +129,5 @@ export default {
     margin: 0;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   }
-  // .content {
-  //   width: 180px;
-  //   height: 54px;
-  //   overflow: hidden;
-  //   text-overflow: ellipsis;
-  //   white-space: nowrap;
-  // }
 }
 </style>
