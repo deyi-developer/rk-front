@@ -46,7 +46,10 @@
             :key="item.userId"
             :label="item.nickName"
             :value="item.userId"
-          ></el-option>
+          >
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userId }}</span>
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="工单完成截止日期" prop="eventHandleDate">

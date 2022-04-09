@@ -32,7 +32,7 @@
             >{{ setStatus(row.eventStatus) || '未知' }}</el-tag>
           </template>
         </vxe-column>
-        <vxe-column align="center" title="工单标题" field="eventTitle" width="180"></vxe-column>
+        <vxe-column align="center" title="工单名" field="eventTitle" width="180"></vxe-column>
         <vxe-column align="center" title="创建人" field="createName" width="120"></vxe-column>
         <vxe-column align="center" title="创建时间" field="createTime" width="180"></vxe-column>
         <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
@@ -136,16 +136,14 @@ export default {
     },
 
     setTagType(type) {
-      if (!type) return 'info'
       const tgaMap = {
-        0: 'info',
-        1: 'success',
+        0: 'success',
+        1: 'info',
       }
       return tgaMap[type]
     },
 
     setStatus(type) {
-      console.log(type)
       const typeMap = {
         0: '处理中',
         1: '已关闭'

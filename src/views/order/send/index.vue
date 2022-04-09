@@ -77,8 +77,12 @@
           :key="item.userId"
           :label="item.nickName"
           :value="item.userId"
-        ></el-option>
+        >
+          <span style="float: left">{{ item.nickName }}</span>
+          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userId }}</span>
+        </el-option>
       </el-select>
+
       <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
       <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
       <ul class="list">
