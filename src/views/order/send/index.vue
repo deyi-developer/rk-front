@@ -1,16 +1,27 @@
 <template>
   <div class="work-order page-bg">
     <header>
-      <h1 style="color: #17233d">
-        {{ info.eventHeaderCode }} {{ info.eventTitle }}
-      </h1>
+      <div class="order-title">
+        <span>
+          {{ info.eventHeaderCode }}
+        </span>
+        <span>
+          {{ info.eventTitle }}
+        </span>
+        <span class="close-btn" style="float: right">
+          <el-button size="mini" type="danger" plain @click="closeOrder"
+            >关闭工单</el-button
+          ></span
+        >
+      </div>
       <ul class="order-info">
         <li class="order-item">
           <label class="space">状态:</label>
 
           <span class="value">
-            <Tag v-if="info.eventStatus" color="default">已关闭</Tag>
-            <Tag v-else color="red">未完成</Tag>
+            <Badge v-if="info.eventStatus" status="default" text="已关闭" />
+            <Badge v-else status="error" text="未完成" />
+
             {{
           }}</span>
         </li>
@@ -32,7 +43,8 @@
         <li class="order-item">
           <label class="space">提单时间:</label>
           <span class="value">
-            <i class="el-icon-time"></i> {{ info.createTime }}</span
+            <Icon type="ios-alarm" color="#6B7285;" />
+            {{ info.createTime }}</span
           >
         </li>
       </ul>
@@ -44,17 +56,23 @@
         </el-col>
       </el-row>
       <div
-        style="display: flex; align-items: center; cursor: pointer"
+        style="
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          font-weight: bold;
+        "
         @click="editorVisible = !editorVisible"
       >
         <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
         >沟通历史
       </div>
     </header>
-    <div v-show="editorVisible" style="margin: 12px 0">
+    <div v-show="editorVisible" style="margin: 18px 0">
       <span>交接人：</span>
       <el-select
         style="width: 30%; margin-bottom: 12px"
+        size="small"
         v-model="eventHandler"
         filterable
         placeholder="请选择工单交接人"
@@ -72,7 +90,7 @@
       <editor
         v-model="info.eventMsg"
         placeholder="请输入回复内容"
-        :height="200"
+        :height="150"
       ></editor>
       <el-button
         style="margin: 12px 0"
@@ -84,22 +102,38 @@
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
-            <img class="avatar" :src="item.avatar" />
+            <img class="avatar" :src="item.avatar" @error="defImg()" />
+
             <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="time">{{ formatDate(item.createDate) }}</p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
+
             <div
               style="margin-left: auto"
               v-if="!item.eventCompleteStutas && item.showFlagButton"
             >
-              <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
-              <el-button size="mini" @click="edit(item, 3)">未完成</el-button>
+              <el-button
+                type="success"
+                plain
+                size="mini"
+                @click="edit(item, 1)"
+              >
+                已完成</el-button
+              >
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
+                >未完成</el-button
+              >
             </div>
             <div style="margin-left: auto" v-else>
-              <label>状态：</label>
-              <span>{{
-                item.eventCompleteStutas === 1 ? "已完成" : "未完成"
-              }}</span>
+              <span
+                style="color: #67c23a; font-size: 12px"
+                v-if="item.eventCompleteStutas"
+              >
+                <i class="el-icon-check"></i> 已完成</span
+              >
+              <span v-else style="color: #f56c6c; font-size: 12px">
+                <i class="el-icon-close"></i> 未完成</span
+              >
             </div>
           </div>
           <div class="bottom" v-html="item.eventMsg"></div>
@@ -116,12 +150,14 @@ import { mapGetters } from "vuex";
 import { handlerList } from "../project/api";
 import { debounce } from "lodash-es";
 import editor from "@/components/Editor";
-import { Tag } from "view-design";
-
+import { Tag, Icon, Badge } from "view-design";
+import defaultImg from "@/assets/images/avatar.png";
 export default {
   components: {
     editor,
-    Tag
+    Badge,
+    Tag,
+    Icon
   },
   dicts: ["event_type", "event_urgency_level"],
 
@@ -154,7 +190,7 @@ export default {
     },
     color() {
       let type = "";
-      console.log(this.info.eventUrgencyLevel);
+
       switch (this.info.eventUrgencyLevel) {
         case 1:
           type = "red";
@@ -198,7 +234,32 @@ export default {
       this.info.forwardFlag = 0;
       this.getReplyList(id);
     },
-
+    defImg() {
+      let img = event.srcElement;
+      img.src = defaultImg;
+      img.onerror = null; //防止闪图
+    },
+    closeOrder() {
+      this.$modal
+        .confirm(`确定关闭工单？`)
+        .then(async () => {
+          const params = {
+            // eventHeaderId: item.eventHeaderId,
+            // eventLineId: item.eventLineId,
+            // eventCompleteStutas: id
+          };
+          // const { code, msg } = await update(params);
+          if (code === 200) {
+            this.$modal.msgSuccess(msg);
+            this.getDetailInfo(this.$route.query.id);
+          } else {
+            this.$modal.msgError(msg);
+          }
+        })
+        .catch(() => {
+          console.log("catch");
+        });
+    },
     /** 回复 */
     async submit() {
       this.info.eventHandler = this.eventHandler; // 选择了交接人
@@ -259,6 +320,25 @@ export default {
 .work-order {
   padding: 20px;
   background: #fff;
+  color: #606266;
+  font-family: "Monospaced Number", "Chinese Quote", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  .order-title {
+    span {
+      margin-right: 15px;
+      font-size: 20px;
+      font-weight: 500;
+      color: #262626;
+      line-height: 28px;
+      margin-bottom: 12px;
+      word-break: break-all;
+    }
+    .close-btn {
+      float: right;
+      line-height: 20px;
+    }
+  }
   .el-row {
     padding: 16px 0;
   }
@@ -280,22 +360,26 @@ export default {
         font-weight: 400;
       }
       .value {
-        color: #909399;
+        // color: #909399;
+        font-size: 14px;
+        font-weight: 400;
+        color: #2b2d38;
       }
     }
   }
   .content {
-    padding: 16px 0px;
-    border: 1px solid #ddd;
+    padding: 15px 0px 30px 0;
+    border: 1px solid #e8eaec;
     border-left: none;
     border-right: none;
-    color: #515a6e;
+    color: #2b2d38;
+    font-weight: 400;
   }
   .list {
     .item {
       padding: 12px;
       list-style: none;
-      border: 1px solid #e4e8f1;
+      border: 1px solid #e8eaec;
       border-radius: 4px;
       margin-bottom: 12px;
       .top {
@@ -312,6 +396,7 @@ export default {
         }
         .name {
           margin: 0 8px;
+          color: #303133;
         }
         .reply,
         .time {
@@ -330,6 +415,8 @@ export default {
       }
       .bottom {
         margin-left: 32px;
+        padding: 15px 0;
+        font-size: 12px;
       }
     }
   }
