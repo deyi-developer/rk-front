@@ -300,12 +300,12 @@
           </div>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="总开票:">{{
+              <el-form-item label="总开票金额:">{{
                 projectData.totalBilling | currency
               }}</el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="总收款:">{{
+              <el-form-item label="总收款金额:">{{
                 projectData.totalReceipts | currency
               }}</el-form-item>
             </el-col>
@@ -556,6 +556,10 @@ export default {
           const { code, msg } = await projectUpdate([this.updateData]);
           if (code === 200) {
             this.$modal.msgSuccess(msg);
+            const {
+              query: { projectCode }
+            } = this.$route;
+            this.getData(projectCode);
           } else {
             this.$modal.msgError(msg);
           }
