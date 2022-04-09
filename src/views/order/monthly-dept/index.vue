@@ -46,8 +46,8 @@
               @keyup.enter="$panel.confirmFilter()"
               :placeholder="
                 item.prop === 'projectCode'
-                  ? '输入完整编码'
-                  : '请输入完整项目名称'
+                  ? '输入项目编码'
+                  : '请输入项目名称'
               "
             />
           </template>
