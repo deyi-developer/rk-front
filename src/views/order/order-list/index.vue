@@ -4,7 +4,11 @@
       <div slot="header">
         <span>工单列表</span>
       </div>
-      <filter-form :projectCode="$route.query.projectCode" @search="getList" ref="form"></filter-form>
+      <filter-form
+        :projectCode="$route.query.projectCode"
+        @search="getList"
+        ref="form"
+      ></filter-form>
       <vxe-table
         border
         size="small"
@@ -14,30 +18,77 @@
         show-overflow
         v-loading="loading"
       >
-        <vxe-column title="序号" type="seq" align="center" width="60px" fixed="left"></vxe-column>
+        <vxe-column
+          title="序号"
+          type="seq"
+          align="center"
+          width="60px"
+          fixed="left"
+        ></vxe-column>
         <vxe-column title="工单编号" align="center" width="240px" fixed="left">
           <template #default="{ row }">
             <a
-              style="color: #57a3f3;"
-              @click="() => $router.push({ path: `/work/details/${row.eventHeaderId}`, query: { id: row.eventHeaderId } })"
-            >{{ row.eventHeaderCode }}</a>
+              style="color: #57a3f3"
+              @click="
+                () =>
+                  $router.push({
+                    path: `/work/details/${row.eventHeaderId}`,
+                    query: { id: row.eventHeaderId }
+                  })
+              "
+              >{{ row.eventHeaderCode }}</a
+            >
           </template>
         </vxe-column>
-        <vxe-column align="center" title="项目编码" field="projectCode" width="180"></vxe-column>
+        <vxe-column
+          align="center"
+          title="项目编码"
+          field="projectCode"
+          width="180"
+        ></vxe-column>
         <vxe-column align="center" title="状态" field="eventStatus" width="100">
           <template #default="{ row }">
-            <el-tag
-              size="small"
-              :type="setTagType(row.eventStatus)"
-            >{{ setStatus(row.eventStatus) || '未知' }}</el-tag>
+            <el-tag size="small" :type="setTagType(row.eventStatus)">{{
+              setStatus(row.eventStatus) || "未知"
+            }}</el-tag>
           </template>
         </vxe-column>
-        <vxe-column align="center" title="工单名" field="eventTitle" width="180"></vxe-column>
-        <vxe-column align="center" title="创建人" field="createName" width="120"></vxe-column>
-        <vxe-column align="center" title="创建时间" field="createTime" width="180"></vxe-column>
-        <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
-        <vxe-column align="center" title="当前处理人部门" field="handlerDeptName" width="180"></vxe-column>
-        <vxe-column align="center" title="最后更新时间" field="lastUpdateDate" width="180"></vxe-column>
+        <vxe-column
+          align="center"
+          title="工单名"
+          field="eventTitle"
+          width="180"
+        ></vxe-column>
+        <vxe-column
+          align="center"
+          title="创建人"
+          field="createName"
+          width="120"
+        ></vxe-column>
+        <vxe-column
+          align="center"
+          title="创建时间"
+          field="createTime"
+          width="180"
+        ></vxe-column>
+        <vxe-column
+          align="center"
+          title="当前处理人"
+          field="handlerName"
+          width="120"
+        ></vxe-column>
+        <vxe-column
+          align="center"
+          title="当前处理人部门"
+          field="handlerDeptName"
+          width="180"
+        ></vxe-column>
+        <vxe-column
+          align="center"
+          title="最后更新时间"
+          field="lastUpdateDate"
+          width="180"
+        ></vxe-column>
         <vxe-column
           v-if="userRolse.includes('risker')"
           align="center"
@@ -46,7 +97,9 @@
           fixed="right"
         >
           <template #default="{ row }">
-            <el-button size="mini" type="primary" @click="closeOrder(row)">关 闭</el-button>
+            <el-button size="mini" type="primary" @click="closeOrder(row)"
+              >关 闭</el-button
+            >
           </template>
         </vxe-column>
       </vxe-table>
@@ -67,12 +120,12 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import { list, edit } from './api'
-import workOrderDialog from '../components/work-order-dialog'
-import filterForm from './filterForm'
+import { mapGetters } from "vuex";
+import { list, edit } from "./api";
+import workOrderDialog from "../components/work-order-dialog";
+import filterForm from "./filterForm";
 export default {
-  name: 'OrderList',
+  name: "WorkOrderList",
   dicts: ["event_type", "event_urgency_level", "event_complete_stutas"],
   components: {
     workOrderDialog,
@@ -84,45 +137,46 @@ export default {
       form: {},
       params: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 10
       },
       tableData: [],
       totals: 0,
       loading: false
-    }
+    };
   },
   computed: {
-    ...mapGetters(['userRolse']),
+    ...mapGetters(["userRolse"])
   },
   created() {
-    const { query } = this.$route
-    this.getList(query)
+    console.log(1);
+    const { query } = this.$route;
+    this.getList(query);
   },
   methods: {
     async getList(query) {
-      console.log(query)
-      this.loading = true
+      console.log(query);
+      this.loading = true;
       this.params = {
         ...this.params,
         ...query
-      }
-      const { total, rows } = await list(this.params)
-      this.tableData = rows
-      this.totals = total
-      this.loading = false
+      };
+      const { total, rows } = await list(this.params);
+      this.tableData = rows;
+      this.totals = total;
+      this.loading = false;
     },
 
     closeOrder(row) {
       this.$modal
         .confirm(`确定关闭此工单吗？`)
         .then(async () => {
-          const { eventHeaderId } = row
-          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
+          const { eventHeaderId } = row;
+          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 });
           if (code === 200) {
-            this.$modal.msgSuccess(msg)
-            this.getList()
+            this.$modal.msgSuccess(msg);
+            this.getList();
           } else {
-            this.$modal.msgError(msg)
+            this.$modal.msgError(msg);
           }
         })
         .catch(() => {
@@ -131,27 +185,27 @@ export default {
     },
 
     update(row) {
-      this.form = row
-      this.dialogVisible = true
+      this.form = row;
+      this.dialogVisible = true;
     },
 
     setTagType(type) {
       const tgaMap = {
-        0: 'success',
-        1: 'info',
-      }
-      return tgaMap[type]
+        0: "success",
+        1: "info"
+      };
+      return tgaMap[type];
     },
 
     setStatus(type) {
       const typeMap = {
-        0: '处理中',
-        1: '已关闭'
-      }
-      return typeMap[type]
+        0: "处理中",
+        1: "已关闭"
+      };
+      return typeMap[type];
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .wrap {

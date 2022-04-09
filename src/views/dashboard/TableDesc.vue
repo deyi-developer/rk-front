@@ -181,7 +181,9 @@ export default {
 <style lang="scss">
 .table-desc {
   .el-descriptions-row {
-    th {
+    th,
+    td {
+      font-size: 12px;
     }
   }
 }

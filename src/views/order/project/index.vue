@@ -553,6 +553,8 @@ export default {
       this.$refs["form"].validate(async (valid) => {
         if (valid) {
           this.updateData.projectCode = this.projectData.projectCode;
+          this.updateData.riskStatus = this.projectData.riskLevel;
+          this.updateData.riskLevel = this.projectData.riskLevel;
           const { code, msg } = await projectUpdate([this.updateData]);
           if (code === 200) {
             this.$modal.msgSuccess(msg);

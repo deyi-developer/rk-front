@@ -167,7 +167,7 @@ export default {
     text-align: right;
     margin-top: 15px;
     color: #17233d;
-    font-size: 30px;
+    font-size: 26px;
     height: 80px;
   }
   .tooltip-icon-wrap {
