@@ -959,9 +959,7 @@ export default {
 
 <style lang="scss">
 .project-list {
-  .pointer {
-    // cursor: pointer;
-  }
+
   .filter-input {
     margin: 5px;
   }

@@ -106,6 +106,7 @@ import { list } from './api'
 import workOrderDialog from '../components/work-order-dialog'
 import filterForm from './filterForm'
 export default {
+  name: 'OrderList',
   dicts: ["event_type", "event_urgency_level", "event_complete_stutas"],
   components: {
     workOrderDialog,

@@ -31,6 +31,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
+  name: 'Message-list',
   data() {
     return {
       activeName: '1',
