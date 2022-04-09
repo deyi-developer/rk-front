@@ -148,7 +148,8 @@ export default {
       if (code === 200) {
         this.$modal.msgSuccess(msg);
         this.getReplyList(this.$route.query.id)
-        this.info = {}
+        // this.info = {}
+        this.info.eventMsg = ''
         this.eventHandler = ''
       } else {
         this.$modal.msgError(msg);
@@ -183,7 +184,7 @@ export default {
 
     getHandlers: debounce(async function (value) {
       this.handlerLoding = true
-      const params = { pageNum: 1, pageSize: 10, nickName: value }
+      const params = { pageNum: 1, pageSize: 100, nickName: value }
       const { rows } = await handlerList(params)
       this.handlers = rows
       this.handlerLoding = false

@@ -15,9 +15,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="工单内容:" prop="eventContext">
-        <template v-slot="scope">
-          <editor v-model="form.eventContext" style="width: 80%;" :height="100"></editor>
-        </template>
+        <editor v-model="form.eventContext" style="width: 80%;" :height="100"></editor>
       </el-form-item>
       <el-form-item label="工单级别:" prop="eventUrgencyLevel">
         <el-select

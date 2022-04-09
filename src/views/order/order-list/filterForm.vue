@@ -90,7 +90,9 @@ export default {
     if (res.code == 200) {
       this.deptList = res.rows;
     }
-    this.$set(this.queryParams, 'projectCode', this.projectCode)
+    if (this.projectCode) {
+      this.$set(this.queryParams, 'projectCode', this.projectCode)
+    }
   },
   methods: {
     /** 搜索按钮操作 */

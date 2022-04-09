@@ -69,7 +69,7 @@
                   style="width: 60%"
                   v-model="updateData.projectChargePeriod"
                   size="small"
-                  :disabled="isBoss"
+                  :disabled="!isPmRule"
                 ></el-input-number>
                 <span>月</span>
               </el-form-item>
@@ -80,7 +80,7 @@
                   style="width: 60%"
                   v-model="updateData.projectInvoicePeriod"
                   size="small"
-                  :disabled="isBoss"
+                  :disabled="!isPmRule"
                 ></el-input-number>
                 <span>天</span>
               </el-form-item>
@@ -117,7 +117,7 @@
             </el-col>
           </el-row>
           <!-- 风控专员才显示 -->
-          <el-row v-if="userRolse.includes('risker')">
+          <el-row v-if="isRisker">
             <el-col :span="6">
               <el-form-item label="开票风险等级:">
                 <el-select
@@ -374,23 +374,51 @@ export default {
       dialogVisible: false
     }
   },
+
   computed: {
     ...mapGetters(['userRolse', 'sidebar', 'usersInfo']),
-    // boss没有任何编辑权限
+
+    // 是否boss
     isBoss() {
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
         return this.userRolse.includes('boss')
+      } else if (this.userRolse.length > 1) {
+        return false
       }
     },
+
     // 登录人员是否是此项目项目经理
     isPm() {
       return this.usersInfo.userId == this.projectData.pmUserId
-    }
+    },
+
+    // 是否pm
+    isPmRule() {
+      if (this.userRolse.length === 0) return
+      if (this.userRolse.length === 1) {
+        return this.userRolse.includes('pm')
+      } else if (this.userRolse.length > 1) {
+        return false
+      }
+    },
+
+    // 是否风控
+    isRisker() {
+      if (this.userRolse.length === 0) return
+      if (this.userRolse.length === 1) {
+        return this.userRolse.includes('risker')
+      } else if (this.userRolse.length > 1) {
+        return false
+      }
+    },
   },
+
   created() {
     const { query: { projectCode } } = this.$route
     this.getData(projectCode)
   },
+
   methods: {
 
     /** 页面数据 */
