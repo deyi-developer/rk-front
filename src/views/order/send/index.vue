@@ -1,17 +1,30 @@
 <template>
   <div class="work-order page-bg">
     <header>
-      <h1 style="font-weight: 500; color: #000;">{{ info.eventHeaderCode }} {{ info.eventTitle }}</h1>
+      <h1 style="color: #17233d">{{ info.eventHeaderCode }} {{ info.eventTitle }}</h1>
       <ul class="order-info">
         <li class="order-item">
           <label class="space">状态:</label>
-          <span class="value">{{ info.eventStatus ? '已关闭' : '未完成' }}</span>
+
+          <span class="value">
+            <Tag v-if="info.eventStatus" color="default">已关闭</Tag>
+            <Tag v-else color="red">未完成</Tag>
+            {{
+            }}
+          </span>
         </li>
         <li class="order-item">
           <label class="space">优先级:</label>
-          <span
-            class="value"
-          >{{ selectDictLabel(dict.type.event_urgency_level, info.eventUrgencyLevel) }}</span>
+          <span class="value">
+            <Tag :color="color">
+              {{
+                selectDictLabel(
+                  dict.type.event_urgency_level,
+                  info.eventUrgencyLevel
+                )
+              }}
+            </Tag>
+          </span>
         </li>
         <li class="order-item">
           <label class="space">提出人:</label>
@@ -19,10 +32,13 @@
         </li>
         <li class="order-item">
           <label class="space">提单时间:</label>
-          <span class="value">{{ info.createTime }}</span>
+          <span class="value">
+            <i class="el-icon-time"></i>
+            {{ info.createTime }}
+          </span>
         </li>
       </ul>
-      <el-row style="padding-top: 0;">
+      <el-row style="padding-top: 0">
         <el-col>
           <div class="content">
             <span v-html="info.eventContext"></span>
@@ -30,7 +46,7 @@
         </el-col>
       </el-row>
       <div
-        style="display: flex; align-items: center; cursor: pointer;"
+        style="display: flex; align-items: center; cursor: pointer"
         @click="editorVisible = !editorVisible"
       >
         <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
@@ -39,7 +55,7 @@
     <div v-show="editorVisible" style="margin: 12px 0">
       <span>交接人：</span>
       <el-select
-        style="width: 30%; margin-bottom: 12px;"
+        style="width: 30%; margin-bottom: 12px"
         v-model="eventHandler"
         filterable
         placeholder="请选择工单交接人"
@@ -64,13 +80,17 @@
             <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="time">{{ formatDate(item.createDate) }}</p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
-            <div style="margin-left: auto;" v-if="!item.eventCompleteStutas && item.showFlagButton">
+            <div style="margin-left: auto" v-if="!item.eventCompleteStutas && item.showFlagButton">
               <el-button size="mini" @click="edit(item, 1)">已完成</el-button>
               <el-button size="mini" @click="edit(item, 3)">未完成</el-button>
             </div>
-            <div style="margin-left: auto;" v-else>
+            <div style="margin-left: auto" v-else>
               <label>状态：</label>
-              <span>{{ item.eventCompleteStutas === 1 ? '已完成' : '未完成' }}</span>
+              <span>
+                {{
+                  item.eventCompleteStutas === 1 ? "已完成" : "未完成"
+                }}
+              </span>
             </div>
           </div>
           <div class="bottom" v-html="item.eventMsg"></div>
@@ -80,16 +100,19 @@
   </div>
 </template>
 <script>
-import { formatDate } from '@/utils'
-import { mapActions } from 'vuex'
-import { detail, reply, replyList, update } from './api'
-import { mapGetters } from 'vuex'
-import { handlerList } from "../project/api"
+import { formatDate } from "@/utils";
+import { mapActions } from "vuex";
+import { detail, reply, replyList, update } from "./api";
+import { mapGetters } from "vuex";
+import { handlerList } from "../project/api";
 import { debounce } from "lodash-es";
-import editor from "@/components/Editor"
+import editor from "@/components/Editor";
+import { Tag } from "view-design";
+
 export default {
   components: {
-    editor
+    editor,
+    Tag
   },
   dicts: ["event_type", "event_urgency_level"],
 
@@ -98,63 +121,89 @@ export default {
       info: {},
       replyList: [],
       editorVisible: true,
-      eventHandler: '',
+      eventHandler: "",
       handlers: [],
       handlerLoding: false,
       formatDate
-    }
+    };
   },
 
   watch: {
-    '$route'() {
-      const { query: { id } } = this.$route
-      this.getDetailInfo(id)
-      this.Messages()
+    $route() {
+      const {
+        query: { id }
+      } = this.$route;
+      this.getDetailInfo(id);
+      this.Messages();
     }
   },
 
   computed: {
-    ...mapGetters(['usersInfo']),
+    ...mapGetters(["usersInfo"]),
     avatar() {
       return process.env.VUE_APP_BASE_API + this.usersInfo.avatar
     },
     env() {
       return process.env.VUE_APP_BASE_API
+    },
+    color() {
+      let type = "";
+      console.log(this.info.eventUrgencyLevel);
+      switch (this.info.eventUrgencyLevel) {
+        case 1:
+          type = "red";
+          break;
+        case 2:
+          type = "orange";
+          break;
+        case 3:
+          type = "yellow";
+          break;
+        case 4:
+          type = "default";
+          break;
+        default:
+          type = "default";
+          break;
+      }
+      return type;
     }
   },
 
   created() {
-    const { query: { id } } = this.$route
+    const {
+      query: { id }
+    } = this.$route;
     if (id) {
-      this.getDetailInfo(id)
-      this.Messages()
+      this.getDetailInfo(id);
+      this.Messages();
     }
-    this.getHandlers()
+    this.getHandlers();
   },
 
   methods: {
-    ...mapActions(['Messages']),
+    ...mapActions(["Messages"]),
 
     /** 获取详情数据 */
     async getDetailInfo(id) {
-      const { data } = await detail(id)
-      this.info = data
-      this.info.eventHandler = this.usersInfo.userId // 默认自己能搞定不转接
-      this.info.forwardFlag = 0
-      this.getReplyList(id)
+      const { data } = await detail(id);
+      this.info = data;
+      this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
+      this.info.forwardFlag = 0;
+      this.getReplyList(id);
     },
 
     /** 回复 */
     async submit() {
-      this.info.eventHandler = this.eventHandler // 选择了交接人
-      this.info.forwardFlag = 1
-      const { code, msg } = await reply(this.info)
+      this.info.eventHandler = this.eventHandler; // 选择了交接人
+      this.info.forwardFlag = 1;
+      const { code, msg } = await reply(this.info);
       if (code === 200) {
         this.$modal.msgSuccess(msg);
-        this.getReplyList(this.$route.query.id)
+        this.getReplyList(this.$route.query.id);
         // this.info = {}
-        this.info.eventMsg = ''
-        this.eventHandler = ''
+        this.info.eventMsg = "";
+        this.eventHandler = "";
       } else {
         this.$modal.msgError(msg);
       }
@@ -162,39 +211,42 @@ export default {
 
     /** 获取回复列表 */
     async getReplyList(id) {
-      const { rows } = await replyList({ eventHeaderId: id })
-      this.replyList = rows || []
+      const { rows } = await replyList({ eventHeaderId: id });
+      this.replyList = rows || [];
     },
 
     /** 修改 */
     edit(item, id) {
-      this.$modal.confirm(`确定标记为${id === 1 ? '已完成' : '未完成'}吗？`).then(async () => {
-        const params = {
-          eventHeaderId: item.eventHeaderId,
-          eventLineId: item.eventLineId,
-          eventCompleteStutas: id
-        }
-        const { code, msg } = await update(params)
-        if (code === 200) {
-          this.$modal.msgSuccess(msg);
-          this.getReplyList(this.$route.query.id)
-        } else {
-          this.$modal.msgError(msg);
-        }
-      }).catch(() => {
-        console.log('catch')
-      })
+      this.$modal
+        .confirm(`确定标记为${id === 1 ? "已完成" : "未完成"}吗？`)
+        .then(async () => {
+          const params = {
+            eventHeaderId: item.eventHeaderId,
+            eventLineId: item.eventLineId,
+            eventCompleteStutas: id
+          };
+          const { code, msg } = await update(params);
+          if (code === 200) {
+            this.$modal.msgSuccess(msg);
+            this.getReplyList(this.$route.query.id);
+          } else {
+            this.$modal.msgError(msg);
+          }
+        })
+        .catch(() => {
+          console.log("catch");
+        });
     },
 
     getHandlers: debounce(async function (value) {
-      this.handlerLoding = true
-      const params = { pageNum: 1, pageSize: 100, nickName: value }
-      const { rows } = await handlerList(params)
-      this.handlers = rows
-      this.handlerLoding = false
+      this.handlerLoding = true;
+      const params = { pageNum: 1, pageSize: 100, nickName: value };
+      const { rows } = await handlerList(params);
+      this.handlers = rows;
+      this.handlerLoding = false;
     }, 500)
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -208,12 +260,13 @@ export default {
     font-weight: bold;
   }
   .order-info {
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-    margin: 16px 0;
+    color: #909399;
+    font-size: 12px;
+    margin: 15px 0;
     .order-item {
+      display: inline-block;
       list-style: none;
+      margin-right: 30px;
       .space {
         display: inline-block;
         // min-width: 60px;
@@ -221,7 +274,7 @@ export default {
         font-weight: 400;
       }
       .value {
-        color: #000;
+        color: #909399;
       }
     }
   }
@@ -230,6 +283,7 @@ export default {
     border: 1px solid #ddd;
     border-left: none;
     border-right: none;
+    color: #515a6e;
   }
   .list {
     .item {
