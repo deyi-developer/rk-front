@@ -16,7 +16,7 @@
         :footer-method="getSummaries"
         ref="filterTable"
         v-loading="loading"
-        height="600"
+        height="500"
         :data="MonthList"
       >
         <vxe-column
@@ -28,6 +28,7 @@
           :type="item.type || ''"
           :filters="item.filters"
           :filter-method="filterHandler"
+          :fixed="item.fixed"
           :filter-multiple="
             item.prop === 'projectCode' || (item.prop === 'projectName' && true)
           "
@@ -114,18 +115,21 @@ export default {
           prop: "serialNumber",
           label: "序号",
           minWidth: 50,
+          fixed: "left"
         },
         {
           prop: "projectCode",
           label: "得逸项目编码",
           filters: [{ value: "projectCode", data: "" }],
           minWidth: "200",
+          fixed: "left"
         },
         {
           prop: "projectName",
           label: "得逸项目名称",
           filters: [{ value: "projectName", data: "" }],
           minWidth: "180",
+          fixed: "left"
         },
         {
           prop: "planBillingMoney",
@@ -269,6 +273,7 @@ export default {
 }
 .wrap {
   padding: 20px;
+    min-height: calc(100vh - 84px);
   background: #f0f2f5;
   font-family: sans-serif, PingFangSC-Regular;
   .clearfix2 {
