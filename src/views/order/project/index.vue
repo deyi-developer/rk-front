@@ -37,7 +37,7 @@
         :model="updateData"
         :rules="rules"
         ref="form"
-        size="medium"
+        size="mini"
         label-position="left"
         label-width="120px"
       >
@@ -174,6 +174,7 @@
                 <el-input-number
                   size="mini"
                   style="width: 60%"
+                  step-strictly
                   v-model="updateData.projectChargePeriod"
                   :disabled="!isPmRule"
                 ></el-input-number>
@@ -185,6 +186,7 @@
                 <el-input-number
                   size="mini"
                   style="width: 60%"
+                  step-strictly
                   v-model="updateData.projectInvoicePeriod"
                   :disabled="!isPmRule"
                 ></el-input-number>
@@ -549,7 +551,6 @@ export default {
     /** 保存 */
     save() {
       this.$refs["form"].validate(async (valid) => {
-        console.log("valid", valid);
         if (valid) {
           this.updateData.projectCode = this.projectData.projectCode;
           const { code, msg } = await projectUpdate([this.updateData]);
@@ -558,6 +559,8 @@ export default {
           } else {
             this.$modal.msgError(msg);
           }
+        } else {
+          this.$modal.msgError("校验不通过");
         }
       });
     },
@@ -606,7 +609,7 @@ let form = ref({
     padding: 20px;
   }
   .el-form-item {
-    margin-bottom: 6px;
+    // margin-bottom: 6px;
     &::v-deep .el-form-item__label {
       font-size: 13px;
     }
