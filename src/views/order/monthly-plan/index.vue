@@ -8,23 +8,24 @@
       </div>
 
       <!-- table -->
-      <el-table
+      <vxe-table
         ref="table1"
-        show-summary
+        show-footer
         height="500"
-        :summary-method="getSummaries"
+        :footer-method="getSummaries"
         v-loading="loading"
         :data="MonthList"
         style="width: 100%"
       >
-        <el-table-column
+        <vxe-column
           v-for="(item, index) in columnist"
           :key="index"
           :prop="item.prop"
-          :label="item.label"
+          :title="item.label"
+          :min-width="item.minWidth"
         >
           <!-- 如果为行标签，自定义行 -->
-          <template slot-scope="{ row }">
+          <template #default="{ row }">
             <router-link
               v-if="item.prop === 'oneDeptName'"
               :to="`/monthly/dept/${row.oneDeptId}?title=${row.oneDeptName}`"
@@ -35,8 +36,8 @@
 
             <span v-else>{{ row[item.prop] | currency }}</span>
           </template>
-        </el-table-column>
-      </el-table>
+        </vxe-column>
+      </vxe-table>
     </el-card>
 
     <!-- 图表 -->
@@ -61,27 +62,27 @@ export default {
         {
           prop: "oneDeptName",
           label: "行标签",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "planBillingMoney",
           label: "本月计划开票金额",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "billingThisMonth",
           label: "本月实际开票金额",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "planReceiptsMoney",
           label: "本月计划收款金额",
-          width: "180",
+          minWidth: "180",
         },
         {
           prop: "receiptsThisMonth",
           label: "本月实际收款金额",
-          width: "180",
+          minWidth: "180",
         },
       ],
       // 合计
@@ -118,19 +119,16 @@ export default {
 
     this.loading = false;
   },
-  updated() {
-    this.$nextTick(() => {
-      this.$refs["table1"].doLayout();
-    });
-  },
   methods: {
+    // 合计
     getSummaries() {
-      return this.currentMonthList;
+      console.log(this.currentMonthList)
+      return [this.currentMonthList];
     },
-    currency(value){
+    // 格式化金额
+    currency(value) {
       return currency(value, { symbol: "", separator: "," }).format();
-    }
-    
+    },
   },
 };
 </script>
