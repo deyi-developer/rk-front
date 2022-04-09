@@ -11,27 +11,28 @@
       </div>
 
       <!-- table -->
-      <el-table
-        show-summary
-        :summary-method="getSummaries"
+      <vxe-table
+        show-footer
+        :footer-method="getSummaries"
         ref="filterTable"
         v-loading="loading"
         height="600"
         :data="MonthList"
       >
-        <el-table-column
+        
+        <vxe-column
           v-for="(item, index) in columnist"
           :key="index"
           :prop="item.prop"
-          :label="item.label"
+          :title="item.label"
           :min-width="item.minWidth"
+          :type="item.type || ''"
           :filters="item.filters"
           :filter-method="item.filters && filterHandler"
-          :type="item.type || ''"
-          :fixed="item.fixed"
+          :filter-multiple="false"
         >
           <!-- 自定义表头 -->
-          <template slot="header" slot-scope="{ row }">
+          <template #header>
             <!-- 项目编码 -->
             <div class="table-header" v-if="item.prop === 'projectCode'">
               <span>{{ item.label }}</span>
@@ -86,24 +87,24 @@
           </template>
 
           <!-- 自定义项内容-->
-          <template slot-scope="{ row, $index }">
+          <template #default="{ row, rowIndex }">
             <!-- 序号 -->
-            <span v-if="item.prop === 'serialNumber'">{{ $index + 1 }}</span>
+            <span v-if="item.prop === 'serialNumber'">{{ rowIndex + 1 }}</span>
 
             <!-- 项目名称 -->
             <el-tooltip
               v-else-if="item.prop === 'projectName'"
               effect="dark"
               :content="row[item.prop]"
-              class="overflowHiding"
+              
             >
-              <span>{{ row[item.prop] }}</span>
+              <span class="overflowHiding">{{ row[item.prop] }}</span>
             </el-tooltip>
 
             <!-- 项目编码 -->
             <router-link
               v-else-if="
-                item.prop === 'projectCode' && MonthList.length !== $index + 1
+                item.prop === 'projectCode' && MonthList.length !== rowIndex + 1
               "
               :to="`/order/details?projectCode=${row.projectCode}`"
               class="link-type"
@@ -123,8 +124,8 @@
 
             <span v-else>{{ row[item.prop] | currency }}</span>
           </template>
-        </el-table-column>
-      </el-table>
+        </vxe-column>
+      </vxe-table>
     </el-card>
 
     <!-- 图表 -->
@@ -150,7 +151,6 @@ export default {
           prop: "serialNumber",
           label: "序号",
           minWidth: 50,
-          fixed: true,
         },
         {
           prop: "projectCode",
@@ -165,37 +165,37 @@ export default {
         {
           prop: "planBillingMoney",
           label: "本月计划开票金额",
-          filters: [{ text: "隐藏无效数据", value: "planBillingMoney" }],
+          filters: [{ label: "隐藏无效数据", value: "planBillingMoney" }],
           minWidth: "150",
         },
         {
           prop: "billingThisMonth",
           label: "本月实际开票金额",
-          filters: [{ text: "隐藏无效数据", value: "billingThisMonth" }],
+          filters: [{ label: "隐藏无效数据", value: "billingThisMonth" }],
           minWidth: "150",
         },
         {
           prop: "planReceiptsMoney",
           label: "本月计划收款金额",
-          filters: [{ text: "隐藏无效数据", value: "planReceiptsMoney" }],
+          filters: [{ label: "隐藏无效数据", value: "planReceiptsMoney" }],
           minWidth: "150",
         },
         {
           prop: "receiptsThisMonth",
           label: "本月实际收款金额",
-          filters: [{ text: "隐藏无效数据", value: "receiptsThisMonth" }],
+          filters: [{ label: "隐藏无效数据", value: "receiptsThisMonth" }],
           minWidth: "150",
         },
         {
           prop: "compleBillingThisMonth",
           label: "开票完成率",
-          filters: [{ text: "隐藏无效数据", value: "compleBillingThisMonth" }],
+          filters: [{ label: "隐藏无效数据", value: "compleBillingThisMonth" }],
           minWidth: "100",
         },
         {
           prop: "compleReceiptsThisMonth",
           label: "收款完成率",
-          filters: [{ text: "隐藏无效数据", value: "compleReceiptsThisMonth" }],
+          filters: [{ label: "隐藏无效数据", value: "compleReceiptsThisMonth" }],
           minWidth: "100",
         },
       ],
@@ -216,19 +216,13 @@ export default {
     this.$tab.updatePage(obj);
     this.getCurrentMonthInfo();
   },
-  updated() {
-    this.$nextTick(() => {
-      this.$refs["filterTable"].doLayout();
-    });
-  },
   methods: {
     getSummaries() {
-      return this.currentMonthList;
+      return [this.currentMonthList];
     },
     currency(value) {
       return currency(value, { symbol: "", separator: "," }).format();
     },
-
     // 获取部门明细信息
     async getCurrentMonthInfo() {
       this.loading = true;
@@ -266,7 +260,7 @@ export default {
     },
 
     // 数据过滤
-    filterHandler(value, row) {
+    filterHandler({value, row}) {
       const data = row[value];
       if (data && data != "0.00") return row;
     },
@@ -324,11 +318,12 @@ export default {
 
   /* 移除隐藏 */
   .overflowHiding {
-    max-width: 100px;
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-bottom: 20px;
+    display: block;
+    cursor: default;
   }
 
   /* 筛选框 */
