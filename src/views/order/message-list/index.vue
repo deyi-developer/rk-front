@@ -14,6 +14,7 @@
         >
           <template slot-scope="{ row }">
             <a
+              style="color: #57a3f3;"
               v-if="item.prop === 'messageContent'"
               href="javascript:;"
               @click="$router.push({

@@ -18,6 +18,7 @@
         <vxe-column title="工单编号" align="center" width="240px" fixed="left">
           <template #default="{ row }">
             <a
+              style="color: #57a3f3;"
               @click="() => $router.push({ path: '/order/send', query: { id: row.eventHeaderId } })"
             >{{ row.eventHeaderCode }}</a>
           </template>
