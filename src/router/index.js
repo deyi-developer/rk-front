@@ -205,6 +205,20 @@ export const dynamicRoutes = [
       },
     ],
   },
+  {
+    path: "/work",
+    component: Layout,
+    hidden: true,
+    permissions: ["workOrder:header:edit"],
+    children: [
+      {
+        path: "details/:id",
+        component: () => import("@/views/order/send"),
+        name: "Details",
+        meta: { title: "工单：" },
+      },
+    ],
+  },
 ]
 
 export default new Router({

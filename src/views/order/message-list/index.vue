@@ -5,12 +5,14 @@
         <el-tab-pane label="已读列表" name="1"></el-tab-pane>
         <el-tab-pane label="未读列表" name="0"></el-tab-pane>
       </el-tabs>
-      <el-table size="small" height="500" border :data="activeName == 1 ? messages : noReadList">
+      <el-table size="small" height="500" border :data="activeName == 1 ? readList : noReadList">
         <el-table-column
           v-for="(item, index) in column"
           :key="index"
           :label="item.label"
           :prop="item.prop"
+          :width="item.width"
+          show-overflow-tooltip
         >
           <template slot-scope="{ row }">
             <a
@@ -38,7 +40,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { list } from "@/api/message"
 export default {
   name: 'Message-list',
   data() {
@@ -47,7 +48,8 @@ export default {
       column: [
         {
           label: '消息内容',
-          prop: 'messageContent'
+          prop: 'messageContent',
+          width: '300px'
         },
         {
           label: '创建时间',
@@ -69,6 +71,9 @@ export default {
     ...mapGetters(["messages", "unread"]),
     noReadList() {
       return this.messages.filter(item => !item.readFlag)
+    },
+    readList() {
+      return this.messages.filter(item => item.readFlag)
     }
   },
   created() {

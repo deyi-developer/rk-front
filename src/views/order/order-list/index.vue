@@ -19,17 +19,17 @@
           <template #default="{ row }">
             <a
               style="color: #57a3f3;"
-              @click="() => $router.push({ path: '/order/send', query: { id: row.eventHeaderId } })"
+              @click="() => $router.push({ path: `/work/details/${row.eventHeaderId}`, query: { id: row.eventHeaderId } })"
             >{{ row.eventHeaderCode }}</a>
           </template>
         </vxe-column>
         <vxe-column align="center" title="项目编码" field="projectCode" width="180"></vxe-column>
-        <vxe-column align="center" title="状态" field="eventCompleteStutas" width="100">
+        <vxe-column align="center" title="状态" field="eventStatus" width="100">
           <template #default="{ row }">
             <el-tag
               size="small"
-              :type="setTagType(row.eventCompleteStutas)"
-            >{{ selectDictLabel(dict.type.event_complete_stutas, row.eventCompleteStutas) || '未知' }}</el-tag>
+              :type="setTagType(row.eventStatus)"
+            >{{ setStatus(row.eventStatus) || '未知' }}</el-tag>
           </template>
         </vxe-column>
         <vxe-column align="center" title="工单标题" field="eventTitle" width="180"></vxe-column>
@@ -38,7 +38,13 @@
         <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
         <vxe-column align="center" title="当前处理人部门" field="handlerDeptName" width="180"></vxe-column>
         <vxe-column align="center" title="最后更新时间" field="lastUpdateDate" width="180"></vxe-column>
-        <vxe-column align="center" title="操作" width="120" fixed="right">
+        <vxe-column
+          v-if="userRolse.includes('risker')"
+          align="center"
+          title="操作"
+          width="120"
+          fixed="right"
+        >
           <template #default="{ row }">
             <el-button size="mini" type="primary" @click="closeOrder(row)">关 闭</el-button>
           </template>
@@ -61,6 +67,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import { list, edit } from './api'
 import workOrderDialog from '../components/work-order-dialog'
 import filterForm from './filterForm'
@@ -84,6 +91,9 @@ export default {
       loading: false
     }
   },
+  computed: {
+    ...mapGetters(['userRolse']),
+  },
   created() {
     const { query } = this.$route
     this.getList(query)
@@ -102,15 +112,22 @@ export default {
       this.loading = false
     },
 
-    async closeOrder(row) {
-      const { eventHeaderId } = row
-      const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
-      if (code === 200) {
-        this.$modal.msgSuccess(msg)
-        this.getList()
-      } else {
-        this.$modal.msgError(msg)
-      }
+    closeOrder(row) {
+      this.$modal
+        .confirm(`确定关闭此工单吗？`)
+        .then(async () => {
+          const { eventHeaderId } = row
+          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
+          if (code === 200) {
+            this.$modal.msgSuccess(msg)
+            this.getList()
+          } else {
+            this.$modal.msgError(msg)
+          }
+        })
+        .catch(() => {
+          console.log("catch");
+        });
     },
 
     update(row) {
@@ -121,12 +138,19 @@ export default {
     setTagType(type) {
       if (!type) return 'info'
       const tgaMap = {
-        0: 'warning',
+        0: 'info',
         1: 'success',
-        3: 'info',
-        4: 'danger'
       }
       return tgaMap[type]
+    },
+
+    setStatus(type) {
+      console.log(type)
+      const typeMap = {
+        0: '处理中',
+        1: '已关闭'
+      }
+      return typeMap[type]
     }
   }
 }

@@ -2,27 +2,18 @@
   <div class="work-order page-bg">
     <header>
       <div class="order-title">
-        <span>
-          {{ info.eventHeaderCode }}
+        <span>{{ info.eventHeaderCode }}</span>
+        <span>{{ info.eventTitle }}</span>
+        <span v-if="userRolse.includes('risker')" class="close-btn" style="float: right">
+          <el-button size="mini" type="danger" plain @click="closeOrder">关闭工单</el-button>
         </span>
-        <span>
-          {{ info.eventTitle }}
-        </span>
-        <span class="close-btn" style="float: right">
-          <el-button size="mini" type="danger" plain @click="closeOrder"
-            >关闭工单</el-button
-          ></span
-        >
       </div>
       <ul class="order-info">
         <li class="order-item">
           <label class="space">状态:</label>
-
           <span class="value">
             <Badge v-if="info.eventStatus" status="default" text="已关闭" />
             <Badge v-else status="error" text="未完成" />
-
-            {{}}
           </span>
         </li>
         <li class="order-item">
@@ -46,8 +37,8 @@
           <label class="space">提单时间:</label>
           <span class="value">
             <Icon type="ios-alarm" color="#6B7285;" />
-            {{ info.createTime }}</span
-          >
+            {{ info.createTime }}
+          </span>
         </li>
       </ul>
       <el-row style="padding-top: 0">
@@ -66,8 +57,7 @@
         "
         @click="editorVisible = !editorVisible"
       >
-        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
-        >沟通历史
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
       </div>
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
@@ -89,18 +79,8 @@
           :value="item.userId"
         ></el-option>
       </el-select>
-      <editor
-        v-model="info.eventMsg"
-        placeholder="请输入回复内容"
-        :height="150"
-      ></editor>
-      <el-button
-        style="margin: 12px 0"
-        type="primary"
-        size="small"
-        @click="submit"
-        >发 布</el-button
-      >
+      <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
+      <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
@@ -109,33 +89,19 @@
             <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="time">{{ formatDate(item.createDate) }}</p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
-
-            <div
-              style="margin-left: auto"
-              v-if="!item.eventCompleteStutas && item.showFlagButton"
-            >
-              <el-button
-                type="success"
-                plain
-                size="mini"
-                @click="edit(item, 1)"
-              >
-                已完成</el-button
-              >
-              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
-                >未完成</el-button
-              >
+            <!-- item.eventCompleteStutas && item.showFlagButton -->
+            <div style="margin-left: auto" v-if="item.showFlagButton">
+              <el-button type="success" plain size="mini" @click="edit(item, 1)">已完成</el-button>
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)">未完成</el-button>
             </div>
-            <div style="margin-left: auto" v-else>
-              <span
-                style="color: #67c23a; font-size: 12px"
-                v-if="item.eventCompleteStutas"
-              >
-                <i class="el-icon-check"></i> 已完成</span
-              >
+
+            <div style="margin-left: auto" v-if="item.showCompleteStutas">
+              <span style="color: #67c23a; font-size: 12px" v-if="item.eventCompleteStutas">
+                <i class="el-icon-check"></i> 已完成
+              </span>
               <span v-else style="color: #f56c6c; font-size: 12px">
-                <i class="el-icon-close"></i> 未完成</span
-              >
+                <i class="el-icon-close"></i> 未完成
+              </span>
             </div>
           </div>
           <div class="bottom" v-html="item.eventMsg"></div>
@@ -150,6 +116,7 @@ import { mapActions } from "vuex";
 import { detail, reply, replyList, update } from "./api";
 import { mapGetters } from "vuex";
 import { handlerList } from "../project/api";
+import { edit } from "../order-list/api";
 import { debounce } from "lodash-es";
 import editor from "@/components/Editor";
 import { Tag, Icon, Badge } from "view-design";
@@ -186,7 +153,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["usersInfo"]),
+    ...mapGetters(["usersInfo", 'userRolse']),
     avatar() {
       return process.env.VUE_APP_BASE_API + this.usersInfo.avatar;
     },
@@ -238,6 +205,8 @@ export default {
       this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
       this.info.forwardFlag = 0;
       this.getReplyList(id);
+      const obj = Object.assign({}, this.$route, { title: '工单：' + data.eventTitle })
+      this.$tab.updatePage(obj);
     },
     defImg() {
       let img = event.srcElement;
@@ -246,24 +215,18 @@ export default {
     },
     closeOrder() {
       this.$modal
-        .confirm(`确定关闭工单？`)
+        .confirm(`确定关闭此工单吗？`)
         .then(async () => {
-          const params = {
-            // eventHeaderId: item.eventHeaderId,
-            // eventLineId: item.eventLineId,
-            // eventCompleteStutas: id
-          };
-          // const { code, msg } = await update(params);
+          const { eventHeaderId } = this.info
+          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
           if (code === 200) {
-            this.$modal.msgSuccess(msg);
-            this.getDetailInfo(this.$route.query.id);
+            this.$modal.msgSuccess(msg)
+            // this.getList()
           } else {
-            this.$modal.msgError(msg);
+            this.$modal.msgError(msg)
           }
         })
-        .catch(() => {
-          console.log("catch");
-        });
+
     },
     /** 回复 */
     async submit() {
