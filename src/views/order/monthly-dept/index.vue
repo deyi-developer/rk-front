@@ -13,6 +13,7 @@
       <!-- table -->
       <vxe-table
         show-footer
+        align="right"
         :footer-method="getSummaries"
         ref="filterTable"
         v-loading="loading"
@@ -104,7 +105,7 @@ import currency from "currency.js";
 export default {
   name: "MonthlyDept",
   components: {
-    ColumnChart,
+    ColumnChart
   },
 
   data() {
@@ -114,60 +115,60 @@ export default {
           prop: "serialNumber",
           label: "序号",
           minWidth: 50,
-          fixed: "left",
+          fixed: "left"
         },
         {
           prop: "projectCode",
           label: "得逸项目编码",
           filters: [{ value: "projectCode", data: "" }],
           minWidth: "200",
-          fixed: "left",
+          fixed: "left"
         },
         {
           prop: "projectName",
           label: "得逸项目名称",
           filters: [{ value: "projectName", data: "" }],
           minWidth: "180",
-          fixed: "left",
+          fixed: "left"
         },
         {
           prop: "planBillingMoney",
           label: "本月计划开票金额",
           filters: [{ label: "隐藏无效数据", value: "planBillingMoney" }],
-          minWidth: "160",
+          minWidth: "160"
         },
         {
           prop: "billingThisMonth",
           label: "本月实际开票金额",
           filters: [{ label: "隐藏无效数据", value: "billingThisMonth" }],
-          minWidth: "160",
+          minWidth: "160"
         },
         {
           prop: "planReceiptsMoney",
           label: "本月计划收款金额",
           filters: [{ label: "隐藏无效数据", value: "planReceiptsMoney" }],
-          minWidth: "160",
+          minWidth: "160"
         },
         {
           prop: "receiptsThisMonth",
           label: "本月实际收款金额",
           filters: [{ label: "隐藏无效数据", value: "receiptsThisMonth" }],
-          minWidth: "160",
+          minWidth: "160"
         },
         {
           prop: "compleBillingThisMonth",
           label: "开票完成率",
           filters: [{ label: "隐藏无效数据", value: "compleBillingThisMonth" }],
-          minWidth: "110",
+          minWidth: "110"
         },
         {
           prop: "compleReceiptsThisMonth",
           label: "收款完成率",
           filters: [
-            { label: "隐藏无效数据", value: "compleReceiptsThisMonth" },
+            { label: "隐藏无效数据", value: "compleReceiptsThisMonth" }
           ],
-          minWidth: "110",
-        },
+          minWidth: "110"
+        }
       ],
       // 当前月度列表+合计
       currentMonthList: [],
@@ -176,12 +177,12 @@ export default {
       // 加载
       loading: false,
       entryCode: "", // 项目编码
-      projectName: "", // 项目名称
+      projectName: "" // 项目名称
     };
   },
   created() {
     const obj = Object.assign({}, this.$route, {
-      title: `${this.$route.query.title}计划明细`,
+      title: `${this.$route.query.title}计划明细`
     });
     this.$tab.updatePage(obj);
     this.getCurrentMonthInfo();
@@ -203,7 +204,7 @@ export default {
         totalBillThisMonth: billingThisMonth, // 本月实际开票总额
         totalPlanBilling: planBillingMoney, //本月计划开票总额
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
-        totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
+        totalReceiptsThisMonth: receiptsThisMonth // 本月实际收款总额
       } = await getCurrentMonth(
         this.$route.params.id,
         this.entryCode,
@@ -223,7 +224,7 @@ export default {
         this.currency(planReceiptsMoney),
         this.currency(receiptsThisMonth),
         "-",
-        "-",
+        "-"
       ];
 
       this.loading = false;
@@ -246,8 +247,8 @@ export default {
       this.entryCode = "";
       this.projectName = "";
       this.getCurrentMonthInfo();
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
