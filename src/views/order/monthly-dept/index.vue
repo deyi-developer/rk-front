@@ -16,7 +16,8 @@
         :footer-method="getSummaries"
         ref="filterTable"
         v-loading="loading"
-        height="500"
+        auto-resize
+        height="80%"
         :data="MonthList"
       >
         <vxe-column
@@ -46,9 +47,7 @@
               @input="$panel.changeOption($event, !!option.data, option)"
               @keyup.enter="$panel.confirmFilter()"
               :placeholder="
-                item.prop === 'projectCode'
-                  ? '输入项目编码'
-                  : '请输入项目名称'
+                item.prop === 'projectCode' ? '输入项目编码' : '请输入项目名称'
               "
             />
           </template>
@@ -115,21 +114,21 @@ export default {
           prop: "serialNumber",
           label: "序号",
           minWidth: 50,
-          fixed: "left"
+          fixed: "left",
         },
         {
           prop: "projectCode",
           label: "得逸项目编码",
           filters: [{ value: "projectCode", data: "" }],
           minWidth: "200",
-          fixed: "left"
+          fixed: "left",
         },
         {
           prop: "projectName",
           label: "得逸项目名称",
           filters: [{ value: "projectName", data: "" }],
           minWidth: "180",
-          fixed: "left"
+          fixed: "left",
         },
         {
           prop: "planBillingMoney",
@@ -234,8 +233,8 @@ export default {
     filterHandler({ option: { data }, row, value }) {
       const validData = row[value];
 
-      if(value === 'projectCode' || value === 'projectName') {
-        if(validData.includes(data)) return row
+      if (value === "projectCode" || value === "projectName") {
+        if (validData.includes(data)) return row;
       } else {
         if (validData && validData != "0.00") return row;
       }
@@ -253,8 +252,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .filter-input {
-    margin: 5px;
-  }
+  margin: 5px;
+}
 .search-entryCode-icon:hover {
   cursor: pointer;
   color: #429eff;
@@ -273,7 +272,7 @@ export default {
 }
 .wrap {
   padding: 20px;
-    min-height: calc(100vh - 84px);
+  height: calc(100vh - 84px);
   background: #f0f2f5;
   font-family: sans-serif, PingFangSC-Regular;
   .clearfix2 {
@@ -285,6 +284,10 @@ export default {
   }
   .space {
     margin-bottom: 12px;
+    height: calc(100vh - 120px);
+    ::v-deep .el-card__body {
+      height: calc(100vh - 100px);
+    }
   }
 
   /* 表单头样式 */
