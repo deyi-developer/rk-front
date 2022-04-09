@@ -311,6 +311,7 @@ export default {
   data() {
     /** 项目结算周期 */
     const projectChargePeriodRule = (rule, value, callback) => {
+      if (!this.isPmRule) callback()
       if (value === '') {
         callback(new Error('请输入项目结算周期'))
       } else {
@@ -331,6 +332,8 @@ export default {
     }
     /** 账务账期 */
     const projectInvoicePeriodRule = (rule, value, callback) => {
+      if (!this.isPmRule) callback()
+
       if (value === '') {
         callback(new Error('请输入账务账期'))
       } else if (value === 0 || value < 0) {
@@ -520,7 +523,7 @@ let form = ref({
     top: 84px;
     left: 0;
     background: #fff;
-    z-index: 999;
+    z-index: 4;
     transition: all 0.28s;
   }
   .fixed-header-wide {

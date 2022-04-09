@@ -199,11 +199,12 @@ export default {
       if (!nickName) return
       const params = {
         pageNum: 1,
-        nickName: nickName,
+        pageSize: 100,
       }
       const { rows } = await handlerList(params)
       this.handlers = rows || []
-      this.form.eventHandler = rows[0].userId
+
+      this.form.eventHandler = this.handlers.find(item => item.nickName === nickName).userId
     },
 
     getHandlers: debounce(async function (value) {

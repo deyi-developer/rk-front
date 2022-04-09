@@ -19,7 +19,6 @@
         height="600"
         :data="MonthList"
       >
-        
         <vxe-column
           v-for="(item, index) in columnist"
           :key="index"
@@ -28,62 +27,29 @@
           :min-width="item.minWidth"
           :type="item.type || ''"
           :filters="item.filters"
-          :filter-method="item.filters && filterHandler"
-          :filter-multiple="false"
+          :filter-method="filterHandler"
+          :filter-multiple="
+            item.prop === 'projectCode' || (item.prop === 'projectName' && true)
+          "
         >
-          <!-- 自定义表头 -->
-          <template #header>
-            <!-- 项目编码 -->
-            <div class="table-header" v-if="item.prop === 'projectCode'">
-              <span>{{ item.label }}</span>
-
-              <el-popover placement="bottom" width="160" trigger="click">
-                <el-input
-                  class="search-entryCode"
-                  size="mini"
-                  placeholder="清输入项目编码"
-                  v-model="entryCode"
-                >
-                  <i
-                    slot="suffix"
-                    class="el-input__icon el-icon-search search-entryCode-icon"
-                    @click="getCurrentMonthInfo"
-                  />
-                </el-input>
-
-                <i
-                  slot="reference"
-                  class="table-header-item-icon el-icon-search"
-                />
-              </el-popover>
-            </div>
-
-            <!-- 项目名称 -->
-            <div class="table-header" v-else-if="item.prop === 'projectName'">
-              <span>{{ item.label }}</span>
-
-              <el-popover placement="bottom" width="160" trigger="click">
-                <el-input
-                  class="search-entryCode"
-                  size="mini"
-                  placeholder="清输入项目名称"
-                  v-model="projectName"
-                >
-                  <i
-                    slot="suffix"
-                    class="el-input__icon el-icon-search search-entryCode-icon"
-                    @click="getCurrentMonthInfo"
-                  />
-                </el-input>
-
-                <i
-                  slot="reference"
-                  class="table-header-item-icon el-icon-search"
-                />
-              </el-popover>
-            </div>
-
-            <span v-else>{{ item.label }}</span>
+          <template
+            v-if="item.prop === 'projectCode' || item.prop === 'projectName'"
+            #filter="{ $panel, column }"
+          >
+            <input
+              class="filter-input"
+              type="type"
+              v-for="(option, index) in column.filters"
+              :key="index"
+              v-model="option.data"
+              @input="$panel.changeOption($event, !!option.data, option)"
+              @keyup.enter="$panel.confirmFilter()"
+              :placeholder="
+                item.prop === 'projectCode'
+                  ? '输入完整编码'
+                  : '请输入完整项目名称'
+              "
+            />
           </template>
 
           <!-- 自定义项内容-->
@@ -96,17 +62,14 @@
               v-else-if="item.prop === 'projectName'"
               effect="dark"
               :content="row[item.prop]"
-              
             >
               <span class="overflowHiding">{{ row[item.prop] }}</span>
             </el-tooltip>
 
             <!-- 项目编码 -->
             <router-link
-              v-else-if="
-                item.prop === 'projectCode' && MonthList.length !== rowIndex + 1
-              "
-              :to="`/order/details?projectCode=${row.projectCode}`"
+              v-else-if="item.prop === 'projectCode'"
+              :to="`/order/details/${rowIndex}?projectCode=${row.projectCode}`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>
@@ -155,11 +118,13 @@ export default {
         {
           prop: "projectCode",
           label: "得逸项目编码",
+          filters: [{ value: "projectCode", data: "" }],
           minWidth: "200",
         },
         {
           prop: "projectName",
           label: "得逸项目名称",
+          filters: [{ value: "projectName", data: "" }],
           minWidth: "180",
         },
         {
@@ -195,7 +160,9 @@ export default {
         {
           prop: "compleReceiptsThisMonth",
           label: "收款完成率",
-          filters: [{ label: "隐藏无效数据", value: "compleReceiptsThisMonth" }],
+          filters: [
+            { label: "隐藏无效数据", value: "compleReceiptsThisMonth" },
+          ],
           minWidth: "110",
         },
       ],
@@ -260,9 +227,14 @@ export default {
     },
 
     // 数据过滤
-    filterHandler({value, row}) {
-      const data = row[value];
-      if (data && data != "0.00") return row;
+    filterHandler({ option: { data }, row, value }) {
+      const validData = row[value];
+
+      if(value === 'projectCode' || value === 'projectName') {
+        if(validData.includes(data)) return row
+      } else {
+        if (validData && validData != "0.00") return row;
+      }
     },
 
     // 清除所有过滤器
@@ -276,9 +248,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.filter-input {
+    margin: 5px;
+  }
 .search-entryCode-icon:hover {
   cursor: pointer;
   color: #429eff;
+}
+.filterHandleStyle {
+  border-top: 1px solid #ebeef5;
+  padding: 8px;
+  .span {
+    background: transparent;
+    border: none;
+    color: #606266;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 0 3px;
+  }
 }
 .wrap {
   padding: 20px;
