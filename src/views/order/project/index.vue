@@ -14,10 +14,15 @@
         </p>
       </div>
 
-      <el-button style="margin-left: auto" type="text" @click="save"
+      <el-button
+        v-hasPermi="['workOrder:header:edit']"
+        style="margin-left: auto"
+        type="text"
+        @click="save"
         ><i class="el-icon-edit"></i>保存</el-button
       >
       <el-button
+        v-hasPermi="['workOrder:order:list']"
         style="padding: 3px 0"
         type="text"
         @click="
@@ -28,7 +33,11 @@
         "
         >服务工单</el-button
       >
-      <el-button style="padding: 3px 0" type="text" @click="sendOrder"
+      <el-button
+        v-hasPermi="['workOrder:header:add']"
+        style="padding: 3px 0"
+        type="text"
+        @click="sendOrder"
         >发起工单</el-button
       >
     </header>

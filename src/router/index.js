@@ -195,7 +195,7 @@ export const dynamicRoutes = [
     path: "/order",
     component: Layout,
     hidden: true,
-    permissions: ["risk:detail:lookup "],
+    permissions: ["risk:detail:lookup"],
     children: [
       {
         path: "details/:id",
@@ -209,7 +209,7 @@ export const dynamicRoutes = [
     path: "/work",
     component: Layout,
     hidden: true,
-    permissions: ["risk:detail:lookup "],
+    permissions: ["risk:detail:lookup"],
     children: [
       {
         path: "details/:id",
