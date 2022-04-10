@@ -15,7 +15,7 @@
       </div>
 
       <el-button
-        v-hasPermi="['workOrder:header:edit']"
+        v-hasPermi="['risk:detail:save']"
         style="margin-left: auto"
         type="text"
         @click="save"
