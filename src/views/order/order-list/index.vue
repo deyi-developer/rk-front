@@ -4,11 +4,7 @@
       <div slot="header">
         <span>工单列表</span>
       </div>
-      <filter-form
-        :projectCode="$route.query.projectCode"
-        @search="getList"
-        ref="form"
-      ></filter-form>
+      <filter-form :projectCode="$route.query.projectCode" @search="getList" ref="form"></filter-form>
       <vxe-table
         border
         size="small"
@@ -18,13 +14,7 @@
         show-overflow
         v-loading="loading"
       >
-        <vxe-column
-          title="序号"
-          type="seq"
-          align="center"
-          width="60px"
-          fixed="left"
-        ></vxe-column>
+        <vxe-column title="序号" type="seq" align="center" width="60px" fixed="left"></vxe-column>
         <vxe-column title="工单编号" align="center" width="240px" fixed="left">
           <template #default="{ row }">
             <a
@@ -36,59 +26,25 @@
                     query: { id: row.eventHeaderId }
                   })
               "
-              >{{ row.eventHeaderCode }}</a
-            >
+            >{{ row.eventHeaderCode }}</a>
           </template>
         </vxe-column>
-        <vxe-column
-          align="center"
-          title="项目编码"
-          field="projectCode"
-          width="180"
-        ></vxe-column>
+        <vxe-column align="center" title="项目编码" field="projectCode" width="180"></vxe-column>
         <vxe-column align="center" title="状态" field="eventStatus" width="100">
           <template #default="{ row }">
-            <el-tag size="small" :type="setTagType(row.eventStatus)">{{
-              setStatus(row.eventStatus) || "未知"
-            }}</el-tag>
+            <el-tag size="small" :type="setTagType(row.eventStatus)">
+              {{
+                setStatus(row.eventStatus) || "未知"
+              }}
+            </el-tag>
           </template>
         </vxe-column>
-        <vxe-column
-          align="center"
-          title="工单名"
-          field="eventTitle"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="创建人"
-          field="createName"
-          width="120"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="创建时间"
-          field="createTime"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="当前处理人"
-          field="handlerName"
-          width="120"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="当前处理人部门"
-          field="handlerDeptName"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="最后更新时间"
-          field="lastUpdateDate"
-          width="180"
-        ></vxe-column>
+        <vxe-column align="center" title="工单名" field="eventTitle" width="180"></vxe-column>
+        <vxe-column align="center" title="创建人" field="createName" width="120"></vxe-column>
+        <vxe-column align="center" title="创建时间" field="createTime" width="180"></vxe-column>
+        <vxe-column align="center" title="当前处理人" field="handlerName" width="120"></vxe-column>
+        <vxe-column align="center" title="当前处理人部门" field="handlerDeptName" width="180"></vxe-column>
+        <vxe-column align="center" title="最后更新时间" field="lastUpdateDate" width="180"></vxe-column>
         <vxe-column
           v-if="userRolse.includes('risker')"
           align="center"
@@ -97,9 +53,7 @@
           fixed="right"
         >
           <template #default="{ row }">
-            <el-button size="mini" type="primary" @click="closeOrder(row)"
-              >关 闭</el-button
-            >
+            <el-button size="mini" type="primary" @click="closeOrder(row)">关 闭</el-button>
           </template>
         </vxe-column>
       </vxe-table>
@@ -147,11 +101,24 @@ export default {
   computed: {
     ...mapGetters(["userRolse"])
   },
+  watch: {
+    $route() {
+      const { query } = this.$route;
+      if (query.projectCode) {
+        this.getList(query);
+      } else {
+        this.getList({ projectCode: '' });
+      }
+    }
+  },
   created() {
-    console.log(1);
     const { query } = this.$route;
     this.getList(query);
   },
+  // activated() {
+  //   const { query } = this.$route;
+  //   this.getList(query);
+  // },
   methods: {
     async getList(query) {
       console.log(query);

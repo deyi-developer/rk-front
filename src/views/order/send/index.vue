@@ -4,14 +4,8 @@
       <div class="order-title">
         <span>{{ info.eventHeaderCode }}</span>
         <span>{{ info.eventTitle }}</span>
-        <span
-          v-if="userRolse.includes('risker')"
-          class="close-btn"
-          style="float: right"
-        >
-          <el-button size="mini" type="danger" plain @click="closeOrder"
-            >关闭工单</el-button
-          >
+        <span v-if="userRolse.includes('risker')" class="close-btn" style="float: right">
+          <el-button size="mini" type="danger" plain @click="closeOrder">关闭工单</el-button>
         </span>
       </div>
       <ul class="order-info">
@@ -63,15 +57,14 @@
         "
         @click="editorVisible = !editorVisible"
       >
-        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
-        >沟通历史
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
       </div>
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
       <span>交接人：</span>
       <el-select
-        style="width: 30%; margin-bottom: 12px"
-        size="small"
+        style="width: 20%; margin-bottom: 12px; margin-right: 24px;"
+        size="mini"
         v-model="eventHandler"
         filterable
         placeholder="请选择工单交接人"
@@ -86,24 +79,28 @@
           :value="item.userId"
         >
           <span style="float: left">{{ item.nickName }}</span>
-          <span style="float: right; color: #8492a6; font-size: 13px">{{
-            item.userId
-          }}</span>
+          <span style="float: right; color: #8492a6; font-size: 13px">
+            {{
+              item.userId
+            }}
+          </span>
         </el-option>
       </el-select>
 
-      <editor
-        v-model="info.eventMsg"
-        placeholder="请输入回复内容"
-        :height="150"
-      ></editor>
-      <el-button
-        style="margin: 12px 0"
-        type="primary"
-        size="small"
-        @click="submit"
-        >发 布</el-button
-      >
+      <!-- <span>工单处理截止日期：</span>
+      <el-date-picker
+        style="width: 20%; margin-bottom: 12px"
+        size="mini"
+        v-model="time"
+        type="date"
+        placeholder="选择日期"
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+      ></el-date-picker>-->
+
+      <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
+      <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
+
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
@@ -114,19 +111,12 @@
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
             <div style="margin-left: auto" v-if="item.showFlagButton">
-              <el-button type="success" plain size="mini" @click="edit(item, 1)"
-                >已完成</el-button
-              >
-              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
-                >未完成</el-button
-              >
+              <el-button type="success" plain size="mini" @click="edit(item, 1)">已完成</el-button>
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)">未完成</el-button>
             </div>
 
             <div style="margin-left: auto" v-if="item.showCompleteStutas">
-              <span
-                style="color: #67c23a; font-size: 12px"
-                v-if="item.eventCompleteStutas"
-              >
+              <span style="color: #67c23a; font-size: 12px" v-if="item.eventCompleteStutas">
                 <i class="el-icon-check"></i> 已完成
               </span>
               <span v-else style="color: #f56c6c; font-size: 12px">
@@ -142,9 +132,8 @@
 </template>
 <script>
 import { formatDate } from "@/utils";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { detail, reply, replyList, update } from "./api";
-import { mapGetters } from "vuex";
 import { handlerList } from "../project/api";
 import { edit } from "../order-list/api";
 import { debounce } from "lodash-es";
@@ -169,7 +158,8 @@ export default {
       eventHandler: "",
       handlers: [],
       handlerLoding: false,
-      formatDate
+      formatDate,
+      time: '',
     };
   },
 
@@ -241,11 +231,13 @@ export default {
       });
       this.$tab.updatePage(obj);
     },
+
     defImg() {
       let img = event.srcElement;
       img.src = defaultImg;
       img.onerror = null; //防止闪图
     },
+
     closeOrder() {
       this.$modal.confirm(`确定关闭此工单吗？`).then(async () => {
         const { eventHeaderId } = this.info;
@@ -259,20 +251,31 @@ export default {
         }
       });
     },
+
     /** 回复 */
     async submit() {
-      this.info.eventHandler = this.eventHandler; // 选择了交接人
+      if (this.eventHandler) { // 选择了交接人
+        this.info.eventHandler = this.eventHandler;
+        // if (!this.time) return this.$modal.msgError('请选择工单截止日期')
+        // this.info.time = this.time
+      }
       this.info.forwardFlag = 1;
       const { code, msg } = await reply(this.info);
       if (code === 200) {
         this.$modal.msgSuccess(msg);
         this.getReplyList(this.$route.query.id);
-        // this.info = {}
-        this.info.eventMsg = "";
-        this.eventHandler = "";
       } else {
         this.$modal.msgError(msg);
       }
+
+      this.clear()
+    },
+
+    /** 清空已选择的数据 */
+    clear() {
+      this.info.eventMsg = "";
+      this.eventHandler = "";
+      this.time = ""
     },
 
     /** 获取回复列表 */
