@@ -5,12 +5,7 @@
         <el-tab-pane label="已读列表" name="1"></el-tab-pane>
         <el-tab-pane label="未读列表" name="0"></el-tab-pane>
       </el-tabs>
-      <el-table
-        size="small"
-        height="500"
-        border
-        :data="activeName == 1 ? readList : noReadList"
-      >
+      <el-table size="small" height="500" border :data="activeName == 1 ? readList : noReadList">
         <el-table-column
           v-for="(item, index) in column"
           :key="index"
@@ -26,12 +21,11 @@
               href="javascript:;"
               @click="
                 $router.push({
-                  path: '/order/send',
+                  path: `/work/details/${row.busiKey}`,
                   query: { id: row.busiKey }
                 })
               "
-              >{{ row[item.prop] }}</a
-            >
+            >{{ row[item.prop] }}</a>
             <span v-else>{{ row[item.prop] }}</span>
           </template>
         </el-table-column>
