@@ -143,11 +143,7 @@
             <!-- 按钮的判段是后端showFlagButton+风控身份+工单为处理中 -->
             <div
               style="margin-left: auto"
-              v-if="
-                item.showFlagButton &&
-                checkRole(['risker']) &&
-                info.eventStatus == 0
-              "
+              v-if="item.showFlagButton && checkRole(['risker'])"
             >
               <el-button type="success" plain size="mini" @click="edit(item, 1)"
                 >已完成</el-button
