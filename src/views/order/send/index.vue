@@ -42,7 +42,11 @@
         </li>
         <li class="order-item">
           <label class="space">提出人:</label>
-          <span class="value">{{ info.createName }}</span>
+          <span class="value">
+            <Icon type="md-person" color="#6B7285;" />{{
+              info.createName
+            }}</span
+          >
         </li>
         <li class="order-item">
           <label class="space">提单时间:</label>
@@ -128,7 +132,7 @@
             <img
               class="avatar"
               :src="item.avatar ? item.avatar : defaultImg"
-              @error="defImg()"
+              :onerror="errorAvatar"
             />
 
             <p class="name">{{ item.nameOfRespondent }}</p>
@@ -156,7 +160,7 @@
             <div style="margin-left: auto" v-if="item.showCompleteStutas">
               <span
                 style="color: #67c23a; font-size: 12px"
-                v-if="item.eventCompleteStutas"
+                v-if="item.eventCompleteStutas == 1"
               >
                 <i class="el-icon-check"></i> 已完成
               </span>
@@ -196,6 +200,7 @@ export default {
   data() {
     return {
       defaultImg,
+      errorAvatar: "this.src = '" + require("@/assets/images/avatar.png") + "'",
       info: {},
       replyList: [],
       editorVisible: true,
@@ -277,12 +282,6 @@ export default {
         title: "工单：" + data.eventTitle
       });
       this.$tab.updatePage(obj);
-    },
-
-    defImg() {
-      let img = event.srcElement;
-      img.src = defaultImg;
-      img.onerror = null; //防止闪图
     },
 
     closeOrder() {
