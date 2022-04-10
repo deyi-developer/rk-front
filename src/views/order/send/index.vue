@@ -129,7 +129,7 @@
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
-            <img class="avatar" :src="item.avatar ? item.avatar : defaultImg" />
+            <img class="avatar" :src="getAvatar(item.avatar)" />
 
             <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="time">{{ formatDate(item.createDate) }}</p>
@@ -263,6 +263,9 @@ export default {
     ...mapActions(["Messages"]),
     checkPermi,
     checkRole,
+    getAvatar(url) {
+      return url ? process.env.VUE_APP_BASE_API + url : defaultImg;
+    },
     /** 获取详情数据 */
     async getDetailInfo(id) {
       const { data } = await detail({ eventHeaderId: id });
@@ -382,6 +385,9 @@ export default {
       float: right;
       line-height: 20px;
     }
+  }
+  .avatar {
+    border-radius: 50%;
   }
   .el-row {
     padding: 16px 0;
