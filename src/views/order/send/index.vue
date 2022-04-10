@@ -4,8 +4,19 @@
       <div class="order-title">
         <span>{{ info.eventHeaderCode }}</span>
         <span>{{ info.eventTitle }}</span>
-        <span v-if="userRolse.includes('risker')" class="close-btn" style="float: right">
-          <el-button size="mini" type="danger" plain @click="closeOrder">关闭工单</el-button>
+        <span
+          v-if="userRolse.includes('risker')"
+          class="close-btn"
+          style="float: right"
+        >
+          <el-button
+            :disabled="info.eventStatus == 1"
+            size="mini"
+            type="danger"
+            plain
+            @click="closeOrder"
+            >关闭工单</el-button
+          >
         </span>
       </div>
       <ul class="order-info">
@@ -13,7 +24,7 @@
           <label class="space">状态:</label>
           <span class="value">
             <Badge v-if="info.eventStatus" status="default" text="已关闭" />
-            <Badge v-else status="error" text="未完成" />
+            <Badge v-else status="success" text="处理中" />
           </span>
         </li>
         <li class="order-item">
@@ -57,35 +68,48 @@
         "
         @click="editorVisible = !editorVisible"
       >
-        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
+        >沟通历史
       </div>
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
-      <span>交接人：</span>
-      <el-select
-        style="width: 20%; margin-bottom: 12px; margin-right: 24px;"
-        size="mini"
-        v-model="eventHandler"
-        filterable
-        placeholder="请选择工单交接人"
-        :filter-method="getHandlers"
-        :loading="handlerLoding"
-        clearable
-      >
-        <el-option
-          v-for="item in handlers"
-          :key="item.userId"
-          :label="item.nickName"
-          :value="item.userId"
+      <div v-if="info.eventStatus == 0">
+        <span>交接人：</span>
+        <el-select
+          style="width: 20%; margin-bottom: 12px; margin-right: 24px"
+          size="mini"
+          v-model="eventHandler"
+          filterable
+          placeholder="请选择工单交接人"
+          :filter-method="getHandlers"
+          :loading="handlerLoding"
+          clearable
         >
-          <span style="float: left">{{ item.nickName }}</span>
-          <span style="float: right; color: #8492a6; font-size: 13px">
-            {{
-              item.userId
-            }}
-          </span>
-        </el-option>
-      </el-select>
+          <el-option
+            v-for="item in handlers"
+            :key="item.userId"
+            :label="item.nickName"
+            :value="item.userId"
+          >
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">
+              {{ item.userId }}
+            </span>
+          </el-option>
+        </el-select>
+        <editor
+          v-model="info.eventMsg"
+          placeholder="请输入回复内容"
+          :height="150"
+        ></editor>
+        <el-button
+          style="margin: 12px 0"
+          type="primary"
+          size="small"
+          @click="submit"
+          >发 布</el-button
+        >
+      </div>
 
       <!-- <span>工单处理截止日期：</span>
       <el-date-picker
@@ -98,9 +122,6 @@
         value-format="yyyy-MM-dd"
       ></el-date-picker>-->
 
-      <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
-      <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
-
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
@@ -110,13 +131,29 @@
             <p class="time">{{ formatDate(item.createDate) }}</p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
-            <div style="margin-left: auto" v-if="item.showFlagButton">
-              <el-button type="success" plain size="mini" @click="edit(item, 1)">已完成</el-button>
-              <el-button plain type="danger" size="mini" @click="edit(item, 3)">未完成</el-button>
+
+            <!-- 按钮的判段是后端showFlagButton+风控身份+工单为处理中 -->
+            <div
+              style="margin-left: auto"
+              v-if="
+                item.showFlagButton &&
+                checkRole(['risker']) &&
+                info.eventStatus == 0
+              "
+            >
+              <el-button type="success" plain size="mini" @click="edit(item, 1)"
+                >已完成</el-button
+              >
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
+                >未完成</el-button
+              >
             </div>
 
             <div style="margin-left: auto" v-if="item.showCompleteStutas">
-              <span style="color: #67c23a; font-size: 12px" v-if="item.eventCompleteStutas">
+              <span
+                style="color: #67c23a; font-size: 12px"
+                v-if="item.eventCompleteStutas"
+              >
                 <i class="el-icon-check"></i> 已完成
               </span>
               <span v-else style="color: #f56c6c; font-size: 12px">
@@ -140,6 +177,8 @@ import { debounce } from "lodash-es";
 import editor from "@/components/Editor";
 import { Tag, Icon, Badge } from "view-design";
 import defaultImg from "@/assets/images/avatar.png";
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+
 export default {
   name: "Send",
   components: {
@@ -159,19 +198,19 @@ export default {
       handlers: [],
       handlerLoding: false,
       formatDate,
-      time: '',
+      time: ""
     };
   },
 
-  watch: {
-    $route() {
-      const {
-        query: { id }
-      } = this.$route;
-      this.getDetailInfo(id);
-      this.Messages();
-    }
-  },
+  // watch: {
+  //   $route() {
+  //     const {
+  //       query: { id }
+  //     } = this.$route;
+  //     this.getDetailInfo(id);
+  //     this.Messages();
+  //   }
+  // },
 
   computed: {
     ...mapGetters(["usersInfo", "userRolse"]),
@@ -205,20 +244,23 @@ export default {
     }
   },
 
-  created() {
+  async created() {
     const {
       query: { id }
     } = this.$route;
     if (id) {
-      this.getDetailInfo(id);
-      this.Messages();
+      await this.getDetailInfo(id);
+
+      //请求详情后再刷新消息列表
+      await this.Messages();
     }
     this.getHandlers();
   },
 
   methods: {
     ...mapActions(["Messages"]),
-
+    checkPermi,
+    checkRole,
     /** 获取详情数据 */
     async getDetailInfo(id) {
       const { data } = await detail(id);
@@ -254,7 +296,8 @@ export default {
 
     /** 回复 */
     async submit() {
-      if (this.eventHandler) { // 选择了交接人
+      if (this.eventHandler) {
+        // 选择了交接人
         this.info.eventHandler = this.eventHandler;
         // if (!this.time) return this.$modal.msgError('请选择工单截止日期')
         // this.info.time = this.time
@@ -268,14 +311,14 @@ export default {
         this.$modal.msgError(msg);
       }
 
-      this.clear()
+      this.clear();
     },
 
     /** 清空已选择的数据 */
     clear() {
       this.info.eventMsg = "";
       this.eventHandler = "";
-      this.time = ""
+      this.time = "";
     },
 
     /** 获取回复列表 */

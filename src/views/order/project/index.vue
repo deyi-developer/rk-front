@@ -153,6 +153,7 @@
                 <el-select
                   style="width: 70%"
                   size="mini"
+                  :class="clacClass(projectData.riskLevel)"
                   placeholder="请选择风险级别"
                   v-model="projectData.riskLevel"
                   :disabled="checkRole(['pm'])"
@@ -224,6 +225,7 @@
                 <el-select
                   style="width: 70%"
                   size="mini"
+                  :class="clacClass(updateData.invoicingRiskLevel)"
                   placeholder="请选择风险级别"
                   v-model="updateData.invoicingRiskLevel"
                   :disabled="checkRole(['pm'])"
@@ -242,6 +244,7 @@
                 <el-select
                   style="width: 70%"
                   size="mini"
+                  :class="clacClass(updateData.receiveRiskLevel)"
                   placeholder="请选择风险级别"
                   v-model="updateData.receiveRiskLevel"
                   :disabled="checkRole(['pm'])"
@@ -261,6 +264,7 @@
                   style="width: 70%"
                   placeholder="请选择风险级别"
                   size="mini"
+                  :class="clacClass(updateData.grossProfitRiskLevel)"
                   v-model="updateData.grossProfitRiskLevel"
                   :disabled="checkRole(['pm'])"
                 >
@@ -536,6 +540,22 @@ export default {
   methods: {
     checkPermi,
     checkRole,
+    clacClass(status) {
+      let className = "";
+      if (status == "Green") {
+        className = "cell-green";
+      }
+      if (status == "Yellow") {
+        className = "cell-yellow";
+      }
+      if (status == "Red") {
+        className = "cell-red";
+      }
+      if (status == "lawsuit") {
+        className = "cell-lawsuit";
+      }
+      return className;
+    },
     /** 页面数据 */
     async getData(projectCode) {
       const { data } = await projectDetails(projectCode);
@@ -613,6 +633,27 @@ let form = ref({
   .content {
     margin-top: 77px;
     padding: 20px;
+  }
+  .cell-red {
+    &::v-deep input {
+      background-color: #fef0f0 !important;
+      color: #f56c6c !important;
+      border-color: #f56c6c !important;
+    }
+  }
+  .cell-lawsuit {
+    &::v-deep input {
+      background-color: #fef0f0 !important;
+      color: #f56c6c !important;
+      border-color: #f56c6c !important;
+    }
+  }
+  .cell-yellow {
+    &::v-deep input {
+      background-color: #fdf6ec !important;
+      color: #e6a23c !important;
+      border-color: #e6a23c !important;
+    }
   }
   .el-form-item {
     // margin-bottom: 6px;
