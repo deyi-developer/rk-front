@@ -57,7 +57,7 @@ export default {
         {
           label: "消息内容",
           prop: "messageContent",
-          width: "300px"
+          width: "700px"
         },
         {
           label: "创建时间",

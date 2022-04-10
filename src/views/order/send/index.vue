@@ -129,11 +129,7 @@
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
           <div class="top">
-            <img
-              class="avatar"
-              :src="item.avatar ? item.avatar : defaultImg"
-              :onerror="errorAvatar"
-            />
+            <img class="avatar" :src="item.avatar ? item.avatar : defaultImg" />
 
             <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="time">{{ formatDate(item.createDate) }}</p>
