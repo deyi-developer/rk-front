@@ -151,30 +151,46 @@ export default {
   computed: {
     ...mapGetters(["userRolse"])
   },
-  watch: {
-    $route() {
-      const { query } = this.$route;
-      if (query.projectCode) {
-        this.getList(query);
-      }
+
+  mounted() {
+    const { params } = this.$route;
+    //如果从项目详情进来  回写项目编码 且页码重置
+    if (params?.projectCode) {
+      this.$refs.form.queryParams = {
+        projectCode: params.projectCode
+      };
+      this.params = {
+        pageNum: 1,
+        pageSize: 10
+      };
     }
+    this.getList();
   },
-  created() {
-    const { query } = this.$route;
-    this.getList(query);
+  activated() {
+    const { params } = this.$route;
+
+    if (params?.projectCode) {
+      this.$refs.form.queryParams = {
+        projectCode: params.projectCode
+      };
+      this.params = {
+        pageNum: 1,
+        pageSize: 10
+      };
+    }
+
+    this.getList();
   },
-  // activated() {
-  //   const { query } = this.$route;
-  //   this.getList(query);
-  // },
   methods: {
     async getList(query = {}) {
       this.loading = true;
-      this.params = {
+      const filterVal = this.$refs.form.queryParams;
+      const params = {
         ...this.params,
-        ...query
+        ...query,
+        ...filterVal
       };
-      const { total, rows } = await list(this.params);
+      const { total, rows } = await list(params);
       this.tableData = rows;
       this.totals = total;
       this.loading = false;

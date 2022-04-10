@@ -15,7 +15,12 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="工单名" prop="eventTitle">
-            <el-input v-model="queryParams.eventTitle" placeholder="请输入工单名" clearable size="small" />
+            <el-input
+              v-model="queryParams.eventTitle"
+              placeholder="请输入工单名"
+              clearable
+              size="small"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -37,8 +42,16 @@
         </el-col>
         <el-col :span="6">
           <div style="float: right">
-            <el-button type="primary" size="small" icon="el-icon-search" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+            <el-button
+              type="primary"
+              size="small"
+              icon="el-icon-search"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="small" @click="resetQuery"
+              >重置</el-button
+            >
           </div>
         </el-col>
         <!-- <el-col :span="6">
@@ -66,12 +79,7 @@ import { getDeptList } from "@/api/common";
 
 export default {
   dicts: ["event_type"],
-  props: {
-    projectCode: {
-      type: String,
-      default: ""
-    }
-  },
+
   data() {
     return {
       more: true,
@@ -81,30 +89,22 @@ export default {
     };
   },
 
-  watch: {
-    projectCode(n) {
-      this.$set(this.queryParams, "projectCode", n);
-    }
-  },
-
   async mounted() {
     const res = await getDeptList();
     if (res.code == 200) {
       this.deptList = res.rows;
     }
-    if (this.projectCode) {
-      this.$set(this.queryParams, "projectCode", this.projectCode);
-    }
   },
   methods: {
     /** 搜索按钮操作 */
     handleQuery() {
-      this.$emit("search", this.queryParams);
+      this.$emit("search");
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.$refs["queryForm"].resetFields();
-      this.$emit("search", this.queryParams);
+      this.queryParams = {};
+      this.$emit("search");
     }
   }
 };

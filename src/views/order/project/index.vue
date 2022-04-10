@@ -22,8 +22,8 @@
         type="text"
         @click="
           $router.push({
-            path: '/order/order-list',
-            query: { projectCode: projectData.projectCode }
+            name: 'Order-list',
+            params: { projectCode: projectData.projectCode }
           })
         "
         >服务工单</el-button
@@ -414,6 +414,7 @@ import filterForm from "../list/filterForm";
 import workOrderDialog from "../components/work-order-dialog";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 export default {
+  name: "Details",
   dicts: ["event_type", "event_urgency_level", "risk_level", "risk_status"],
   components: {
     filterForm,
@@ -558,8 +559,9 @@ export default {
     },
     /** 页面数据 */
     async getData(projectCode) {
+      const vm = this;
       const { data } = await projectDetails(projectCode);
-      const obj = Object.assign({}, this.$route, {
+      const obj = Object.assign({}, vm.$route, {
         title: "项目:" + data.projectCode
       });
       this.$tab.updatePage(obj);

@@ -296,11 +296,14 @@ export default {
 
     /** 回复 */
     async submit() {
+      console.log(this.eventHandler);
       if (this.eventHandler) {
         // 选择了交接人
         this.info.eventHandler = this.eventHandler;
         // if (!this.time) return this.$modal.msgError('请选择工单截止日期')
         // this.info.time = this.time
+      } else {
+        this.info.eventHandler = null;
       }
       this.info.forwardFlag = 1;
       const { code, msg } = await reply(this.info);
