@@ -265,7 +265,7 @@ export default {
     checkRole,
     /** 获取详情数据 */
     async getDetailInfo(id) {
-      const { data } = await detail(id);
+      const { data } = await detail({ eventHeaderId: id });
       this.info = data;
       this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
       this.info.forwardFlag = 0;

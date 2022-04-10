@@ -24,12 +24,7 @@
               style="color: #57a3f3"
               v-if="item.prop === 'messageContent'"
               href="javascript:;"
-              @click="
-                $router.push({
-                  path: `/work/details/${row.busiKey}`,
-                  query: { id: row.busiKey }
-                })
-              "
+              @click="gotoDetail(row)"
               >{{ row[item.prop] }}</a
             >
             <span v-else>{{ row[item.prop] }}</span>
@@ -48,6 +43,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { detail } from "../send/api";
 export default {
   name: "Message-list",
   data() {
@@ -98,6 +94,18 @@ export default {
     },
     handleClick(value) {
       this.getList();
+    },
+    gotoDetail(row) {
+      const parmas = {
+        eventHeaderId: row.busiKey,
+        messageId: row.messageId
+      };
+      //消费消息
+      detail(parmas);
+      this.$router.push({
+        path: `/work/details/${row.busiKey}`,
+        query: { id: row.busiKey }
+      });
     }
   }
 };
