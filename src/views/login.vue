@@ -7,7 +7,10 @@
       :rules="loginRules"
       class="login-form"
     >
-      <h1 class="title">得逸风控管理系统</h1>
+      <h1 class="title">
+        <img class="logo-img" :src="logoImg" alt="" srcset="" />
+        得逸风控管理系统
+      </h1>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -86,6 +89,8 @@
 </template>
 
 <script>
+import logoImg from "@/assets/logo/sign-logo.svg";
+
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
@@ -95,6 +100,7 @@ export default {
   components: { bg },
   data() {
     return {
+      logoImg: logoImg,
       codeUrl: "",
       loginForm: {
         username: "admin",
@@ -207,6 +213,10 @@ export default {
   text-align: center;
   letter-spacing: 2px;
   color: #707070;
+  .logo-img {
+    width: 45px;
+    vertical-align: bottom;
+  }
 }
 
 .login-form {

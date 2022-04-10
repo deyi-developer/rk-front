@@ -6,7 +6,7 @@
       backgroundColor:
         sideTheme === 'theme-dark'
           ? variables.menuBackground
-          : variables.menuLightBackground,
+          : variables.menuLightBackground
     }"
   >
     <transition name="sidebarLogoFade">
@@ -24,7 +24,7 @@
             color:
               sideTheme === 'theme-dark'
                 ? variables.logoTitleColor
-                : variables.logoLightTitleColor,
+                : variables.logoLightTitleColor
           }"
         >
           {{ title }}
@@ -38,7 +38,7 @@
             color:
               sideTheme === 'theme-dark'
                 ? variables.logoTitleColor
-                : variables.logoLightTitleColor,
+                : variables.logoLightTitleColor
           }"
         >
           {{ title }}
@@ -49,7 +49,8 @@
 </template>
 
 <script>
-import logoImg from "@/assets/logo/logo.png";
+// import logoImg from "@/assets/logo/logo.png";
+import logoImg from "@/assets/logo/sign-logo.svg";
 import variables from "@/assets/styles/variables.scss";
 
 export default {
@@ -57,8 +58,8 @@ export default {
   props: {
     collapse: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     variables() {
@@ -66,14 +67,14 @@ export default {
     },
     sideTheme() {
       return this.$store.state.settings.sideTheme;
-    },
+    }
   },
   data() {
     return {
       title: "风控管理系统",
-      logo: logoImg,
+      logo: logoImg
     };
-  },
+  }
 };
 </script>
 
