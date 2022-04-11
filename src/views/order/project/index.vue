@@ -1,45 +1,36 @@
 <template>
   <div class="order page-bg">
-    <header
-      class="header"
-      :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']"
-    >
+    <header class="header" :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']">
       <div>
         <span class="header-span">项目明细</span>
         <p class="header-title">
-          <span> 项目编码：{{ projectData.projectCode }}</span>
-          <span style="margin-left: 15px">
-            项目名称: {{ projectData.projectName }}</span
-          >
+          <span>项目编码：{{ projectData.projectCode }}</span>
+          <span style="margin-left: 15px">项目名称: {{ projectData.projectName }}</span>
         </p>
       </div>
 
-      <el-button
-        v-hasPermi="['risk:detail:save']"
-        style="margin-left: auto"
-        type="text"
-        @click="save"
-        ><i class="el-icon-edit"></i>保存</el-button
-      >
-      <el-button
-        v-hasPermi="['workOrder:order:list']"
-        style="padding: 3px 0"
-        type="text"
-        @click="
-          $router.push({
-            name: 'Order-list',
-            params: { projectCode: projectData.projectCode }
-          })
-        "
-        >服务工单</el-button
-      >
-      <el-button
-        v-hasPermi="['workOrder:header:add']"
-        style="padding: 3px 0"
-        type="text"
-        @click="sendOrder"
-        >发起工单</el-button
-      >
+      <div style="margin-left: auto">
+        <el-button v-hasPermi="['risk:detail:save']" type="text" @click="save">
+          <i class="el-icon-edit"></i>保存
+        </el-button>
+        <el-button
+          v-hasPermi="['workOrder:order:list']"
+          style="padding: 3px 0"
+          type="text"
+          @click="
+            $router.push({
+              name: 'Order-list',
+              params: { projectCode: projectData.projectCode }
+            })
+          "
+        >服务工单</el-button>
+        <el-button
+          v-hasPermi="['workOrder:header:add']"
+          style="padding: 3px 0"
+          type="text"
+          @click="sendOrder"
+        >发起工单</el-button>
+      </div>
     </header>
     <div class="content">
       <el-form
@@ -57,9 +48,11 @@
           </div>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="项目编码:">{{
-                projectData.projectCode
-              }}</el-form-item>
+              <el-form-item label="项目编码:">
+                {{
+                  projectData.projectCode
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-tooltip
@@ -82,9 +75,11 @@
 
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="对外项目编码:">{{
-                projectData.parentProjectCode
-              }}</el-form-item>
+              <el-form-item label="对外项目编码:">
+                {{
+                  projectData.parentProjectCode
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-tooltip
@@ -95,67 +90,83 @@
                 placement="top"
               >
                 <el-form-item label="对外项目名称:">
-                  <div class="ellipsis">
-                    {{ projectData.parentProjectName }}
-                  </div>
+                  <div class="ellipsis">{{ projectData.parentProjectName }}</div>
                 </el-form-item>
               </el-tooltip>
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="项目结算类型:">{{
-                updateData.projectChargeType
-              }}</el-form-item>
+              <el-form-item label="项目结算类型:">
+                {{
+                  updateData.projectChargeType
+                }}
+              </el-form-item>
             </el-col>
           </el-row>
 
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="项目创建日期:">{{
-                projectData.projectCreateDate
-              }}</el-form-item>
+              <el-form-item label="项目创建日期:">
+                {{
+                  projectData.projectCreateDate
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="项目开始日期:">{{
-                projectData.projectStartDate
-              }}</el-form-item>
+              <el-form-item label="项目开始日期:">
+                {{
+                  projectData.projectStartDate
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="项目结束日期:">{{
-                projectData.projectEndDate
-              }}</el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item label="最终客户:">{{
-                projectData.customName
-              }}</el-form-item>
-            </el-col>
-
-            <el-col :span="8">
-              <el-form-item label="一级部门:">{{
-                projectData.oneDeptName
-              }}</el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="项目部门:">{{
-                projectData.deptName
-              }}</el-form-item>
+              <el-form-item label="项目结束日期:">
+                {{
+                  projectData.projectEndDate
+                }}
+              </el-form-item>
             </el-col>
           </el-row>
 
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="项目经理工号:">{{
-                projectData.projectManagerEmpNum
-              }}</el-form-item>
+              <el-form-item label="最终客户:">
+                {{
+                  projectData.customName
+                }}
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="一级部门:">
+                {{
+                  projectData.oneDeptName
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="项目经理姓名:">{{
-                projectData.pmName
-              }}</el-form-item>
+              <el-form-item label="项目部门:">
+                {{
+                  projectData.deptName
+                }}
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="项目经理工号:">
+                {{
+                  projectData.projectManagerEmpNum
+                }}
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目经理姓名:">
+                {{
+                  projectData.pmName
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="项目风险状态:">
@@ -188,7 +199,7 @@
                   v-model="updateData.projectChargePeriod"
                   :disabled="!isPmRule"
                 ></el-input-number>
-                <span> 月</span>
+                <span>月</span>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -200,7 +211,7 @@
                   v-model="updateData.projectInvoicePeriod"
                   :disabled="!isPmRule"
                 ></el-input-number>
-                <span> 天</span>
+                <span>天</span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -212,7 +223,7 @@
                   style="width: 70%"
                   size="mini"
                   v-model="updateData.planBillingMoney"
-                  :disabled="!checkRole(['pm'])"
+                  :disabled="!checkRole(['pm']) || !projectData.planEditEnable"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -222,7 +233,7 @@
                   style="width: 70%"
                   size="mini"
                   v-model="updateData.planReceiptsMoney"
-                  :disabled="!checkRole(['pm'])"
+                  :disabled="!checkRole(['pm']) || !projectData.planEditEnable"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -290,7 +301,7 @@
 
           <!-- <el-col :span="8">
               <el-form-item label="项目结算类型:">{{ projectData.projectChargeType }}</el-form-item>
-            </el-col>-->
+          </el-col>-->
 
           <el-row :gutter="20">
             <el-col :span="16">
@@ -313,36 +324,48 @@
           </div>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="总开票金额:">{{
-                projectData.totalBilling | currency
-              }}</el-form-item>
+              <el-form-item label="总开票金额:">
+                {{
+                  projectData.totalBilling | currency
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="总收款金额:">{{
-                projectData.totalReceipts | currency
-              }}</el-form-item>
+              <el-form-item label="总收款金额:">
+                {{
+                  projectData.totalReceipts | currency
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="PJTD含税总收入:">{{
-                projectData.pjtdTotalMoney | currency
-              }}</el-form-item>
+              <el-form-item label="PJTD含税总收入:">
+                {{
+                  projectData.pjtdTotalMoney | currency
+                }}
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="相对PJTD收款率:">{{
-                projectData.pjtdReceiptsRate | percent
-              }}</el-form-item>
+              <el-form-item label="相对PJTD收款率:">
+                {{
+                  projectData.pjtdReceiptsRate | percent
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="相对PJTD开票率:">{{
-                projectData.pjtdBillingRate | percent
-              }}</el-form-item>
+              <el-form-item label="相对PJTD开票率:">
+                {{
+                  projectData.pjtdBillingRate | percent
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="相对总开票收款率:">{{
-                projectData.totalBillingRate | percent
-              }}</el-form-item>
+              <el-form-item label="相对总开票收款率:">
+                {{
+                  projectData.totalBillingRate | percent
+                }}
+              </el-form-item>
             </el-col>
           </el-row>
         </el-card>
@@ -353,26 +376,34 @@
           </div>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="总应开金额:">{{
-                projectData.totalShouldBillingMoney | currency
-              }}</el-form-item>
+              <el-form-item label="总应开金额:">
+                {{
+                  projectData.totalShouldBillingMoney | currency
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="总应收金额:">{{
-                projectData.totalShouldReceiptsMoney | currency
-              }}</el-form-item>
+              <el-form-item label="总应收金额:">
+                {{
+                  projectData.totalShouldReceiptsMoney | currency
+                }}
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="总已开金额:">{{
-                projectData.totalAlreadyBillingMoney | currency
-              }}</el-form-item>
+              <el-form-item label="总已开金额:">
+                {{
+                  projectData.totalAlreadyBillingMoney | currency
+                }}
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="总已收金额:">{{
-                projectData.totalInvoicedMoney | currency
-              }}</el-form-item>
+              <el-form-item label="总已收金额:">
+                {{
+                  projectData.totalInvoicedMoney | currency
+                }}
+              </el-form-item>
             </el-col>
           </el-row>
           <!-- <el-row :gutter="20">
@@ -399,10 +430,7 @@
           </el-row>-->
         </el-card>
       </el-form>
-      <ChartsGroup
-        :projectData="projectData"
-        :projectCode="$route.query.projectCode"
-      ></ChartsGroup>
+      <ChartsGroup :projectData="projectData" :projectCode="$route.query.projectCode"></ChartsGroup>
     </div>
 
     <work-order-dialog
@@ -550,6 +578,7 @@ export default {
   methods: {
     checkPermi,
     checkRole,
+
     clacClass(status) {
       let className = "";
       if (status == "Green") {
@@ -566,6 +595,7 @@ export default {
       }
       return className;
     },
+
     /** 页面数据 */
     async getData(projectCode) {
       const vm = this;
