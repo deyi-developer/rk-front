@@ -1209,6 +1209,9 @@ export default {
       if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
       }
+      //重新获取数据
+      this.fetchData()
+
     },
     // 滚动事件
     scrollHandle: throttle(function ({
