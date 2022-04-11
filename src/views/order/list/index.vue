@@ -1203,9 +1203,12 @@ export default {
       this.$message.error("您的角色没有编辑此字段权限");
     },
     // 切换计划编辑状态
-    checkoutPlanEdit(data) {
+    async checkoutPlanEdit(data) {
       this.risk.planEditEnable = data;
-      rkPlanEdit(data);
+      const res = await rkPlanEdit(data);
+      if (res.code == "200") {
+        this.$modal.notifySuccess(res.msg);
+      }
     },
     // 滚动事件
     scrollHandle: throttle(function ({
