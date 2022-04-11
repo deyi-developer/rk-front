@@ -5,12 +5,7 @@
         <el-tab-pane label="未读列表" name="0"></el-tab-pane>
         <el-tab-pane label="已读列表" name="1"></el-tab-pane>
       </el-tabs>
-      <el-table
-        size="small"
-        height="500"
-        border
-        :data="activeName == 1 ? readList : noReadList"
-      >
+      <el-table size="small" height="500" border :data="list">
         <el-table-column
           v-for="(item, index) in column"
           :key="index"
@@ -33,8 +28,8 @@
       </el-table>
     </el-card>
     <pagination
-      v-show="totals > 0"
-      :total="totals"
+      v-show="total > 0"
+      :total="total"
       :page.sync="params.pageNum"
       :limit.sync="params.pageSize"
       @pagination="getList"
@@ -42,8 +37,9 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { detail } from "../send/api";
+import { list } from "@/api/message"
+// import { mapGetters, mapActions } from "vuex"
+import { detail } from "../send/api"
 export default {
   name: "Message-list",
   data() {
@@ -53,66 +49,79 @@ export default {
         {
           label: "消息内容",
           prop: "messageContent",
-          width: "700px"
+          width: "700px",
         },
         {
           label: "创建时间",
-          prop: "createTime"
+          prop: "createTime",
         },
         {
           label: "更新时间",
-          prop: "updateTime"
-        }
+          prop: "updateTime",
+        },
       ],
       params: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
       },
-      totals: 0
-    };
-  },
-  computed: {
-    ...mapGetters(["messages", "unread"]),
-    noReadList() {
-      return this.messages.filter((item) => !item.readFlag);
-    },
-    readList() {
-      return this.messages.filter((item) => item.readFlag);
+      total: 0,
+      list: [],
     }
   },
+  // computed: {
+  //   ...mapGetters(["messages", "unread"]),
+  //   noReadList() {
+  //     return this.messages.filter((item) => !item.readFlag)
+  //   },
+  //   readList() {
+  //     return this.messages.filter((item) => item.readFlag)
+  //   },
+  // },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
-    ...mapActions(["Messages"]),
     async getList(query) {
       this.params = {
         ...this.params,
-        ...query
-      };
-      this.Messages(this.params);
+        ...query,
+        readFlag: Number(this.activeName),
+      }
+      console.log(this.params)
+      const { rows, total } = await list(this.params)
+      this.list = rows
+      this.total = total
     },
-    handleClick(value) {
-      this.getList();
+
+    handleClick() {
+      this.getList()
     },
+
     gotoDetail(row) {
       const parmas = {
         eventHeaderId: row.busiKey,
-        messageId: row.messageId
-      };
+        messageId: row.messageId,
+      }
       //消费消息
-      detail(parmas);
+      detail(parmas)
       this.$router.push({
         path: `/work/details/${row.busiKey}`,
-        query: { id: row.busiKey }
-      });
-    }
-  }
-};
+        query: { id: row.busiKey },
+      })
+    },
+  },
+}
 </script>
 <style scoped lang="scss">
 .message-wrap {
   padding: 20px;
   min-height: calc(100vh - 84px);
+  .pagination-container {
+    display: flex;
+    align-items: center;
+    padding: 32px 12px !important;
+    margin: 0;
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+  }
 }
 </style>

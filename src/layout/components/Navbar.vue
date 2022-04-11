@@ -18,7 +18,7 @@
       <template v-if="device !== 'mobile'">
         <search id="header-search" class="right-menu-item" />
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
-        <Badge class="right-menu-item" :count="unread" :overflow-count="unread">
+        <Badge class="right-menu-item" :count="unread" :overflow-count="100">
           <Icon
             style="cursor: pointer"
             size="22"
@@ -84,16 +84,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { Badge, Icon, Tabs, TabPane } from "view-design";
-import Breadcrumb from "@/components/Breadcrumb";
-import TopNav from "@/components/TopNav";
-import Hamburger from "@/components/Hamburger";
-import Screenfull from "@/components/Screenfull";
-import SizeSelect from "@/components/SizeSelect";
-import Search from "@/components/HeaderSearch";
-import RuoYiGit from "@/components/RuoYi/Git";
-import RuoYiDoc from "@/components/RuoYi/Doc";
+import { mapGetters, mapActions } from "vuex"
+import { Badge, Icon, Tabs, TabPane } from "view-design"
+import Breadcrumb from "@/components/Breadcrumb"
+import TopNav from "@/components/TopNav"
+import Hamburger from "@/components/Hamburger"
+import Screenfull from "@/components/Screenfull"
+import SizeSelect from "@/components/SizeSelect"
+import Search from "@/components/HeaderSearch"
+import RuoYiGit from "@/components/RuoYi/Git"
+import RuoYiDoc from "@/components/RuoYi/Doc"
 
 export default {
   components: {
@@ -108,71 +108,69 @@ export default {
     Icon,
     RuoYiDoc,
     Tabs,
-    TabPane
+    TabPane,
   },
   data() {
     return {
-      messageList: []
-    };
+      messageList: [],
+    }
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device", "messages", "unread"]),
     setting: {
       get() {
-        return this.$store.state.settings.showSettings;
+        return this.$store.state.settings.showSettings
       },
       set(val) {
         this.$store.dispatch("settings/changeSetting", {
           key: "showSettings",
-          value: val
-        });
-      }
+          value: val,
+        })
+      },
     },
     topNav: {
       get() {
-        return this.$store.state.settings.topNav;
-      }
-    }
+        return this.$store.state.settings.topNav
+      },
+    },
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     ...mapActions(["Messages"]),
 
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch("app/toggleSideBar")
     },
 
     async logout() {
       this.$confirm("确定注销并退出系统吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           // 清空页签
-          this.$tab.closeAllPage();
-
+          this.$tab.closeAllPage()
           this.$store.dispatch("LogOut").then(() => {
-            this.$router.replace("/login");
-            window.location.reload(true);
-          });
+            this.$router.replace("/login")
+            window.location.reload(true)
+          })
         })
-        .catch(() => {});
+        .catch(() => {})
     },
     /**
      * 消息列表
      */
     getList() {
-      this.Messages();
+      const params = {
+        readFlag: 0, // 未读
+      }
+      this.Messages(params)
     },
-
-    demo() {
-      console.log(111);
-    }
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>

@@ -4,14 +4,19 @@
       <div class="order-title">
         <span>{{ info.eventHeaderCode }}</span>
         <span>{{ info.eventTitle }}</span>
-        <span v-if="userRolse.includes('risker')" class="close-btn" style="float: right">
+        <span
+          v-if="userRolse.includes('risker')"
+          class="close-btn"
+          style="float: right"
+        >
           <el-button
             :disabled="info.eventStatus == 1"
             size="mini"
             type="danger"
             plain
             @click="closeOrder"
-          >关闭工单</el-button>
+            >关闭工单</el-button
+          >
         </span>
       </div>
       <ul class="order-info">
@@ -39,9 +44,7 @@
           <label class="space">提出人:</label>
           <span class="value">
             <Icon type="md-person" color="#6B7285;" />
-            {{
-              info.createName
-            }}
+            {{ info.createName }}
           </span>
         </li>
         <li class="order-item">
@@ -68,7 +71,8 @@
         "
         @click="editorVisible = !editorVisible"
       >
-        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
+        >沟通历史
       </div>
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
@@ -91,7 +95,9 @@
             :value="item.userId"
           >
             <span style="float: left">{{ item.nickName }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userId }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{
+              item.userId
+            }}</span>
           </el-option>
         </el-select>
 
@@ -107,8 +113,18 @@
           value-format="yyyy-MM-dd"
         ></el-date-picker>
 
-        <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
-        <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
+        <editor
+          v-model="info.eventMsg"
+          placeholder="请输入回复内容"
+          :height="150"
+        ></editor>
+        <el-button
+          style="margin: 12px 0"
+          type="primary"
+          size="small"
+          @click="submit"
+          >发 布</el-button
+        >
       </div>
 
       <ul class="list">
@@ -122,13 +138,23 @@
             <!-- item.eventCompleteStutas && item.showFlagButton -->
 
             <!-- 按钮的判段是后端showFlagButton+风控身份+工单为处理中 -->
-            <div style="margin-left: auto" v-if="item.showFlagButton && checkRole(['risker'])">
-              <el-button type="success" plain size="mini" @click="edit(item, 1)">已完成</el-button>
-              <el-button plain type="danger" size="mini" @click="edit(item, 3)">未完成</el-button>
+            <div
+              style="margin-left: auto"
+              v-if="item.showFlagButton && checkRole(['risker'])"
+            >
+              <el-button type="success" plain size="mini" @click="edit(item, 1)"
+                >已完成</el-button
+              >
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
+                >未完成</el-button
+              >
             </div>
 
             <div style="margin-left: auto" v-if="item.showCompleteStutas">
-              <span style="color: #67c23a; font-size: 12px" v-if="item.eventCompleteStutas == 1">
+              <span
+                style="color: #67c23a; font-size: 12px"
+                v-if="item.eventCompleteStutas == 1"
+              >
                 <i class="el-icon-check"></i> 已完成
               </span>
               <span v-else style="color: #f56c6c; font-size: 12px">
@@ -143,16 +169,16 @@
   </div>
 </template>
 <script>
-import { formatDate } from "@/utils";
-import { mapActions, mapGetters } from "vuex";
-import { detail, reply, replyList, update } from "./api";
-import { handlerList } from "../project/api";
-import { edit } from "../order-list/api";
-import { debounce } from "lodash-es";
-import editor from "@/components/Editor";
-import { Tag, Icon, Badge } from "view-design";
-import defaultImg from "@/assets/images/avatar.png";
-import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+import { formatDate } from "@/utils"
+import { mapActions, mapGetters } from "vuex"
+import { detail, reply, replyList, update } from "./api"
+import { handlerList } from "../project/api"
+import { edit } from "../order-list/api"
+import { debounce } from "lodash-es"
+import editor from "@/components/Editor"
+import { Tag, Icon, Badge } from "view-design"
+import defaultImg from "@/assets/images/avatar.png"
+import { checkPermi, checkRole } from "@/utils/permission" // 权限判断函数
 
 export default {
   name: "Send",
@@ -160,7 +186,7 @@ export default {
     editor,
     Badge,
     Tag,
-    Icon
+    Icon,
   },
   dicts: ["event_type", "event_urgency_level"],
 
@@ -175,8 +201,8 @@ export default {
       handlers: [],
       handlerLoding: false,
       formatDate,
-      eventHandleDate: ""
-    };
+      eventHandleDate: "",
+    }
   },
 
   // watch: {
@@ -192,46 +218,46 @@ export default {
   computed: {
     ...mapGetters(["usersInfo", "userRolse"]),
     avatar() {
-      return process.env.VUE_APP_BASE_API + this.usersInfo.avatar;
+      return process.env.VUE_APP_BASE_API + this.usersInfo.avatar
     },
     env() {
-      return process.env.VUE_APP_BASE_API;
+      return process.env.VUE_APP_BASE_API
     },
     color() {
-      let type = "";
+      let type = ""
 
       switch (this.info.eventUrgencyLevel) {
         case 1:
-          type = "red";
-          break;
+          type = "red"
+          break
         case 2:
-          type = "orange";
-          break;
+          type = "orange"
+          break
         case 3:
-          type = "yellow";
-          break;
+          type = "yellow"
+          break
         case 4:
-          type = "default";
-          break;
+          type = "default"
+          break
         default:
-          type = "default";
-          break;
+          type = "default"
+          break
       }
-      return type;
-    }
+      return type
+    },
   },
 
   async created() {
     const {
-      query: { id }
-    } = this.$route;
+      query: { id },
+    } = this.$route
     if (id) {
-      await this.getDetailInfo(id);
+      await this.getDetailInfo(id)
 
       //请求详情后再刷新消息列表
-      await this.Messages();
+      await this.Messages({ readFlag: 0 })
     }
-    this.getHandlers();
+    this.getHandlers()
   },
 
   methods: {
@@ -239,69 +265,70 @@ export default {
     checkPermi,
     checkRole,
     getAvatar(url) {
-      return url ? process.env.VUE_APP_BASE_API + url : defaultImg;
+      return url ? process.env.VUE_APP_BASE_API + url : defaultImg
     },
     /** 获取详情数据 */
     async getDetailInfo(id) {
-      const { data } = await detail({ eventHeaderId: id });
-      this.info = data;
-      this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
-      this.info.forwardFlag = 0;
-      this.getReplyList(id);
+      const { data } = await detail({ eventHeaderId: id })
+      this.info = data
+      this.info.eventHandler = this.usersInfo.userId // 默认自己能搞定不转接
+      this.info.forwardFlag = 0
+      this.getReplyList(id)
       const obj = Object.assign({}, this.$route, {
-        title: "工单：" + data.eventTitle
-      });
-      this.$tab.updatePage(obj);
+        title: "工单：" + data.eventTitle,
+      })
+      this.$tab.updatePage(obj)
     },
 
     closeOrder() {
       this.$modal.confirm(`确定关闭此工单吗？`).then(async () => {
-        const { eventHeaderId } = this.info;
-        const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 });
+        const { eventHeaderId } = this.info
+        const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
         if (code === 200) {
-          this.$modal.msgSuccess(msg);
-          this.getDetailInfo(this.$route.query.id);
+          this.$modal.msgSuccess(msg)
+          this.getDetailInfo(this.$route.query.id)
           // this.getList()
         } else {
-          this.$modal.msgError(msg);
+          this.$modal.msgError(msg)
         }
-      });
+      })
     },
 
     /** 回复 */
     async submit() {
       if (this.eventHandler) {
         // 选择了交接人
-        this.info.eventHandler = this.eventHandler;
+        this.info.eventHandler = this.eventHandler
 
-        if (!this.eventHandleDate) return this.$modal.msgError('请选择工单截止日期')
+        if (!this.eventHandleDate)
+          return this.$modal.msgError("请选择工单截止日期")
         this.info.eventHandleDate = this.eventHandleDate
       } else {
-        this.info.eventHandler = null;
+        this.info.eventHandler = null
       }
-      this.info.forwardFlag = 1;
-      const { code, msg } = await reply(this.info);
+      this.info.forwardFlag = 1
+      const { code, msg } = await reply(this.info)
       if (code === 200) {
-        this.$modal.msgSuccess(msg);
-        this.getReplyList(this.$route.query.id);
+        this.$modal.msgSuccess(msg)
+        this.getReplyList(this.$route.query.id)
       } else {
-        this.$modal.msgError(msg);
+        this.$modal.msgError(msg)
       }
 
-      this.clear();
+      this.clear()
     },
 
     /** 清空已选择的数据 */
     clear() {
-      this.info.eventMsg = "";
-      this.eventHandler = "";
-      this.eventHandleDate = "";
+      this.info.eventMsg = ""
+      this.eventHandler = ""
+      this.eventHandleDate = ""
     },
 
     /** 获取回复列表 */
     async getReplyList(id) {
-      const { rows } = await replyList({ eventHeaderId: id });
-      this.replyList = rows || [];
+      const { rows } = await replyList({ eventHeaderId: id })
+      this.replyList = rows || []
     },
 
     /** 修改 */
@@ -312,30 +339,30 @@ export default {
           const params = {
             eventHeaderId: item.eventHeaderId,
             eventLineId: item.eventLineId,
-            eventCompleteStutas: id
-          };
-          const { code, msg } = await update(params);
+            eventCompleteStutas: id,
+          }
+          const { code, msg } = await update(params)
           if (code === 200) {
-            this.$modal.msgSuccess(msg);
-            this.getReplyList(this.$route.query.id);
+            this.$modal.msgSuccess(msg)
+            this.getReplyList(this.$route.query.id)
           } else {
-            this.$modal.msgError(msg);
+            this.$modal.msgError(msg)
           }
         })
         .catch(() => {
-          console.log("catch");
-        });
+          console.log("catch")
+        })
     },
 
     getHandlers: debounce(async function (value) {
-      this.handlerLoding = true;
-      const params = { pageNum: 1, pageSize: 100, nickName: value };
-      const { rows } = await handlerList(params);
-      this.handlers = rows;
-      this.handlerLoding = false;
-    }, 500)
-  }
-};
+      this.handlerLoding = true
+      const params = { pageNum: 1, pageSize: 100, nickName: value }
+      const { rows } = await handlerList(params)
+      this.handlers = rows
+      this.handlerLoding = false
+    }, 500),
+  },
+}
 </script>
 
 <style lang="scss" scoped>

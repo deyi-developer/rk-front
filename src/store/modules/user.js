@@ -11,6 +11,7 @@ const user = {
     permissions: [],
     user: {},
     messages: [], // 消息列表
+    unread: 0, // 未读消息条数
   },
   getters: {
     userInfo: (state) => state.user,
@@ -36,6 +37,9 @@ const user = {
     },
     SET_MESSAGE: (state, list) => {
       state.messages = list
+    },
+    SET_UNREAD: (state, count) => {
+      state.unread = count
     },
   },
 
@@ -113,10 +117,11 @@ const user = {
       })
     },
 
-    Messages({ commit }) {
-      list().then((res) => {
+    Messages({ commit }, parmas) {
+      list(parmas).then((res) => {
         if (res.code === 200) {
-          commit("SET_MESSAGE", res.rows)
+          // commit("SET_MESSAGE", res.rows)
+          commit("SET_UNREAD", res.total)
         }
       })
     },

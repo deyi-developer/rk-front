@@ -33,7 +33,7 @@
                 () =>
                   $router.push({
                     path: `/work/details/${row.eventHeaderId}`,
-                    query: { id: row.eventHeaderId }
+                    query: { id: row.eventHeaderId },
                   })
               "
               >{{ row.eventHeaderCode }}</a
@@ -48,9 +48,9 @@
         ></vxe-column>
         <vxe-column align="center" title="状态" field="eventStatus" width="100">
           <template #default="{ row }">
-            <el-tag size="small" :type="setTagType(row.eventStatus)">
-              {{ setStatus(row.eventStatus) || "未知" }}
-            </el-tag>
+            <el-tag size="small" :type="setTagType(row.eventStatus)">{{
+              setStatus(row.eventStatus) || "未知"
+            }}</el-tag>
           </template>
         </vxe-column>
         <vxe-column
@@ -124,16 +124,16 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { list, edit } from "./api";
-import workOrderDialog from "../components/work-order-dialog";
-import filterForm from "./filterForm";
+import { mapGetters } from "vuex"
+import { list, edit } from "./api"
+import workOrderDialog from "../components/work-order-dialog"
+import filterForm from "./filterForm"
 export default {
   name: "Order-list",
   dicts: ["event_type", "event_urgency_level", "event_complete_stutas"],
   components: {
     workOrderDialog,
-    filterForm
+    filterForm,
   },
   data() {
     return {
@@ -141,101 +141,101 @@ export default {
       form: {},
       params: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
       },
       tableData: [],
       totals: 0,
-      loading: false
-    };
+      loading: false,
+    }
   },
   computed: {
-    ...mapGetters(["userRolse"])
+    ...mapGetters(["userRolse"]),
   },
 
   mounted() {
-    const { params } = this.$route;
+    const { params } = this.$route
     //如果从项目详情进来  回写项目编码 且页码重置
     if (params?.projectCode) {
       this.$refs.form.queryParams = {
-        projectCode: params.projectCode
-      };
+        projectCode: params.projectCode,
+      }
       this.params = {
         pageNum: 1,
-        pageSize: 10
-      };
+        pageSize: 10,
+      }
     }
-    this.getList();
+    this.getList()
   },
   activated() {
-    const { params } = this.$route;
+    const { params } = this.$route
 
     if (params?.projectCode) {
       this.$refs.form.queryParams = {
-        projectCode: params.projectCode
-      };
+        projectCode: params.projectCode,
+      }
       this.params = {
         pageNum: 1,
-        pageSize: 10
-      };
+        pageSize: 10,
+      }
     }
 
-    this.getList();
+    this.getList()
   },
   methods: {
     async getList(query = {}) {
-      this.loading = true;
-      const filterVal = this.$refs.form.queryParams;
+      this.loading = true
+      const filterVal = this.$refs.form.queryParams
       const params = {
         ...this.params,
         ...query,
-        ...filterVal
-      };
-      const { total, rows } = await list(params);
-      this.tableData = rows;
-      this.totals = total;
-      this.loading = false;
+        ...filterVal,
+      }
+      const { total, rows } = await list(params)
+      this.tableData = rows
+      this.totals = total
+      this.loading = false
     },
 
     closeOrder(row) {
       this.$modal
         .confirm(`确定关闭此工单吗？`)
         .then(async () => {
-          const { eventHeaderId } = row;
-          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 });
+          const { eventHeaderId } = row
+          const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
           if (code === 200) {
-            this.$modal.msgSuccess(msg);
-            this.getList();
+            this.$modal.msgSuccess(msg)
+            this.getList()
           } else {
-            this.$modal.msgError(msg);
+            this.$modal.msgError(msg)
           }
         })
         .catch(() => {
-          console.log("catch");
-        });
+          console.log("catch")
+        })
     },
 
     update(row) {
-      this.form = row;
-      this.dialogVisible = true;
+      this.form = row
+      this.dialogVisible = true
     },
 
     setTagType(type) {
       const tgaMap = {
         0: "success",
-        1: "info"
-      };
-      return tgaMap[type];
+        1: "info",
+      }
+      return tgaMap[type]
     },
 
     setStatus(type) {
       const typeMap = {
         0: "处理中",
-        1: "已关闭"
-      };
-      return typeMap[type];
-    }
-  }
-};
+        1: "已关闭",
+      }
+      return typeMap[type]
+    },
+  },
+}
 </script>
 <style lang="scss" scoped>
 .wrap {
