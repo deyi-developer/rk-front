@@ -1,10 +1,11 @@
  
  # file to upload
-FOLDER_NAME="./dist"
-WORK_DIR_TEST="/root/opt/hydemoweb"
+INPUT_FOLDER="/usr/project/www/rk/"
+OUT_FOLDER="/root/guns-vip-admin/data/rk-system/rk/"
 
-echo "*******Start to build*******"
-npm run build:prod
+echo "*******Start to cpoy*******"
+rm -rf OUT_FOLDER
+cp -r INPUT_FOLDER OUT_FOLDER
 
-echo "*******Start to deploy *******"
+echo "*******end*******"
 
