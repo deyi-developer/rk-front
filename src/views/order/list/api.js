@@ -48,3 +48,10 @@ export function deleteCurrentMonth(type) {
     method: "delete"
   });
 }
+
+export function rkPlanEdit(enableFlag) {
+  return request({
+    url: `/report/rkPlanEdit/${enableFlag}`,
+    method: "POST"
+  });
+}
