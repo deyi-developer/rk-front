@@ -91,7 +91,12 @@
             </el-dropdown>
 
             <!-- 计划是否可编辑 -->
-            <el-tooltip v-if="checkRole(['risker'])" effect="dark" content="计划是否可编辑" placement="bottom">
+            <el-tooltip
+              v-if="checkRole(['risker'])"
+              effect="dark"
+              content="计划是否可编辑"
+              placement="bottom"
+            >
               <el-switch
                 v-model="risk.planEditEnable"
                 style="margin-left: 10px"
@@ -607,6 +612,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
+                  :disabled="!row.planEditEnable"
                   v-model="row.planBillingMoney"
                   type="number"
                   placeholder="请输入数值"
@@ -650,6 +656,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
+                  :disabled="!row.planEditEnable"
                   v-model="row.planReceiptsMoney"
                   type="number"
                   placeholder="请输入数值"
@@ -826,7 +833,14 @@ import { Tabs, TabPane } from "view-design";
 import { throttle, debounce } from "lodash-es";
 import filterForm from "./filterForm.vue";
 import { getDeptList } from "@/api/common";
-import { getList, saveData, getRiskNum, initData, toggle, rkPlanEdit } from "./api";
+import {
+  getList,
+  saveData,
+  getRiskNum,
+  initData,
+  toggle,
+  rkPlanEdit
+} from "./api";
 import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
@@ -905,7 +919,7 @@ export default {
         noRiskProjectNum: 0,
         noRiskProjectRate: 0,
         totalProjectNum: 827,
-        planEditEnable: false, // 计划是否可编辑
+        planEditEnable: false // 计划是否可编辑
       },
       //表头筛选项
       filterParams: {
@@ -927,7 +941,7 @@ export default {
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
         planReceiptsMoney: [{ required: true, message: "必须填写" }]
-      },
+      }
     };
   },
   async created() {
@@ -1190,8 +1204,8 @@ export default {
     },
     // 切换计划编辑状态
     checkoutPlanEdit(data) {
-      this.risk.planEditEnable = data
-      rkPlanEdit(data)
+      this.risk.planEditEnable = data;
+      rkPlanEdit(data);
     },
     // 滚动事件
     scrollHandle: throttle(function ({
