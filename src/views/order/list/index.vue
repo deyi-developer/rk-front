@@ -1210,8 +1210,7 @@ export default {
         this.$modal.notifySuccess(res.msg);
       }
       //重新获取数据
-      this.fetchData()
-
+      this.fetchData();
     },
     // 滚动事件
     scrollHandle: throttle(function ({
@@ -1266,11 +1265,10 @@ export default {
   }
   .content {
     height: 100%;
-    margin-left: 20px;
+    padding-top: 10px;
     span {
       padding-left: 15px;
-      display: table-cell;
-      vertical-align: bottom;
+      letter-spacing: 0;
       height: 31px;
       font-size: 12px;
       &:nth-of-type(1) {
