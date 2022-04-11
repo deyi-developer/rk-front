@@ -1,15 +1,15 @@
-"use strict"
-const path = require("path")
-const ScriptSetup = require("unplugin-vue2-script-setup/webpack").default
+"use strict";
+const path = require("path");
+const ScriptSetup = require("unplugin-vue2-script-setup/webpack").default;
 function resolve(dir) {
-  return path.join(__dirname, dir)
+  return path.join(__dirname, dir);
 }
 
-const CompressionPlugin = require("compression-webpack-plugin")
+const CompressionPlugin = require("compression-webpack-plugin");
 
-const name = process.env.VUE_APP_TITLE || "风控管理系统" // 网页标题
-const isEnd = process.env.END
-const port = process.env.port || process.env.npm_config_port || 9000 // 端口
+const name = process.env.VUE_APP_TITLE || "风控管理系统"; // 网页标题
+const isEnd = process.env.END;
+const port = process.env.port || process.env.npm_config_port || 9000; // 端口
 
 // vue.config.js 配置说明
 //官方vue.config.js 参考文档 https://cli.vuejs.org/zh/config/#css-loaderoptions
@@ -39,27 +39,27 @@ module.exports = {
             target: `http://localhost:8090`,
             changeOrigin: true,
             pathRewrite: {
-              ["^" + process.env.VUE_APP_BASE_API]: "",
-            },
-          },
+              ["^" + process.env.VUE_APP_BASE_API]: ""
+            }
+          }
         }
       : null,
-    disableHostCheck: true,
+    disableHostCheck: true
   },
   css: {
     loaderOptions: {
       sass: {
-        sassOptions: { outputStyle: "expanded" },
-      },
-    },
+        sassOptions: { outputStyle: "expanded" }
+      }
+    }
   },
   configureWebpack: {
     //parallel: false, // disable thread-loader, which is not compactible with this plugin
     name: name,
     resolve: {
       alias: {
-        "@": resolve("src"),
-      },
+        "@": resolve("src")
+      }
     },
     plugins: [
       // ScriptSetup({
@@ -70,20 +70,16 @@ module.exports = {
         test: /\.(js|css|html)?$/i, // 压缩文件格式
         filename: "[path].gz[query]", // 压缩后的文件名
         algorithm: "gzip", // 使用gzip压缩
-        minRatio: 0.8, // 压缩率小于1才会压缩
-      }),
-    ],
-    performance: {
-      maxEntrypointSize: 10000000,
-      maxAssetSize: 30000000,
-    },
+        minRatio: 0.8 // 压缩率小于1才会压缩
+      })
+    ]
   },
   chainWebpack(config) {
-    config.plugins.delete("preload") // TODO: need test
-    config.plugins.delete("prefetch") // TODO: need test
+    config.plugins.delete("preload"); // TODO: need test
+    config.plugins.delete("prefetch"); // TODO: need test
 
     // set svg-sprite-loader
-    config.module.rule("svg").exclude.add(resolve("src/assets/icons")).end()
+    config.module.rule("svg").exclude.add(resolve("src/assets/icons")).end();
     config.module
       .rule("icons")
       .test(/\.svg$/)
@@ -92,9 +88,9 @@ module.exports = {
       .use("svg-sprite-loader")
       .loader("svg-sprite-loader")
       .options({
-        symbolId: "icon-[name]",
+        symbolId: "icon-[name]"
       })
-      .end()
+      .end();
 
     config.when(process.env.NODE_ENV !== "development", (config) => {
       config
@@ -103,10 +99,10 @@ module.exports = {
         .use("script-ext-html-webpack-plugin", [
           {
             // `runtime` must same as runtimeChunk name. default is `runtime`
-            inline: /runtime\..*\.js$/,
-          },
+            inline: /runtime\..*\.js$/
+          }
         ])
-        .end()
+        .end();
       config.optimization.splitChunks({
         chunks: "all",
         cacheGroups: {
@@ -114,27 +110,27 @@ module.exports = {
             name: "chunk-libs",
             test: /[\\/]node_modules[\\/]/,
             priority: 10,
-            chunks: "initial", // only package third parties that are initially dependent
+            chunks: "initial" // only package third parties that are initially dependent
           },
           elementUI: {
             name: "chunk-elementUI", // split elementUI into a single package
             priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?element-ui(.*)/, // in order to adapt to cnpm
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
           },
           commons: {
             name: "chunk-commons",
             test: resolve("src/components"), // can customize your rules
             minChunks: 3, //  minimum common number
             priority: 5,
-            reuseExistingChunk: true,
-          },
-        },
-      })
+            reuseExistingChunk: true
+          }
+        }
+      });
       config.optimization.runtimeChunk("single"),
         {
           from: path.resolve(__dirname, "./public/robots.txt"), //防爬虫文件
-          to: "./", //到根目录下
-        }
-    })
-  },
-}
+          to: "./" //到根目录下
+        };
+    });
+  }
+};
