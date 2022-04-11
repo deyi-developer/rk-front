@@ -4,19 +4,14 @@
       <div class="order-title">
         <span>{{ info.eventHeaderCode }}</span>
         <span>{{ info.eventTitle }}</span>
-        <span
-          v-if="userRolse.includes('risker')"
-          class="close-btn"
-          style="float: right"
-        >
+        <span v-if="userRolse.includes('risker')" class="close-btn" style="float: right">
           <el-button
             :disabled="info.eventStatus == 1"
             size="mini"
             type="danger"
             plain
             @click="closeOrder"
-            >关闭工单</el-button
-          >
+          >关闭工单</el-button>
         </span>
       </div>
       <ul class="order-info">
@@ -43,10 +38,11 @@
         <li class="order-item">
           <label class="space">提出人:</label>
           <span class="value">
-            <Icon type="md-person" color="#6B7285;" />{{
+            <Icon type="md-person" color="#6B7285;" />
+            {{
               info.createName
-            }}</span
-          >
+            }}
+          </span>
         </li>
         <li class="order-item">
           <label class="space">提单时间:</label>
@@ -72,17 +68,16 @@
         "
         @click="editorVisible = !editorVisible"
       >
-        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span
-        >沟通历史
+        <span :class="[editorVisible ? 'triangle-up' : 'triangle-down']"></span>沟通历史
       </div>
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
       <div v-if="info.eventStatus == 0">
         <span>交接人：</span>
         <el-select
+          v-model="eventHandler"
           style="width: 20%; margin-bottom: 12px; margin-right: 24px"
           size="mini"
-          v-model="eventHandler"
           filterable
           placeholder="请选择工单交接人"
           :filter-method="getHandlers"
@@ -96,35 +91,25 @@
             :value="item.userId"
           >
             <span style="float: left">{{ item.nickName }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">
-              {{ item.userId }}
-            </span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userId }}</span>
           </el-option>
         </el-select>
-        <editor
-          v-model="info.eventMsg"
-          placeholder="请输入回复内容"
-          :height="150"
-        ></editor>
-        <el-button
-          style="margin: 12px 0"
-          type="primary"
-          size="small"
-          @click="submit"
-          >发 布</el-button
-        >
-      </div>
 
-      <!-- <span>工单处理截止日期：</span>
-      <el-date-picker
-        style="width: 20%; margin-bottom: 12px"
-        size="mini"
-        v-model="time"
-        type="date"
-        placeholder="选择日期"
-        format="yyyy-MM-dd"
-        value-format="yyyy-MM-dd"
-      ></el-date-picker>-->
+        <span>工单处理截止日期：</span>
+        <el-date-picker
+          v-model="eventHandleDate"
+          style="width: 20%; margin-bottom: 12px"
+          size="mini"
+          type="date"
+          filterable
+          placeholder="选择日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
+
+        <editor v-model="info.eventMsg" placeholder="请输入回复内容" :height="150"></editor>
+        <el-button style="margin: 12px 0" type="primary" size="small" @click="submit">发 布</el-button>
+      </div>
 
       <ul class="list">
         <li class="item" v-for="(item, index) in replyList" :key="index">
@@ -137,23 +122,13 @@
             <!-- item.eventCompleteStutas && item.showFlagButton -->
 
             <!-- 按钮的判段是后端showFlagButton+风控身份+工单为处理中 -->
-            <div
-              style="margin-left: auto"
-              v-if="item.showFlagButton && checkRole(['risker'])"
-            >
-              <el-button type="success" plain size="mini" @click="edit(item, 1)"
-                >已完成</el-button
-              >
-              <el-button plain type="danger" size="mini" @click="edit(item, 3)"
-                >未完成</el-button
-              >
+            <div style="margin-left: auto" v-if="item.showFlagButton && checkRole(['risker'])">
+              <el-button type="success" plain size="mini" @click="edit(item, 1)">已完成</el-button>
+              <el-button plain type="danger" size="mini" @click="edit(item, 3)">未完成</el-button>
             </div>
 
             <div style="margin-left: auto" v-if="item.showCompleteStutas">
-              <span
-                style="color: #67c23a; font-size: 12px"
-                v-if="item.eventCompleteStutas == 1"
-              >
+              <span style="color: #67c23a; font-size: 12px" v-if="item.eventCompleteStutas == 1">
                 <i class="el-icon-check"></i> 已完成
               </span>
               <span v-else style="color: #f56c6c; font-size: 12px">
@@ -200,7 +175,7 @@ export default {
       handlers: [],
       handlerLoding: false,
       formatDate,
-      time: ""
+      eventHandleDate: ""
     };
   },
 
@@ -295,12 +270,12 @@ export default {
 
     /** 回复 */
     async submit() {
-      console.log(this.eventHandler);
       if (this.eventHandler) {
         // 选择了交接人
         this.info.eventHandler = this.eventHandler;
-        // if (!this.time) return this.$modal.msgError('请选择工单截止日期')
-        // this.info.time = this.time
+
+        if (!this.eventHandleDate) return this.$modal.msgError('请选择工单截止日期')
+        this.info.eventHandleDate = this.eventHandleDate
       } else {
         this.info.eventHandler = null;
       }
@@ -320,7 +295,7 @@ export default {
     clear() {
       this.info.eventMsg = "";
       this.eventHandler = "";
-      this.time = "";
+      this.eventHandleDate = "";
     },
 
     /** 获取回复列表 */
