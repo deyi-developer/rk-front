@@ -151,6 +151,9 @@ export default {
         type: "warning"
       })
         .then(() => {
+          // 清空页签
+          this.$tab.closeAllPage();
+
           this.$store.dispatch("LogOut").then(() => {
             this.$router.replace("/login");
             window.location.reload(true);
