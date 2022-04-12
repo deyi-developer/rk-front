@@ -152,6 +152,7 @@
   </el-row>
 </template>
 <script>
+import { isNumber } from "lodash-es";
 export default {
   props: {
     summary: {
@@ -163,10 +164,10 @@ export default {
   },
   methods: {
     formatVal(a, b) {
-      if (!a || !b) {
-        return 0;
-      } else {
+      if (isNumber(a) && isNumber(b)) {
         return a - b;
+      } else {
+        return 0;
       }
     }
   }
