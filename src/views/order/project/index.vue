@@ -50,7 +50,7 @@
       >
         <el-card class="spacing" title="项目基本信息">
           <div slot="header">
-            <span>项目基本信息</span>
+            <span style="font-weight: bold; font-size: 16px">项目基本信息</span>
             <div style="float: right"></div>
           </div>
           <el-row :gutter="20">
@@ -304,8 +304,8 @@
             </el-col>
           </el-row>
         </el-card>
-        <!-- <TableDesc :summary="projectData" /> -->
-        <el-card class="spacing">
+        <TableDesc :summary="projectData" />
+        <!-- <el-card class="spacing">
           <div slot="header">
             <span>收入信息</span>
           </div>
@@ -373,7 +373,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-        </el-card>
+        </el-card> -->
       </el-form>
       <ChartsGroup
         :projectData="projectData"
@@ -425,7 +425,7 @@ export default {
           if (value !== 0) {
             callback()
           } else {
-            callback(new Error("非里程碑状态下项目结算周期不能0"))
+            callback(new Error("非里程碑状态下项目结算周期不能为0"))
           }
         }
       }
