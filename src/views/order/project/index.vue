@@ -1,11 +1,16 @@
 <template>
   <div class="order page-bg">
-    <header class="header" :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']">
+    <header
+      class="header"
+      :class="[sidebar.opened ? 'fixed-header-wide' : 'fixed-header-narrow']"
+    >
       <div>
         <span class="header-span">项目明细</span>
         <p class="header-title">
           <span>项目编码：{{ projectData.projectCode }}</span>
-          <span style="margin-left: 15px">项目名称: {{ projectData.projectName }}</span>
+          <span style="margin-left: 15px"
+            >项目名称: {{ projectData.projectName }}</span
+          >
         </p>
       </div>
 
@@ -20,16 +25,18 @@
           @click="
             $router.push({
               name: 'Order-list',
-              params: { projectCode: projectData.projectCode }
+              params: { projectCode: projectData.projectCode },
             })
           "
-        >服务工单</el-button>
+          >服务工单</el-button
+        >
         <el-button
           v-hasPermi="['workOrder:header:add']"
           style="padding: 3px 0"
           type="text"
           @click="sendOrder"
-        >发起工单</el-button>
+          >发起工单</el-button
+        >
       </div>
     </header>
     <div class="content">
@@ -39,7 +46,7 @@
         ref="form"
         size="mini"
         label-position="left"
-        label-width="120px"
+        label-width="140px"
       >
         <el-card class="spacing" title="项目基本信息">
           <div slot="header">
@@ -49,9 +56,7 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="项目编码:">
-                {{
-                  projectData.projectCode
-                }}
+                {{ projectData.projectCode }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -76,9 +81,7 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="对外项目编码:">
-                {{
-                  projectData.parentProjectCode
-                }}
+                {{ projectData.parentProjectCode }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -90,16 +93,16 @@
                 placement="top"
               >
                 <el-form-item label="对外项目名称:">
-                  <div class="ellipsis">{{ projectData.parentProjectName }}</div>
+                  <div class="ellipsis">
+                    {{ projectData.parentProjectName }}
+                  </div>
                 </el-form-item>
               </el-tooltip>
             </el-col>
 
             <el-col :span="8">
               <el-form-item label="项目结算类型:">
-                {{
-                  updateData.projectChargeType
-                }}
+                {{ updateData.projectChargeType }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,23 +110,17 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="项目创建日期:">
-                {{
-                  projectData.projectCreateDate
-                }}
+                {{ projectData.projectCreateDate }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="项目开始日期:">
-                {{
-                  projectData.projectStartDate
-                }}
+                {{ projectData.projectStartDate }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="项目结束日期:">
-                {{
-                  projectData.projectEndDate
-                }}
+                {{ projectData.projectEndDate }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -131,24 +128,18 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="最终客户:">
-                {{
-                  projectData.customName
-                }}
+                {{ projectData.customName }}
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
               <el-form-item label="一级部门:">
-                {{
-                  projectData.oneDeptName
-                }}
+                {{ projectData.oneDeptName }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="项目部门:">
-                {{
-                  projectData.deptName
-                }}
+                {{ projectData.deptName }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -156,16 +147,12 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="项目经理工号:">
-                {{
-                  projectData.projectManagerEmpNum
-                }}
+                {{ projectData.projectManagerEmpNum }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="项目经理姓名:">
-                {{
-                  projectData.pmName
-                }}
+                {{ projectData.pmName }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -317,7 +304,7 @@
             </el-col>
           </el-row>
         </el-card>
-
+        <!-- <TableDesc :summary="projectData" /> -->
         <el-card class="spacing">
           <div slot="header">
             <span>收入信息</span>
@@ -325,46 +312,34 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="总开票金额:">
-                {{
-                  projectData.totalBilling | currency
-                }}
+                {{ projectData.totalAlreadyBillingMoney | currency }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="总收款金额:">
-                {{
-                  projectData.totalReceipts | currency
-                }}
+                {{ projectData.totalReceiptssMoney | currency }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="PJTD含税总收入:">
-                {{
-                  projectData.pjtdTotalMoney | currency
-                }}
+                {{ projectData.pjtdTotalMoney | currency }}
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="相对PJTD收款率:">
-                {{
-                  projectData.pjtdReceiptsRate | percent
-                }}
+                {{ projectData.pjtdReceiptsRate | percent }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="相对PJTD开票率:">
-                {{
-                  projectData.pjtdBillingRate | percent
-                }}
+                {{ projectData.pjtdBillingRate | percent }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="相对总开票收款率:">
-                {{
-                  projectData.totalBillingRate | percent
-                }}
+                {{ projectData.totalBillingRate | percent }}
               </el-form-item>
             </el-col>
           </el-row>
@@ -377,60 +352,33 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="总应开金额:">
-                {{
-                  projectData.totalShouldBillingMoney | currency
-                }}
+                {{ projectData.totalShouldBillingMoney | currency }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="总应收金额:">
-                {{
-                  projectData.totalShouldReceiptsMoney | currency
-                }}
+                {{ projectData.totalShouldReceiptsMoney | currency }}
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="总已开金额:">
-                {{
-                  projectData.totalAlreadyBillingMoney | currency
-                }}
+                {{ projectData.totalAlreadyBillingMoney | currency }}
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="总已收金额:">
-                {{
-                  projectData.totalInvoicedMoney | currency
-                }}
+                {{ projectData.totalReceiptssMoney | currency }}
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item label="总应开未开:">总应开未开</el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="总应收未收(相对应收):">总应收未收(相对应收)</el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="总应收未收(相对已开):">总应收未收(相对已开)</el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item label="相对应开开票率:">相对应开开票率</el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="相对应收收款率:">相对应收收款率</el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="相对已开收款率:">相对已开收款率</el-form-item>
-            </el-col>
-          </el-row>-->
         </el-card>
       </el-form>
-      <ChartsGroup :projectData="projectData" :projectCode="$route.query.projectCode"></ChartsGroup>
+      <ChartsGroup
+        :projectData="projectData"
+        :projectCode="$route.query.projectCode"
+      ></ChartsGroup>
     </div>
 
     <work-order-dialog
@@ -444,54 +392,56 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { projectDetails, projectUpdate } from "./api";
-import ChartsGroup from "../../dashboard/ChartsGroup";
-import filterForm from "../list/filterForm";
-import workOrderDialog from "../components/work-order-dialog";
-import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+import { mapGetters } from "vuex"
+import { projectDetails, projectUpdate } from "./api"
+import ChartsGroup from "../../dashboard/ChartsGroup"
+import TableDesc from "../../dashboard/TableDesc.vue"
+import filterForm from "../list/filterForm"
+import workOrderDialog from "../components/work-order-dialog"
+import { checkPermi, checkRole } from "@/utils/permission" // 权限判断函数
 export default {
   name: "Details",
   dicts: ["event_type", "event_urgency_level", "risk_level", "risk_status"],
   components: {
     filterForm,
     workOrderDialog,
-    ChartsGroup
+    ChartsGroup,
+    TableDesc,
   },
   data() {
     /** 项目结算周期 */
     const projectChargePeriodRule = (rule, value, callback) => {
-      if (!this.isPmRule) callback();
+      if (!this.isPmRule) callback()
       if (value === "") {
-        callback(new Error("请输入项目结算周期"));
+        callback(new Error("请输入项目结算周期"))
       } else {
         if (this.projectData.projectChargeType == "里程碑") {
           if (value !== 0) {
-            callback(new Error("里程碑状态下项目结算周期必须为0"));
+            callback(new Error("里程碑状态下项目结算周期必须为0"))
           } else {
-            callback();
+            callback()
           }
         } else {
           if (value !== 0) {
-            callback();
+            callback()
           } else {
-            callback(new Error("非里程碑状态下项目结算周期不能0"));
+            callback(new Error("非里程碑状态下项目结算周期不能0"))
           }
         }
       }
-    };
+    }
     /** 账务账期 */
     const projectInvoicePeriodRule = (rule, value, callback) => {
-      if (!this.isPmRule) callback();
+      if (!this.isPmRule) callback()
 
       if (value === "") {
-        callback(new Error("请输入账务账期"));
+        callback(new Error("请输入账务账期"))
       } else if (value === 0 || value < 0) {
-        callback(new Error("账务账期必须大于0"));
+        callback(new Error("账务账期必须大于0"))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       projectData: {},
       updateData: {
@@ -505,7 +455,7 @@ export default {
         planReceiptsMoney: "",
         planRemark: "",
         projectCode: "",
-        projectChargeType: ""
+        projectChargeType: "",
       },
       // 工单内容
       workOrderform: {
@@ -515,18 +465,18 @@ export default {
         eventHandler: "",
         eventUrgencyLevel: "",
         eventHandleDate: "",
-        projectCode: this.$route.query.projectCode
+        projectCode: this.$route.query.projectCode,
       },
       rules: {
         projectChargePeriod: [
-          { validator: projectChargePeriodRule, required: true }
+          { validator: projectChargePeriodRule, required: true },
         ],
         projectInvoicePeriod: [
-          { validator: projectInvoicePeriodRule, required: true }
-        ]
+          { validator: projectInvoicePeriodRule, required: true },
+        ],
       },
-      dialogVisible: false
-    };
+      dialogVisible: false,
+    }
   },
 
   computed: {
@@ -534,45 +484,45 @@ export default {
 
     // 是否boss
     isBoss() {
-      if (this.userRolse.length === 0) return;
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
-        return this.userRolse.includes("boss");
+        return this.userRolse.includes("boss")
       } else if (this.userRolse.length > 1) {
-        return false;
+        return false
       }
     },
 
     // 登录人员是否是此项目项目经理
     isPm() {
-      return this.usersInfo.userId == this.projectData.pmUserId;
+      return this.usersInfo.userId == this.projectData.pmUserId
     },
 
     // 是否pm
     isPmRule() {
-      if (this.userRolse.length === 0) return;
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
-        return this.userRolse.includes("pm");
+        return this.userRolse.includes("pm")
       } else if (this.userRolse.length > 1) {
-        return false;
+        return false
       }
     },
 
     // 是否风控
     isRisker() {
-      if (this.userRolse.length === 0) return;
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
-        return this.userRolse.includes("risker");
+        return this.userRolse.includes("risker")
       } else if (this.userRolse.length > 1) {
-        return false;
+        return false
       }
-    }
+    },
   },
 
   created() {
     const {
-      query: { projectCode }
-    } = this.$route;
-    this.getData(projectCode);
+      query: { projectCode },
+    } = this.$route
+    this.getData(projectCode)
   },
 
   methods: {
@@ -580,73 +530,73 @@ export default {
     checkRole,
 
     clacClass(status) {
-      let className = "";
+      let className = ""
       if (status == "Green") {
-        className = "cell-green";
+        className = "cell-green"
       }
       if (status == "Yellow") {
-        className = "cell-yellow";
+        className = "cell-yellow"
       }
       if (status == "Red") {
-        className = "cell-red";
+        className = "cell-red"
       }
       if (status == "lawsuit") {
-        className = "cell-lawsuit";
+        className = "cell-lawsuit"
       }
-      return className;
+      return className
     },
 
     /** 页面数据 */
     async getData(projectCode) {
-      const vm = this;
-      const { data } = await projectDetails(projectCode);
+      const vm = this
+      const { data } = await projectDetails(projectCode)
       const obj = Object.assign({}, vm.$route, {
-        title: "项目:" + data.projectCode
-      });
-      this.$tab.updatePage(obj);
-      this.projectData = data;
-      this.setUpdata(data);
-      this.$refs["form"].validate(); // 请求完数据后即做一次验证
+        title: "项目:" + data.projectCode,
+      })
+      this.$tab.updatePage(obj)
+      this.projectData = data
+      this.setUpdata(data)
+      this.$refs["form"].validate() // 请求完数据后即做一次验证
     },
 
     /** 保存 */
     save() {
       this.$refs["form"].validate(async (valid) => {
         if (valid) {
-          this.updateData.projectCode = this.projectData.projectCode;
-          this.updateData.riskStatus = this.projectData.riskLevel;
-          this.updateData.riskLevel = this.projectData.riskLevel;
-          const { code, msg } = await projectUpdate([this.updateData]);
+          this.updateData.projectCode = this.projectData.projectCode
+          this.updateData.riskStatus = this.projectData.riskLevel
+          this.updateData.riskLevel = this.projectData.riskLevel
+          const { code, msg } = await projectUpdate([this.updateData])
           if (code === 200) {
-            this.$modal.msgSuccess(msg);
+            this.$modal.msgSuccess(msg)
             const {
-              query: { projectCode }
-            } = this.$route;
-            this.getData(projectCode);
+              query: { projectCode },
+            } = this.$route
+            this.getData(projectCode)
           } else {
-            this.$modal.msgError(msg);
+            this.$modal.msgError(msg)
           }
         } else {
-          this.$modal.msgError("校验不通过");
+          this.$modal.msgError("校验不通过")
         }
-      });
+      })
     },
 
     /** 设置回显数据 */
     setUpdata(data) {
       Object.keys(data).forEach((key) => {
         if (this.updateData.hasOwnProperty(key)) {
-          this.updateData[key] = data[key];
+          this.updateData[key] = data[key]
         }
-      });
+      })
     },
 
     /** 发起工单 */
     sendOrder() {
-      this.dialogVisible = true;
-    }
-  }
-};
+      this.dialogVisible = true
+    },
+  },
+}
 </script>
 <!-- <script setup>
 import { ref } from "@vue/composition-api";

@@ -12,7 +12,6 @@
       <vxe-table
         border
         size="small"
-        class="table"
         :data="tableData"
         style="width: 100%"
         show-overflow
