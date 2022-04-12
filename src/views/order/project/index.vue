@@ -25,7 +25,7 @@
           @click="
             $router.push({
               name: 'Order-list',
-              params: { projectCode: projectData.projectCode }
+              params: { projectCode: projectData.projectCode },
             })
           "
           >服务工单</el-button
@@ -184,7 +184,7 @@
                   style="width: 60%"
                   step-strictly
                   v-model="updateData.projectChargePeriod"
-                  :disabled="!isPmRule"
+                  :disabled="!checkRole(['pm', 'boss'])"
                 ></el-input-number>
                 <span>月</span>
               </el-form-item>
@@ -196,7 +196,7 @@
                   style="width: 60%"
                   step-strictly
                   v-model="updateData.projectInvoicePeriod"
-                  :disabled="!isPmRule"
+                  :disabled="!checkRole(['pm', 'boss'])"
                 ></el-input-number>
                 <span>天</span>
               </el-form-item>
@@ -210,7 +210,9 @@
                   style="width: 70%"
                   size="mini"
                   v-model="updateData.planBillingMoney"
-                  :disabled="!checkRole(['pm']) || !projectData.planEditEnable"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -220,7 +222,9 @@
                   style="width: 70%"
                   size="mini"
                   v-model="updateData.planReceiptsMoney"
-                  :disabled="!checkRole(['pm']) || !projectData.planEditEnable"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -298,7 +302,6 @@
                   :rows="2"
                   placeholder="请输入内容"
                   v-model="updateData.planRemark"
-                  :disabled="isBoss"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -392,13 +395,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { projectDetails, projectUpdate } from "./api";
-import ChartsGroup from "../../dashboard/ChartsGroup";
-import TableDesc from "../../dashboard/TableDesc.vue";
-import filterForm from "../list/filterForm";
-import workOrderDialog from "../components/work-order-dialog";
-import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+import { mapGetters } from "vuex"
+import { projectDetails, projectUpdate } from "./api"
+import ChartsGroup from "../../dashboard/ChartsGroup"
+import TableDesc from "../../dashboard/TableDesc.vue"
+import filterForm from "../list/filterForm"
+import workOrderDialog from "../components/work-order-dialog"
+import { checkPermi, checkRole } from "@/utils/permission" // 权限判断函数
 export default {
   name: "Details",
   dicts: ["event_type", "event_urgency_level", "risk_level", "risk_status"],
@@ -406,42 +409,42 @@ export default {
     filterForm,
     workOrderDialog,
     ChartsGroup,
-    TableDesc
+    TableDesc,
   },
   data() {
     /** 项目结算周期 */
     const projectChargePeriodRule = (rule, value, callback) => {
-      if (!this.isPmRule) callback();
+      if (!this.isPmRule) callback()
       if (value === "") {
-        callback(new Error("请输入项目结算周期"));
+        callback(new Error("请输入项目结算周期"))
       } else {
         if (this.projectData.projectChargeType == "里程碑") {
           if (value !== 0) {
-            callback(new Error("里程碑状态下项目结算周期必须为0"));
+            callback(new Error("里程碑状态下项目结算周期必须为0"))
           } else {
-            callback();
+            callback()
           }
         } else {
           if (value !== 0) {
-            callback();
+            callback()
           } else {
-            callback(new Error("非里程碑状态下项目结算周期不能为0"));
+            callback(new Error("非里程碑状态下项目结算周期不能为0"))
           }
         }
       }
-    };
+    }
     /** 账务账期 */
     const projectInvoicePeriodRule = (rule, value, callback) => {
-      if (!this.isPmRule) callback();
+      if (!this.isPmRule) callback()
 
       if (value === "") {
-        callback(new Error("请输入账务账期"));
+        callback(new Error("请输入账务账期"))
       } else if (value === 0 || value < 0) {
-        callback(new Error("账务账期必须大于0"));
+        callback(new Error("账务账期必须大于0"))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       projectData: {},
       updateData: {
@@ -455,7 +458,7 @@ export default {
         planReceiptsMoney: "",
         planRemark: "",
         projectCode: "",
-        projectChargeType: ""
+        projectChargeType: "",
       },
       // 工单内容
       workOrderform: {
@@ -465,18 +468,18 @@ export default {
         eventHandler: "",
         eventUrgencyLevel: "",
         eventHandleDate: "",
-        projectCode: this.$route.query.projectCode
+        projectCode: this.$route.query.projectCode,
       },
       rules: {
         projectChargePeriod: [
-          { validator: projectChargePeriodRule, required: true }
+          { validator: projectChargePeriodRule, required: true },
         ],
         projectInvoicePeriod: [
-          { validator: projectInvoicePeriodRule, required: true }
-        ]
+          { validator: projectInvoicePeriodRule, required: true },
+        ],
       },
-      dialogVisible: false
-    };
+      dialogVisible: false,
+    }
   },
 
   computed: {
@@ -484,45 +487,45 @@ export default {
 
     // 是否boss
     isBoss() {
-      if (this.userRolse.length === 0) return;
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
-        return this.userRolse.includes("boss");
+        return this.userRolse.includes("boss")
       } else if (this.userRolse.length > 1) {
-        return false;
+        return false
       }
     },
 
     // 登录人员是否是此项目项目经理
     isPm() {
-      return this.usersInfo.userId == this.projectData.pmUserId;
+      return this.usersInfo.userId == this.projectData.pmUserId
     },
 
     // 是否pm
     isPmRule() {
-      if (this.userRolse.length === 0) return;
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
-        return this.userRolse.includes("pm");
+        return this.userRolse.includes("pm")
       } else if (this.userRolse.length > 1) {
-        return false;
+        return false
       }
     },
 
     // 是否风控
     isRisker() {
-      if (this.userRolse.length === 0) return;
+      if (this.userRolse.length === 0) return
       if (this.userRolse.length === 1) {
-        return this.userRolse.includes("risker");
+        return this.userRolse.includes("risker")
       } else if (this.userRolse.length > 1) {
-        return false;
+        return false
       }
-    }
+    },
   },
 
   created() {
     const {
-      query: { projectCode }
-    } = this.$route;
-    this.getData(projectCode);
+      query: { projectCode },
+    } = this.$route
+    this.getData(projectCode)
   },
 
   methods: {
@@ -530,73 +533,73 @@ export default {
     checkRole,
 
     clacClass(status) {
-      let className = "";
+      let className = ""
       if (status == "Green") {
-        className = "cell-green";
+        className = "cell-green"
       }
       if (status == "Yellow") {
-        className = "cell-yellow";
+        className = "cell-yellow"
       }
       if (status == "Red") {
-        className = "cell-red";
+        className = "cell-red"
       }
       if (status == "lawsuit") {
-        className = "cell-lawsuit";
+        className = "cell-lawsuit"
       }
-      return className;
+      return className
     },
 
     /** 页面数据 */
     async getData(projectCode) {
-      const vm = this;
-      const { data } = await projectDetails(projectCode);
+      const vm = this
+      const { data } = await projectDetails(projectCode)
       const obj = Object.assign({}, vm.$route, {
-        title: "项目:" + data.projectCode
-      });
-      this.$tab.updatePage(obj);
-      this.projectData = data;
-      this.setUpdata(data);
-      this.$refs["form"].validate(); // 请求完数据后即做一次验证
+        title: "项目:" + data.projectCode,
+      })
+      this.$tab.updatePage(obj)
+      this.projectData = data
+      this.setUpdata(data)
+      this.$refs["form"].validate() // 请求完数据后即做一次验证
     },
 
     /** 保存 */
     save() {
       this.$refs["form"].validate(async (valid) => {
         if (valid) {
-          this.updateData.projectCode = this.projectData.projectCode;
-          this.updateData.riskStatus = this.projectData.riskLevel;
-          this.updateData.riskLevel = this.projectData.riskLevel;
-          const { code, msg } = await projectUpdate([this.updateData]);
+          this.updateData.projectCode = this.projectData.projectCode
+          this.updateData.riskStatus = this.projectData.riskLevel
+          this.updateData.riskLevel = this.projectData.riskLevel
+          const { code, msg } = await projectUpdate([this.updateData])
           if (code === 200) {
-            this.$modal.msgSuccess(msg);
+            this.$modal.msgSuccess(msg)
             const {
-              query: { projectCode }
-            } = this.$route;
-            this.getData(projectCode);
+              query: { projectCode },
+            } = this.$route
+            this.getData(projectCode)
           } else {
-            this.$modal.msgError(msg);
+            this.$modal.msgError(msg)
           }
         } else {
-          this.$modal.msgError("校验不通过");
+          this.$modal.msgError("校验不通过")
         }
-      });
+      })
     },
 
     /** 设置回显数据 */
     setUpdata(data) {
       Object.keys(data).forEach((key) => {
         if (this.updateData.hasOwnProperty(key)) {
-          this.updateData[key] = data[key];
+          this.updateData[key] = data[key]
         }
-      });
+      })
     },
 
     /** 发起工单 */
     sendOrder() {
-      this.dialogVisible = true;
-    }
-  }
-};
+      this.dialogVisible = true
+    },
+  },
+}
 </script>
 <!-- <script setup>
 import { ref } from "@vue/composition-api";
