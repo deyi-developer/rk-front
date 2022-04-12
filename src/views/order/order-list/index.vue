@@ -92,7 +92,6 @@
           v-if="userRolse.includes('risker')"
           align="center"
           title="操作"
-          width="120"
           fixed="right"
         >
           <template #default="{ row }">

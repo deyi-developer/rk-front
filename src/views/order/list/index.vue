@@ -1059,12 +1059,21 @@ export default {
 
     // 提交行
     async saveRowEvent(row) {
-      saveData([row]).then((res) => {
-        if (res.code == "200") {
-          this.$modal.notifySuccess(res.msg);
-          this.fetchData();
-        }
-      });
+      const $table = this.$refs.xTable;
+      const errMap = await $table.validate(true).catch((errMap) => errMap);
+      if (errMap && checkRole(["pm"])) {
+        this.$notify({
+          type: "warning",
+          message: "请检查数据是否填写完整！"
+        });
+      } else {
+        saveData([row]).then((res) => {
+          if (res.code == "200") {
+            this.$modal.notifySuccess(res.msg);
+            this.fetchData();
+          }
+        });
+      }
     },
     // 项目开关
     openStatusChange: debounce(({ openStatus, projectCode }) => {
