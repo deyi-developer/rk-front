@@ -294,6 +294,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
+                  :min="0"
                   v-model="row.projectChargePeriod"
                   type="number"
                   placeholder="请输入数值"
@@ -457,6 +458,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
+                  :min="0"
                   v-model="row.projectInvoicePeriod"
                   type="number"
                   placeholder="请输入数值"
@@ -1060,12 +1062,16 @@ export default {
     // 提交行
     async saveRowEvent(row) {
       const $table = this.$refs.xTable;
-      const errMap = await $table.validate(true).catch((errMap) => errMap);
-      if (errMap && checkRole(["pm"])) {
-        this.$notify({
-          type: "warning",
-          message: "请检查数据是否填写完整！"
-        });
+
+      if (checkRole(["pm"])) {
+        const errMap = await $table.validate(row).catch((errMap) => errMap);
+        if (errMap) {
+          console.log(errMap);
+          this.$notify({
+            type: "warning",
+            message: "请检查数据是否填写完整！"
+          });
+        }
       } else {
         saveData([row]).then((res) => {
           if (res.code == "200") {
@@ -1102,13 +1108,15 @@ export default {
     async validAllEvent() {
       const $table = this.$refs.xTable;
 
-      const errMap = await $table.validate(true).catch((errMap) => errMap);
-      // 有必填项未填 且为pm身份就提示报错
-      if (errMap && checkRole(["pm"])) {
-        this.$notify({
-          type: "warning",
-          message: "请检查数据是否填写完整！"
-        });
+      if (checkRole(["pm"])) {
+        // 有必填项未填 且为pm身份就提示报错
+        const errMap = await $table.validate(true).catch((errMap) => errMap);
+        if (errMap) {
+          this.$notify({
+            type: "warning",
+            message: "请检查数据是否填写完整！"
+          });
+        }
       } else {
         const data = $table.getData();
 
