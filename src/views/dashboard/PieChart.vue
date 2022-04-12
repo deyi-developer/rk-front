@@ -144,13 +144,13 @@ export default {
                 }
               },
               {
-                value: billingMoney90Day / 10000,
+                value: billingMoney60to90Day / 10000,
                 itemStyle: {
                   color: "#626c91"
                 }
               },
               {
-                value: billingMoney60to90Day / 10000,
+                value: billingMoney90Day / 10000,
                 itemStyle: {
                   color: "#a0a7e6"
                 }

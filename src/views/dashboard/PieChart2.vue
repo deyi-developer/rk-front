@@ -141,21 +141,21 @@ export default {
             },
             data: [
               // { value: totalReceiptssMoney, name: "已收" },
-              { value: receiptsMoney90Day / 10000, name: "超90天应收未收" },
+              { value: receiptsMoney30Day / 10000 },
               {
-                value: receiptsMoney60to90Day / 10000,
+                value: receiptsMoney30to60Day / 10000,
                 itemStyle: {
                   color: "#6be6c1"
                 }
               },
               {
-                value: receiptsMoney30to60Day / 10000,
+                value: receiptsMoney60to90Day / 10000,
                 itemStyle: {
                   color: "#626c91"
                 }
               },
               {
-                value: receiptsMoney30Day / 10000,
+                value: receiptsMoney90Day / 10000,
                 itemStyle: {
                   color: "#a0a7e6"
                 }
