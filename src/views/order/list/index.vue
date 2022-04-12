@@ -1190,7 +1190,7 @@ export default {
       //   return false;
       // }
       // pm boss不能编辑这个字段 、
-      if (checkRole(["pm,boss"])) {
+      if (checkRole(["pm", "boss"])) {
         if (
           [
             "grossProfitRiskLevel",
