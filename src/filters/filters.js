@@ -103,6 +103,8 @@ const install = function (Vue) {
   Vue.filter("percent", (value) => {
     if (value) {
       return (value * 100).toFixed(0) + "%";
+    } else if (value === 0) {
+      return "0%";
     } else {
       return "";
     }
