@@ -1168,11 +1168,11 @@ export default {
     activeCellMethod({ column }) {
       const { field } = column;
       // boss不能编辑
-      if (checkRole(["boss"])) {
-        return false;
-      }
-      // pm不能编辑这个字段
-      if (checkRole(["pm"])) {
+      // if (checkRole(["boss"])) {
+      //   return false;
+      // }
+      // pm boss不能编辑这个字段 、
+      if (checkRole(["pm,boss"])) {
         if (
           [
             "grossProfitRiskLevel",
