@@ -6,6 +6,7 @@
 <script>
 import resize from "./mixins/resize";
 import { getReportCost } from "./api";
+import currency from "currency.js";
 const animationDuration = 6000;
 
 export default {
@@ -88,6 +89,23 @@ export default {
           trigger: "axis",
           axisPointer: {
             type: "cross"
+          },
+          formatter: function (params) {
+            let tip = "";
+            let { axisValue, value } = params[0];
+            let { value2 } = params[1];
+            tip += axisValue;
+            params.forEach((item) => {
+              const { marker, seriesName, value } = item;
+              const val = currency(value, {
+                symbol: "",
+                separator: ","
+              }).format();
+              tip += "<br/>" + marker + seriesName + "   " + val;
+            });
+            const percent = ((value / value2) * 100).toFixed(2) + "%";
+            tip = tip + "<br/>" + "比率：" + percent;
+            return tip;
           }
         },
         aria: {

@@ -42,15 +42,14 @@
             :contentStyle="{ textAlign: 'right' }"
             label="未开票金额(相对PJTD)"
             >{{
-              formatVal(summary.pjtdTotalMoney - summary.totalBilling)
-                | currency
+              formatVal(summary.pjtdTotalMoney, summary.totalBilling) | currency
             }}</el-descriptions-item
           >
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="未收款金额(相对PJTD)"
             >{{
-              formatVal(summary.pjtdTotalMoney - summary.totalReceipts)
+              formatVal(summary.pjtdTotalMoney, summary.totalReceipts)
                 | currency
             }}</el-descriptions-item
           >
@@ -58,7 +57,7 @@
             :contentStyle="{ textAlign: 'right' }"
             label="未收款金额(相对已开)"
             >{{
-              formatVal(summary.totalBilling - summary.totalReceipts) | currency
+              formatVal(summary.totalBilling, summary.totalReceipts) | currency
             }}</el-descriptions-item
           >
           <el-descriptions-item
