@@ -124,14 +124,14 @@
             trigger: 'click',
             mode: 'cell',
             showStatus: true,
-            activeMethod: activeCellMethod,
+            activeMethod: activeCellMethod
           }"
           :column-config="{
-            width: 200,
+            width: 200
           }"
           :edit-rules="validRules"
           :filter-config="{
-            remote: true,
+            remote: true
           }"
           @scroll="scrollHandle"
           @edit-disabled="editDisabledEvent"
@@ -287,7 +287,7 @@
               title="结算周期（月）"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
               :filter-multiple="false"
               :edit-render="{}"
@@ -450,7 +450,7 @@
               title="发票账期（天）"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
               :filter-multiple="false"
               :edit-render="{}"
@@ -612,7 +612,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
-                  :disabled="!row.planEditEnable"
+                  :disabled="risk.planEditEnable == 0"
                   v-model="row.planBillingMoney"
                   type="number"
                   placeholder="请输入数值"
@@ -656,7 +656,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
-                  :disabled="!row.planEditEnable"
+                  :disabled="risk.planEditEnable == 0"
                   v-model="row.planReceiptsMoney"
                   type="number"
                   placeholder="请输入数值"
@@ -820,7 +820,7 @@
             'NextJump',
             'Sizes',
             'FullJump',
-            'Total',
+            'Total'
           ]"
         ></vxe-pager>
       </el-card>
@@ -829,21 +829,21 @@
   </div>
 </template>
 <script>
-import { Tabs, TabPane } from "view-design"
-import { throttle, debounce } from "lodash-es"
-import filterForm from "./filterForm.vue"
-import { getDeptList } from "@/api/common"
+import { Tabs, TabPane } from "view-design";
+import { throttle, debounce } from "lodash-es";
+import filterForm from "./filterForm.vue";
+import { getDeptList } from "@/api/common";
 import {
   getList,
   saveData,
   getRiskNum,
   initData,
   toggle,
-  rkPlanEdit,
-} from "./api"
-import ChartsGroup from "@/views/dashboard/ChartsGroup.vue"
+  rkPlanEdit
+} from "./api";
+import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 
-import { checkPermi, checkRole } from "@/utils/permission" // 权限判断函数
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 /* 每列宽度200
     前面2列固定
     项目基本信息 12个字段
@@ -854,19 +854,19 @@ import { checkPermi, checkRole } from "@/utils/permission" // 权限判断函数
     操作字段 2个
    */
 
-const w = 200 // 列宽度
-const fixedWidth = w * 2 //固定列
-const firstWidth = w * 11
-const secondWidth = w * 14
-const thirdWidth = w * 14
-const fourthWidth = w * 9
-const fifthWidth = w * 5
+const w = 200; // 列宽度
+const fixedWidth = w * 2; //固定列
+const firstWidth = w * 11;
+const secondWidth = w * 14;
+const thirdWidth = w * 14;
+const fourthWidth = w * 9;
+const fifthWidth = w * 5;
 //列   距离
-const firstLeft = 0
-const secondLeft = firstWidth
-const thirdLeft = firstWidth + secondWidth
-const fourthLeft = firstWidth + secondWidth + thirdWidth
-const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth
+const firstLeft = 0;
+const secondLeft = firstWidth;
+const thirdLeft = firstWidth + secondWidth;
+const fourthLeft = firstWidth + secondWidth + thirdWidth;
+const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth;
 
 export default {
   dicts: ["risk_level", "risk_status", "deyi_project_amount_type"],
@@ -878,34 +878,34 @@ export default {
       riskLevelFilter: [
         {
           label: "高风险",
-          value: "Red",
+          value: "Red"
         },
         {
           label: "中风险",
-          value: "Yellow",
+          value: "Yellow"
         },
         {
           label: "无风险",
-          value: "Green",
-        },
+          value: "Green"
+        }
       ],
       riskStatusFilter: [
         {
           label: "法务接管",
-          value: "lawsuit",
+          value: "lawsuit"
         },
         {
           label: "高风险",
-          value: "Red",
+          value: "Red"
         },
         {
           label: "中风险",
-          value: "Yellow",
+          value: "Yellow"
         },
         {
           label: "无风险",
-          value: "Green",
-        },
+          value: "Green"
+        }
       ],
       activeName: "first",
       tableLodaing: true,
@@ -919,18 +919,18 @@ export default {
         noRiskProjectNum: 0,
         noRiskProjectRate: 0,
         totalProjectNum: 827,
-        planEditEnable: false, // 计划是否可编辑
+        planEditEnable: false // 计划是否可编辑
       },
       //表头筛选项
       filterParams: {
         projectChargePeriod: null,
         projectChargePeriod: null,
-        oneDeptId: null,
+        oneDeptId: null
       },
       page: {
         pageSize: 20,
         pageNum: 1,
-        total: 0,
+        total: 0
       },
       validRules: {
         // grossProfitRiskLevel: [
@@ -940,18 +940,18 @@ export default {
         projectChargePeriod: [{ required: true, message: "必须填写" }],
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
-        planReceiptsMoney: [{ required: true, message: "必须填写" }],
-      },
-    }
+        planReceiptsMoney: [{ required: true, message: "必须填写" }]
+      }
+    };
   },
   async created() {
-    const res = await getDeptList()
+    const res = await getDeptList();
     if (res.code == 200) {
-      this.deptList = res.rows
+      this.deptList = res.rows;
     }
   },
   mounted() {
-    this.fetchData()
+    this.fetchData();
   },
   activated() {
     // this.fetchData();
@@ -962,21 +962,21 @@ export default {
 
     // 获取数据
     async fetchData(page) {
-      this.tableLodaing = true
-      const filterParams = this.filterParams
-      const formVal = {} //this.$refs.form.queryParams ;
-      const params = { ...formVal, ...filterParams, ...this.page, ...page }
+      this.tableLodaing = true;
+      const filterParams = this.filterParams;
+      const formVal = {}; //this.$refs.form.queryParams ;
+      const params = { ...formVal, ...filterParams, ...this.page, ...page };
       //获取列表
-      const res = await getList(params)
-      this.page.total = res.total
-      this.page.pageNum = res.pageNum
-      this.page.pageSize = res.pageSize
-      this.dataSource = res.rows
-      this.tableLodaing = false
+      const res = await getList(params);
+      this.page.total = res.total;
+      this.page.pageNum = res.pageNum;
+      this.page.pageSize = res.pageSize;
+      this.dataSource = res.rows;
+      this.tableLodaing = false;
       // 获取顶部风险项目
-      const risk = await getRiskNum(params)
+      const risk = await getRiskNum(params);
       if (risk) {
-        this.risk = risk
+        this.risk = risk;
       }
       //this.$nextTick(() => {
       // pm角色 更新数据后 要提醒他填写数据
@@ -987,103 +987,103 @@ export default {
       // });
     },
     handleCommand(command) {
-      this.$message("click on item " + command)
+      this.$message("click on item " + command);
       if (command == "initData") {
-        this.initData()
+        this.initData();
       } else {
-        this.otherButtom(command)
+        this.otherButtom(command);
       }
     },
     //重算按钮
     initData() {
       initData().then((res) => {
-        this.$message.warning("初始化完成，请刷新页面")
-      })
+        this.$message.warning("初始化完成，请刷新页面");
+      });
     },
     async otherButtom(command) {
-      const res = deleteCurrentMonth(command)
+      const res = deleteCurrentMonth(command);
       if (res.code == "200") {
-        this.$modal.notifySuccess(res.msg)
+        this.$modal.notifySuccess(res.msg);
       }
     },
     oneDeptIdChange(val) {
-      this.filterParams["oneDeptId"] = val
+      this.filterParams["oneDeptId"] = val;
       // 重新请求
-      this.fetchData({ pageNum: 1 })
+      this.fetchData({ pageNum: 1 });
     },
     //筛选
     filterChangeEvent({ property, values, datas, column }) {
-      console.log(property, values, datas, column)
+      console.log(property, values, datas, column);
       // 自定义的筛选数据是在datas里面
-      const val = values[0] || datas[0]
+      const val = values[0] || datas[0];
       if (val) {
-        this.filterParams[property] = val
+        this.filterParams[property] = val;
       } else {
-        this.filterParams[property] = null
+        this.filterParams[property] = null;
       }
 
       // 重新请求
-      this.fetchData({ pageNum: 1 })
+      this.fetchData({ pageNum: 1 });
     },
     //重置筛选
     reset() {
-      const $table = this.$refs.xTable
-      this.filterParams = {}
-      $table.clearFilter()
+      const $table = this.$refs.xTable;
+      this.filterParams = {};
+      $table.clearFilter();
       // 重新请求
-      this.fetchData({ pageNum: 1 })
+      this.fetchData({ pageNum: 1 });
     },
     // 点击tab 滚动列表
     handleClick(name) {
-      const $table = this.$refs.xTable
-      let left = 0
+      const $table = this.$refs.xTable;
+      let left = 0;
       switch (name) {
         case "first":
-          left = firstLeft
-          break
+          left = firstLeft;
+          break;
         case "second":
-          left = secondLeft
-          break
+          left = secondLeft;
+          break;
         case "third":
-          left = thirdLeft
-          break
+          left = thirdLeft;
+          break;
         case "fourth":
-          left = fourthLeft
-          break
+          left = fourthLeft;
+          break;
         case "fifth":
-          left = fifthLeft
-          break
+          left = fifthLeft;
+          break;
       }
-      $table.scrollTo(left + 5)
+      $table.scrollTo(left + 5);
     },
 
     // 提交行
     async saveRowEvent(row) {
       saveData([row]).then((res) => {
         if (res.code == "200") {
-          this.$modal.notifySuccess(res.msg)
-          this.fetchData()
+          this.$modal.notifySuccess(res.msg);
+          this.fetchData();
         }
-      })
+      });
     },
     // 项目开关
     openStatusChange: debounce(({ openStatus, projectCode }) => {
       toggle({ openStatus, projectCode })
         .then(() => {})
-        .finaly(() => this.fetchData())
-      console.log(openStatus, projectCode)
+        .finaly(() => this.fetchData());
+      console.log(openStatus, projectCode);
     }, 500),
     //table 点击事件
     gotoDetail(row) {
-      const { id, projectCode } = row
+      const { id, projectCode } = row;
       // const { field } = column;
       this.$router.push({
         // path: `/order/details/${projectCode}`,
-        path: `/order/details/${id}?projectCode=${projectCode}`,
+        path: `/order/details/${id}?projectCode=${projectCode}`
         // query: {
         //   projectCode
         // }
-      })
+      });
 
       // if (field == "projectCode") {
 
@@ -1091,82 +1091,100 @@ export default {
     },
     //提交全部
     async validAllEvent() {
-      const $table = this.$refs.xTable
+      const $table = this.$refs.xTable;
 
-      const errMap = await $table.validate(true).catch((errMap) => errMap)
+      const errMap = await $table.validate(true).catch((errMap) => errMap);
       // 有必填项未填 且为pm身份就提示报错
       if (errMap && checkRole(["pm"])) {
         this.$notify({
           type: "warning",
-          message: "请检查数据是否填写完整！",
-        })
+          message: "请检查数据是否填写完整！"
+        });
       } else {
-        const data = $table.getData()
+        const data = $table.getData();
 
         saveData(data).then((res) => {
           if (res.code == "200") {
-            this.$modal.notifySuccess(res.msg)
-            this.fetchData()
+            this.$modal.notifySuccess(res.msg);
+            this.fetchData();
           }
-        })
+        });
       }
     },
     //页码更新
     pageChange({ currentPage: pageNum, pageSize }) {
-      const $table = this.$refs.xTable
-      const updateRecords = $table.getUpdateRecords()
+      const $table = this.$refs.xTable;
+      const updateRecords = $table.getUpdateRecords();
 
       if (updateRecords.length > 0) {
-        let msg = "以下项目有修改但未提交数据：<br/>"
+        let msg = "以下项目有修改但未提交数据：<br/>";
 
         for (let index = 0; index < updateRecords.length; index++) {
-          const item = updateRecords[index]
-          msg = msg + item.projectName + "，<br/>"
+          const item = updateRecords[index];
+          msg = msg + item.projectName + "，<br/>";
         }
         this.$confirm(msg + "是否放弃填写?", "提示", {
-          dangerouslyUseHTMLString: true,
+          dangerouslyUseHTMLString: true
         })
           .then(() => {
-            this.fetchData({ pageNum, pageSize })
+            this.fetchData({ pageNum, pageSize });
           })
           .then(() => {})
-          .catch(() => {})
+          .catch(() => {});
       } else {
-        this.fetchData({ pageNum, pageSize })
+        this.fetchData({ pageNum, pageSize });
       }
     },
     cellClass({ row, column }) {
-      const { field } = column
+      const { field } = column;
+      const value = row[field];
+
       if (field == "projectCode") {
-        let className = ""
+        let className = "";
         const status = [
           row["grossProfitRiskLevel"],
           row["invoicingRiskLevel"],
           row["receiveRiskLevel"],
-          row["riskStatus"],
-        ]
+          row["riskStatus"]
+        ];
         if (status.includes("Green")) {
-          className = "cell-green"
+          className = "cell-green";
         }
         if (status.includes("Yellow")) {
-          className = "cell-yellow"
+          className = "cell-yellow";
         }
         if (status.includes("Red")) {
-          className = "cell-red"
+          className = "cell-red";
         }
         if (status.includes("lawsuit")) {
-          className = "cell-lawsuit"
+          className = "cell-lawsuit";
         }
 
-        return className
+        return className;
       } else {
-        return ""
+        let className = "";
+        // switch (value) {
+        //   case "Green":
+        //     className = "cell-green";
+        //     break;
+        //   case "Yellow":
+        //     className = "cell-yellow";
+        //     break;
+        //   case "Red":
+        //     className = "cell-red";
+        //     break;
+        //   case "lawsuit":
+        //     className = "cell-lawsuit";
+        //     break;
+        // }
+
+        return className;
       }
     },
 
     // 设置填写权限
     activeCellMethod({ column }) {
-      const { field } = column
+      const { field } = column;
       // boss不能编辑
       // if (checkRole(["boss"])) {
       //   return false;
@@ -1178,10 +1196,10 @@ export default {
             "grossProfitRiskLevel",
             "invoicingRiskLevel",
             "receiveRiskLevel",
-            "riskStatus",
+            "riskStatus"
           ].includes(field)
         ) {
-          return false
+          return false;
         }
       }
       // 风控不能编辑这个字段
@@ -1191,67 +1209,67 @@ export default {
             "projectChargePeriod",
             "projectInvoicePeriod",
             "planBillingMoney",
-            "planReceiptsMoney",
+            "planReceiptsMoney"
           ].includes(field)
         ) {
-          return false
+          return false;
         }
       }
-      return true
+      return true;
     },
     editDisabledEvent() {
-      this.$message.error("您的角色没有编辑此字段权限")
+      this.$message.error("您的角色没有编辑此字段权限");
     },
     // 切换计划编辑状态
     async checkoutPlanEdit(data) {
-      this.risk.planEditEnable = data
-      const res = await rkPlanEdit(data)
+      this.risk.planEditEnable = data;
+      const res = await rkPlanEdit(data);
       if (res.code == "200") {
-        this.$modal.notifySuccess(res.msg)
+        this.$modal.notifySuccess(res.msg);
       }
       //重新获取数据
-      this.fetchData()
+      this.fetchData();
     },
     // 滚动事件
     scrollHandle: throttle(function ({
       isX,
       bodyWidth,
       scrollLeft,
-      scrollWidth,
+      scrollWidth
     }) {
       if (isX) {
         if (scrollLeft >= firstLeft && scrollLeft <= firstLeft + firstWidth) {
-          this.activeName = "first"
+          this.activeName = "first";
         } else if (
           scrollLeft >= secondLeft &&
           scrollLeft <= secondLeft + secondWidth
         ) {
-          this.activeName = "second"
+          this.activeName = "second";
         } else if (
           scrollLeft >= thirdLeft &&
           scrollLeft <= thirdLeft + thirdWidth
         ) {
-          this.activeName = "third"
+          this.activeName = "third";
         } else if (
           scrollLeft >= fourthLeft &&
           scrollLeft <= fourthLeft + fourthWidth
         ) {
-          this.activeName = "fourth"
+          this.activeName = "fourth";
         } else if (
           scrollLeft >= fifthLeft &&
           scrollLeft <= fifthLeft + fifthWidth
         ) {
-          this.activeName = "fifth"
+          this.activeName = "fifth";
         }
 
         if (scrollLeft + bodyWidth == scrollWidth) {
-          this.activeName = "fifth"
+          this.activeName = "fifth";
         }
       }
     },
-    150),
-  },
-}
+    150)
+  }
+};
 </script>
 
 <style lang="scss">
