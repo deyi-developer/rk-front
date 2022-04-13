@@ -1071,15 +1071,18 @@ export default {
             type: "warning",
             message: "请检查数据是否填写完整！"
           });
+          return 
         }
-      } else {
-        saveData([row]).then((res) => {
-          if (res.code == "200") {
-            this.$modal.notifySuccess(res.msg);
-            this.fetchData();
-          }
-        });
       }
+      
+     
+      saveData([row]).then((res) => {
+        if (res.code == "200") {
+          this.$modal.notifySuccess(res.msg);
+          this.fetchData();
+        }
+      });
+      
     },
     // 项目开关
     openStatusChange: debounce(({ openStatus, projectCode }) => {
@@ -1116,17 +1119,19 @@ export default {
             type: "warning",
             message: "请检查数据是否填写完整！"
           });
+          return
         }
-      } else {
-        const data = $table.getData();
-
-        saveData(data).then((res) => {
-          if (res.code == "200") {
-            this.$modal.notifySuccess(res.msg);
-            this.fetchData();
-          }
-        });
       }
+
+      const data = $table.getData();
+
+      saveData(data).then((res) => {
+        if (res.code == "200") {
+          this.$modal.notifySuccess(res.msg);
+          this.fetchData();
+        }
+      });
+      
     },
     //页码更新
     pageChange({ currentPage: pageNum, pageSize }) {
