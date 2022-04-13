@@ -1003,7 +1003,7 @@ export default {
       });
     },
     async otherButtom(command) {
-      const res = deleteCurrentMonth(command);
+      const res = await deleteCurrentMonth(command);
       if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
       }
@@ -1085,10 +1085,10 @@ export default {
       
     },
     // 项目开关
-    openStatusChange: debounce(({ openStatus, projectCode }) => {
-      toggle({ openStatus, projectCode })
-        .then(() => {})
-        .finaly(() => this.fetchData());
+    openStatusChange: debounce(async function({ openStatus, projectCode }) {
+      await toggle({ openStatus, projectCode })
+
+      this.fetchData()
       console.log(openStatus, projectCode);
     }, 500),
     //table 点击事件
