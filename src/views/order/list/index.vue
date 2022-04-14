@@ -610,6 +610,7 @@
               field="planBillingMoney"
               class-name="bg-plan"
               title="本月计划开票额"
+              :formatter="currency"
               :edit-render="{}"
             >
               <template #edit="{ row }">
@@ -654,6 +655,7 @@
               field="planReceiptsMoney"
               class-name="bg-plan"
               title="本月计划收款额"
+              :formatter="currency"
               :edit-render="{}"
             >
               <template #edit="{ row }">
@@ -844,7 +846,7 @@ import {
   rkPlanEdit
 } from "./api";
 import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
-
+import currency from "currency.js";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 /* 每列宽度200
     前面2列固定
@@ -961,6 +963,9 @@ export default {
   methods: {
     checkPermi,
     checkRole,
+    currency({cellValue}) {
+      return currency(cellValue, { symbol: "", separator: "," }).format();
+    },
 
     // 获取数据
     async fetchData(page) {
