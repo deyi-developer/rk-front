@@ -25,10 +25,10 @@ export default {
       receiptsThisMonthAll
     ) {
       const config = {
-        rotate: 45,
+        rotate: 90,
         align: "left",
         verticalAlign: "middle",
-        position: "insideBottom",
+        position: "top",
         distance: 15,
       };
       const labelOption = {
@@ -38,7 +38,7 @@ export default {
         align: config.align,
         verticalAlign: config.verticalAlign,
         rotate: config.rotate,
-        formatter: "{c}  {name|{a}}",
+        formatter: "{c}",
         fontSize: 13,
         color: "#000",
         rich: {
@@ -79,7 +79,7 @@ export default {
             name: "计划开票额",
             type: "bar",
             barGap: 0,
-            // label: labelOption,
+            label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -88,7 +88,7 @@ export default {
           {
             name: "实际开票额",
             type: "bar",
-            // label: labelOption,
+            label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -97,7 +97,7 @@ export default {
           {
             name: "计划收款额",
             type: "bar",
-            // label: labelOption,
+            label: labelOption,
             emphasis: {
               focus: "series",
             },
@@ -106,7 +106,7 @@ export default {
           {
             name: "实际收款额",
             type: "bar",
-            // label: labelOption,
+            label: labelOption,
             emphasis: {
               focus: "series",
             },
