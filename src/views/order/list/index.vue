@@ -368,6 +368,11 @@
               class-name="bg-inv"
               title="超账期30天内应开未开"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.billingMoney30Day | currency
@@ -378,6 +383,11 @@
               class-name="bg-inv"
               title="超账期30-60天应开未开"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.billingMoney30to60Day | currency
@@ -388,6 +398,11 @@
               class-name="bg-inv"
               title="超账期60-90天应开未开"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.billingMoney60to90Day | currency
@@ -398,6 +413,11 @@
               class-name="bg-inv"
               title="超账期90天以上应开未开"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.billingMoney90Day | currency
@@ -532,6 +552,11 @@
               class-name="bg-collection"
               title="超账期30天内应收未收"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.receiptsMoney30Day | currency
@@ -542,6 +567,11 @@
               class-name="bg-collection"
               title="超账期30-60天应收未收"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.receiptsMoney30to60Day | currency
@@ -552,6 +582,11 @@
               class-name="bg-collection"
               title="超账期60-90天应收未收"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.receiptsMoney60to90Day | currency
@@ -562,6 +597,11 @@
               class-name="bg-collection"
               title="超账期90天以上应收未收"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 }
+              ]"
             >
               <template #default="{ row }">{{
                 row.receiptsMoney90Day | currency
@@ -832,6 +872,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { Tabs, TabPane } from "view-design";
 import { throttle, debounce } from "lodash-es";
