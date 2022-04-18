@@ -13,8 +13,8 @@
       <!-- table -->
       <vxe-table
         show-footer
-        align="right"
-        :footer-method="getSummaries"
+        align="center"
+        :footer-method="() => currentMonthList"
         ref="filterTable"
         v-loading="loading"
         auto-resize
@@ -32,9 +32,10 @@
           :filter-method="filterHandler"
           :fixed="item.fixed"
           :filter-multiple="
-            item.prop === 'projectCode' || (item.prop === 'projectName' && true)
+            (item.prop === 'projectCode' || item.prop === 'projectName') && true
           "
         >
+          <!-- 筛选 -->
           <template
             v-if="item.prop === 'projectCode' || item.prop === 'projectName'"
             #filter="{ $panel, column }"
@@ -47,9 +48,7 @@
               v-model="option.data"
               @input="$panel.changeOption($event, !!option.data, option)"
               @keyup.enter="$panel.confirmFilter()"
-              :placeholder="
-                item.prop === 'projectCode' ? '输入项目编码' : '请输入项目名称'
-              "
+              :placeholder="inputPlaceholder[item.prop]"
             />
           </template>
 
@@ -91,109 +90,43 @@
         </vxe-column>
       </vxe-table>
     </el-card>
-
-    <!-- 图表 -->
-    <!-- <el-card>
-      <column-chart :MonthList="MonthList" />
-    </el-card> -->
   </div>
 </template>
 <script>
+// 接口
 import { getCurrentMonth } from "./api";
-import ColumnChart from "./columnChart";
-import currency from "currency.js";
+
+// 常量
+import { COLUMN_LIST, FILTER_HANDLER, INPUT_PLACEHOLDER } from "./constants";
+
+// 转换千元单位
+import { thousandHandle } from "@utils";
 export default {
   name: "MonthlyDept",
-  components: {
-    ColumnChart
-  },
-
   data() {
     return {
-      columnist: [
-        {
-          prop: "serialNumber",
-          label: "序号",
-          minWidth: 50,
-          fixed: "left"
-        },
-        {
-          prop: "projectCode",
-          label: "得逸项目编码",
-          filters: [{ value: "projectCode", data: "" }],
-          minWidth: "200",
-          fixed: "left"
-        },
-        {
-          prop: "projectName",
-          label: "得逸项目名称",
-          filters: [{ value: "projectName", data: "" }],
-          minWidth: "180",
-          fixed: "left"
-        },
-        {
-          prop: "planBillingMoney",
-          label: "本月计划开票金额",
-          filters: [{ label: "隐藏无效数据", value: "planBillingMoney" }],
-          minWidth: "160"
-        },
-        {
-          prop: "billingThisMonth",
-          label: "本月实际开票金额",
-          filters: [{ label: "隐藏无效数据", value: "billingThisMonth" }],
-          minWidth: "160"
-        },
-        {
-          prop: "planReceiptsMoney",
-          label: "本月计划收款金额",
-          filters: [{ label: "隐藏无效数据", value: "planReceiptsMoney" }],
-          minWidth: "160"
-        },
-        {
-          prop: "receiptsThisMonth",
-          label: "本月实际收款金额",
-          filters: [{ label: "隐藏无效数据", value: "receiptsThisMonth" }],
-          minWidth: "160"
-        },
-        {
-          prop: "compleBillingThisMonth",
-          label: "开票完成率",
-          filters: [{ label: "隐藏无效数据", value: "compleBillingThisMonth" }],
-          minWidth: "110"
-        },
-        {
-          prop: "compleReceiptsThisMonth",
-          label: "收款完成率",
-          filters: [
-            { label: "隐藏无效数据", value: "compleReceiptsThisMonth" }
-          ],
-          minWidth: "110"
-        }
-      ],
-      // 当前月度列表+合计
-      currentMonthList: [],
-      // 当前月度列表
-      MonthList: [],
-      // 加载
-      loading: false,
+      columnist: COLUMN_LIST, // tableColum
+      inputPlaceholder: INPUT_PLACEHOLDER, // 筛选提示文案
+
+      currentMonthList: [], // 当前月度列表总计
+      MonthList: [], // 当前月度列表
+      loading: false, // 加载
       entryCode: "", // 项目编码
-      projectName: "" // 项目名称
+      projectName: "", // 项目名称
     };
   },
   created() {
-    const obj = Object.assign({}, this.$route, {
-      title: `${this.$route.query.title}计划明细`
-    });
-    this.$tab.updatePage(obj);
+    // 动态设置tab拦
+    this.$tab.updatePage(
+      Object.assign({}, this.$route, {
+        title: `${this.$route.query.title}计划明细`,
+      })
+    );
+
+    // 获取事业部计划明细列表
     this.getCurrentMonthInfo();
   },
   methods: {
-    getSummaries() {
-      return [this.currentMonthList];
-    },
-    currency(value) {
-      return currency(value, { symbol: "", separator: "," }).format();
-    },
     // 获取部门明细信息
     async getCurrentMonthInfo() {
       this.loading = true;
@@ -204,7 +137,7 @@ export default {
         totalBillThisMonth: billingThisMonth, // 本月实际开票总额
         totalPlanBilling: planBillingMoney, //本月计划开票总额
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
-        totalReceiptsThisMonth: receiptsThisMonth // 本月实际收款总额
+        totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
       } = await getCurrentMonth(
         this.$route.params.id,
         this.entryCode,
@@ -216,15 +149,17 @@ export default {
 
       // 有总计项的当前月度列表
       this.currentMonthList = [
-        "总计",
-        "-",
-        "-",
-        this.currency(planBillingMoney),
-        this.currency(billingThisMonth),
-        this.currency(planReceiptsMoney),
-        this.currency(receiptsThisMonth),
-        "-",
-        "-"
+        [
+          "总计",
+          "-",
+          "-",
+          thousandHandle(planBillingMoney),
+          thousandHandle(billingThisMonth),
+          thousandHandle(planReceiptsMoney),
+          thousandHandle(receiptsThisMonth),
+          "-",
+          "-",
+        ],
       ];
 
       this.loading = false;
@@ -232,13 +167,7 @@ export default {
 
     // 数据过滤
     filterHandler({ option: { data }, row, value }) {
-      const validData = row[value];
-
-      if (value === "projectCode" || value === "projectName") {
-        if (validData.includes(data)) return row;
-      } else {
-        if (validData && validData != "0.00") return row;
-      }
+      return FILTER_HANDLER(value)(row[value], data, row);
     },
 
     // 清除所有过滤器
@@ -247,8 +176,8 @@ export default {
       this.entryCode = "";
       this.projectName = "";
       this.getCurrentMonthInfo();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -58,7 +58,8 @@ module.exports = {
     name: name,
     resolve: {
       alias: {
-        "@": resolve("src")
+        "@": resolve("src"),
+        "@utils": resolve("src/utils")
       }
     },
     plugins: [

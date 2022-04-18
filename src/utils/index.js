@@ -1,5 +1,7 @@
 import { parseTime } from './ruoyi'
 
+import currency from "currency.js";
+
 /**
  * 表格时间格式化
  */
@@ -387,4 +389,12 @@ export function camelCase(str) {
 export function isNumberStr(str) {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str)
 }
+
+/**
+ * 转换为千元单位的数字
+ * @abstract
+ * @param {!number} value: 需要转换为千元的数字
+ * @return {number} 转换好的千元数字
+ */
+export const thousandHandle = value => currency(value, { symbol: "", separator: "," }).format()
  

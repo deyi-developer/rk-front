@@ -12,7 +12,7 @@
         ref="table1"
         show-footer
         height="500"
-        :footer-method="getSummaries"
+        :footer-method="() => this.currentMonthList"
         v-loading="loading"
         :data="MonthList"
         style="width: 100%"
@@ -23,17 +23,22 @@
           :prop="item.prop"
           :title="item.label"
           :min-width="item.minWidth"
+          :align="item.align"
         >
-          <!-- 如果为行标签，自定义行 -->
-          <template #default="{ row }">
+          <template #default="{ row, rowIndex }">
+            <!-- 序号 -->
+            <span v-if="item.prop === 'serialNumber'">{{ rowIndex + 1 }}</span>
+
+            <!-- 部门名称 -->
             <router-link
-              v-if="item.prop === 'oneDeptName'"
+              v-else-if="item.prop === 'oneDeptName'"
               :to="`/monthly/dept/${row.oneDeptId}?title=${row.oneDeptName}`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>
             </router-link>
 
+            <!-- 默认值 -->
             <span v-else>{{ row[item.prop] | currency }}</span>
           </template>
         </vxe-column>
@@ -46,88 +51,66 @@
     </el-card>
   </div>
 </template>
+
 <script>
+// 接口
 import { getCurrentMonth } from "./api";
+
+// 图表
 import ColumnChart from "./columnChart";
-import currency from "currency.js";
+
+// 转换千元单位
+import { thousandHandle } from "@utils";
+
+// 常量
+import { COLUMN_LIST } from "./constants";
 export default {
   name: "Monthly-plan",
   components: {
     ColumnChart,
   },
-
   data() {
     return {
-      columnist: [
-        {
-          prop: "oneDeptName",
-          label: "行标签",
-          minWidth: "180",
-        },
-        {
-          prop: "planBillingMoney",
-          label: "本月计划开票金额",
-          minWidth: "180",
-        },
-        {
-          prop: "billingThisMonth",
-          label: "本月实际开票金额",
-          minWidth: "180",
-        },
-        {
-          prop: "planReceiptsMoney",
-          label: "本月计划收款金额",
-          minWidth: "180",
-        },
-        {
-          prop: "receiptsThisMonth",
-          label: "本月实际收款金额",
-          minWidth: "180",
-        },
-      ],
-      // 合计
-      currentMonthList: {},
-      // 当前月度列表
-      MonthList: [],
-      // 加载
-      loading: false,
+      columnist: COLUMN_LIST, // 表格项
+
+      MonthList: [], // 当前月度列表
+      currentMonthList: [], // 合计
+      loading: false, // 加载
     };
   },
-  async created() {
-    this.loading = true;
-
-    // 获取当前月度
-    const {
-      planDtoList = [],
-      totalBillThisMonth: billingThisMonth, // 本月实际开票总额
-      totalPlanBilling: planBillingMoney, //本月计划开票总额
-      totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
-      totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
-    } = await getCurrentMonth();
-
-    // 当前月度列表
-    this.MonthList = planDtoList;
-
-    // 有总计项的当前月度列表
-    this.currentMonthList = [
-      "总计",
-      this.currency(planBillingMoney),
-      this.currency(billingThisMonth),
-      this.currency(planReceiptsMoney),
-      this.currency(receiptsThisMonth),
-    ];
-
-    this.loading = false;
+  created() {
+    this.getMonthPlanList();
   },
   methods: {
-    // 合计
-    getSummaries() {
-      console.log(this.currentMonthList)
-      return [this.currentMonthList];
-    },
-    // 格式化金额
-    currency(value) {
-      return currency(value, { symbol: "", separator: "," }).format();
+    // 获取当月计划列表
+    async getMonthPlanList() {
+      this.loading = true;
+
+      // 获取当前月度
+      const {
+        planDtoList = [],
+        totalBillThisMonth: billingThisMonth, // 本月实际开票总额
+        totalPlanBilling: planBillingMoney, //本月计划开票总额
+        totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
+        totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
+      } = await getCurrentMonth();
+
+      // 当前月度列表
+      this.MonthList = planDtoList;
+
+      // 有总计项的当前月度列表
+      this.currentMonthList = [
+        [
+          "总计",
+          "-",
+          thousandHandle(planBillingMoney),
+          thousandHandle(billingThisMonth),
+          thousandHandle(planReceiptsMoney),
+          thousandHandle(receiptsThisMonth),
+        ],
+      ];
+
+      this.loading = false;
     },
   },
 };
