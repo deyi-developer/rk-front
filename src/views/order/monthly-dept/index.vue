@@ -1,4 +1,4 @@
-<!-- 当月计划 -->
+<!-- 部门计划明细 -->
 <template>
   <div class="wrap">
     <el-card class="space">
@@ -138,11 +138,11 @@ export default {
         totalPlanBilling: planBillingMoney, //本月计划开票总额
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
         totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
-      } = await getCurrentMonth(
-        this.$route.params.id,
-        this.entryCode,
-        this.projectName
-      );
+      } = await getCurrentMonth({
+        oneDeptId: this.$route.params.id,
+        projectCode: this.entryCode,
+        projectName: this.projectName,
+      });
 
       // 当前月度列表
       this.MonthList = planDtoList;
