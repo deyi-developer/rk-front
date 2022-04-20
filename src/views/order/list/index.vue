@@ -1187,7 +1187,7 @@ export default {
       saveData([row]).then((res) => {
         if (res.code == "200") {
           this.$modal.notifySuccess(res.msg);
-          this.fetchData();
+          // this.fetchData();
         }
       });
     },
