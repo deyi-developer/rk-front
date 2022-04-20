@@ -14,28 +14,28 @@ export default {
   props: {
     summary: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     className: {
       type: String,
-      default: "chart"
+      default: "chart",
     },
     width: {
       type: String,
-      default: "100%"
+      default: "100%",
     },
     height: {
       type: String,
-      default: "350px"
+      default: "350px",
     },
     options: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      chart: null
+      chart: null,
     };
   },
   watch: {
@@ -43,8 +43,8 @@ export default {
       handler() {
         this.initChart();
       },
-      depp: true
-    }
+      depp: true,
+    },
   },
 
   beforeDestroy() {
@@ -66,7 +66,7 @@ export default {
         receiptsMoney30to60Day = 0,
         receiptsMoney60to90Day = 0,
         receiptsMoney90Day = 0,
-        totalShouldNotReceiptsMoney = 0
+        totalShouldNotReceiptsMoney = 0,
       } = this.summary;
       const total =
         (receiptsMoney30Day +
@@ -78,8 +78,8 @@ export default {
         aria: {
           enabled: true,
           decal: {
-            show: true
-          }
+            show: true,
+          },
         },
         title: {
           text:
@@ -91,21 +91,21 @@ export default {
             "万     " +
             "总应收未收：" +
             (totalShouldNotReceiptsMoney / 10000).toFixed(2) +
-            "万"
+            "万",
         },
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "shadow"
+            type: "shadow",
           },
           formatter: function (params) {
             const { name, value } = params[0];
             const percent = total ? ((value / total) * 100).toFixed(2) : 0;
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
               symbol: "",
-              separator: ","
+              separator: ",",
             }).format()}<br/>`;
-          }
+          },
         },
         xAxis: {
           type: "category",
@@ -115,8 +115,8 @@ export default {
             "超30天内\n应收未收",
             "超30-60天\n应收未收",
             "超60-90天\n应收未收",
-            "超90天\n应收未收"
-          ]
+            "超90天\n应收未收",
+          ],
         },
         yAxis: {
           type: "value",
@@ -127,8 +127,8 @@ export default {
             formatter: function (value, index) {
               // return value / 10000 + "万元";
               return value;
-            }
-          }
+            },
+          },
         },
         series: [
           {
@@ -137,29 +137,32 @@ export default {
             barWidth: "30",
             showBackground: true,
             backgroundStyle: {
-              color: "rgba(180, 180, 180, 0.2)"
+              color: "rgba(180, 180, 180, 0.2)",
             },
             data: [
               // { value: totalReceiptssMoney, name: "已收" },
-              { value: receiptsMoney30Day / 10000 },
+              { value: receiptsMoney30Day / 10000, id: "receiptsMoney30Day" },
               {
                 value: receiptsMoney30to60Day / 10000,
+                id: "receiptsMoney30to60Day",
                 itemStyle: {
-                  color: "#6be6c1"
-                }
+                  color: "#6be6c1",
+                },
               },
               {
                 value: receiptsMoney60to90Day / 10000,
+                id: "receiptsMoney60to90Day",
                 itemStyle: {
-                  color: "#626c91"
-                }
+                  color: "#626c91",
+                },
               },
               {
                 value: receiptsMoney90Day / 10000,
+                id: "receiptsMoney90Day",
                 itemStyle: {
-                  color: "#a0a7e6"
-                }
-              }
+                  color: "#a0a7e6",
+                },
+              },
             ],
             label: {
               show: true,
@@ -167,19 +170,37 @@ export default {
               formatter: ({ value }) => {
                 return currency(value, {
                   symbol: "",
-                  separator: ","
+                  separator: ",",
                 }).format();
-              }
-            }
-          }
+              },
+            },
+          },
         ],
-        ...this.options
+        ...this.options,
       };
 
       this.chart = this.$echarts.init(this.$el, "walden");
 
       this.chart.setOption(option);
-    }
-  }
+
+      this.chart.getZr().on("click", (event) => {
+        // 点击空白处，触发
+        if (!event.target) {
+          this.$router.push({
+            path: `/order/list?filter=${JSON.stringify([
+              "totalShouldNotReceiptsMoney",
+            ])}`,
+          });
+        }
+      });
+
+      // 柱状图点击事件
+      this.chart.on("click", ({ data }) => {
+        this.$router.push({
+          path: `/order/list?filter=${JSON.stringify([data.id])}`,
+        });
+      });
+    },
+  },
 };
 </script>

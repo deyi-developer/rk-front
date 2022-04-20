@@ -12,28 +12,28 @@ export default {
   props: {
     summary: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     className: {
       type: String,
-      default: "chart"
+      default: "chart",
     },
     width: {
       type: String,
-      default: "100%"
+      default: "100%",
     },
     height: {
       type: String,
-      default: "350px"
+      default: "350px",
     },
     options: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
-      chart: null
+      chart: null,
     };
   },
   watch: {
@@ -41,8 +41,8 @@ export default {
       handler() {
         this.initChart();
       },
-      depp: true
-    }
+      depp: true,
+    },
   },
 
   beforeDestroy() {
@@ -64,7 +64,7 @@ export default {
         billingMoney30to60Day = 0,
         billingMoney60to90Day = 0,
         billingMoney90Day = 0,
-        totalShouldNotBillingMoney = 0
+        totalShouldNotBillingMoney = 0,
       } = this.summary;
 
       const total =
@@ -77,8 +77,8 @@ export default {
         aria: {
           enabled: true,
           decal: {
-            show: true
-          }
+            show: true,
+          },
         },
         title: {
           text:
@@ -90,21 +90,21 @@ export default {
             "万     " +
             "总应开未开：" +
             (totalShouldNotBillingMoney / 10000).toFixed(2) +
-            "万"
+            "万",
         },
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "shadow"
+            type: "shadow",
           },
           formatter: function (params) {
             const { name, value } = params[0];
             const percent = total ? ((value / total) * 100).toFixed(2) : 0;
             return `${name}<br/>比率：${percent}%<br/>数值：${currency(value, {
               symbol: "",
-              separator: ","
+              separator: ",",
             }).format()}<br/>`;
-          }
+          },
         },
         yAxis: {
           type: "value",
@@ -115,8 +115,8 @@ export default {
             formatter: function (value, index) {
               // return value / 10000 + "万元";
               return value;
-            }
-          }
+            },
+          },
         },
         xAxis: {
           type: "category",
@@ -126,8 +126,8 @@ export default {
             "超30天内\n应开未开",
             "超30-60天\n应开未开",
             "超60-90天\n应开未开",
-            "超90天\n应开未开"
-          ]
+            "超90天\n应开未开",
+          ],
         },
         series: [
           {
@@ -135,30 +135,34 @@ export default {
             barWidth: "30",
             data: [
               {
-                value: billingMoney30Day / 10000
+                value: billingMoney30Day / 10000,
+                id: "billingMoney30Day",
               },
               {
                 value: billingMoney30to60Day / 10000,
+                id: "billingMoney30to60Day",
                 itemStyle: {
-                  color: "#6be6c1"
-                }
+                  color: "#6be6c1",
+                },
               },
               {
                 value: billingMoney60to90Day / 10000,
+                id: "billingMoney60to90Day",
                 itemStyle: {
-                  color: "#626c91"
-                }
+                  color: "#626c91",
+                },
               },
               {
                 value: billingMoney90Day / 10000,
+                id: "billingMoney90Day",
                 itemStyle: {
-                  color: "#a0a7e6"
-                }
-              }
+                  color: "#a0a7e6",
+                },
+              },
             ],
             showBackground: true,
             backgroundStyle: {
-              color: "rgba(180, 180, 180, 0.2)"
+              color: "rgba(180, 180, 180, 0.2)",
             },
             label: {
               show: true,
@@ -166,19 +170,37 @@ export default {
               formatter: ({ value }) => {
                 return currency(value, {
                   symbol: "",
-                  separator: ","
+                  separator: ",",
                 }).format();
-              }
-            }
-          }
+              },
+            },
+          },
         ],
-        ...this.options
+        ...this.options,
       };
 
       this.chart = this.$echarts.init(this.$el, "walden");
 
       this.chart.setOption(option);
-    }
-  }
+
+      this.chart.getZr().on("click", (event) => {
+        // 点击空白处，触发
+        if (!event.target) {
+          this.$router.push({
+            path: `/order/list?filter=${JSON.stringify([
+              "totalShouldNotBillingMoney",
+            ])}`,
+          });
+        }
+      });
+
+      // 柱状图点击跳转事件
+      this.chart.on("click", ({ data }) => {
+        this.$router.push({
+          path: `/order/list?filter=${JSON.stringify([data.id])}`,
+        });
+      });
+    },
+  },
 };
 </script>

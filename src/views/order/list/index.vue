@@ -124,14 +124,14 @@
             trigger: 'click',
             mode: 'cell',
             showStatus: true,
-            activeMethod: activeCellMethod
+            activeMethod: activeCellMethod,
           }"
           :column-config="{
-            width: 200
+            width: 200,
           }"
           :edit-rules="validRules"
           :filter-config="{
-            remote: true
+            remote: true,
           }"
           @scroll="scrollHandle"
           @edit-disabled="editDisabledEvent"
@@ -287,7 +287,7 @@
               title="结算周期（月）"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
               :filter-multiple="false"
               :edit-render="{}"
@@ -358,6 +358,11 @@
               class-name="bg-inv"
               title="超账期应开未开总额"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 },
+              ]"
             >
               <template #default="{ row }">{{
                 row.totalShouldNotBillingMoney | currency
@@ -371,7 +376,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -386,7 +391,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -401,7 +406,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -416,7 +421,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -471,7 +476,7 @@
               title="发票账期（天）"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
               :filter-multiple="false"
               :edit-render="{}"
@@ -542,6 +547,11 @@
               class-name="bg-collection"
               title="超账期应收未收总额"
               align="right"
+              :filter-multiple="false"
+              :filters="[
+                { label: '数据非空', value: 2 },
+                { label: '数据为空', value: 1 },
+              ]"
             >
               <template #default="{ row }">{{
                 row.totalShouldNotReceiptsMoney | currency
@@ -555,7 +565,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -570,7 +580,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -585,7 +595,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -600,7 +610,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 }
+                { label: '数据为空', value: 1 },
               ]"
             >
               <template #default="{ row }">{{
@@ -637,7 +647,7 @@
 
           <vxe-colgroup title="项目计划">
             <vxe-column
-              field="totalShouldNotBillingMoney"
+              field="totalShouldNotBillingMoneys"
               class-name="bg-plan"
               title="超帐期应开未开总额"
               align="right"
@@ -682,7 +692,7 @@
               }}</template>
             </vxe-column>
             <vxe-column
-              field="totalShouldNotReceiptsMoney"
+              field="totalShouldNotReceiptsMoneys"
               class-name="bg-plan"
               title="超帐期应收未收总额"
               align="right"
@@ -864,7 +874,7 @@
             'NextJump',
             'Sizes',
             'FullJump',
-            'Total'
+            'Total',
           ]"
         ></vxe-pager>
       </el-card>
@@ -884,11 +894,18 @@ import {
   getRiskNum,
   initData,
   toggle,
-  rkPlanEdit
+  rkPlanEdit,
 } from "./api";
 import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 import currency from "currency.js";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+
+// 常量
+import { FILTER_PARAMS } from "./constants";
+
+// 缓存过滤参数
+let QUERY_STORE = "[]";
+
 /* 每列宽度200
     前面2列固定
     项目基本信息 12个字段
@@ -923,34 +940,34 @@ export default {
       riskLevelFilter: [
         {
           label: "高风险",
-          value: "Red"
+          value: "Red",
         },
         {
           label: "中风险",
-          value: "Yellow"
+          value: "Yellow",
         },
         {
           label: "无风险",
-          value: "Green"
-        }
+          value: "Green",
+        },
       ],
       riskStatusFilter: [
         {
           label: "法务接管",
-          value: "lawsuit"
+          value: "lawsuit",
         },
         {
           label: "高风险",
-          value: "Red"
+          value: "Red",
         },
         {
           label: "中风险",
-          value: "Yellow"
+          value: "Yellow",
         },
         {
           label: "无风险",
-          value: "Green"
-        }
+          value: "Green",
+        },
       ],
       activeName: "first",
       tableLodaing: true,
@@ -964,18 +981,14 @@ export default {
         noRiskProjectNum: 0,
         noRiskProjectRate: 0,
         totalProjectNum: 827,
-        planEditEnable: false // 计划是否可编辑
+        planEditEnable: false, // 计划是否可编辑
       },
       //表头筛选项
-      filterParams: {
-        projectChargePeriod: null,
-        projectChargePeriod: null,
-        oneDeptId: null
-      },
+      filterParams: {},
       page: {
         pageSize: 20,
         pageNum: 1,
-        total: 0
+        total: 0,
       },
       validRules: {
         // grossProfitRiskLevel: [
@@ -985,8 +998,8 @@ export default {
         projectChargePeriod: [{ required: true, message: "必须填写" }],
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
-        planReceiptsMoney: [{ required: true, message: "必须填写" }]
-      }
+        planReceiptsMoney: [{ required: true, message: "必须填写" }],
+      },
     };
   },
   async created() {
@@ -996,16 +1009,46 @@ export default {
     }
   },
   mounted() {
-    this.fetchData();
+    this.initHandle("mounted");
   },
-  activated() {
-    // this.fetchData();
+  watch: {
+    $route({ path }) {
+      // 进入的不是项目清单，结束逻辑
+      if (path !== "/order/list") return;
+
+      // 过滤初始化
+      this.initHandle("watch");
+    },
   },
   methods: {
     checkPermi,
     checkRole,
-    currency({cellValue}) {
+    currency({ cellValue }) {
       return currency(cellValue, { symbol: "", separator: "," }).format();
+    },
+
+    // 初始化处理
+    initHandle(type) {
+      this.$nextTick(() => {
+        const query = this.$route.query.filter || "[]";
+
+        // 参数一样并且不是初始化,走缓存
+        if (query === QUERY_STORE && type !== "mounted") return;
+
+        // 记录上一次的筛选数据
+        QUERY_STORE = query;
+
+        // 获取筛选数据
+        const filterData = JSON.parse(query);
+
+        // 初始化过滤条件
+        this.filterParams = FILTER_PARAMS();
+
+        if (filterData[0]) this.handleFilter(filterData)
+
+        // 重新请求
+        this.fetchData({ pageNum: 1 });
+      });
     },
 
     // 获取数据
@@ -1042,6 +1085,26 @@ export default {
         this.otherButtom(command);
       }
     },
+
+    // 处理初始化过滤条件
+    handleFilter(filterData) {
+      const $table = this.$refs.xTable;
+
+      // 清空筛选
+      $table.clearFilter()
+
+      filterData.forEach((element) => {
+        // 从项目概括点击柱状图，走默认不为空筛选
+        this.filterParams[element] = 2;
+
+        // 操控表格添加筛选条件
+        $table.getColumnByField(element).filters[0].checked = true;
+
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        $table.updateData();
+      });
+    },
+
     //重算按钮
     initData() {
       initData().then((res) => {
@@ -1115,27 +1178,24 @@ export default {
           console.log(errMap);
           this.$notify({
             type: "warning",
-            message: "请检查数据是否填写完整！"
+            message: "请检查数据是否填写完整！",
           });
-          return 
+          return;
         }
       }
-      
-     
+
       saveData([row]).then((res) => {
         if (res.code == "200") {
           this.$modal.notifySuccess(res.msg);
           this.fetchData();
         }
       });
-      
     },
     // 项目开关
-    openStatusChange: debounce(async function({ openStatus, projectCode }) {
-      await toggle({ openStatus, projectCode })
+    openStatusChange: debounce(async function ({ openStatus, projectCode }) {
+      await toggle({ openStatus, projectCode });
 
-      this.fetchData()
-      console.log(openStatus, projectCode);
+      this.fetchData();
     }, 500),
     //table 点击事件
     gotoDetail(row) {
@@ -1143,7 +1203,7 @@ export default {
       // const { field } = column;
       this.$router.push({
         // path: `/order/details/${projectCode}`,
-        path: `/order/details/${id}?projectCode=${projectCode}`
+        path: `/order/details/${id}?projectCode=${projectCode}`,
         // query: {
         //   projectCode
         // }
@@ -1163,9 +1223,9 @@ export default {
         if (errMap) {
           this.$notify({
             type: "warning",
-            message: "请检查数据是否填写完整！"
+            message: "请检查数据是否填写完整！",
           });
-          return
+          return;
         }
       }
 
@@ -1177,7 +1237,6 @@ export default {
           this.fetchData();
         }
       });
-      
     },
     //页码更新
     pageChange({ currentPage: pageNum, pageSize }) {
@@ -1192,7 +1251,7 @@ export default {
           msg = msg + item.projectName + "，<br/>";
         }
         this.$confirm(msg + "是否放弃填写?", "提示", {
-          dangerouslyUseHTMLString: true
+          dangerouslyUseHTMLString: true,
         })
           .then(() => {
             this.fetchData({ pageNum, pageSize });
@@ -1213,7 +1272,7 @@ export default {
           row["grossProfitRiskLevel"],
           row["invoicingRiskLevel"],
           row["receiveRiskLevel"],
-          row["riskStatus"]
+          row["riskStatus"],
         ];
         if (status.includes("Green")) {
           className = "cell-green";
@@ -1264,7 +1323,7 @@ export default {
             "grossProfitRiskLevel",
             "invoicingRiskLevel",
             "receiveRiskLevel",
-            "riskStatus"
+            "riskStatus",
           ].includes(field)
         ) {
           return false;
@@ -1277,7 +1336,7 @@ export default {
             "projectChargePeriod",
             "projectInvoicePeriod",
             "planBillingMoney",
-            "planReceiptsMoney"
+            "planReceiptsMoney",
           ].includes(field)
         ) {
           return false;
@@ -1303,7 +1362,7 @@ export default {
       isX,
       bodyWidth,
       scrollLeft,
-      scrollWidth
+      scrollWidth,
     }) {
       if (isX) {
         if (scrollLeft >= firstLeft && scrollLeft <= firstLeft + firstWidth) {
@@ -1335,8 +1394,8 @@ export default {
         }
       }
     },
-    150)
-  }
+    150),
+  },
 };
 </script>
 
