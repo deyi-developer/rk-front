@@ -5,6 +5,15 @@
       <!-- title -->
       <div slot="header" class="clearfix">
         <span>当月计划</span>
+        <el-button
+          style="float: right;"
+          type="primary"
+          size="mini"
+          icon="el-icon-download"
+          @click="handleExport('monthPlan')"
+        >
+          导出
+        </el-button>
       </div>
 
       <!-- table -->
@@ -64,8 +73,12 @@ import { thousandHandle } from "@utils";
 
 // 常量
 import { COLUMN_LIST } from "./constants";
+
+// 导出
+import { exportMixins } from "@/mixins/export";
 export default {
   name: "Monthly-plan",
+  mixins: [exportMixins],
   components: {
     ColumnChart,
   },

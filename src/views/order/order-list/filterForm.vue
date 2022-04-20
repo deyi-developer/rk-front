@@ -45,6 +45,14 @@
             <el-button
               type="primary"
               size="small"
+              icon="el-icon-download"
+              @click="handleExport('workOrder', queryParams)"
+            >
+              导出
+            </el-button>
+            <el-button
+              type="primary"
+              size="small"
               icon="el-icon-search"
               @click="handleQuery"
               >搜索</el-button
@@ -76,16 +84,18 @@
 
 <script>
 import { getDeptList } from "@/api/common";
-
+import { exportMixins } from "@/mixins/export";
 export default {
   dicts: ["event_type"],
+
+  mixins: [exportMixins],
 
   data() {
     return {
       more: true,
       // 查询参数
       queryParams: {},
-      deptList: []
+      deptList: [],
     };
   },
 
@@ -105,8 +115,9 @@ export default {
       this.$refs["queryForm"].resetFields();
       this.queryParams = {};
       this.$emit("search");
-    }
-  }
+    },
+
+  },
 };
 </script>
 <style lang="scss"></style>

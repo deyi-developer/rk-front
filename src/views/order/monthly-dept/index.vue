@@ -5,9 +5,19 @@
       <!-- title -->
       <div slot="header" class="clearfix2">
         <span>{{ this.$route.query.title }}计划明细</span>
-        <el-button @click="clearFilter" type="primary" size="small"
-          >清除所有过滤器</el-button
-        >
+        <div>
+          <el-button @click="clearFilter" type="primary" size="small"
+            >清除所有过滤器</el-button
+          >
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-download"
+            @click="handleExport('deptPlan')"
+          >
+            导出
+          </el-button>
+        </div>
       </div>
 
       <!-- table -->
@@ -101,8 +111,12 @@ import { COLUMN_LIST, FILTER_HANDLER, INPUT_PLACEHOLDER } from "./constants";
 
 // 转换千元单位
 import { thousandHandle } from "@utils";
+
+// 导出
+import { exportMixins } from "@/mixins/export";
 export default {
   name: "MonthlyDept",
+  mixins: [exportMixins],
   data() {
     return {
       columnist: COLUMN_LIST, // tableColum

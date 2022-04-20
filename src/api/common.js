@@ -7,3 +7,31 @@ export function getDeptList() {
     method: "get"
   });
 }
+
+export function exportWorkOrder(data) {
+  return request({
+    url: "/workOrder/header/export",
+    method: "post",
+    responseType: 'blob',
+    data
+  });
+}
+
+export function exportMonthlyPlan(data) {
+  return request({
+    url: "/monthlyplan/monthlyplan/exportMonthlyPlan",
+    method: "post",
+    responseType: 'blob',
+    data
+  });
+}
+
+export function exportDeptPlan(data) {
+  return request({
+    url: "/monthlyplan/monthlyplan/exportDeptMonthlyPlan",
+    method: "post",
+    responseType: 'blob',
+    data
+  });
+}
+
