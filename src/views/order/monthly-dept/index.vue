@@ -6,16 +6,19 @@
       <div slot="header" class="clearfix2">
         <span>{{ this.$route.query.title }}计划明细</span>
         <div>
-          <el-button @click="clearFilter" type="primary" size="small"
-            >清除所有过滤器</el-button
-          >
+          <!-- clear filter -->
+          <el-button @click="clearFilter" type="primary" size="small">
+            清除所有过滤器
+          </el-button>
+
+          <!-- 当前表格附件下载 -->
           <el-button
+            @click="downloadFile"
             type="primary"
-            size="small"
             icon="el-icon-download"
-            @click="handleExport('deptPlan')"
+            size="small"
           >
-            导出
+            附件下载
           </el-button>
         </div>
       </div>
@@ -30,6 +33,8 @@
         auto-resize
         height="80%"
         :data="MonthList"
+        :filter-config="{ remote: true }"
+        @filter-change="filterHandler"
       >
         <vxe-column
           v-for="(item, index) in columnist"
@@ -39,7 +44,7 @@
           :min-width="item.minWidth"
           :type="item.type || ''"
           :filters="item.filters"
-          :filter-method="filterHandler"
+          :field="item.prop"
           :fixed="item.fixed"
           :filter-multiple="
             (item.prop === 'projectCode' || item.prop === 'projectName') && true
@@ -55,8 +60,8 @@
               type="type"
               v-for="(option, index) in column.filters"
               :key="index"
-              v-model="option.data"
-              @input="$panel.changeOption($event, !!option.data, option)"
+              v-model="option.value"
+              @input="$panel.changeOption($event, !!option.value, option)"
               @keyup.enter="$panel.confirmFilter()"
               :placeholder="inputPlaceholder[item.prop]"
             />
@@ -104,19 +109,15 @@
 </template>
 <script>
 // 接口
-import { getCurrentMonth } from "./api";
+import { getCurrentMonthApi, exportDeptMonthlyPlanApi } from "./api";
 
 // 常量
-import { COLUMN_LIST, FILTER_HANDLER, INPUT_PLACEHOLDER } from "./constants";
+import { COLUMN_LIST, INPUT_PLACEHOLDER, FILTER_CONDITIONS } from "./constants";
 
 // 转换千元单位
 import { thousandHandle } from "@utils";
-
-// 导出
-import { exportMixins } from "@/mixins/export";
 export default {
   name: "MonthlyDept",
-  mixins: [exportMixins],
   data() {
     return {
       columnist: COLUMN_LIST, // tableColum
@@ -125,8 +126,7 @@ export default {
       currentMonthList: [], // 当前月度列表总计
       MonthList: [], // 当前月度列表
       loading: false, // 加载
-      entryCode: "", // 项目编码
-      projectName: "", // 项目名称
+      filterConditions: FILTER_CONDITIONS(), // 筛选条件
     };
   },
   created() {
@@ -152,10 +152,9 @@ export default {
         totalPlanBilling: planBillingMoney, //本月计划开票总额
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
         totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
-      } = await getCurrentMonth({
+      } = await getCurrentMonthApi({
         oneDeptId: this.$route.params.id,
-        projectCode: this.entryCode,
-        projectName: this.projectName,
+        ...this.filterConditions,
       });
 
       // 当前月度列表
@@ -180,15 +179,31 @@ export default {
     },
 
     // 数据过滤
-    filterHandler({ option: { data }, row, value }) {
-      return FILTER_HANDLER(value)(row[value], data, row);
+    filterHandler({ property, values }) {
+      this.filterConditions[property] = values[0];
+      
+      this.getCurrentMonthInfo();
+    },
+
+    // 附件下载
+    async downloadFile() {
+      // 获取当前月度
+      this.download(
+        exportDeptMonthlyPlanApi,
+        {
+          oneDeptId: this.$route.params.id,
+          ...this.filterConditions,
+        },
+        `${this.$route.query.title}计划明细列表_${new Date().getTime()}.xlsx`
+      );
     },
 
     // 清除所有过滤器
     clearFilter() {
       this.$refs.filterTable.clearFilter();
-      this.entryCode = "";
-      this.projectName = "";
+
+      this.filterConditions = FILTER_CONDITIONS();
+
       this.getCurrentMonthInfo();
     },
   },
@@ -222,6 +237,7 @@ export default {
   .clearfix2 {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   span {
     font-family: sans-serif, PingFangSC-Regular;

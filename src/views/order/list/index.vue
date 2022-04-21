@@ -99,10 +99,15 @@
             >
               <el-switch
                 v-model="risk.planEditEnable"
-                style="margin-left: 10px"
+                style="margin: 0 10px"
                 @change="checkoutPlanEdit"
               />
             </el-tooltip>
+
+            <!-- 当前表格附件下载 -->
+            <el-button type="primary" icon="el-icon-download" size="small">
+              附件下载
+            </el-button>
           </template>
         </Tabs>
 
@@ -1044,7 +1049,7 @@ export default {
         // 初始化过滤条件
         this.filterParams = FILTER_PARAMS();
 
-        if (filterData[0]) this.handleFilter(filterData)
+        if (filterData[0]) this.handleFilter(filterData);
 
         // 重新请求
         this.fetchData({ pageNum: 1 });
@@ -1091,7 +1096,7 @@ export default {
       const $table = this.$refs.xTable;
 
       // 清空筛选
-      $table.clearFilter()
+      $table.clearFilter();
 
       filterData.forEach((element) => {
         // 从项目概括点击柱状图，走默认不为空筛选

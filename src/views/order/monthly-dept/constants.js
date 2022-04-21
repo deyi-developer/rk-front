@@ -10,7 +10,7 @@ export const COLUMN_LIST = [
   {
     prop: "projectCode",
     label: "得逸项目编码",
-    filters: [{ value: "projectCode", data: "" }],
+    filters: [{ value: "" }],
     minWidth: "200",
     fixed: "left",
     align: "center",
@@ -18,7 +18,7 @@ export const COLUMN_LIST = [
   {
     prop: "projectName",
     label: "得逸项目名称",
-    filters: [{ value: "projectName", data: "" }],
+    filters: [{ value: "" }],
     minWidth: "180",
     fixed: "left",
     align: "center",
@@ -26,65 +26,81 @@ export const COLUMN_LIST = [
   {
     prop: "planBillingMoney",
     label: "本月计划开票金额",
-    filters: [{ label: "隐藏无效数据", value: "planBillingMoney" }],
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
     minWidth: "160",
     align: "center",
   },
   {
     prop: "billingThisMonth",
     label: "本月实际开票金额",
-    filters: [{ label: "隐藏无效数据", value: "billingThisMonth" }],
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
     minWidth: "160",
     align: "center",
   },
   {
     prop: "planReceiptsMoney",
     label: "本月计划收款金额",
-    filters: [{ label: "隐藏无效数据", value: "planReceiptsMoney" }],
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
     minWidth: "160",
     align: "center",
   },
   {
     prop: "receiptsThisMonth",
     label: "本月实际收款金额",
-    filters: [{ label: "隐藏无效数据", value: "receiptsThisMonth" }],
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
     minWidth: "160",
     align: "center",
   },
   {
     prop: "compleBillingThisMonth",
     label: "开票完成率",
-    filters: [{ label: "隐藏无效数据", value: "compleBillingThisMonth" }],
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
     minWidth: "110",
     align: "center",
   },
   {
     prop: "compleReceiptsThisMonth",
     label: "收款完成率",
-    filters: [{ label: "隐藏无效数据", value: "compleReceiptsThisMonth" }],
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
     minWidth: "110",
     align: "center",
   },
 ];
 
-// 数据筛选
-export const FILTER_HANDLER = (key) => {
-  if (key !== "projectCode" && key !== "projectName") key = "defaultValue";
-  return {
-    projectCode: (validData, data, row) => {
-      if (validData.includes(data)) return row;
-    }, // 项目代码筛选
-    projectName: (validData, data, row) => {
-      if (validData.includes(data)) return row;
-    }, // 项目名称筛选
-    defaultValue: (validData, _, row) => {
-      if (validData && validData != "0.00") return row;
-    }, // 默认筛选
-  }[key];
-};
-
 // 提示文案
 export const INPUT_PLACEHOLDER = {
   projectCode: "输入项目编码",
   projectName: "请输入项目名称",
+};
+
+// 初始化筛选条件
+export const FILTER_CONDITIONS = () => {
+  return {
+    projectCode: "", // 项目编码
+    projectName: "", // 项目名称
+    planBillingMoney: undefined, // 本月计划开票金额
+    billingThisMonth: undefined, // 本月实际开票金额
+    planReceiptsMoney: undefined, // 本月计划收款金额
+    receiptsThisMonth: undefined, // 本月实际收款金额
+    compleBillingThisMonth: undefined, // 开票完成率
+    compleReceiptsThisMonth: undefined, // 收款完成率
+  };
 };

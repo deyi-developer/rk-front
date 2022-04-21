@@ -1,18 +1,27 @@
-<!-- 当月计划 -->
+<!-- 月计划 -->
 <template>
   <div class="wrap">
     <el-card class="space">
-      <!-- title -->
-      <div slot="header" class="clearfix">
-        <span>当月计划</span>
+      <!-- header -->
+      <div slot="header" class="header">
+        <!-- 月份选择器 -->
+        <el-date-picker
+          v-model="duringMonth"
+          type="month"
+          placeholder="选择月份"
+          @change="(res) => (duringMonth = res)"
+          :clearable="false"
+          :picker-options="pickerOptions"
+        />
+
+        <!-- 当前表格附件下载 -->
         <el-button
-          style="float: right;"
+          @click="downloadFile"
           type="primary"
-          size="mini"
           icon="el-icon-download"
-          @click="handleExport('monthPlan')"
+          size="small"
         >
-          导出
+          附件下载
         </el-button>
       </div>
 
@@ -63,7 +72,7 @@
 
 <script>
 // 接口
-import { getCurrentMonth } from "./api";
+import { getCurrentMonthApi, exportMonthlyPlanApi } from "./api";
 
 // 图表
 import ColumnChart from "./columnChart";
@@ -73,12 +82,8 @@ import { thousandHandle } from "@utils";
 
 // 常量
 import { COLUMN_LIST } from "./constants";
-
-// 导出
-import { exportMixins } from "@/mixins/export";
 export default {
   name: "Monthly-plan",
-  mixins: [exportMixins],
   components: {
     ColumnChart,
   },
@@ -86,27 +91,37 @@ export default {
     return {
       columnist: COLUMN_LIST, // 表格项
 
-      MonthList: [], // 当前月度列表
+      MonthList: [], // 当前选择月度列表
       currentMonthList: [], // 合计
       loading: false, // 加载
+      duringMonth: new Date(), // 当前选择月份
+      pickerOptions: {
+        // 时间选择器有效范围
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6;
+        },
+      },
     };
   },
   created() {
     this.getMonthPlanList();
   },
   methods: {
-    // 获取当月计划列表
+    // 获取当前月计划列表
     async getMonthPlanList() {
       this.loading = true;
 
       // 获取当前月度
       const {
         planDtoList = [],
-        totalBillThisMonth: billingThisMonth, // 本月实际开票总额
-        totalPlanBilling: planBillingMoney, //本月计划开票总额
-        totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
-        totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
-      } = await getCurrentMonth();
+        totalBillThisMonth: billingThisMonth, // 当前月实际开票总额
+        totalPlanBilling: planBillingMoney, //当前月计划开票总额
+        totalPlanReceipts: planReceiptsMoney, // 当前月计划收款总额
+        totalReceiptsThisMonth: receiptsThisMonth, // 当前月实际收款总额
+      } = await getCurrentMonthApi({
+        month: this.duringMonth.getMonth() + 1,
+        year: this.duringMonth.getFullYear()
+      });
 
       // 当前月度列表
       this.MonthList = planDtoList;
@@ -125,6 +140,21 @@ export default {
 
       this.loading = false;
     },
+
+    // 附件下载
+    async downloadFile() {
+      this.download(
+        exportMonthlyPlanApi,
+        {},
+        `月计划列表_${new Date().getTime()}.xlsx`
+      );
+    },
+  },
+  watch: {
+    // 监听时间变化，更新列表
+    duringMonth() {
+      this.getMonthPlanList();
+    },
   },
 };
 </script>
@@ -134,6 +164,12 @@ export default {
   padding: 20px;
   .space {
     margin-bottom: 12px;
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 }
 </style>
