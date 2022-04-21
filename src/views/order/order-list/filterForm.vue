@@ -46,9 +46,9 @@
               type="primary"
               size="small"
               icon="el-icon-download"
-              @click="handleExport('workOrder', queryParams)"
+              @click="handleExport"
             >
-              导出
+              附件下载
             </el-button>
             <el-button
               type="primary"
@@ -84,11 +84,8 @@
 
 <script>
 import { getDeptList } from "@/api/common";
-import { exportMixins } from "@/mixins/export";
 export default {
   dicts: ["event_type"],
-
-  mixins: [exportMixins],
 
   data() {
     return {
@@ -117,6 +114,14 @@ export default {
       this.$emit("search");
     },
 
+    /** 导出表格 */
+    handleExport() {
+      this.download(
+        '/workOrder/header/export',
+        this.queryParams,
+        `工单列表_${new Date().getTime()}.xlsx`
+      );
+    },
   },
 };
 </script>
