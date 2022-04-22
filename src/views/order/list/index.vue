@@ -1,33 +1,27 @@
 <template>
   <div class="page-bg">
     <div class="project-list app-container">
-      <div class="ds-flex title">
-        <h1>项目清单</h1>
-        <div class="fx-1 content">
-          <span>{{ `总项目数：${risk.totalProjectNum} ` }}</span>
-          <span>
-            {{
-              `无风险项目：${risk.noRiskProjectNum} (${risk.noRiskProjectRate}%)`
-            }}
-          </span>
-          <span>
-            {{
-              `中风险项目：${risk.mediumRiskProjectNum} (${risk.mediumRiskProjectRate}%)`
-            }}
-          </span>
+      <!-- header -->
+      <div class="ds-flex header">
+        <div class="title">
+          <!-- title -->
+          <h1>项目清单</h1>
 
-          <span>
-            {{
-              `高风险项目：${risk.highRiskProjectNum} (${risk.highRiskProjectRate}%)`
-            }}
-          </span>
-          <span>
-            {{
-              `法务接管项目：${risk.lawsuitRiskProjectNum} (${risk.lawsuitRiskProjectRate}%)`
-            }}
-          </span>
+          <!-- 项目信息 -->
+          <div class="fx-1 content">
+            <span
+              :style="{ color: item.color }"
+              v-for="item in projectType"
+              :key="item.name"
+            >
+              {{ item.name }}{{ item.content(risk) }}
+            </span>
+          </div>
         </div>
+
+        <!-- 部门选择器 -->
         <el-select
+          v-if="!checkRole(['pm'])"
           v-model="filterParams.oneDeptId"
           clearable
           size="small"
@@ -105,7 +99,12 @@
             </el-tooltip>
 
             <!-- 当前表格附件下载 -->
-            <el-button type="primary" icon="el-icon-download" size="small">
+            <el-button
+              @click="downloadFile"
+              type="primary"
+              icon="el-icon-download"
+              size="small"
+            >
               附件下载
             </el-button>
           </template>
@@ -883,7 +882,6 @@
           ]"
         ></vxe-pager>
       </el-card>
-      <!-- <ChartsGroup /> -->
     </div>
   </div>
 </template>
@@ -900,13 +898,13 @@ import {
   initData,
   toggle,
   rkPlanEdit,
+  reportdataExort, // 文件导出
 } from "./api";
-import ChartsGroup from "@/views/dashboard/ChartsGroup.vue";
 import currency from "currency.js";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 // 常量
-import { FILTER_PARAMS } from "./constants";
+import { FILTER_PARAMS, PROJECT_TYPEP } from "./constants";
 
 // 缓存过滤参数
 let QUERY_STORE = "[]";
@@ -938,9 +936,11 @@ const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth;
 export default {
   dicts: ["risk_level", "risk_status", "deyi_project_amount_type"],
   name: "List",
-  components: { Tabs, TabPane, filterForm, ChartsGroup },
+  components: { Tabs, TabPane, filterForm },
   data() {
     return {
+      projectType: PROJECT_TYPEP, // 项目数量以及类型信息
+
       deptList: [],
       riskLevelFilter: [
         {
@@ -1362,6 +1362,16 @@ export default {
       //重新获取数据
       this.fetchData();
     },
+    // 附件下载
+    async downloadFile() {
+      const params = { ...this.filterParams, ...this.page };
+      console.log(params)
+      this.download(
+        reportdataExort,
+        params,
+        `月计划列表_${new Date().getTime()}.xlsx`
+      );
+    },
     // 滚动事件
     scrollHandle: throttle(function ({
       isX,
@@ -1404,14 +1414,22 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .project-list {
   .filter-input {
     margin: 5px;
   }
-  .title {
+  // 头部信息
+  .header {
     height: 31px;
     margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    .title {
+      display: flex;
+      justify-content: flex-start;
+    }
   }
   .content {
     height: 100%;
@@ -1421,21 +1439,6 @@ export default {
       letter-spacing: 0;
       height: 31px;
       font-size: 12px;
-      &:nth-of-type(1) {
-        color: #409eff;
-      }
-      &:nth-of-type(2) {
-        color: #67c23a;
-      }
-      &:nth-of-type(3) {
-        color: #e6a23c;
-      }
-      &:nth-of-type(4) {
-        color: #f56c6c;
-      }
-      &:nth-of-type(5) {
-        color: #909399;
-      }
     }
   }
   .cell-red {
