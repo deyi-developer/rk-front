@@ -17,7 +17,8 @@ export const PROJECT_TYPEP = [
   {
     color: "#67c23a",
     name: "无风险项目：",
-    content: (risk) => `${risk.noRiskProjectNum || 0} (${risk.noRiskProjectRate || 0}%)`,
+    content: (risk) =>
+      `${risk.noRiskProjectNum || 0} (${risk.noRiskProjectRate || 0}%)`,
   },
   {
     color: "#e6a23c",
@@ -35,6 +36,43 @@ export const PROJECT_TYPEP = [
     color: "#909399",
     name: "法务接管项目：",
     content: (risk) =>
-      `${risk.lawsuitRiskProjectNum || 0} (${risk.lawsuitRiskProjectRate || 0}%)`,
+      `${risk.lawsuitRiskProjectNum || 0} (${
+        risk.lawsuitRiskProjectRate || 0
+      }%)`,
   },
 ];
+
+// header自定义class
+export const HEADER_CELL_CLASS_NAME = {
+  totalShouldNotBillingMoney: "cell-block", // 超账期应开未开总额
+  totalShouldNotReceiptsMoney: "cell-block", // 超账期应收未收总额
+};
+
+// context自定义class
+export const CONTEXT_CELL_CLASS_NAME = (type, row) => {
+  switch (type) {
+    case "projectCode": // 项目编码
+      // 获取全部状态，去最高级状态
+      const status = [
+        row["grossProfitRiskLevel"],
+        row["invoicingRiskLevel"],
+        row["receiveRiskLevel"],
+        row["riskStatus"],
+      ];
+
+      if (status.includes("lawsuit")) return "cell-lawsuit";
+
+      if (status.includes("Red")) return "cell-red";
+
+      if (status.includes("Yellow")) return "cell-yellow";
+
+      if (status.includes("Green")) return "cell-green";
+
+    case "totalShouldNotBillingMoney": // 超账期应开未开总额
+      return "cell-block";
+    case "totalShouldNotReceiptsMoney": // 超账期应收未收总额
+      return "cell-block";
+    default:
+      return "";
+  }
+};

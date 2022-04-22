@@ -39,6 +39,7 @@
 
       <el-card>
         <!-- <filterForm @search="fetchData" ref="form" /> -->
+        <!-- :cell-class-name="cellClassName" -->
         <Tabs v-model="activeName" @on-click="handleClick">
           <TabPane label="项目基本信息" name="first"></TabPane>
           <TabPane label="项目开票信息" name="second"></TabPane>
@@ -118,7 +119,6 @@
           show-overflow
           keep-source
           size="small"
-          :cell-class-name="cellClass"
           id="projectCode"
           :data="dataSource"
           :loading="tableLodaing"
@@ -140,15 +140,9 @@
           @scroll="scrollHandle"
           @edit-disabled="editDisabledEvent"
           @filter-change="filterChangeEvent"
+          :cell-class-name="cellClass"
+          :header-cell-class-name="headerCellClassName"
         >
-          <!-- <vxe-column
-          type="seq"
-          field="seq"
-          fixed="left"
-          title="序号"
-          width="60"
-          ></vxe-column>-->
-          <!-- 项目基本信息 -->
           <vxe-column
             field="projectCode"
             fixed="left"
@@ -895,16 +889,23 @@ import {
   getList,
   saveData,
   getRiskNum,
-  initData,
+  initDataApi,
   toggle,
   rkPlanEdit,
   reportdataExort, // 文件导出
 } from "./api";
 import currency from "currency.js";
-import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+
+// 权限判断函数
+import { checkPermi, checkRole } from "@/utils/permission";
 
 // 常量
-import { FILTER_PARAMS, PROJECT_TYPEP } from "./constants";
+import {
+  FILTER_PARAMS,
+  PROJECT_TYPEP,
+  HEADER_CELL_CLASS_NAME,
+  CONTEXT_CELL_CLASS_NAME,
+} from "./constants";
 
 // 缓存过滤参数
 let QUERY_STORE = "[]";
@@ -1082,8 +1083,8 @@ export default {
       // }
       // });
     },
+    // 下拉菜单事件触发
     handleCommand(command) {
-      this.$message("click on item " + command);
       if (command == "initData") {
         this.initData();
       } else {
@@ -1111,9 +1112,24 @@ export default {
     },
 
     //重算按钮
-    initData() {
-      initData().then((res) => {
-        this.$message.warning("初始化完成，请刷新页面");
+    async initData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "重算中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+
+      // 重算接口调用
+      const { code, msg } = await initDataApi();
+
+      if (code !== 200) return;
+
+      loading.close();
+
+      this.$message({
+        message: msg,
+        type: "success",
       });
     },
     async otherButtom(command) {
@@ -1267,52 +1283,6 @@ export default {
         this.fetchData({ pageNum, pageSize });
       }
     },
-    cellClass({ row, column }) {
-      const { field } = column;
-      const value = row[field];
-
-      if (field == "projectCode") {
-        let className = "";
-        const status = [
-          row["grossProfitRiskLevel"],
-          row["invoicingRiskLevel"],
-          row["receiveRiskLevel"],
-          row["riskStatus"],
-        ];
-        if (status.includes("Green")) {
-          className = "cell-green";
-        }
-        if (status.includes("Yellow")) {
-          className = "cell-yellow";
-        }
-        if (status.includes("Red")) {
-          className = "cell-red";
-        }
-        if (status.includes("lawsuit")) {
-          className = "cell-lawsuit";
-        }
-
-        return className;
-      } else {
-        let className = "";
-        // switch (value) {
-        //   case "Green":
-        //     className = "cell-green";
-        //     break;
-        //   case "Yellow":
-        //     className = "cell-yellow";
-        //     break;
-        //   case "Red":
-        //     className = "cell-red";
-        //     break;
-        //   case "lawsuit":
-        //     className = "cell-lawsuit";
-        //     break;
-        // }
-
-        return className;
-      }
-    },
 
     // 设置填写权限
     activeCellMethod({ column }) {
@@ -1365,7 +1335,7 @@ export default {
     // 导出
     async downloadFile() {
       const params = { ...this.filterParams, ...this.page };
-      console.log(params)
+      console.log(params);
       this.download(
         reportdataExort,
         params,
@@ -1410,6 +1380,16 @@ export default {
       }
     },
     150),
+
+    // 表格选择性context样式
+    cellClass({ row, column: { field } }) {
+      return CONTEXT_CELL_CLASS_NAME(field, row);
+    },
+
+    // 表格选择性header样式
+    headerCellClassName({ column: { property } }) {
+      return HEADER_CELL_CLASS_NAME[property];
+    },
   },
 };
 </script>
@@ -1430,26 +1410,19 @@ export default {
       display: flex;
       justify-content: flex-start;
     }
-  }
-  .content {
-    height: 100%;
-    padding-top: 10px;
-    span {
-      padding-left: 15px;
-      letter-spacing: 0;
-      height: 31px;
-      font-size: 12px;
-    }
-  }
-  .cell-red {
-    background-color: #fef0f0 !important;
-    a {
-      color: #f56c6c !important;
-      &::after {
-        border-color: #f56c6c !important;
+    .content {
+      height: 100%;
+      padding-top: 10px;
+      span {
+        padding-left: 15px;
+        letter-spacing: 0;
+        height: 31px;
+        font-size: 12px;
       }
     }
   }
+
+  // 法务接管
   .cell-lawsuit {
     background-color: #fef0f0 !important;
     a {
@@ -1459,6 +1432,19 @@ export default {
       }
     }
   }
+
+  // 高风险
+  .cell-red {
+    background-color: #fef0f0 !important;
+    a {
+      color: #f56c6c !important;
+      &::after {
+        border-color: #f56c6c !important;
+      }
+    }
+  }
+
+  // 中风险
   .cell-yellow {
     background-color: #fdf6ec !important;
     a {
@@ -1468,6 +1454,7 @@ export default {
       }
     }
   }
+
   .link-color {
     color: #409eff;
   }
@@ -1485,6 +1472,12 @@ export default {
   }
   .bg-other {
     background-color: #f4f4f5;
+  }
+
+  // 超账期应收未收总额和超账期应开未开总额加粗
+  ::v-deep .cell-block {
+    font-weight: bold;
+    color: #000;
   }
 }
 </style>

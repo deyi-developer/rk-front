@@ -26,7 +26,7 @@ export function saveData(data) {
   });
 }
 
-export function initData(data) {
+export function initDataApi(data) {
   return request({
     url: "/reportdata/reportdata/init-data",
     method: "post",
