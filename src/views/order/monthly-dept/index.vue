@@ -11,14 +11,14 @@
             清除所有过滤器
           </el-button>
 
-          <!-- 当前表格附件下载 -->
+          <!-- 当前表格导出 -->
           <el-button
             @click="downloadFile"
             type="primary"
             icon="el-icon-download"
             size="small"
           >
-            附件下载
+            导出
           </el-button>
         </div>
       </div>
@@ -185,7 +185,7 @@ export default {
       this.getCurrentMonthInfo();
     },
 
-    // 附件下载
+    // 导出
     async downloadFile() {
       // 获取当前月度
       this.download(

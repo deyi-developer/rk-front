@@ -8,6 +8,6 @@ export const getCurrentMonthApi = (params) =>
     params
   });
 
-// 月度计划列表附件下载
+// 月度计划列表导出
 export const exportMonthlyPlanApi =
   "/monthlyplan/monthlyplan/exportMonthlyPlan";

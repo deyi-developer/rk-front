@@ -98,14 +98,14 @@
               />
             </el-tooltip>
 
-            <!-- 当前表格附件下载 -->
+            <!-- 当前表格导出 -->
             <el-button
               @click="downloadFile"
               type="primary"
               icon="el-icon-download"
               size="small"
             >
-              附件下载
+              导出
             </el-button>
           </template>
         </Tabs>
@@ -1362,7 +1362,7 @@ export default {
       //重新获取数据
       this.fetchData();
     },
-    // 附件下载
+    // 导出
     async downloadFile() {
       const params = { ...this.filterParams, ...this.page };
       console.log(params)

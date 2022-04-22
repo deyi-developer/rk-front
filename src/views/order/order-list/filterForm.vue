@@ -48,7 +48,7 @@
               icon="el-icon-download"
               @click="handleExport"
             >
-              附件下载
+              导出
             </el-button>
             <el-button
               type="primary"
