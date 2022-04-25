@@ -93,6 +93,7 @@
           align="center"
           title="操作"
           fixed="right"
+          width="100px"
         >
           <template #default="{ row }">
             <el-button
