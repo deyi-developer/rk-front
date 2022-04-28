@@ -50,7 +50,11 @@
             <!-- 部门名称 -->
             <router-link
               v-else-if="item.prop === 'oneDeptName'"
-              :to="`/monthly/dept/${row.oneDeptId}?title=${row.oneDeptName}`"
+              :to="`/monthly/dept/${row.oneDeptId}?title=${
+                row.oneDeptName
+              }&year=${duringMonth.getFullYear()}&month=${
+                duringMonth.getMonth() + 1
+              }`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>
@@ -120,7 +124,7 @@ export default {
         totalReceiptsThisMonth: receiptsThisMonth, // 当前月实际收款总额
       } = await getCurrentMonthApi({
         month: this.duringMonth.getMonth() + 1,
-        year: this.duringMonth.getFullYear()
+        year: this.duringMonth.getFullYear(),
       });
 
       // 当前月度列表

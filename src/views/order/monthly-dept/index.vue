@@ -4,7 +4,8 @@
     <el-card class="space">
       <!-- title -->
       <div slot="header" class="clearfix2">
-        <span>{{ this.$route.query.title }}计划明细</span>
+        <selectAll v-if="!checkRole(['pm'])" />
+        <div v-else></div>
         <div>
           <!-- clear filter -->
           <el-button @click="clearFilter" type="primary" size="small">
@@ -116,8 +117,13 @@ import { COLUMN_LIST, INPUT_PLACEHOLDER, FILTER_CONDITIONS } from "./constants";
 
 // 转换千元单位
 import { thousandHandle } from "@utils";
+import selectAll from "./selectAll.vue";
+import { checkRole } from "@/utils/permission";
 export default {
   name: "MonthlyDept",
+  components: {
+    selectAll,
+  },
   data() {
     return {
       columnist: COLUMN_LIST, // tableColum
@@ -141,8 +147,9 @@ export default {
     this.getCurrentMonthInfo();
   },
   methods: {
+    checkRole,
     // 获取部门明细信息
-    async getCurrentMonthInfo() {
+    async getCurrentMonthInfo(id) {
       this.loading = true;
 
       // 获取当前月度
@@ -153,7 +160,7 @@ export default {
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
         totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
       } = await getCurrentMonthApi({
-        oneDeptId: this.$route.params.id,
+        oneDeptId: id ? id : this.$route.params.id,
         ...this.filterConditions,
       });
 
@@ -181,7 +188,7 @@ export default {
     // 数据过滤
     filterHandler({ property, values }) {
       this.filterConditions[property] = values[0];
-      
+
       this.getCurrentMonthInfo();
     },
 
