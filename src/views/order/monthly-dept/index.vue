@@ -140,7 +140,7 @@ export default {
     // 动态设置tab拦
     this.$tab.updatePage(
       Object.assign({}, this.$route, {
-        title: `${this.$route.query.title}计划明细`,
+        title: `${this.$route.query.title || ""}计划明细`,
       })
     );
 

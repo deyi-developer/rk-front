@@ -19,19 +19,17 @@ export default {
   data() {
     return {
       deptList: [],
-      selectDeptId: 1,
+      selectDeptId: -1,
     };
   },
   created() {
-    this.selectDeptId = this.$route.params.id
-      ? parseInt(this.$route.params.id)
-      : 0;
+    this.selectDeptId = this.$route.params.id || -1;
     getDeptList().then((res) => {
       if (res.code == 200) {
         this.deptList = res.rows;
         this.deptList = [
           {
-            oneDeptId: 1,
+            oneDeptId: -1,
             oneDeptName: "全部",
           },
           ...this.deptList,

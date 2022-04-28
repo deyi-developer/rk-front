@@ -173,7 +173,7 @@ export const dynamicRoutes = [
         path: "dept/:id",
         component: () => import("@/views/order/monthly-dept"),
         name: "MonthlyDept",
-        meta: { title: "部门计划明细", activeMenu: "/order/monthly-plan" }
+        meta: { title: "部门计划明细" }
       }
     ]
   },
