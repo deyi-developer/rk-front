@@ -13,8 +13,9 @@
               :style="{ color: item.color }"
               v-for="item in projectType"
               :key="item.name"
+              @click="projectTypeNav(item)"
             >
-              {{ item.name }}{{ item.content(risk) }}
+              {{ item.name }}: {{ item.content(risk) }}
             </span>
           </div>
         </div>
@@ -1036,21 +1037,26 @@ export default {
     // 初始化处理
     initHandle(type) {
       this.$nextTick(() => {
-        const query = this.$route.query.filter || "[]";
+        const {
+          query,
+          params: { projectType },
+        } = this.$route;
+        const filter = query.filter || "[]";
 
         // 参数一样并且不是初始化,走缓存
-        if (query === QUERY_STORE && type !== "mounted") return;
+        if (filter === QUERY_STORE && type !== "mounted") return;
 
         // 记录上一次的筛选数据
-        QUERY_STORE = query;
-
-        // 获取筛选数据
-        const filterData = JSON.parse(query);
+        QUERY_STORE = filter;
 
         // 初始化过滤条件
         this.filterParams = FILTER_PARAMS();
 
-        if (filterData[0]) this.handleFilter(filterData);
+        // 获取筛选数据
+        const filterData = JSON.parse(filter);
+
+        if (filterData[0] || projectType)
+          this.handleFilter(filterData, projectType);
 
         // 重新请求
         this.fetchData({ pageNum: 1 });
@@ -1093,7 +1099,7 @@ export default {
     },
 
     // 处理初始化过滤条件
-    handleFilter(filterData) {
+    handleFilter(filterData, projectType) {
       const $table = this.$refs.xTable;
 
       // 清空筛选
@@ -1105,10 +1111,30 @@ export default {
 
         // 操控表格添加筛选条件
         $table.getColumnByField(element).filters[0].checked = true;
-
-        // 修改条件之后，需要手动调用 updateData 处理表格数据
-        $table.updateData();
       });
+
+      // 获取匹配的状态
+      const filterType = this.riskStatusFilter.filter(
+        ({ value }) => value === projectType
+      )[0];
+
+      // 动态设置tab拦
+      this.$tab.updatePage(
+        Object.assign({}, this.$route, {
+          title: filterType?.label ? `${filterType?.label}项目` : "项目清单",
+        })
+      );
+
+      // 有项目状态，进行控制
+      if (filterType) {
+        // 操控表格添加筛选条件
+        $table.getColumnByField("riskStatus").filters.map((res) => {
+          if (res.label === filterType.label) res.checked = true;
+        });
+      }
+
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      $table.updateData();
     },
 
     //重算按钮
@@ -1390,6 +1416,25 @@ export default {
     headerCellClassName({ column: { property } }) {
       return HEADER_CELL_CLASS_NAME[property];
     },
+
+    // 根据状态跳转新的tab-项目清单页
+    projectTypeNav({ name }) {
+      // 获取匹配的状态
+      const projectType = this.riskStatusFilter.filter(({ label }) =>
+        name.includes(label)
+      )[0];
+
+      // 没有匹配的不需要跳转
+      if (!projectType?.value) return;
+
+      // 同一个类型，不需要跳转
+      if (projectType.value === this.$route.params.projectType) return;
+
+      // 不同类型打开不同标签
+      this.$router.push({
+        path: `/order/list2/${projectType.value}`,
+      });
+    },
   },
 };
 </script>
@@ -1415,6 +1460,7 @@ export default {
       padding-top: 10px;
       span {
         padding-left: 15px;
+        cursor: pointer;
         letter-spacing: 0;
         height: 31px;
         font-size: 12px;

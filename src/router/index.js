@@ -181,13 +181,27 @@ export const dynamicRoutes = [
     path: "/order",
     component: Layout,
     hidden: true,
+    permissions: ["order:list2"],
+    children: [
+      {
+        path: "list2/:projectType",
+        component: () => import("@/views/order/list"),
+        name: "orderList2",
+        meta: { title: "项目清单" }
+      }
+    ]
+  },
+  {
+    path: "/order",
+    component: Layout,
+    hidden: true,
     permissions: ["risk:detail:lookup"],
     children: [
       {
         path: "details/:id",
         component: () => import("@/views/order/project"),
         name: "Details",
-        meta: { title: "项目明细", activeMenu: "/order/list" }
+        meta: { title: "项目明细", activeMenu: "/order/list/:projectType" }
       }
     ]
   },
