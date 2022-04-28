@@ -20,6 +20,31 @@
         </span>
       </div>
       <ul class="order-info">
+        <li
+          class="order-item"
+          @click="
+            () =>
+              $router.push({
+                path: `/order/details/${info.eventHeaderId}`,
+                query: { projectCode: info.projectCode },
+              })
+          "
+        >
+          <label class="space">项目编码:</label>
+          <span class="value projectCode">
+            {{ info.projectCode }}
+          </span>
+        </li>
+      </ul>
+      <ul class="order-info">
+        <li class="order-item">
+          <label class="space">项目名称:</label>
+          <span class="value">
+            {{ info.projectName }}
+          </span>
+        </li>
+      </ul>
+      <ul class="order-info">
         <li class="order-item">
           <label class="space">状态:</label>
           <span class="value">
@@ -52,27 +77,6 @@
           <span class="value">
             <Icon type="ios-alarm" color="#6B7285;" />
             {{ info.createTime }}
-          </span>
-        </li>
-        <li
-          class="order-item"
-          @click="
-            () =>
-              $router.push({
-                path: `/order/details/${info.eventHeaderId}`,
-                query: { projectCode: info.projectCode },
-              })
-          "
-        >
-          <label class="space projectCode">项目编码:</label>
-          <span class="value projectCode">
-            {{ info.projectCode }}
-          </span>
-        </li>
-        <li class="order-item">
-          <label class="space">项目名称:</label>
-          <span class="value">
-            {{ info.projectName }}
           </span>
         </li>
       </ul>

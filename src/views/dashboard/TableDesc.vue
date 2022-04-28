@@ -89,6 +89,8 @@
             >
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
+              labelClassName="boldClass"
+              contentClassName="boldClass"
               label="总应开未开"
               >{{
                 summary.totalShouldNotBillingMoney | currency
@@ -98,6 +100,8 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对应开开票率"
+              labelClassName="boldClass"
+              contentClassName="boldClass"
               >{{
                 summary.correspondingBillingRate | percent
               }}</el-descriptions-item
@@ -119,6 +123,8 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收未收(相对应收)"
+              labelClassName="boldClass"
+              contentClassName="boldClass"
               >{{
                 summary.totalShouldNotReceiptsMoney | currency
               }}</el-descriptions-item
@@ -133,6 +139,8 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="相对应收收款率"
+              labelClassName="boldClass"
+              contentClassName="boldClass"
               >{{
                 summary.relativeReceivableRate | percent
               }}</el-descriptions-item
@@ -158,8 +166,8 @@ export default {
       type: Object,
       default() {
         return {};
-      }
-    }
+      },
+    },
   },
   methods: {
     formatVal(a, b) {
@@ -168,8 +176,8 @@ export default {
       } else {
         return 0;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -178,7 +186,7 @@ export default {
   margin-bottom: 10px;
 }
 </style>
-<style lang="scss">
+<style lang="scss" scoped>
 .table-desc {
   .el-descriptions-row {
     th,
@@ -186,5 +194,9 @@ export default {
       font-size: 12px;
     }
   }
+}
+::v-deep .boldClass {
+  color: #000;
+  font-weight: bold;
 }
 </style>
