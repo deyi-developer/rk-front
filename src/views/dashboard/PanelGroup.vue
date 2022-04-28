@@ -149,7 +149,6 @@ export default {
   methods: {
     // 根据状态跳转新的tab-项目清单页
     projectTypeNav(value) {
-      console.log("111111")
       // 不同类型打开不同标签
       this.$router.push({
         path: `/order/list2/${value}`,

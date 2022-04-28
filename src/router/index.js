@@ -181,7 +181,7 @@ export const dynamicRoutes = [
     path: "/order",
     component: Layout,
     hidden: true,
-    permissions: ["order:list2"],
+    permissions: ["order:list"],
     children: [
       {
         path: "list2/:projectType",
