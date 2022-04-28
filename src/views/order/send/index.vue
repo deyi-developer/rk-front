@@ -54,6 +54,27 @@
             {{ info.createTime }}
           </span>
         </li>
+        <li
+          class="order-item"
+          @click="
+            () =>
+              $router.push({
+                path: `/order/details/${info.eventHeaderId}`,
+                query: { projectCode: info.projectCode },
+              })
+          "
+        >
+          <label class="space projectCode">项目编码:</label>
+          <span class="value projectCode">
+            {{ info.projectCode }}
+          </span>
+        </li>
+        <li class="order-item">
+          <label class="space">项目名称:</label>
+          <span class="value">
+            {{ info.projectName }}
+          </span>
+        </li>
       </ul>
       <el-row style="padding-top: 0">
         <el-col>
@@ -169,16 +190,16 @@
   </div>
 </template>
 <script>
-import { formatDate } from "@/utils"
-import { mapActions, mapGetters } from "vuex"
-import { detail, reply, replyList, update } from "./api"
-import { handlerList } from "../project/api"
-import { edit } from "../order-list/api"
-import { debounce } from "lodash-es"
-import editor from "@/components/Editor"
-import { Tag, Icon, Badge } from "view-design"
-import defaultImg from "@/assets/images/avatar.png"
-import { checkPermi, checkRole } from "@/utils/permission" // 权限判断函数
+import { formatDate } from "@/utils";
+import { mapActions, mapGetters } from "vuex";
+import { detail, reply, replyList, update } from "./api";
+import { handlerList } from "../project/api";
+import { edit } from "../order-list/api";
+import { debounce } from "lodash-es";
+import editor from "@/components/Editor";
+import { Tag, Icon, Badge } from "view-design";
+import defaultImg from "@/assets/images/avatar.png";
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 export default {
   name: "Send",
@@ -202,7 +223,7 @@ export default {
       handlerLoding: false,
       formatDate,
       eventHandleDate: "",
-    }
+    };
   },
 
   // watch: {
@@ -218,46 +239,46 @@ export default {
   computed: {
     ...mapGetters(["usersInfo", "userRolse"]),
     avatar() {
-      return process.env.VUE_APP_BASE_API + this.usersInfo.avatar
+      return process.env.VUE_APP_BASE_API + this.usersInfo.avatar;
     },
     env() {
-      return process.env.VUE_APP_BASE_API
+      return process.env.VUE_APP_BASE_API;
     },
     color() {
-      let type = ""
+      let type = "";
 
       switch (this.info.eventUrgencyLevel) {
         case 1:
-          type = "red"
-          break
+          type = "red";
+          break;
         case 2:
-          type = "orange"
-          break
+          type = "orange";
+          break;
         case 3:
-          type = "yellow"
-          break
+          type = "yellow";
+          break;
         case 4:
-          type = "default"
-          break
+          type = "default";
+          break;
         default:
-          type = "default"
-          break
+          type = "default";
+          break;
       }
-      return type
+      return type;
     },
   },
 
   async created() {
     const {
       query: { id },
-    } = this.$route
+    } = this.$route;
     if (id) {
-      await this.getDetailInfo(id)
+      await this.getDetailInfo(id);
 
       //请求详情后再刷新消息列表
-      await this.Messages({ readFlag: 0 })
+      await this.Messages({ readFlag: 0 });
     }
-    this.getHandlers()
+    this.getHandlers();
   },
 
   methods: {
@@ -265,70 +286,70 @@ export default {
     checkPermi,
     checkRole,
     getAvatar(url) {
-      return url ? process.env.VUE_APP_BASE_API + url : defaultImg
+      return url ? process.env.VUE_APP_BASE_API + url : defaultImg;
     },
     /** 获取详情数据 */
     async getDetailInfo(id) {
-      const { data } = await detail({ eventHeaderId: id })
-      this.info = data
-      this.info.eventHandler = this.usersInfo.userId // 默认自己能搞定不转接
-      this.info.forwardFlag = 0
-      this.getReplyList(id)
+      const { data } = await detail({ eventHeaderId: id });
+      this.info = data;
+      this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
+      this.info.forwardFlag = 0;
+      this.getReplyList(id);
       const obj = Object.assign({}, this.$route, {
         title: "工单：" + data.eventTitle,
-      })
-      this.$tab.updatePage(obj)
+      });
+      this.$tab.updatePage(obj);
     },
 
     closeOrder() {
       this.$modal.confirm(`确定关闭此工单吗？`).then(async () => {
-        const { eventHeaderId } = this.info
-        const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 })
+        const { eventHeaderId } = this.info;
+        const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 });
         if (code === 200) {
-          this.$modal.msgSuccess(msg)
-          this.getDetailInfo(this.$route.query.id)
+          this.$modal.msgSuccess(msg);
+          this.getDetailInfo(this.$route.query.id);
           // this.getList()
         } else {
-          this.$modal.msgError(msg)
+          this.$modal.msgError(msg);
         }
-      })
+      });
     },
 
     /** 回复 */
     async submit() {
       if (this.eventHandler) {
         // 选择了交接人
-        this.info.eventHandler = this.eventHandler
+        this.info.eventHandler = this.eventHandler;
 
         if (!this.eventHandleDate)
-          return this.$modal.msgError("请选择工单截止日期")
-        this.info.eventHandleDate = this.eventHandleDate
+          return this.$modal.msgError("请选择工单截止日期");
+        this.info.eventHandleDate = this.eventHandleDate;
       } else {
-        this.info.eventHandler = null
+        this.info.eventHandler = null;
       }
-      this.info.forwardFlag = 1
-      const { code, msg } = await reply(this.info)
+      this.info.forwardFlag = 1;
+      const { code, msg } = await reply(this.info);
       if (code === 200) {
-        this.$modal.msgSuccess(msg)
-        this.getReplyList(this.$route.query.id)
+        this.$modal.msgSuccess(msg);
+        this.getReplyList(this.$route.query.id);
       } else {
-        this.$modal.msgError(msg)
+        this.$modal.msgError(msg);
       }
 
-      this.clear()
+      this.clear();
     },
 
     /** 清空已选择的数据 */
     clear() {
-      this.info.eventMsg = ""
-      this.eventHandler = ""
-      this.eventHandleDate = ""
+      this.info.eventMsg = "";
+      this.eventHandler = "";
+      this.eventHandleDate = "";
     },
 
     /** 获取回复列表 */
     async getReplyList(id) {
-      const { rows } = await replyList({ eventHeaderId: id })
-      this.replyList = rows || []
+      const { rows } = await replyList({ eventHeaderId: id });
+      this.replyList = rows || [];
     },
 
     /** 修改 */
@@ -340,29 +361,29 @@ export default {
             eventHeaderId: item.eventHeaderId,
             eventLineId: item.eventLineId,
             eventCompleteStutas: id,
-          }
-          const { code, msg } = await update(params)
+          };
+          const { code, msg } = await update(params);
           if (code === 200) {
-            this.$modal.msgSuccess(msg)
-            this.getReplyList(this.$route.query.id)
+            this.$modal.msgSuccess(msg);
+            this.getReplyList(this.$route.query.id);
           } else {
-            this.$modal.msgError(msg)
+            this.$modal.msgError(msg);
           }
         })
         .catch(() => {
-          console.log("catch")
-        })
+          console.log("catch");
+        });
     },
 
     getHandlers: debounce(async function (value) {
-      this.handlerLoding = true
-      const params = { pageNum: 1, pageSize: 100, nickName: value }
-      const { rows } = await handlerList(params)
-      this.handlers = rows
-      this.handlerLoding = false
+      this.handlerLoding = true;
+      const params = { pageNum: 1, pageSize: 100, nickName: value };
+      const { rows } = await handlerList(params);
+      this.handlers = rows;
+      this.handlerLoding = false;
     }, 500),
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -401,6 +422,10 @@ export default {
     color: #909399;
     font-size: 12px;
     margin: 15px 0;
+    .projectCode {
+      color: #337ab7 !important;
+      cursor: pointer;
+    }
     .order-item {
       display: inline-block;
       list-style: none;
