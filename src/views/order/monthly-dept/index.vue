@@ -4,8 +4,9 @@
     <el-card class="space">
       <!-- title -->
       <div slot="header" class="clearfix2">
-        <selectAll v-if="!checkRole(['pm'])" />
-        <div v-else></div>
+        <div>
+          <selectAll v-if="!checkRole(['pm'])" />
+        </div>
         <div>
           <!-- clear filter -->
           <el-button @click="clearFilter" type="primary" size="small">
@@ -161,6 +162,8 @@ export default {
         totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
       } = await getCurrentMonthApi({
         oneDeptId: id ? id : this.$route.params.id,
+        month: this.$route.query.month,
+        year: this.$route.query.year,
         ...this.filterConditions,
       });
 
