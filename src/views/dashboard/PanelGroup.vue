@@ -3,7 +3,7 @@
   <el-row :gutter="12" style="margin-bottom: 10px">
     <el-col :span="6">
       <el-card shadow="always" class="click-handle">
-        <div class="ds-flex">
+        <div class="ds-flex" @click="projectTypeNav('Green')">
           <i-circle :percent="risk.noRiskProjectRate" stroke-color="#19be6b">
             <span class="demo-Circle-inner">{{ risk.noRiskProjectRate }}%</span>
           </i-circle>
@@ -31,7 +31,7 @@
     </el-col>
     <el-col :span="6">
       <el-card shadow="always" class="click-handle">
-        <div class="ds-flex">
+        <div class="ds-flex" @click="projectTypeNav('Yellow')">
           <i-circle
             :percent="risk.mediumRiskProjectRate"
             stroke-color="#ff9900"
@@ -64,7 +64,7 @@
     </el-col>
     <el-col :span="6">
       <el-card shadow="always" class="click-handle">
-        <div class="ds-flex">
+        <div @click="projectTypeNav('Red')" class="ds-flex">
           <i-circle :percent="risk.highRiskProjectRate" stroke-color="#ed4014">
             <span class="demo-Circle-inner"
               >{{ risk.highRiskProjectRate }}%</span
@@ -94,7 +94,7 @@
     </el-col>
     <el-col :span="6">
       <el-card shadow="always" class="click-handle">
-        <div class="ds-flex">
+        <div @click="projectTypeNav('lawsuit')" class="ds-flex">
           <i-circle
             :percent="risk.lawsuitRiskProjectRate"
             stroke-color="#808695"
@@ -145,13 +145,23 @@ export default {
     CountTo,
     iCircle: Circle,
     Tooltip
+  },
+  methods: {
+    // 根据状态跳转新的tab-项目清单页
+    projectTypeNav(value) {
+      console.log("111111")
+      // 不同类型打开不同标签
+      this.$router.push({
+        path: `/order/list2/${value}`,
+      });
+    },
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .click-handle {
-  // cursor: pointer;
+  cursor: pointer;
 }
 .circel-desc {
   display: inline-block;

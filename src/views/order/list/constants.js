@@ -11,24 +11,24 @@ export const FILTER_PARAMS = () => {
 export const PROJECT_TYPEP = [
   {
     color: "#409eff",
-    name: "总项目数：",
+    name: "总项目数",
     content: (risk) => risk.totalProjectNum || 0,
   },
   {
     color: "#67c23a",
-    name: "无风险项目：",
+    name: "无风险项目",
     content: (risk) =>
       `${risk.noRiskProjectNum || 0} (${risk.noRiskProjectRate || 0}%)`,
   },
   {
     color: "#e6a23c",
-    name: "中风险项目：",
+    name: "中风险项目",
     content: (risk) =>
       `${risk.mediumRiskProjectNum || 0} (${risk.mediumRiskProjectRate || 0}%)`,
   },
   {
     color: "#f56c6c",
-    name: "高风险项目：",
+    name: "高风险项目",
     content: (risk) =>
       `${risk.highRiskProjectNum || 0} (${risk.highRiskProjectRate || 0}%)`,
   },
