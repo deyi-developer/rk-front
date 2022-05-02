@@ -37,29 +37,29 @@ export const constantRoutes = [
     children: [
       {
         path: "/redirect/:path(.*)",
-        component: () => import("@/views/redirect")
-      }
-    ]
+        component: () => import("@/views/redirect"),
+      },
+    ],
   },
   {
     path: "/login",
     component: () => import("@/views/login"),
-    hidden: true
+    hidden: true,
   },
   {
     path: "/register",
     component: () => import("@/views/register"),
-    hidden: true
+    hidden: true,
   },
   {
     path: "/404",
     component: () => import("@/views/error/404"),
-    hidden: true
+    hidden: true,
   },
   {
     path: "/401",
     component: () => import("@/views/error/401"),
-    hidden: true
+    hidden: true,
   },
   {
     path: "",
@@ -71,9 +71,16 @@ export const constantRoutes = [
         component: () => import("@/views/index"),
         // component: () => import("@/views/error/401"),
         name: "Index",
-        meta: { title: "项目概览", icon: "dashboard", affix: true }
-      }
-    ]
+        meta: { title: "项目概览", icon: "dashboard", affix: true },
+      },
+      {
+        path: "reach-chart-details",
+        component: () => import("@/views/dashboard/ReachCharDetails"),
+        name: "reachChartDetails",
+        hidden: true,
+        meta: { title: "达成率详情" },
+      },
+    ],
   },
   {
     path: "/user",
@@ -85,10 +92,10 @@ export const constantRoutes = [
         path: "profile",
         component: () => import("@/views/system/user/profile/index"),
         name: "Profile",
-        meta: { title: "个人中心", icon: "user" }
-      }
-    ]
-  }
+        meta: { title: "个人中心", icon: "user" },
+      },
+    ],
+  },
 ];
 
 // 动态路由，基于用户权限动态去加载
@@ -103,9 +110,9 @@ export const dynamicRoutes = [
         path: "role/:userId(\\d+)",
         component: () => import("@/views/system/user/authRole"),
         name: "AuthRole",
-        meta: { title: "分配角色", activeMenu: "/system/user" }
-      }
-    ]
+        meta: { title: "分配角色", activeMenu: "/system/user" },
+      },
+    ],
   },
   {
     path: "/system/role-auth",
@@ -117,9 +124,9 @@ export const dynamicRoutes = [
         path: "user/:roleId(\\d+)",
         component: () => import("@/views/system/role/authUser"),
         name: "AuthUser",
-        meta: { title: "分配用户", activeMenu: "/system/role" }
-      }
-    ]
+        meta: { title: "分配用户", activeMenu: "/system/role" },
+      },
+    ],
   },
   {
     path: "/system/dict-data",
@@ -131,9 +138,9 @@ export const dynamicRoutes = [
         path: "index/:dictId(\\d+)",
         component: () => import("@/views/system/dict/data"),
         name: "Data",
-        meta: { title: "字典数据", activeMenu: "/system/dict" }
-      }
-    ]
+        meta: { title: "字典数据", activeMenu: "/system/dict" },
+      },
+    ],
   },
   {
     path: "/monitor/job-log",
@@ -145,9 +152,9 @@ export const dynamicRoutes = [
         path: "index",
         component: () => import("@/views/monitor/job/log"),
         name: "JobLog",
-        meta: { title: "调度日志", activeMenu: "/monitor/job" }
-      }
-    ]
+        meta: { title: "调度日志", activeMenu: "/monitor/job" },
+      },
+    ],
   },
   {
     path: "/tool/gen-edit",
@@ -159,9 +166,9 @@ export const dynamicRoutes = [
         path: "index/:tableId(\\d+)",
         component: () => import("@/views/tool/gen/editTable"),
         name: "GenEdit",
-        meta: { title: "修改生成配置", activeMenu: "/tool/gen" }
-      }
-    ]
+        meta: { title: "修改生成配置", activeMenu: "/tool/gen" },
+      },
+    ],
   },
   {
     path: "/monthly",
@@ -173,9 +180,9 @@ export const dynamicRoutes = [
         path: "dept/:id",
         component: () => import("@/views/order/monthly-dept"),
         name: "MonthlyDept",
-        meta: { title: "部门计划明细" }
-      }
-    ]
+        meta: { title: "部门计划明细" },
+      },
+    ],
   },
   {
     path: "/order",
@@ -187,9 +194,9 @@ export const dynamicRoutes = [
         path: "list2/:projectType",
         component: () => import("@/views/order/list"),
         name: "orderList2",
-        meta: { title: "项目清单" }
-      }
-    ]
+        meta: { title: "项目清单" },
+      },
+    ],
   },
   {
     path: "/order",
@@ -201,9 +208,9 @@ export const dynamicRoutes = [
         path: "details/:id",
         component: () => import("@/views/order/project"),
         name: "Details",
-        meta: { title: "项目明细", activeMenu: "/order/list/:projectType" }
-      }
-    ]
+        meta: { title: "项目明细", activeMenu: "/order/list/:projectType" },
+      },
+    ],
   },
   {
     path: "/work",
@@ -215,15 +222,15 @@ export const dynamicRoutes = [
         path: "details/:id",
         component: () => import("@/views/order/send"),
         name: "Send",
-        meta: { title: "工单：", activeMenu: "/order/order-list" }
-      }
-    ]
-  }
+        meta: { title: "工单：", activeMenu: "/order/order-list" },
+      },
+    ],
+  },
 ];
 
 export default new Router({
   base: "rk",
   mode: "history", // 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRoutes,
 });

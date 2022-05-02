@@ -23,7 +23,7 @@ export default {
     };
   },
   created() {
-    this.selectDeptId = this.$route.params.id || -1;
+    this.selectDeptId = parseInt(this.$route.params.id) || -1;
     getDeptList().then((res) => {
       if (res.code == 200) {
         this.deptList = res.rows;

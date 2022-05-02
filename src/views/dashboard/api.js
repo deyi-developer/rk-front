@@ -5,7 +5,7 @@ export function getSummary(params) {
   return request({
     url: "/reportdata/reportdata/summary",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -14,7 +14,7 @@ export function getRiskNum(params) {
   return request({
     url: "/reportdata/reportdata/risk-num",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -27,7 +27,7 @@ export function getReportReceive(params) {
   return request({
     url: "report/receive",
     method: "get",
-    params
+    params,
   });
 }
 // 查询现金分布
@@ -35,7 +35,7 @@ export function getReportCash(params) {
   return request({
     url: "report/cash",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -44,7 +44,7 @@ export function getReportCost(params) {
   return request({
     url: "report/cost",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -53,7 +53,7 @@ export function getReportAmount(params) {
   return request({
     url: "report/amount",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -62,7 +62,7 @@ export function getReportCashOccupy(params) {
   return request({
     url: "report/cash/occupy",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -71,7 +71,7 @@ export function getReach({ type = 1, ...params }) {
   return request({
     url: `report/reach/${type}`,
     method: "get",
-    params
+    params,
   });
 }
 
@@ -80,7 +80,7 @@ export function getMaori(query) {
   return request({
     url: "report/maori",
     method: "get",
-    params: query
+    params: query,
   });
 }
 
@@ -89,13 +89,22 @@ export function getInvoiceReceivePercent(query) {
   return request({
     url: "/report/invoiceReceivePercent",
     method: "get",
-    params: query
+    params: query,
   });
 }
 // 项目明细
 export const projectDetails = (projectCode) => {
   return request({
     url: `/projectDetail/findProjectDetail/${projectCode}`,
-    method: "get"
+    method: "get",
+  });
+};
+
+// 达成率详情
+export const getReachDetail = ({ reachType, data }) => {
+  return request({
+    url: `/report/reachDetail/${reachType}`,
+    params: data,
+    method: "get",
   });
 };

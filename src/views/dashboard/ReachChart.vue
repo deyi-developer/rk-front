@@ -23,6 +23,7 @@
       style="margin-top: 10px"
       :class="className"
       :style="{ height: height, width: width }"
+      @click="handleJump"
     />
   </div>
 </template>
@@ -36,33 +37,38 @@ export default {
   mixins: [resize],
   props: {
     projectCode: {
-      type: String
+      type: String,
     },
     oneDeptId: {
-      type: [String, Number]
+      type: [String, Number],
     },
     className: {
       type: String,
-      default: "chart"
+      default: "chart",
     },
     width: {
       type: String,
-      default: "100%"
+      default: "100%",
     },
     height: {
       type: String,
-      default: "300px"
-    }
+      default: "300px",
+    },
+  },
+  computed: {
+    title() {
+      return this.options.find((item) => item.value == this.type).label;
+    },
   },
   data() {
     return {
       type: 2,
       options: [
         { label: "工单完工达成率", value: 1 },
-        { label: "开票收款达成率", value: 2 }
+        { label: "开票收款达成率", value: 2 },
       ],
 
-      chart: null
+      chart: null,
     };
   },
   mounted() {
@@ -78,9 +84,18 @@ export default {
   watch: {
     oneDeptId() {
       this.fetchData();
-    }
+    },
   },
   methods: {
+    handleJump() {
+      this.$router.push({
+        path: "/reach-chart-details",
+        query: {
+          title: this.title,
+          type: this.type,
+        },
+      });
+    },
     changeHandle() {
       this.fetchData();
     },
@@ -88,7 +103,7 @@ export default {
       const params = {
         type: this.type,
         projectCode: this.projectCode,
-        oneDeptId: this.oneDeptId
+        oneDeptId: this.oneDeptId,
       };
       getReach(params).then((res) => {
         const data = res.data.data;
@@ -106,17 +121,17 @@ export default {
         dataZoom: [
           {
             startValue: dateList[dateList.length - 12],
-            endValue: dateList[dateList.length]
+            endValue: dateList[dateList.length],
           },
           {
-            type: "inside"
-          }
+            type: "inside",
+          },
         ],
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "cross"
-          }
+            type: "cross",
+          },
         },
         // aria: {
         //   enabled: true,
@@ -126,16 +141,16 @@ export default {
         // },
         title: {
           text: "达成率",
-          subtext: "单位（%）"
+          subtext: "单位（%）",
         },
         xAxis: [
           {
             type: "category",
             axisTick: {
-              alignWithLabel: true
+              alignWithLabel: true,
             },
             axisLine: {
-              onZero: false
+              onZero: false,
             },
             axisPointer: {
               label: {
@@ -146,17 +161,17 @@ export default {
                       ? "：" + params.seriesData[0].data + "%"
                       : "")
                   );
-                }
-              }
+                },
+              },
             },
-            data: dateList
-          }
+            data: dateList,
+          },
         ],
         yAxis: {
           type: "value",
           axisLabel: {
-            formatter: "{value}%"
-          }
+            formatter: "{value}%",
+          },
         },
         series: [
           {
@@ -167,21 +182,21 @@ export default {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: "rgba(63,177,227,0.8)"
+                  color: "rgba(63,177,227,0.8)",
                 },
                 {
                   offset: 1,
-                  color: "rgba(63,177,227,0.1)"
-                }
-              ])
-            }
-          }
-        ]
+                  color: "rgba(63,177,227,0.1)",
+                },
+              ]),
+            },
+          },
+        ],
       };
       this.chart = this.$echarts.init(this.$refs.dom, "walden");
 
       this.chart.setOption(option);
-    }
-  }
+    },
+  },
 };
 </script>
