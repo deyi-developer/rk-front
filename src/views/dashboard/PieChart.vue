@@ -186,6 +186,9 @@ export default {
       this.chart.getZr().on("click", (event) => {
         // 点击空白处，触发
         if (!event.target) {
+          // 不是从项目概览进来的页面，不允许点击跳转
+          if (this.$route.path !== "/index") return;
+
           this.$router.push({
             path: `/order/list?filter=${JSON.stringify([
               "totalShouldNotBillingMoney",
@@ -196,6 +199,9 @@ export default {
 
       // 柱状图点击跳转事件
       this.chart.on("click", ({ data }) => {
+        // 不是从项目概览进来的页面，不允许点击跳转
+        if (this.$route.path !== "/index") return;
+
         this.$router.push({
           path: `/order/list?filter=${JSON.stringify([data.id])}`,
         });
