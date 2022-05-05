@@ -276,9 +276,18 @@
               title="总收入"
               align="right"
             >
-              <template #default="{ row }">{{
-                row.pjtdTotalMoney | currency
-              }}</template>
+              <template #default="{ row }">
+                <el-link
+                  style="font-size: 12px"
+                  @click="
+                    $router.push({
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=1`,
+                    })
+                  "
+                  type="primary"
+                  >{{ row.pjtdTotalMoney | currency }}</el-link
+                ></template
+              >
             </vxe-column>
             <vxe-column
               class-name="bg-inv"
@@ -465,9 +474,19 @@
               title="已开总额"
               align="right"
             >
-              <template #default="{ row }">{{
-                row.totalAlreadyBillingMoney | currency
-              }}</template>
+              <template #default="{ row }">
+                <el-link
+                  style="font-size: 12px"
+                  @click="
+                    $router.push({
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`,
+                      
+                    })
+                  "
+                  type="primary"
+                  >{{ row.totalAlreadyBillingMoney | currency }}</el-link
+                ></template
+              >
             </vxe-column>
             <vxe-column
               field="projectInvoicePeriod"
@@ -519,9 +538,18 @@
               title="已收总额"
               align="right"
             >
-              <template #default="{ row }">{{
-                row.totalReceiptssMoney | currency
-              }}</template>
+              <template #default="{ row }">
+                <el-link
+                  style="font-size: 12px"
+                  @click="
+                    $router.push({
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=3`,
+                    })
+                  "
+                  type="primary"
+                  >{{ row.totalReceiptssMoney | currency }}</el-link
+                ></template
+              >
             </vxe-column>
             <vxe-column
               field="receivedRateOfTotalPjtd"
@@ -1247,18 +1275,9 @@ export default {
     //table 点击事件
     gotoDetail(row) {
       const { id, projectCode } = row;
-      // const { field } = column;
       this.$router.push({
-        // path: `/order/details/${projectCode}`,
         path: `/order/details/${id}?projectCode=${projectCode}`,
-        // query: {
-        //   projectCode
-        // }
       });
-
-      // if (field == "projectCode") {
-
-      // }
     },
     //提交全部
     async validAllEvent() {

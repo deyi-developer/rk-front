@@ -218,7 +218,21 @@ export const dynamicRoutes = [
         meta: { title: "工单：", activeMenu: "/order/order-list" }
       }
     ]
-  }
+  },
+  {
+    path: "/project",
+    component: Layout,
+    hidden: true,
+    permissions: ["risk:detail:lookup"],
+    children: [
+      {
+        path: "item/:id",
+        component: () => import("@/views/order/project-item"),
+        name: "Details",
+        meta: { title: "不知道叫什么啊", activeMenu: "/order/list" }
+      }
+    ]
+  },
 ];
 
 export default new Router({
