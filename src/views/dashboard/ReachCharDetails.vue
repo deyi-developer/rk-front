@@ -10,19 +10,20 @@
       <vxe-column field="projectName" title="项目名称"></vxe-column>
       <vxe-column field="parentProjectCode" title="父项目编码"></vxe-column>
       <vxe-column field="parentProjectName" title="父项目名称"></vxe-column>
-
+      <!-- 1 工单    2 开票 -->
       <template v-if="parseInt(type) === 2">
         <vxe-column field="year" title="年"></vxe-column>
         <vxe-column field="month" title="月"></vxe-column>
+        <vxe-column field="reachType" title="开票/收款类型"></vxe-column>
         <vxe-column field="planAmount" title="计划金额"></vxe-column>
         <vxe-column field="actualAmount" title="实际金额"></vxe-column>
       </template>
       <template v-else>
+        <vxe-column field="reachType" title="工单类型"></vxe-column>
         <vxe-column field="createTime" title="工单行日期"></vxe-column>
         <vxe-column field="handler" title="工单行处理人(创建人)"></vxe-column>
       </template>
 
-      <vxe-column field="reachType" title="工单类型"></vxe-column>
       <vxe-column field="completeStatus" title="达成状态"></vxe-column>
     </vxe-table>
 
