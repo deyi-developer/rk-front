@@ -74,6 +74,12 @@
         ></vxe-column>
         <vxe-column
           align="center"
+          title="工单类型"
+          field="eventTypeName"
+          width="180"
+        ></vxe-column>
+        <vxe-column
+          align="center"
           title="创建人"
           field="createName"
           width="120"
@@ -82,6 +88,12 @@
           align="center"
           title="创建时间"
           field="createTime"
+          width="180"
+        ></vxe-column>
+        <vxe-column
+          align="center"
+          title="截止时间"
+          field="eventHandleDate"
           width="180"
         ></vxe-column>
         <vxe-column

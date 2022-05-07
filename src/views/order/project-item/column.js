@@ -22,6 +22,7 @@ export const PJTD_LIST = [
     prop: "projectName",
     label: "项目名称",
     minWidth: 50,
+    width: 200,
     fixed: "left",
     align: "center",
   },
@@ -32,16 +33,22 @@ export const PJTD_LIST = [
     align: "center",
   },
   {
+    prop: 'parentProjectName',
+    label: "父项目名称",
+    minWidth: 50,
+    align: "center",
+  },
+  {
     prop: "parentProjectCode",
     label: "父项目编码",
-    width: 220,
+    minWidth: 50,
     fixed: "left",
     align: "center",
   },
   {
     prop: "money",
     label: "收入金额",
-    width: 160,
+    minWidth: 50,
     align: "center",
   },
 ];
@@ -80,9 +87,15 @@ export const ALREADY_BILLING = [
     align: "center",
   },
   {
+    prop: 'parentProjectName',
+    label: "父项目名称",
+    minWidth: 50,
+    align: "center",
+  },
+  {
     prop: "parentProjectCode",
     label: "父项目编码",
-    width: 220,
+    minWidth: 50,
     fixed: "left",
     align: "center",
   },
@@ -140,9 +153,15 @@ export const RECEIPTS_MONEY = [
     align: "center",
   },
   {
+    prop: 'parentProjectName',
+    label: "父项目名称",
+    minWidth: 50,
+    align: "center",
+  },
+  {
     prop: "parentProjectCode",
     label: "父项目编码",
-    width: 220,
+    minWidth: 50,
     fixed: "left",
     align: "center",
   },
@@ -155,7 +174,7 @@ export const RECEIPTS_MONEY = [
   {
     prop: "chargeInvoiceCurrency",
     label: "币种",
-    width: 160,
+    minWidth: 50,
     align: "center",
   },
   {
