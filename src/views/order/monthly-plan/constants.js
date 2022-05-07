@@ -9,7 +9,7 @@ export const COLUMN_LIST = [
   },
   {
     prop: "oneDeptName",
-    label: "行标签",
+    label: "部门名称",
     minWidth: "180",
     align: "center",
   },

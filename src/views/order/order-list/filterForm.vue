@@ -2,10 +2,11 @@
 <template>
   <div class="filter-form">
     <el-form :model="queryParams" ref="queryForm" label-width="100px">
-      <el-row :gutter="24">
-        <el-col :span="6">
-          <el-form-item label="项目编码" prop="projectCode">
+      <el-row type="flex" justify="space-between" >
+        <el-col :span="4">
+          <el-form-item label-width="80px" label="项目编码" prop="projectCode">
             <el-input
+              style="width: 100%"
               v-model="queryParams.projectCode"
               placeholder="请输入项目编码"
               clearable
@@ -13,9 +14,10 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="工单名" prop="eventTitle">
+        <el-col :span="4">
+          <el-form-item label-width="80px" label="工单名" prop="eventTitle">
             <el-input
+              style="width: 100%"
               v-model="queryParams.eventTitle"
               placeholder="请输入工单名"
               clearable
@@ -23,10 +25,10 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="工单类型" prop="eventType">
+        <el-col :span="4">
+          <el-form-item label-width="80px" label="工单类型" prop="eventType">
             <el-select
-              style="width: 80%"
+              style="width: 100%"
               placeholder="请选择工单类型"
               v-model="queryParams.eventType"
               clearable
@@ -40,7 +42,24 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
+          <el-form-item label-width="80px" label="状态" prop="eventStatus">
+            <el-select
+              style="width: 100%"
+              placeholder="请选择状态"
+              v-model="queryParams.eventStatus"
+              clearable
+            >
+              <el-option
+                v-for="dict in dict.type.event_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
           <div style="float: right">
             <el-button
               type="primary"
@@ -85,13 +104,15 @@
 <script>
 import { getDeptList } from "@/api/common";
 export default {
-  dicts: ["event_type"],
+  dicts: ["event_type", "event_status"],
 
   data() {
     return {
       more: true,
       // 查询参数
-      queryParams: {},
+      queryParams: {
+        eventStatus: "0"
+      },
       deptList: [],
     };
   },

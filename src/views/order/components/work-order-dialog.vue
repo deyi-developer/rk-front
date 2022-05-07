@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="发起工单" width="70%" :visible.sync="dialogVisible" :before-close="beforeClose">
+  <el-dialog :close-on-click-modal="false" title="发起工单" width="70%" :visible.sync="dialogVisible" :before-close="beforeClose">
     <el-form :model="form" :rules="rules" ref="formRef" label-width="150px">
       <el-form-item label="工单标题:" prop="eventTitle">
         <el-input style="width: 80%;" v-model="form.eventTitle"></el-input>
@@ -40,6 +40,27 @@
           placeholder="请选择工单处理人"
           :filter-method="getHandlers"
           :loading="handlerLoding"
+        >
+          <el-option
+            v-for="item in handlers"
+            :key="item.userId"
+            :label="item.nickName"
+            :value="item.userId"
+          >
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userId }}</span>
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="抄送人:" prop="ccIds">
+        <el-select
+          style="width: 80%;"
+          v-model="form.ccIds"
+          filterable
+          placeholder="请选择抄送人"
+          :filter-method="getHandlers"
+          :loading="handlerLoding"
+          multiple
         >
           <el-option
             v-for="item in handlers"
