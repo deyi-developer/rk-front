@@ -1,7 +1,7 @@
 <template>
   <el-select
+    class="mg"
     v-model="selectDeptId"
-    size="small"
     placeholder="请选择部门"
     @change="update"
   >
@@ -39,9 +39,13 @@ export default {
   },
   methods: {
     update() {
-      this.$parent.$parent.getCurrentMonthInfo(this.selectDeptId);
+      this.$parent.$parent.setId(this.selectDeptId);
     },
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.mg {
+  margin-right: 10px;
+}
+</style>

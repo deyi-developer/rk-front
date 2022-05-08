@@ -339,9 +339,19 @@
               title="已开总额"
               align="right"
             >
-              <template #default="{ row }">{{
-                row.totalAlreadyBillingMoney | currency
-              }}</template>
+              <template #default="{ row }">
+                <el-link
+                  style="font-size: 12px"
+                  @click="
+                    $router.push({
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`,
+                      
+                    })
+                  "
+                  type="primary"
+                  >{{ row.totalAlreadyBillingMoney | currency }}</el-link
+                ></template
+              >
             </vxe-column>
             <vxe-column
               field="billingRateOfTotalPjtd"
@@ -1083,8 +1093,9 @@ export default {
         // 获取筛选数据
         const filterData = JSON.parse(filter);
 
-        if (filterData[0] || projectType)
+        if (filterData[0] || projectType) {
           this.handleFilter(filterData, projectType);
+        }
 
         // 重新请求
         this.fetchData({ pageNum: 1 });
@@ -1096,6 +1107,8 @@ export default {
       this.tableLodaing = true;
       const filterParams = this.filterParams;
       const formVal = {}; //this.$refs.form.queryParams ;
+      console.log(filterParams)
+      console.log(formVal)
       const params = { ...formVal, ...filterParams, ...this.page, ...page };
       //获取列表
       const res = await getList(params);
@@ -1159,6 +1172,9 @@ export default {
         $table.getColumnByField("riskStatus").filters.map((res) => {
           if (res.label === filterType.label) res.checked = true;
         });
+
+        // 设置筛选
+        this.filterParams.riskStatus = projectType
       }
 
       // 修改条件之后，需要手动调用 updateData 处理表格数据

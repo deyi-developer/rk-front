@@ -106,7 +106,7 @@ export const ALREADY_BILLING = [
     align: "center",
   },
   {
-    prop: "bankArrivalDate",
+    prop: "invoiceDate",
     label: "开票日期",
     width: 160,
     align: "center",
@@ -172,13 +172,13 @@ export const RECEIPTS_MONEY = [
     align: "center",
   },
   {
-    prop: "chargeInvoiceCurrency",
+    prop: "chargeReceiveCurrency",
     label: "币种",
     minWidth: 50,
     align: "center",
   },
   {
-    prop: "invoiceDate",
+    prop: "bankArrivalDate",
     label: "银行到账日期",
     width: 160,
     align: "center",

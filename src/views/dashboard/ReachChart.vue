@@ -1,6 +1,6 @@
 <!-- 达成率 -->
 <template>
-  <div>
+  <div style="cursor: pointer;">
     <div class="datepicker-wrap">
       <el-select
         size="mini"
@@ -20,7 +20,7 @@
 
     <div
       ref="dom"
-      style="margin-top: 10px"
+      style="margin-top: 10px;"
       :class="className"
       :style="{ height: height, width: width }"
       @click="handleJump"

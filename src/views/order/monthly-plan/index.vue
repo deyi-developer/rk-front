@@ -52,9 +52,7 @@
               v-else-if="item.prop === 'oneDeptName'"
               :to="`/monthly/dept/${row.oneDeptId}?title=${
                 row.oneDeptName
-              }&year=${duringMonth.getFullYear()}&month=${
-                duringMonth.getMonth() + 1
-              }`"
+              }&duringMonth=${duringMonth}`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>

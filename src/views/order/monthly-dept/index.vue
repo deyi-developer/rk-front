@@ -5,7 +5,17 @@
       <!-- title -->
       <div slot="header" class="clearfix2">
         <div>
-          <selectAll v-if="!checkRole(['pm'])" />
+          <selectAll v-if="!checkRole(['pm', 'boss'])" />
+
+          <!-- 月份选择器 -->
+          <el-date-picker
+            v-model="duringMonth"
+            type="month"
+            placeholder="选择月份"
+            @change="(res) => (duringMonth = res)"
+            :clearable="false"
+            :picker-options="pickerOptions"
+          />
         </div>
         <div>
           <!-- clear filter -->
@@ -131,18 +141,31 @@ export default {
       inputPlaceholder: INPUT_PLACEHOLDER, // 筛选提示文案
 
       currentMonthList: [], // 当前月度列表总计
+      duringMonth: new Date(), // 当前选择月份
       MonthList: [], // 当前月度列表
       loading: false, // 加载
       filterConditions: FILTER_CONDITIONS(), // 筛选条件
+      id: this.$route.params.id, // 当月
+      pickerOptions: {
+        // 时间选择器有效范围
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6;
+        },
+      },
     };
   },
   created() {
+    const {duringMonth, title } = this.$route.query
     // 动态设置tab拦
     this.$tab.updatePage(
       Object.assign({}, this.$route, {
-        title: `${this.$route.query.title || ""}计划明细`,
+        title: `${title || ""}计划明细`,
       })
     );
+
+    if(duringMonth) {
+      this.duringMonth = new Date(duringMonth)
+    }
 
     // 获取事业部计划明细列表
     this.getCurrentMonthInfo();
@@ -150,7 +173,7 @@ export default {
   methods: {
     checkRole,
     // 获取部门明细信息
-    async getCurrentMonthInfo(id) {
+    async getCurrentMonthInfo() {
       this.loading = true;
 
       // 获取当前月度
@@ -161,9 +184,9 @@ export default {
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
         totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
       } = await getCurrentMonthApi({
-        oneDeptId: id ? id : this.$route.params.id,
-        month: this.$route.query.month,
-        year: this.$route.query.year,
+        oneDeptId: this.id,
+        month: this.duringMonth.getMonth() + 1,
+        year: this.duringMonth.getFullYear(),
         ...this.filterConditions,
       });
 
@@ -188,6 +211,10 @@ export default {
       this.loading = false;
     },
 
+    setId(id){
+      this.id = id
+    },
+
     // 数据过滤
     filterHandler({ property, values }) {
       this.filterConditions[property] = values[0];
@@ -201,7 +228,7 @@ export default {
       this.download(
         exportDeptMonthlyPlanApi,
         {
-          oneDeptId: this.$route.params.id,
+          oneDeptId: this.id,
           ...this.filterConditions,
         },
         `${this.$route.query.title}计划明细列表_${new Date().getTime()}.xlsx`
@@ -216,6 +243,15 @@ export default {
 
       this.getCurrentMonthInfo();
     },
+  },
+  watch: {
+    // 监听时间变化，更新列表
+    duringMonth() {
+      this.getCurrentMonthInfo();
+    },
+    id() {
+      this.getCurrentMonthInfo();
+    }
   },
 };
 </script>

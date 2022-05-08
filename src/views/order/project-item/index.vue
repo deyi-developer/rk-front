@@ -24,6 +24,9 @@
             <!-- 序号 -->
             <span v-if="item.prop === 'index'">{{ rowIndex + 1 }}</span>
 
+            <!-- 序号 -->
+            <span v-if="item.prop === 'money'">{{ row[item.prop] | currency }}</span>
+
             <!-- 默认值 -->
             <span v-else>{{ row[item.prop] }}</span>
           </template>
