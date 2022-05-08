@@ -93,6 +93,7 @@ export default {
         query: {
           title: this.title,
           type: this.type,
+          projectCode: this.projectCode
         },
       });
     },

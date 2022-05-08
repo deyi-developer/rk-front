@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       type: this.$route.query.type,
+      projectCode: this.$route.query.projectCode,
       loading: false,
       tableData: [],
       tablePage: {
@@ -76,6 +77,7 @@ export default {
         data: {
           pageNum: this.tablePage.currentPage,
           pageSize: this.tablePage.pageSize,
+          projectCode: this.projectCode
         },
       });
       if (code === 200) {

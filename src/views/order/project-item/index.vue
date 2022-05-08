@@ -81,7 +81,7 @@ export default {
     setTitle(name) {
       const vm = this
       const obj = Object.assign({}, vm.$route, {
-        title: `${name}: ${this.header}`
+        title: name ? `${name}: ${this.header}` : this.header
       });
       this.$tab.updatePage(obj);
     },

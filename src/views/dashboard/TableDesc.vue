@@ -6,13 +6,33 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="PJTD含税总收入"
-            >{{ summary.pjtdTotalMoney | currency }}</el-descriptions-item
           >
+            <span v-if="$route.name === 'Index'" style="font-size: 12px">
+              {{ summary.pjtdTotalMoney | currency }}
+            </span>
+            <el-link
+              v-else
+              style="font-size: 12px"
+              type="primary"
+              @click="toItemDetails(1)"
+              >{{ summary.pjtdTotalMoney | currency }}</el-link
+            >
+          </el-descriptions-item>
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="总已开金额"
-            >{{ summary.totalBilling | currency }}</el-descriptions-item
           >
+            <span v-if="$route.name === 'Index'" style="font-size: 12px">
+              {{ summary.totalBilling | currency }}
+            </span>
+            <el-link
+              v-else
+              style="font-size: 12px"
+              type="primary"
+              @click="toItemDetails(2)"
+              >{{ summary.totalBilling | currency }}</el-link
+            >
+          </el-descriptions-item>
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD开票率"
@@ -24,8 +44,18 @@
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="总已收金额"
-            >{{ summary.totalReceipts | currency }}</el-descriptions-item
           >
+            <span v-if="$route.name === 'Index'" style="font-size: 12px">
+              {{ summary.totalReceipts | currency }}
+            </span>
+            <el-link
+              v-else
+              style="font-size: 12px"
+              type="primary"
+              @click="toItemDetails(3)"
+              >{{ summary.totalReceipts | currency }}</el-link
+            >
+          </el-descriptions-item>
           <el-descriptions-item
             :contentStyle="{ textAlign: 'right' }"
             label="相对PJTD收款率"
@@ -83,10 +113,18 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总已开金额"
-              >{{
-                summary.totalAlreadyBillingMoney | currency
-              }}</el-descriptions-item
             >
+              <span v-if="$route.name === 'Index'" style="font-size: 12px">
+                {{ summary.totalAlreadyBillingMoney | currency }}
+              </span>
+              <el-link
+                v-else
+                style="font-size: 12px"
+                type="primary"
+                @click="toItemDetails(2)"
+                >{{ summary.totalAlreadyBillingMoney | currency }}</el-link
+              >
+            </el-descriptions-item>
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               labelClassName="boldClass"
@@ -116,10 +154,18 @@
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总已收金额"
-              >{{
-                summary.totalReceiptssMoney | currency
-              }}</el-descriptions-item
             >
+              <span v-if="$route.name === 'Index'" style="font-size: 12px">
+                {{ summary.totalReceiptssMoney | currency }}
+              </span>
+              <el-link
+                v-else
+                style="font-size: 12px"
+                type="primary"
+                @click="toItemDetails(3)"
+                >{{ summary.totalReceiptssMoney | currency }}</el-link
+              >
+            </el-descriptions-item>
             <el-descriptions-item
               :contentStyle="{ textAlign: 'right' }"
               label="总应收未收(相对应收)"
@@ -176,6 +222,19 @@ export default {
       } else {
         return 0;
       }
+    },
+
+    toItemDetails(type) {
+      this.$router.push({
+        path: `/project/item/${this.summary.projectCode}?projectCode=${this.summary.projectCode}&name=${this.summary.projectName}&type=${type}`,
+      });
+      // if (this.$route.name === 'Index') {
+      //   this.$router.push({
+      //     path: `/project/item/1?type=${type}`,
+      //   });
+      // } else {
+
+      // }
     },
   },
 };
