@@ -233,7 +233,7 @@ export default {
           year: this.duringMonth.getFullYear(),
           ...this.filterConditions,
         },
-        `${this.$route.query.title}计划明细列表_${new Date().getTime()}.xlsx`
+        `${this.$route.query.title || ""}计划明细列表_${new Date().getTime()}.xlsx`
       );
     },
 
