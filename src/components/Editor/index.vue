@@ -31,47 +31,47 @@ export default {
     /* 编辑器的内容 */
     value: {
       type: String,
-      default: "",
+      default: ""
     },
     /* 高度 */
     height: {
       type: Number,
-      default: null,
+      default: null
     },
     /* 最小高度 */
     minHeight: {
       type: Number,
-      default: null,
+      default: null
     },
     /* 只读 */
     readOnly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 上传文件大小限制(MB)
     fileSize: {
       type: Number,
-      default: 5,
+      default: 5
     },
     /* 类型（base64格式、url格式） */
     type: {
       type: String,
-      default: "url",
+      default: "url"
     },
     placeholder: {
       typr: String,
-      default: '请输入内容'
+      default: "请输入内容"
     }
   },
   model: {
     prop: "value",
-    event: "input",
+    event: "input"
   },
   data() {
     return {
       uploadUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
-        Authorization: "Bearer " + getToken(),
+        Authorization: "Bearer " + getToken()
       },
       Quill: null,
       currentValue: "",
@@ -91,12 +91,12 @@ export default {
             [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
             [{ align: [] }], // 对齐方式
             ["clean"], // 清除文本格式
-            ["link", "image"], // 链接、图片、视频
-          ],
+            ["link", "image"] // 链接、图片、视频
+          ]
         },
         placeholder: this.placeholder,
-        readOnly: this.readOnly,
-      },
+        readOnly: this.readOnly
+      }
     };
   },
   computed: {
@@ -109,12 +109,11 @@ export default {
         style.height = `${this.height}px`;
       }
       return style;
-    },
+    }
   },
   watch: {
     value: {
       handler(val) {
-        console.log('val', val)
         this.dispatch("ElFormItem", "el.form.change", [val]);
         if (val !== this.currentValue) {
           this.currentValue = val === null ? null : val;
@@ -123,8 +122,8 @@ export default {
           }
         }
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   mounted() {
     this.init();
@@ -200,8 +199,8 @@ export default {
     },
     handleUploadError() {
       this.$message.error("图片插入失败");
-    },
-  },
+    }
+  }
 };
 </script>
 
