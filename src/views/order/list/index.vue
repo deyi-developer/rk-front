@@ -144,6 +144,20 @@
           :cell-class-name="cellClass"
           :header-cell-class-name="headerCellClassName"
         >
+         <vxe-column
+            field="billNum"
+            fixed="left"
+            title="状态"
+            width="50"
+          >
+            <template #default="{ row: { billNum = {}, alertList='无' } }">
+              <el-tooltip effect="dark" placement="right">
+                <div slot="content" v-html="alertList" />
+                <span :style="{cursor: 'default',color: billNum.color || ''}">{{ billNum.count || '-' }}</span>
+              </el-tooltip>
+            </template>
+          </vxe-column>
+
           <vxe-column
             field="projectCode"
             fixed="left"
