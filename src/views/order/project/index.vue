@@ -299,8 +299,10 @@
               <el-form-item label="项目备注:">
                 <el-input
                   type="textarea"
-                  :rows="2"
                   placeholder="请输入内容"
+                  :autosize="{
+                    minRows: 6
+                  }"
                   v-model="updateData.planRemark"
                 ></el-input>
               </el-form-item>
