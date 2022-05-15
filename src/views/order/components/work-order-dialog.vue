@@ -109,7 +109,9 @@
     </el-form>
     <div slot="footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button :loading="btnloading" type="primary" @click="submit"
+        >确 定</el-button
+      >
     </div>
   </el-dialog>
 </template>
@@ -178,7 +180,8 @@ export default {
         ]
       },
       handlers: [],
-      handlerLoding: false
+      handlerLoding: false,
+      btnloading: false
     };
   },
   watch: {
@@ -211,7 +214,9 @@ export default {
     sendWorkOrder() {
       this.$refs.formRef.validate(async (valid) => {
         if (valid) {
+          this.btnloading = true;
           const { code, msg } = await send(this.form);
+          this.btnloading = false;
           if (code == 200) {
             this.close();
             this.refresh();
@@ -225,7 +230,9 @@ export default {
     updateWorkOrder() {
       this.$refs.formRef.validate(async (valid) => {
         if (valid) {
+          this.btnloading = true;
           const { code, msg } = await update(this.form);
+          this.btnloading = false;
           if (code == 200) {
             this.close();
             this.refresh();
