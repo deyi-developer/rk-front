@@ -18,6 +18,18 @@ export function formatDate(cellValue) {
 }
 
 /**
+ * 表格时间格式化
+ */
+ export function formatDateOf(cellValue) {
+  if (cellValue == null || cellValue == "") return "";
+  var date = new Date(cellValue) 
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+  var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate() 
+  return year + '-' + month + '-' + day
+}
+
+/**
  * @param {number} time
  * @param {string} option
  * @returns {string}

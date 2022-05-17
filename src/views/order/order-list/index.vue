@@ -59,6 +59,24 @@
             >
           </template>
         </vxe-column>
+         <vxe-column
+          align="center"
+          title="项目名称"
+          field="projectName"
+          width="180"
+        />
+        <vxe-column
+          align="center"
+          title="父项目名称"
+          field="parentProjectCode"
+          width="180"
+        />
+        <vxe-column
+          align="center"
+          title="父项目编码"
+          field="parentProjectName"
+          width="180"
+        />
         <vxe-column align="center" title="状态" field="eventStatus" width="100">
           <template #default="{ row }">
             <el-tag size="small" :type="setTagType(row.eventStatus)">{{

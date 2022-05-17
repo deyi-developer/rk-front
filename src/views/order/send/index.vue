@@ -20,6 +20,14 @@
         </span>
       </div>
       <ul class="order-info">
+        <li class="order-item">
+          <label class="space">项目名称:</label>
+          <span class="value">
+            {{ info.projectName }}
+          </span>
+        </li>
+      </ul>
+      <ul class="order-info">
         <li
           class="order-item"
           @click="
@@ -33,14 +41,6 @@
           <label class="space">项目编码:</label>
           <span class="value projectCode">
             {{ info.projectCode }}
-          </span>
-        </li>
-      </ul>
-      <ul class="order-info">
-        <li class="order-item">
-          <label class="space">项目名称:</label>
-          <span class="value">
-            {{ info.projectName }}
           </span>
         </li>
       </ul>
@@ -77,6 +77,13 @@
           <span class="value">
             <Icon type="ios-alarm" color="#6B7285;" />
             {{ info.createTime }}
+          </span>
+        </li>
+        <li class="order-item">
+          <label class="space">工单类型:</label>
+          <span class="value">
+            <Icon type="ios-browsers" color="#6B7285;" />
+            {{ info.eventTypeName }}
           </span>
         </li>
       </ul>
@@ -158,7 +165,18 @@
             <img class="avatar" :src="getAvatar(item.avatar)" />
 
             <p class="name">{{ item.nameOfRespondent }}</p>
-            <p class="time">{{ formatDate(item.createDate) }}</p>
+             <p class="top-item">
+              <span class="label">回复时间: </span
+              >{{ formatDate(item.createDate) }}
+            </p>
+            <p class="top-item">
+              <span class="label">责任人: </span
+              >{{ item.handlerName }}
+            </p>
+            <p class="top-item">
+              <span class="label">截止时间: </span
+              >{{ formatDateOf(item.eventHandleDate) }}
+            </p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
 
@@ -194,7 +212,7 @@
   </div>
 </template>
 <script>
-import { formatDate } from "@/utils";
+import { formatDate, formatDateOf } from "@/utils";
 import { mapActions, mapGetters } from "vuex";
 import { detail, reply, replyList, update } from "./api";
 import { handlerList } from "../project/api";
@@ -226,6 +244,7 @@ export default {
       handlers: [],
       handlerLoding: false,
       formatDate,
+      formatDateOf,
       eventHandleDate: "",
     };
   },
@@ -488,6 +507,15 @@ export default {
         .reply,
         .time {
           color: rgb(194, 189, 189);
+        }
+        .top-item {
+          margin-left: 15px;
+          color: rgb(194, 189, 189);
+          font-size: 10px;
+          .label {
+            color: #303133;
+            font-size: 10px;
+          }
         }
         .reply {
           display: none;
