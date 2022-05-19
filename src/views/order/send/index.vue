@@ -164,7 +164,7 @@
           </el-option>
         </el-select>
 
-        <span>工单处理截止日期：</span>
+        <span>处理截止日期：</span>
         <el-date-picker
           v-model="eventHandleDate"
           style="width: 20%; margin-bottom: 12px"
