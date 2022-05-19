@@ -80,6 +80,13 @@
           </span>
         </li>
         <li class="order-item">
+          <label class="space">截止日期:</label>
+          <span class="value">
+            <Icon type="md-alarm" color="#6B7285;" />
+            {{ formatDateOf(info.headerEndDate) }}
+          </span>
+        </li>
+        <li class="order-item">
           <label class="space">工单类型:</label>
           <span class="value">
             <Icon type="ios-browsers" color="#6B7285;" />
@@ -109,16 +116,40 @@
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
       <div v-if="info.eventStatus == 0">
-        <span>交接人：</span>
+        <span>责任人：</span>
         <el-select
           v-model="eventHandler"
           style="width: 20%; margin-bottom: 12px; margin-right: 24px"
           size="mini"
           filterable
-          placeholder="请选择工单交接人"
+          placeholder="请选择工单责任人"
           :filter-method="getHandlers"
           :loading="handlerLoding"
           clearable
+        >
+          <el-option
+            v-for="item in handlers"
+            :key="item.userId"
+            :label="item.nickName"
+            :value="item.userId"
+          >
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{
+              item.userId
+            }}</span>
+          </el-option>
+        </el-select>
+
+        <span>抄送人：</span>
+        <el-select
+          style="width: 20%; margin-bottom: 12px; margin-right: 24px"
+          v-model="ccIds"
+          size="mini"
+          filterable
+          placeholder="请选择抄送人"
+          :filter-method="getHandlers"
+          :loading="handlerLoding"
+          multiple
         >
           <el-option
             v-for="item in handlers"
@@ -165,13 +196,12 @@
             <img class="avatar" :src="getAvatar(item.avatar)" />
 
             <p class="name">{{ item.nameOfRespondent }}</p>
-             <p class="top-item">
+            <p class="top-item">
               <span class="label">回复时间: </span
               >{{ formatDate(item.createDate) }}
             </p>
             <p class="top-item">
-              <span class="label">责任人: </span
-              >{{ item.handlerName }}
+              <span class="label">责任人: </span>{{ item.handlerName }}
             </p>
             <p class="top-item">
               <span class="label">截止时间: </span
@@ -241,6 +271,7 @@ export default {
       replyList: [],
       editorVisible: true,
       eventHandler: "",
+      ccIds: [],
       handlers: [],
       handlerLoding: false,
       formatDate,
@@ -340,17 +371,23 @@ export default {
 
     /** 回复 */
     async submit() {
-      if (this.eventHandler) {
-        // 选择了交接人
-        this.info.eventHandler = this.eventHandler;
+      // 校验责任人
+      if (!this.eventHandler) return this.$modal.msgError("请选择责任人!");
+      // 校验截止日期
+      if (!this.eventHandleDate)
+        return this.$modal.msgError("请选择工单截止日期!");
+        // 校验截止日期
+      if (!this.ccIds[0])
+        return this.$modal.msgError("请选择抄送人!");
 
-        if (!this.eventHandleDate)
-          return this.$modal.msgError("请选择工单截止日期");
-        this.info.eventHandleDate = this.eventHandleDate;
-      } else {
-        this.info.eventHandler = null;
-      }
+      // 选择了责任人
+      this.info.eventHandler = this.eventHandler;
+
+      this.info.eventHandleDate = this.eventHandleDate;
+
       this.info.forwardFlag = 1;
+
+      this.info.ccIds = this.ccIds;
       const { code, msg } = await reply(this.info);
       if (code === 200) {
         this.$modal.msgSuccess(msg);
@@ -367,6 +404,7 @@ export default {
       this.info.eventMsg = "";
       this.eventHandler = "";
       this.eventHandleDate = "";
+      this.ccIds = [];
     },
 
     /** 获取回复列表 */
