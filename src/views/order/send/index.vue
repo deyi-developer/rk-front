@@ -20,15 +20,7 @@
         </span>
       </div>
       <ul class="order-info">
-        <li class="order-item">
-          <label class="space">项目名称:</label>
-          <span class="value">
-            {{ info.projectName }}
-          </span>
-        </li>
-      </ul>
-      <ul class="order-info">
-        <li
+         <li
           class="order-item"
           @click="
             () =>
@@ -41,6 +33,28 @@
           <label class="space">项目编码:</label>
           <span class="value projectCode">
             {{ info.projectCode }}
+          </span>
+        </li>
+        <li class="order-item">
+          <label class="space">项目名称:</label>
+          <span class="value">
+            {{ info.projectName }}
+          </span>
+        </li>
+      </ul>
+      <ul class="order-info">
+        <li class="order-item">
+          <label class="space">提单时间:</label>
+          <span class="value">
+            <Icon type="ios-alarm" color="#6B7285;" />
+            {{ info.createTime }}
+          </span>
+        </li>
+        <li class="order-item">
+          <label class="space">截止日期:</label>
+          <span class="value">
+            <Icon type="md-alarm" color="#6B7285;" />
+            {{ formatDateOf(info.headerEndDate) }}
           </span>
         </li>
       </ul>
@@ -73,27 +87,28 @@
           </span>
         </li>
         <li class="order-item">
-          <label class="space">提单时间:</label>
-          <span class="value">
-            <Icon type="ios-alarm" color="#6B7285;" />
-            {{ info.createTime }}
-          </span>
-        </li>
-        <li class="order-item">
-          <label class="space">截止日期:</label>
-          <span class="value">
-            <Icon type="md-alarm" color="#6B7285;" />
-            {{ formatDateOf(info.headerEndDate) }}
-          </span>
-        </li>
-        <li class="order-item">
           <label class="space">工单类型:</label>
           <span class="value">
             <Icon type="ios-browsers" color="#6B7285;" />
             {{ info.eventTypeName }}
           </span>
         </li>
+        <li class="order-item">
+          <label class="space">责任人:</label>
+          <span class="value">
+            <Icon type="ios-person" color="#6B7285;" />
+            {{ info.handlerName }}
+          </span>
+        </li>
+        <li class="order-item">
+          <label class="space">抄送人:</label>
+          <span class="value">
+            <Icon type="ios-person-outline" color="#6B7285;" />
+            {{ info.ccName }}
+          </span>
+        </li>
       </ul>
+      
       <el-row style="padding-top: 0">
         <el-col>
           <div class="content">
@@ -116,7 +131,7 @@
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
       <div v-if="info.eventStatus == 0">
-        <span>责任人：</span>
+        <span><i class="require-icon">*</i>责任人：</span>
         <el-select
           v-model="eventHandler"
           style="width: 20%; margin-bottom: 12px; margin-right: 24px"
@@ -164,7 +179,7 @@
           </el-option>
         </el-select>
 
-        <span>处理截止日期：</span>
+        <span><i class="require-icon">*</i>处理截止日期：</span>
         <el-date-picker
           v-model="eventHandleDate"
           style="width: 20%; margin-bottom: 12px"
@@ -201,11 +216,15 @@
               >{{ formatDate(item.createDate) }}
             </p>
             <p class="top-item">
+              <span class="label">截止时间: </span
+              >{{ formatDateOf(item.eventHandleDate) }}
+            </p>
+            <p class="top-item">
               <span class="label">责任人: </span>{{ item.handlerName }}
             </p>
             <p class="top-item">
-              <span class="label">截止时间: </span
-              >{{ formatDateOf(item.eventHandleDate) }}
+              <span class="label">抄送人: </span
+              >{{ item.ccName }}
             </p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
@@ -376,9 +395,9 @@ export default {
       // 校验截止日期
       if (!this.eventHandleDate)
         return this.$modal.msgError("请选择工单截止日期!");
-        // 校验截止日期
-      if (!this.ccIds[0])
-        return this.$modal.msgError("请选择抄送人!");
+      // 抄送人
+      // if (!this.ccIds[0])
+      //   return this.$modal.msgError("请选择抄送人!");
 
       // 选择了责任人
       this.info.eventHandler = this.eventHandler;
@@ -448,6 +467,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.require-icon {
+  font-size: 8px;
+  color: red;
+  margin-right: 2px;
+}
 .work-order {
   padding: 20px;
   background: #fff;
