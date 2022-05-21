@@ -116,13 +116,13 @@
         ></vxe-column>
         <vxe-column
           align="center"
-          title="当前处理人"
+          title="责任人"
           field="handlerName"
           width="120"
         ></vxe-column>
         <vxe-column
           align="center"
-          title="当前处理人部门"
+          title="责任人部门"
           field="handlerDeptName"
           width="180"
         ></vxe-column>
