@@ -144,16 +144,14 @@
           :cell-class-name="cellClass"
           :header-cell-class-name="headerCellClassName"
         >
-         <vxe-column
-            field="billNum"
-            fixed="left"
-            title="状态"
-            width="50"
-          >
-            <template #default="{ row: { billNum = {}, alertList='无' } }">
+          <vxe-column field="billNum" fixed="left" title="状态" width="50">
+            <template #default="{ row: { billNum = {}, alertList = '无' } }">
               <el-tooltip effect="dark" placement="right">
                 <div slot="content" v-html="alertList" />
-                <span :style="{cursor: 'default',color: billNum.color || ''}">{{ billNum.count || '-' }}</span>
+                <span
+                  :style="{ cursor: 'default', color: billNum.color || '' }"
+                  >{{ billNum.count || "-" }}</span
+                >
               </el-tooltip>
             </template>
           </vxe-column>
@@ -255,7 +253,22 @@
               field="oneDeptName"
               class-name="bg-base"
               title="一级部门"
-            ></vxe-column>
+              :filters="[{ data: '' }]"
+            >
+              <template #filter="{ $panel, column }">
+                <template v-for="(option, index) in column.filters">
+                  <vxe-input
+                    class="filter-input"
+                    :key="index"
+                    style="width: 200px"
+                    v-model="option.data"
+                    @input="$panel.changeOption($event, !!option.data, option)"
+                    placeholder="支持模糊搜索"
+                    size="mini"
+                  ></vxe-input>
+                </template>
+              </template>
+            </vxe-column>
             <vxe-column
               field="deptName"
               class-name="bg-base"
@@ -359,7 +372,6 @@
                   @click="
                     $router.push({
                       path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`,
-                      
                     })
                   "
                   type="primary"
@@ -504,7 +516,6 @@
                   @click="
                     $router.push({
                       path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`,
-                      
                     })
                   "
                   type="primary"
@@ -1121,8 +1132,8 @@ export default {
       this.tableLodaing = true;
       const filterParams = this.filterParams;
       const formVal = {}; //this.$refs.form.queryParams ;
-      console.log(filterParams)
-      console.log(formVal)
+      console.log(filterParams);
+      console.log(formVal);
       const params = { ...formVal, ...filterParams, ...this.page, ...page };
       //获取列表
       const res = await getList(params);
@@ -1188,7 +1199,7 @@ export default {
         });
 
         // 设置筛选
-        this.filterParams.riskStatus = projectType
+        this.filterParams.riskStatus = projectType;
       }
 
       // 修改条件之后，需要手动调用 updateData 处理表格数据

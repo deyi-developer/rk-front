@@ -108,3 +108,7 @@ export const getReachDetail = ({ reachType, data }) => {
     method: "get",
   });
 };
+// 达成率导出
+export const reachExport = (reachType) => {
+  return `/report/reachDetail/${reachType}/export`;
+};

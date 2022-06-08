@@ -16,6 +16,7 @@
         >
         </el-option>
       </el-select>
+       <el-link type="primary" @click="handleJump">更多...</el-link>
     </div>
 
     <div
@@ -23,7 +24,6 @@
       style="margin-top: 10px;"
       :class="className"
       :style="{ height: height, width: width }"
-      @click="handleJump"
     />
   </div>
 </template>
@@ -201,3 +201,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+ .datepicker-wrap {
+   display:flex;
+   justify-content: space-between;
+ }
+</style>

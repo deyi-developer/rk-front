@@ -1,5 +1,14 @@
 <template>
   <div class="project-list app-container">
+    <div class="export">
+      <el-button
+        type="primary"
+        icon="el-icon-download"
+        size="small"
+        @click="handleExport"
+        >导出</el-button
+      >
+    </div>
     <vxe-table
       show-overflow
       row-id="projectCode"
@@ -46,7 +55,7 @@
   </div>
 </template>
 <script>
-import { getReachDetail } from "./api";
+import { getReachDetail, reachExport } from "./api";
 export default {
   data() {
     return {
@@ -77,7 +86,7 @@ export default {
         data: {
           pageNum: this.tablePage.currentPage,
           pageSize: this.tablePage.pageSize,
-          projectCode: this.projectCode
+          projectCode: this.projectCode,
         },
       });
       if (code === 200) {
@@ -93,7 +102,26 @@ export default {
       this.tablePage.pageSize = pageSize;
       this.getReachDetailInfo();
     },
+    handleExport() {
+      console.log(11);
+      const params = {
+        pageNum: this.tablePage.currentPage,
+        pageSize: this.tablePage.pageSize,
+        projectCode: this.projectCode,
+      };
+      console.log(reachExport(this.type));
+      this.download(
+        reachExport(this.type),
+        params,
+        `达成率_${new Date().getTime()}.xlsx`
+      );
+    },
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.export {
+  text-align: right;
+  padding-bottom: 10px;
+}
+</style>
