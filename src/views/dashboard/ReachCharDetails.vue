@@ -103,13 +103,11 @@ export default {
       this.getReachDetailInfo();
     },
     handleExport() {
-      console.log(11);
       const params = {
         pageNum: this.tablePage.currentPage,
         pageSize: this.tablePage.pageSize,
         projectCode: this.projectCode,
       };
-      console.log(reachExport(this.type));
       this.download(
         reachExport(this.type),
         params,

@@ -4,18 +4,29 @@
       <div slot="header">
         <span>工单列表</span>
       </div>
-      <filter-form
+      <!-- <filter-form
         :projectCode="$route.query.projectCode"
         @search="getList"
         ref="form"
-      ></filter-form>
+      ></filter-form> -->
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-download"
+        @click="handleExport"
+      >
+        导出
+      </el-button>
       <vxe-table
         border
         size="small"
         :data="tableData"
         style="width: 100%"
+        height="85%"
         show-overflow
         v-loading="loading"
+        @filter-change="filterChangeEvent"
+        :filter-config="{ remote: true }"
       >
         <vxe-column
           title="序号"
@@ -24,7 +35,27 @@
           width="60px"
           fixed="left"
         ></vxe-column>
-        <vxe-column title="工单编号" align="center" width="240px" fixed="left">
+        <vxe-column
+          field="eventHeaderCode"
+          title="工单编号"
+          align="center"
+          width="240px"
+          fixed="left"
+          :filters="[{ data: '' }]"
+        >
+          <template #filter="{ $panel, column }">
+            <template v-for="(option, index) in column.filters">
+              <vxe-input
+                class="filter-input"
+                :key="index"
+                style="width: 200px"
+                v-model="option.data"
+                @input="$panel.changeOption($event, !!option.data, option)"
+                placeholder="请输入工单编号"
+                size="mini"
+              ></vxe-input>
+            </template>
+          </template>
           <template #default="{ row }">
             <a
               style="color: #57a3f3"
@@ -44,7 +75,21 @@
           title="项目编码"
           field="projectCode"
           width="180"
+          :filters="[{ data: '' }]"
         >
+          <template #filter="{ $panel, column }">
+            <template v-for="(option, index) in column.filters">
+              <vxe-input
+                class="filter-input"
+                :key="index"
+                style="width: 200px"
+                v-model="option.data"
+                @input="$panel.changeOption($event, !!option.data, option)"
+                placeholder="输入完整编码"
+                size="mini"
+              ></vxe-input>
+            </template>
+          </template>
           <template #default="{ row }">
             <a
               style="color: #57a3f3"
@@ -59,7 +104,7 @@
             >
           </template>
         </vxe-column>
-         <vxe-column
+        <vxe-column
           align="center"
           title="项目名称"
           field="projectName"
@@ -77,7 +122,17 @@
           field="parentProjectName"
           width="180"
         />
-        <vxe-column align="center" title="状态" field="eventStatus" width="100">
+        <vxe-column
+          align="center"
+          title="状态"
+          field="eventStatus"
+          width="100"
+          :filter-multiple="false"
+          :filters="[
+            { label: '处理中', value: 0 },
+            { label: '已关闭', value: 1 },
+          ]"
+        >
           <template #default="{ row }">
             <el-tag size="small" :type="setTagType(row.eventStatus)">{{
               setStatus(row.eventStatus) || "未知"
@@ -89,13 +144,31 @@
           title="工单名"
           field="eventTitle"
           width="180"
-        ></vxe-column>
+          :filters="[{ data: '' }]"
+        >
+          <template #filter="{ $panel, column }">
+            <template v-for="(option, index) in column.filters">
+              <vxe-input
+                class="filter-input"
+                :key="index"
+                style="width: 200px"
+                v-model="option.data"
+                @input="$panel.changeOption($event, !!option.data, option)"
+                placeholder="输入完整编码"
+                size="mini"
+              ></vxe-input>
+            </template>
+          </template>
+        </vxe-column>
         <vxe-column
           align="center"
           title="工单类型"
           field="eventTypeName"
           width="180"
-        ></vxe-column>
+          :filter-multiple="false"
+          :filters="this.eventTypeList"
+        >
+        </vxe-column>
         <vxe-column
           align="center"
           title="创建人"
@@ -119,7 +192,22 @@
           title="责任人"
           field="handlerName"
           width="120"
-        ></vxe-column>
+          :filters="[{ data: '' }]"
+        >
+          <template #filter="{ $panel, column }">
+            <template v-for="(option, index) in column.filters">
+              <vxe-input
+                class="filter-input"
+                :key="index"
+                style="width: 200px"
+                v-model="option.data"
+                @input="$panel.changeOption($event, !!option.data, option)"
+                placeholder="输入完整编码"
+                size="mini"
+              ></vxe-input>
+            </template>
+          </template>
+        </vxe-column>
         <vxe-column
           align="center"
           title="责任人部门"
@@ -170,13 +258,13 @@
 import { mapGetters } from "vuex";
 import { list, edit } from "./api";
 import workOrderDialog from "../components/work-order-dialog";
-import filterForm from "./filterForm";
+// import filterForm from "./filterForm";
 export default {
   name: "Order-list",
   dicts: ["event_type", "event_urgency_level", "event_complete_stutas"],
   components: {
     workOrderDialog,
-    filterForm,
+    // filterForm,
   },
   data() {
     return {
@@ -186,16 +274,34 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
+      eventTypeList: [
+        { label: "提问工单", value: "提问工单" },
+        { label: "开票类工单", value: "开票类工单" },
+        { label: "收款类工单", value: "收款类工单" },
+        { label: "阶段文档类工单", value: "阶段文档类工单" },
+        { label: "毛利类工单", value: "毛利类工单" },
+        { label: "项目结项工单", value: "项目结项工单" },
+      ],
       tableData: [],
       totals: 0,
       loading: false,
+      filterParams: {}, // 表头筛选条件
     };
   },
   computed: {
     ...mapGetters(["userRolse"]),
   },
-
   mounted() {
+    setTimeout(() => {
+      console.log($.table.selectDictLabel(this.dict.type.event_type, 'dictValue'));
+      // this.eventTypeList = this.dict.type.event_type.map((item) => {
+      //   return {
+      //     label: item.label,
+      //     value: item.value,
+      //   };
+      // });
+      // console.log(JSON.stringify(this.eventTypeList));
+    }, 2000);
     const { params } = this.$route;
     //如果从项目详情进来  回写项目编码 且页码重置
     if (params?.projectCode) {
@@ -227,18 +333,39 @@ export default {
   methods: {
     async getList(query = {}) {
       this.loading = true;
-      const filterVal = this.$refs.form.queryParams;
+      // const filterVal = this.$refs.form.queryParams;
       const params = {
         ...this.params,
         ...query,
-        ...filterVal,
+        ...this.filterParams,
+        // ...filterVal,
       };
       const { total, rows } = await list(params);
       this.tableData = rows;
       this.totals = total;
       this.loading = false;
     },
+    /** 导出表格 */
+    handleExport() {
+      this.download(
+        "/workOrder/header/export",
+        this.filterParams,
+        `工单列表_${new Date().getTime()}.xlsx`
+      );
+    },
+    //筛选
+    filterChangeEvent({ property, values, datas, column }) {
+      // 自定义的筛选数据是在datas里面
+      const val = values[0] || datas[0];
+      if (val) {
+        this.filterParams[property] = val;
+      } else {
+        this.filterParams[property] = null;
+      }
 
+      // 重新请求
+      this.getList({ pageNum: 1 });
+    },
     closeOrder(row) {
       this.$modal
         .confirm(`确定关闭此工单吗？`)
