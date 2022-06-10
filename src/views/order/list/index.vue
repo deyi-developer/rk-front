@@ -85,7 +85,13 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-
+            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+              <span>确定要执行该操作吗？</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirm">确 定</el-button>
+              </span>
+            </el-dialog>
             <!-- 计划是否可编辑 -->
             <el-tooltip
               v-if="checkRole(['risker'])"
@@ -1005,7 +1011,8 @@ export default {
   data() {
     return {
       projectType: PROJECT_TYPEP, // 项目数量以及类型信息
-
+      dialogVisible: false,
+      dialogVisibleValue: "",
       deptList: [],
       riskLevelFilter: [
         {
@@ -1157,13 +1164,17 @@ export default {
     },
     // 下拉菜单事件触发
     handleCommand(command) {
-      if (command == "initData") {
+      this.dialogVisible = true;
+      this.dialogVisibleValue = command;
+    },
+    confirm() {
+      this.dialogVisible = false;
+      if (this.dialogVisibleValue == "initData") {
         this.initData();
       } else {
-        this.otherButtom(command);
+        this.otherButtom(this.dialogVisibleValue);
       }
     },
-
     // 处理初始化过滤条件
     handleFilter(filterData, projectType) {
       const $table = this.$refs.xTable;
@@ -1219,7 +1230,7 @@ export default {
       const { code, msg } = await initDataApi();
 
       if (code !== 200) return;
-
+      this.dialogVisibleValue = ''
       loading.close();
 
       this.$message({
@@ -1232,6 +1243,7 @@ export default {
       if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
       }
+      this.dialogVisibleValue = ''
     },
     oneDeptIdChange(val) {
       this.filterParams["oneDeptId"] = val;

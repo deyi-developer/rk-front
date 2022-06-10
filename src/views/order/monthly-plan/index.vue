@@ -50,14 +50,20 @@
             <!-- 部门名称 -->
             <router-link
               v-else-if="item.prop === 'oneDeptName'"
-              :to="`/monthly/dept/${row.oneDeptId}?title=${
-                row.oneDeptName
-              }&duringMonth=${duringMonth}`"
+              :to="`/monthly/dept/${row.oneDeptId}?title=${row.oneDeptName}&duringMonth=${duringMonth}`"
               class="link-type"
             >
               <span>{{ row[item.prop] }}</span>
             </router-link>
 
+            <!-- 默认值 -->
+            <span
+              v-else-if="
+                item.prop === 'bilCompletionRate' ||
+                item.prop === 'colleCompletionRate'
+              "
+              >{{ row[item.prop] | percent }}</span
+            >
             <!-- 默认值 -->
             <span v-else>{{ row[item.prop] | currency }}</span>
           </template>
@@ -135,8 +141,10 @@ export default {
           "-",
           thousandHandle(planBillingMoney),
           thousandHandle(billingThisMonth),
+          "-",
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
+          "-",
         ],
       ];
 

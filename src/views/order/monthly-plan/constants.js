@@ -26,6 +26,12 @@ export const COLUMN_LIST = [
     align: "center",
   },
   {
+    prop: "bilCompletionRate",
+    label: "开票完成率",
+    minWidth: "180",
+    align: "center",
+  },
+  {
     prop: "planReceiptsMoney",
     label: "本月计划收款金额",
     minWidth: "180",
@@ -34,6 +40,12 @@ export const COLUMN_LIST = [
   {
     prop: "receiptsThisMonth",
     label: "本月实际收款金额",
+    minWidth: "180",
+    align: "center",
+  },
+  {
+    prop: "colleCompletionRate",
+    label: "收款完成率",
     minWidth: "180",
     align: "center",
   },

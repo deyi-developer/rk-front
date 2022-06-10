@@ -106,6 +106,14 @@
       <!-- <el-form-item label="关联项目:">
         <el-input style="width: 80%;" v-model="form.projectCode"></el-input>
       </el-form-item>-->
+      <el-form-item label="金额:" prop="orderAmount">
+        <el-input
+          type="text"
+          style="width: 80%"
+          v-model="form.orderAmount"
+          @blur="form.orderAmount = handleCurrency(form.orderAmount)"
+        ></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="close">取 消</el-button>
@@ -118,30 +126,31 @@
 <script>
 import { debounce } from "lodash-es";
 import { send, update, handlerList } from "../project/api";
+import currency from "currency.js";
 // import editor from "@/components/Editor";
 export default {
   dicts: ["event_type", "event_urgency_level"],
   props: {
     form: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     dialogVisible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     type: {
       // 新增或编辑,编辑不显示工单级别
       type: String,
-      default: "add"
+      default: "add",
     },
     /** 如果登录人员不是项目经理，负责人需要默认显示此项目的项目经理, nickName用于接口请求 */
     isPm: {
-      type: Boolean
+      type: Boolean,
     },
     pmName: {
-      type: String
-    }
+      type: String,
+    },
     /** end */
   },
   data() {
@@ -156,38 +165,41 @@ export default {
     return {
       rules: {
         eventTitle: [
-          { required: true, message: "请输入工单标题", trigger: "change" }
+          { required: true, message: "请输入工单标题", trigger: "change" },
         ],
         eventType: [
-          { required: true, message: "请输入选择工单类型", trigger: "change" }
+          { required: true, message: "请输入选择工单类型", trigger: "change" },
         ],
         eventContext: [
           { required: true, message: "请输入工单内容", trigger: "input" },
-          { validator: checkEditor, trigger: "input" }
+          { validator: checkEditor, trigger: "input" },
         ],
         eventUrgencyLevel: [
-          { required: true, message: "请选择工单级别", trigger: "change" }
+          { required: true, message: "请选择工单级别", trigger: "change" },
         ],
         eventHandler: [
-          { required: true, message: "请选择工单处理人", trigger: "change" }
+          { required: true, message: "请选择工单处理人", trigger: "change" },
         ],
         eventHandleDate: [
           {
             required: true,
             message: "请选择工单完成截止日期",
-            trigger: "change"
-          }
-        ]
+            trigger: "change",
+          },
+        ],
+        orderAmount: [
+          { required: true, message: "请输入金额", trigger: "change" },
+        ],
       },
       handlers: [],
       handlerLoding: false,
-      btnloading: false
+      btnloading: false,
     };
   },
   watch: {
     pmName(n) {
       this.defaultHandler(n);
-    }
+    },
   },
   created() {
     if (this.isPm) {
@@ -200,6 +212,13 @@ export default {
   },
 
   methods: {
+    handleCurrency(cellValue) {
+      return currency(cellValue, {
+        precision: 3,
+        symbol: "",
+        separator: ",",
+      }).format();
+    },
     submit() {
       if (this.type === "add") {
         this.sendWorkOrder();
@@ -269,7 +288,7 @@ export default {
       if (!nickName) return;
       const params = {
         pageNum: 1,
-        pageSize: 100
+        pageSize: 100,
       };
       const { rows } = await handlerList(params);
       this.handlers = rows || [];
@@ -284,12 +303,12 @@ export default {
       const params = {
         pageNum: 1,
         pageSize: 100,
-        nickName: value || ""
+        nickName: value || "",
       };
       const { rows } = await handlerList(params);
       this.handlers = rows || [];
       this.handlerLoding = false;
-    })
-  }
+    }),
+  },
 };
 </script>

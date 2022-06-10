@@ -25,7 +25,7 @@
           @click="
             $router.push({
               name: 'Order-list',
-              params: { projectCode: projectData.projectCode }
+              params: { projectCode: projectData.projectCode },
             })
           "
           >服务工单</el-button
@@ -301,7 +301,7 @@
                   type="textarea"
                   placeholder="请输入内容"
                   :autosize="{
-                    minRows: 6
+                    minRows: 6,
                   }"
                   v-model="updateData.planRemark"
                 ></el-input>
@@ -411,7 +411,7 @@ export default {
     filterForm,
     workOrderDialog,
     ChartsGroup,
-    TableDesc
+    TableDesc,
   },
   data() {
     /** 项目结算周期 */
@@ -460,7 +460,7 @@ export default {
         planReceiptsMoney: "",
         planRemark: "",
         projectCode: "",
-        projectChargeType: ""
+        projectChargeType: "",
       },
       // 工单内容
       workOrderform: {
@@ -470,17 +470,18 @@ export default {
         eventHandler: "",
         eventUrgencyLevel: "",
         eventHandleDate: "",
-        projectCode: this.$route.query.projectCode
+        projectCode: this.$route.query.projectCode,
+        orderAmount: "",
       },
       rules: {
         projectChargePeriod: [
-          { validator: projectChargePeriodRule, required: true }
+          { validator: projectChargePeriodRule, required: true },
         ],
         projectInvoicePeriod: [
-          { validator: projectInvoicePeriodRule, required: true }
-        ]
+          { validator: projectInvoicePeriodRule, required: true },
+        ],
       },
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
 
@@ -520,12 +521,12 @@ export default {
       } else if (this.userRolse.length > 1) {
         return false;
       }
-    }
+    },
   },
 
   created() {
     const {
-      query: { projectCode }
+      query: { projectCode },
     } = this.$route;
     this.getData(projectCode);
   },
@@ -556,7 +557,7 @@ export default {
       const vm = this;
       const { data } = await projectDetails(projectCode);
       const obj = Object.assign({}, vm.$route, {
-        title: "项目:" + data.projectCode
+        title: "项目:" + data.projectCode,
       });
       this.$tab.updatePage(obj);
       this.projectData = data;
@@ -575,7 +576,7 @@ export default {
           if (code === 200) {
             this.$modal.msgSuccess(msg);
             const {
-              query: { projectCode }
+              query: { projectCode },
             } = this.$route;
             this.getData(projectCode);
           } else {
@@ -599,8 +600,8 @@ export default {
     /** 发起工单 */
     sendOrder() {
       this.dialogVisible = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <!-- <script setup>

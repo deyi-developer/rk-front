@@ -44,6 +44,16 @@ export const COLUMN_LIST = [
     align: "center",
   },
   {
+    prop: "compleBillingThisMonth",
+    label: "开票完成率",
+    filters: [
+      { label: "数据非空", value: 2 },
+      { label: "数据为空", value: 1 },
+    ],
+    minWidth: "110",
+    align: "center",
+  },
+  {
     prop: "planReceiptsMoney",
     label: "本月计划收款金额",
     filters: [
@@ -63,16 +73,7 @@ export const COLUMN_LIST = [
     minWidth: "160",
     align: "center",
   },
-  {
-    prop: "compleBillingThisMonth",
-    label: "开票完成率",
-    filters: [
-      { label: "数据非空", value: 2 },
-      { label: "数据为空", value: 1 },
-    ],
-    minWidth: "110",
-    align: "center",
-  },
+  
   {
     prop: "compleReceiptsThisMonth",
     label: "收款完成率",
