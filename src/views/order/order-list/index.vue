@@ -20,9 +20,10 @@
       <vxe-table
         border
         size="small"
+        ref="xTable1"
         :data="tableData"
         style="width: 100%"
-        height="85%"
+        height="90%"
         show-overflow
         v-loading="loading"
         @filter-change="filterChangeEvent"
@@ -163,11 +164,14 @@
         <vxe-column
           align="center"
           title="工单类型"
-          field="eventTypeName"
+          field="eventType"
           width="180"
           :filter-multiple="false"
-          :filters="this.eventTypeList"
+          :filters="[]"
         >
+          <template #default="{ row }">
+            {{ row.eventTypeName }}
+          </template>
         </vxe-column>
         <vxe-column
           align="center"
@@ -274,14 +278,6 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
-      eventTypeList: [
-        { label: "提问工单", value: "提问工单" },
-        { label: "开票类工单", value: "开票类工单" },
-        { label: "收款类工单", value: "收款类工单" },
-        { label: "阶段文档类工单", value: "阶段文档类工单" },
-        { label: "毛利类工单", value: "毛利类工单" },
-        { label: "项目结项工单", value: "项目结项工单" },
-      ],
       tableData: [],
       totals: 0,
       loading: false,
@@ -292,16 +288,17 @@ export default {
     ...mapGetters(["userRolse"]),
   },
   mounted() {
+    // 异步加载筛选数据
     setTimeout(() => {
-      console.log($.table.selectDictLabel(this.dict.type.event_type, 'dictValue'));
-      // this.eventTypeList = this.dict.type.event_type.map((item) => {
-      //   return {
-      //     label: item.label,
-      //     value: item.value,
-      //   };
-      // });
-      // console.log(JSON.stringify(this.eventTypeList));
-    }, 2000);
+      const $table = this.$refs.xTable1;
+      if ($table) {
+        const nameColumn = $table.getColumnByField("eventType");
+        if (nameColumn) {
+          $table.setFilter(nameColumn, this.dict.type.event_type);
+        }
+      }
+    }, 500);
+
     const { params } = this.$route;
     //如果从项目详情进来  回写项目编码 且页码重置
     if (params?.projectCode) {
@@ -331,6 +328,10 @@ export default {
     this.getList();
   },
   methods: {
+    filterNameMethod: ({ value, row }) => {
+      console.log(value, row);
+      // return XEUtils.toValueString(row.name).toLowerCase().indexOf(value) > -1;
+    },
     async getList(query = {}) {
       this.loading = true;
       // const filterVal = this.$refs.form.queryParams;
