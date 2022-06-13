@@ -5,10 +5,18 @@
         <span>{{ info.eventHeaderCode }}</span>
         <span>{{ info.eventTitle }}</span>
         <span
-          v-if="userRolse.includes('risker')"
+          v-if="checkRole(['risker'])"
           class="close-btn"
           style="float: right"
         >
+          <el-button
+            :disabled="info.eventStatus == 1"
+            size="mini"
+            type="primary"
+            plain
+            @click="save"
+            >保存</el-button
+          >
           <el-button
             :disabled="info.eventStatus == 1"
             size="mini"
@@ -53,8 +61,27 @@
         <li class="order-item">
           <label class="space">截止日期:</label>
           <span class="value">
-            <Icon type="md-alarm" color="#6B7285;" />
-            {{ formatDateOf(info.headerEndDate) }}
+            <el-date-picker
+              v-if="checkRole(['risker'])"
+              v-model="saveParams.headerEndDate"
+              size="mini"
+              type="date"
+              filterable
+              placeholder="选择日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+            ></el-date-picker>
+            <span v-else>
+              <Icon type="md-alarm" color="#6B7285;" />
+              {{ formatDateOf(info.headerEndDate) }}
+            </span>
+          </span>
+        </li>
+        <li class="order-item">
+          <label class="space">金额:</label>
+          <input v-if="checkRole(['risker'])" v-model="saveParams.eventAmount" />
+          <span class="value" v-else>
+            {{ info.eventAmount  }}
           </span>
         </li>
       </ul>
@@ -296,6 +323,11 @@ export default {
       formatDate,
       formatDateOf,
       eventHandleDate: "",
+      saveParams: {
+        eventAmount: "", // 金额
+        headerEndDate: "", // 截止日期
+        eventHeaderId: "" // 工单id
+      },
     };
   },
 
@@ -367,11 +399,27 @@ export default {
       this.info = data;
       this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
       this.info.forwardFlag = 0;
+      // 金额和截止日期
+      this.saveParams.eventAmount = data.eventAmount
+      this.saveParams.headerEndDate = data.headerEndDate
+
       this.getReplyList(id);
       const obj = Object.assign({}, this.$route, {
         title: "工单：" + data.eventTitle,
       });
       this.$tab.updatePage(obj);
+    },
+
+    /** 保存 */
+    save() {
+      this.saveParams.eventHeaderId = this.info.eventHeaderId
+      edit(this.saveParams).then(res => {
+        if (res.code === 200) {
+          this.$modal.msgSuccess(res.msg);
+        } else {
+          this.$modal.msgError(res.msg);
+        }
+      })
     },
 
     closeOrder() {

@@ -37,9 +37,9 @@
   </div>
 </template>
 <script>
-import { list } from "@/api/message"
+import { list } from "@/api/message";
 // import { mapGetters, mapActions } from "vuex"
-import { detail } from "../send/api"
+import { detail } from "../send/api";
 export default {
   name: "Message-list",
   data() {
@@ -66,7 +66,7 @@ export default {
       },
       total: 0,
       list: [],
-    }
+    };
   },
   // computed: {
   //   ...mapGetters(["messages", "unread"]),
@@ -78,7 +78,7 @@ export default {
   //   },
   // },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     async getList(query) {
@@ -86,31 +86,33 @@ export default {
         ...this.params,
         ...query,
         readFlag: Number(this.activeName),
-      }
-      console.log(this.params)
-      const { rows, total } = await list(this.params)
-      this.list = rows
-      this.total = total
+      };
+      console.log(this.params);
+      const { rows, total } = await list(this.params);
+      this.list = rows;
+      this.total = total;
     },
 
     handleClick() {
-      this.getList()
+      this.getList();
     },
 
     gotoDetail(row) {
       const parmas = {
         eventHeaderId: row.busiKey,
         messageId: row.messageId,
-      }
+      };
       //消费消息
-      detail(parmas)
+      detail(parmas);
       this.$router.push({
         path: `/work/details/${row.busiKey}`,
         query: { id: row.busiKey },
-      })
+      });
+
+      this.getList()
     },
   },
-}
+};
 </script>
 <style scoped lang="scss">
 .message-wrap {
