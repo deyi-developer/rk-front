@@ -28,7 +28,7 @@
         </span>
       </div>
       <ul class="order-info">
-         <li
+        <li
           class="order-item"
           @click="
             () =>
@@ -79,9 +79,15 @@
         </li>
         <li class="order-item">
           <label class="space">金额:</label>
-          <input v-if="checkRole(['risker'])" v-model="saveParams.eventAmount" />
-          <span class="value" v-else>
-            {{ info.eventAmount  }}
+          <span class="value">
+            <el-input
+              size="mini"
+              v-if="checkRole(['risker'])"
+              v-model="saveParams.eventAmount"
+            />
+            <span v-else>
+              {{ info.eventAmount }}
+            </span>
           </span>
         </li>
       </ul>
@@ -135,7 +141,7 @@
           </span>
         </li>
       </ul>
-      
+
       <el-row style="padding-top: 0">
         <el-col>
           <div class="content">
@@ -250,8 +256,7 @@
               <span class="label">责任人: </span>{{ item.handlerName }}
             </p>
             <p class="top-item">
-              <span class="label">抄送人: </span
-              >{{ item.ccName }}
+              <span class="label">抄送人: </span>{{ item.ccName }}
             </p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
@@ -298,7 +303,6 @@ import editor from "@/components/Editor";
 import { Tag, Icon, Badge } from "view-design";
 import defaultImg from "@/assets/images/avatar.png";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
-
 export default {
   name: "Send",
   components: {
@@ -326,7 +330,7 @@ export default {
       saveParams: {
         eventAmount: "", // 金额
         headerEndDate: "", // 截止日期
-        eventHeaderId: "" // 工单id
+        eventHeaderId: "", // 工单id
       },
     };
   },
@@ -400,8 +404,8 @@ export default {
       this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
       this.info.forwardFlag = 0;
       // 金额和截止日期
-      this.saveParams.eventAmount = data.eventAmount
-      this.saveParams.headerEndDate = data.headerEndDate
+      this.saveParams.eventAmount = data.eventAmount;
+      this.saveParams.headerEndDate = data.headerEndDate;
 
       this.getReplyList(id);
       const obj = Object.assign({}, this.$route, {
@@ -412,14 +416,14 @@ export default {
 
     /** 保存 */
     save() {
-      this.saveParams.eventHeaderId = this.info.eventHeaderId
-      edit(this.saveParams).then(res => {
+      this.saveParams.eventHeaderId = this.info.eventHeaderId;
+      edit(this.saveParams).then((res) => {
         if (res.code === 200) {
           this.$modal.msgSuccess(res.msg);
         } else {
           this.$modal.msgError(res.msg);
         }
-      })
+      });
     },
 
     closeOrder() {
@@ -560,7 +564,8 @@ export default {
       cursor: pointer;
     }
     .order-item {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       list-style: none;
       margin-right: 30px;
       .space {

@@ -5,7 +5,13 @@
         <el-tab-pane label="未读列表" name="0"></el-tab-pane>
         <el-tab-pane label="已读列表" name="1"></el-tab-pane>
       </el-tabs>
-      <el-table size="small" height="500" border :data="list">
+      <el-table
+        size="small"
+        height="500"
+        border
+        :data="list"
+        v-loading="loading"
+      >
         <el-table-column
           v-for="(item, index) in column"
           :key="index"
@@ -19,7 +25,7 @@
               style="color: #57a3f3"
               v-if="item.prop === 'messageContent'"
               href="javascript:;"
-              @click="gotoDetail(row)"
+              @click="gotoDetail(row, index)"
               >{{ row[item.prop] }}</a
             >
             <span v-else>{{ row[item.prop] }}</span>
@@ -45,6 +51,7 @@ export default {
   data() {
     return {
       activeName: "0",
+      loading: false,
       column: [
         {
           label: "消息内容",
@@ -82,13 +89,14 @@ export default {
   },
   methods: {
     async getList(query) {
+      this.loading = true;
       this.params = {
         ...this.params,
         ...query,
         readFlag: Number(this.activeName),
       };
-      console.log(this.params);
       const { rows, total } = await list(this.params);
+      this.loading = false;
       this.list = rows;
       this.total = total;
     },
@@ -97,7 +105,7 @@ export default {
       this.getList();
     },
 
-    gotoDetail(row) {
+    gotoDetail(row, index) {
       const parmas = {
         eventHeaderId: row.busiKey,
         messageId: row.messageId,
@@ -109,7 +117,7 @@ export default {
         query: { id: row.busiKey },
       });
 
-      this.getList()
+      this.list.splice(index, 1);
     },
   },
 };

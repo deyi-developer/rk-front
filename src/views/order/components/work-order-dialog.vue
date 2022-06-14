@@ -111,8 +111,6 @@
           type="text"
           style="width: 80%"
           v-model="form.orderAmount"
-          @blur="form.orderAmount = micrometerLevel(form.orderAmount)"
-          @focus="form.orderAmount = percentile(form.orderAmount)"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -127,7 +125,6 @@
 <script>
 import { debounce } from "lodash-es";
 import { send, update, handlerList } from "../project/api";
-import currency from "currency.js";
 // import editor from "@/components/Editor";
 export default {
   dicts: ["event_type", "event_urgency_level"],
@@ -213,23 +210,6 @@ export default {
   },
 
   methods: {
-    // 千分位
-    micrometerLevel(cellValue) {
-      return currency(cellValue, {
-        precision: 3,
-        symbol: "",
-        separator: ",",
-      }).format();
-    },
-    // 转成百分位
-    percentile(cellValue) {
-      if(cellValue.length <= 0) return ""
-      return currency(cellValue, {
-        precision: 0,
-        symbol: "",
-        separator: ",",
-      }).format();
-    },
     submit() {
       if (this.type === "add") {
         this.sendWorkOrder();
