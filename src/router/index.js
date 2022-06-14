@@ -222,9 +222,9 @@ export const dynamicRoutes = [
         path: "details/:id",
         component: () => import("@/views/order/send"),
         name: "Send",
-        meta: { title: "工单：", activeMenu: "/order/order-list" }
-      }
-    ]
+        meta: { title: "工单：", activeMenu: "/order/order-list" },
+      },
+    ],
   },
   {
     path: "/project",
@@ -236,9 +236,9 @@ export const dynamicRoutes = [
         path: "item/:id",
         component: () => import("@/views/order/project-item"),
         name: "Details",
-        meta: { title: "", activeMenu: "/order/list" }
-      }
-    ]
+        meta: { title: "", activeMenu: "/order/list" },
+      },
+    ],
   },
 ];
 
