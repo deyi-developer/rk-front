@@ -733,7 +733,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
-                  :disabled="risk.planEditEnable == 0"
+                  :disabled="risk.planEditEnable"
                   v-model="row.planBillingMoney"
                   type="number"
                   placeholder="请输入数值"
@@ -749,10 +749,9 @@
             >
               <template #edit="{ row }">
                 <vxe-input
-                  :disabled="risk.planEditEnable == 0"
+                  :disabled="risk.planEditEnable"
                   v-model="row.billRemark"
                   type="text"
-                  placeholder="请输入备注信息"
                 ></vxe-input>
               </template>
             </vxe-column>
@@ -794,7 +793,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
-                  :disabled="risk.planEditEnable == 0"
+                  :disabled="risk.planEditEnable"
                   v-model="row.planReceiptsMoney"
                   type="number"
                   placeholder="请输入数值"
@@ -810,7 +809,7 @@
             >
               <template #edit="{ row }">
                 <vxe-input
-                  :disabled="risk.planEditEnable == 0"
+                  :disabled="risk.planEditEnable"
                   v-model="row.receiptRemark "
                   placeholder="请输入备注信息"
                 ></vxe-input>
