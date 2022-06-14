@@ -366,10 +366,13 @@ export default {
       );
     },
     //筛选
-    filterChangeEvent({ property, values, datas, column }) {
+    filterChangeEvent({ property, values, datas }) {
       // 自定义的筛选数据是在datas里面
-      const val = values[0] || datas[0];
-      if (val) {
+      const val =
+        values[0] === null || values[0] === undefined || val !== ""
+          ? values[0]
+          : datas[0];
+      if (val !== null || val !== undefined || val !== "") {
         this.filterParams[property] = val;
       } else {
         this.filterParams[property] = null;

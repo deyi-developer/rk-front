@@ -155,7 +155,7 @@ export default {
     };
   },
   created() {
-    const {duringMonth, title } = this.$route.query
+    const { duringMonth, title } = this.$route.query;
     // 动态设置tab拦
     this.$tab.updatePage(
       Object.assign({}, this.$route, {
@@ -163,8 +163,8 @@ export default {
       })
     );
 
-    if(duringMonth) {
-      this.duringMonth = new Date(duringMonth)
+    if (duringMonth) {
+      this.duringMonth = new Date(duringMonth);
     }
 
     // 获取事业部计划明细列表
@@ -211,14 +211,21 @@ export default {
       this.loading = false;
     },
 
-    setId(id){
-      this.id = id
+    setId(id) {
+      this.id = id;
     },
 
     // 数据过滤
-    filterHandler({ property, values }) {
-      this.filterConditions[property] = values[0];
-
+    filterHandler({ property, values, datas }) {
+      const val =
+        values[0] === null || values[0] === undefined || val !== ""
+          ? values[0]
+          : datas[0];
+      if (val !== null || val !== undefined || val !== "") {
+        this.filterConditions[property] = val;
+      } else {
+        this.filterConditions[property] = null;
+      }
       this.getCurrentMonthInfo();
     },
 
@@ -233,7 +240,9 @@ export default {
           year: this.duringMonth.getFullYear(),
           ...this.filterConditions,
         },
-        `${this.$route.query.title || ""}计划明细列表_${new Date().getTime()}.xlsx`
+        `${
+          this.$route.query.title || ""
+        }计划明细列表_${new Date().getTime()}.xlsx`
       );
     },
 
@@ -253,7 +262,7 @@ export default {
     },
     id() {
       this.getCurrentMonthInfo();
-    }
+    },
   },
 };
 </script>

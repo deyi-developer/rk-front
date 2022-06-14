@@ -742,7 +742,7 @@
             </vxe-column>
             <!-- 新增字段 -->
             <vxe-column
-              field="billRemark" 
+              field="billRemark"
               class-name="bg-plan"
               title="开票备注"
               :edit-render="{}"
@@ -810,7 +810,7 @@
               <template #edit="{ row }">
                 <vxe-input
                   :disabled="risk.planEditEnable"
-                  v-model="row.receiptRemark "
+                  v-model="row.receiptRemark"
                   placeholder="请输入备注信息"
                 ></vxe-input>
               </template>
@@ -1005,7 +1005,7 @@ import {
   PROJECT_TYPEP,
   HEADER_CELL_CLASS_NAME,
   CONTEXT_CELL_CLASS_NAME,
-  FILTER_TITLE
+  FILTER_TITLE,
 } from "./constants";
 
 // 缓存过滤参数
@@ -1037,7 +1037,7 @@ const secondLeft = firstWidth;
 const thirdLeft = firstWidth + secondWidth;
 const fourthLeft = firstWidth + secondWidth + thirdWidth;
 const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth;
-import { deleteCurrentMonth } from './api';
+import { deleteCurrentMonth } from "./api";
 export default {
   dicts: ["risk_level", "risk_status", "deyi_project_amount_type"],
   name: "List",
@@ -1292,11 +1292,13 @@ export default {
       this.fetchData({ pageNum: 1 });
     },
     //筛选
-    filterChangeEvent({ property, values, datas, column }) {
-      console.log(property, values, datas, column);
+    filterChangeEvent({ property, values, datas }) {
       // 自定义的筛选数据是在datas里面
-      const val = values[0] || datas[0];
-      if (val) {
+      const val =
+        values[0] === null || values[0] === undefined || val !== ""
+          ? values[0]
+          : datas[0];
+      if (val !== null || val !== undefined || val !== "") {
         this.filterParams[property] = val;
       } else {
         this.filterParams[property] = null;
