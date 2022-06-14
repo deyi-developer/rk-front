@@ -76,3 +76,16 @@ export const CONTEXT_CELL_CLASS_NAME = (type, row) => {
       return "";
   }
 };
+
+// 根据状态动态获取标题
+export const FILTER_TITLE = (filterType, dep) => {
+  const label = filterType?.label
+  if(label) {
+    const oneDeptName = dep?.oneDeptName
+    if(oneDeptName) {
+      return `${oneDeptName}: ${label}项目`
+    }else {
+      return `${label}项目`
+    }
+  }else return "项目清单";
+};

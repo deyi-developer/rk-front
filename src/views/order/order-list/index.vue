@@ -1,247 +1,250 @@
 <template>
   <div class="wrap page-bg">
-    <el-card>
-      <div slot="header">
+    <el-card style="height: 75vh">
+      <div class="header-class" slot="header">
         <span>工单列表</span>
+
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-download"
+          @click="handleExport"
+        >
+          导出
+        </el-button>
       </div>
       <!-- <filter-form
         :projectCode="$route.query.projectCode"
         @search="getList"
         ref="form"
       ></filter-form> -->
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-download"
-        @click="handleExport"
-      >
-        导出
-      </el-button>
-      <vxe-table
-        border
-        size="small"
-        ref="xTable1"
-        :data="tableData"
-        style="width: 100%"
-        height="90%"
-        show-overflow
-        v-loading="loading"
-        @filter-change="filterChangeEvent"
-        :filter-config="{ remote: true }"
-      >
-        <vxe-column
-          title="序号"
-          type="seq"
-          align="center"
-          width="60px"
-          fixed="left"
-        ></vxe-column>
-        <vxe-column
-          field="eventHeaderCode"
-          title="工单编号"
-          align="center"
-          width="240px"
-          fixed="left"
-          :filters="[{ data: '' }]"
+      <div style="height: 65vh">
+        <vxe-table
+          border
+          size="small"
+          ref="xTable1"
+          :data="tableData"
+          max-height="99%"
+          auto-resize
+          show-overflow
+          v-loading="loading"
+          @filter-change="filterChangeEvent"
+          :filter-config="{ remote: true }"
         >
-          <template #filter="{ $panel, column }">
-            <template v-for="(option, index) in column.filters">
-              <vxe-input
-                class="filter-input"
-                :key="index"
-                style="width: 200px"
-                v-model="option.data"
-                @input="$panel.changeOption($event, !!option.data, option)"
-                placeholder="请输入工单编号"
-                size="mini"
-              ></vxe-input>
+          <vxe-column
+            title="序号"
+            type="seq"
+            align="center"
+            width="60px"
+            fixed="left"
+          ></vxe-column>
+          <vxe-column
+            field="eventHeaderCode"
+            title="工单编号"
+            align="center"
+            width="240px"
+            fixed="left"
+            :filters="[{ data: '' }]"
+          >
+            <template #filter="{ $panel, column }">
+              <template v-for="(option, index) in column.filters">
+                <vxe-input
+                  class="filter-input"
+                  :key="index"
+                  style="width: 200px"
+                  v-model="option.data"
+                  @input="$panel.changeOption($event, !!option.data, option)"
+                  placeholder="请输入工单编号"
+                  size="mini"
+                ></vxe-input>
+              </template>
             </template>
-          </template>
-          <template #default="{ row }">
-            <a
-              style="color: #57a3f3"
-              @click="
-                () =>
-                  $router.push({
-                    path: `/work/details/${row.eventHeaderId}`,
-                    query: { id: row.eventHeaderId },
-                  })
-              "
-              >{{ row.eventHeaderCode }}</a
-            >
-          </template>
-        </vxe-column>
-        <vxe-column
-          align="center"
-          title="项目编码"
-          field="projectCode"
-          width="180"
-          :filters="[{ data: '' }]"
-        >
-          <template #filter="{ $panel, column }">
-            <template v-for="(option, index) in column.filters">
-              <vxe-input
-                class="filter-input"
-                :key="index"
-                style="width: 200px"
-                v-model="option.data"
-                @input="$panel.changeOption($event, !!option.data, option)"
-                placeholder="输入完整编码"
-                size="mini"
-              ></vxe-input>
+            <template #default="{ row }">
+              <a
+                style="color: #57a3f3"
+                @click="
+                  () =>
+                    $router.push({
+                      path: `/work/details/${row.eventHeaderId}`,
+                      query: { id: row.eventHeaderId },
+                    })
+                "
+                >{{ row.eventHeaderCode }}</a
+              >
             </template>
-          </template>
-          <template #default="{ row }">
-            <a
-              style="color: #57a3f3"
-              @click="
-                () =>
-                  $router.push({
-                    path: `/order/details/${row.handlerId}`,
-                    query: { projectCode: row.projectCode },
-                  })
-              "
-              >{{ row.projectCode }}</a
-            >
-          </template>
-        </vxe-column>
-        <vxe-column
-          align="center"
-          title="项目名称"
-          field="projectName"
-          width="180"
-        />
-        <vxe-column
-          align="center"
-          title="父项目名称"
-          field="parentProjectCode"
-          width="180"
-        />
-        <vxe-column
-          align="center"
-          title="父项目编码"
-          field="parentProjectName"
-          width="180"
-        />
-        <vxe-column
-          align="center"
-          title="状态"
-          field="eventStatus"
-          width="100"
-          :filter-multiple="false"
-          :filters="[
-            { label: '处理中', value: 0 },
-            { label: '已关闭', value: 1 },
-          ]"
-        >
-          <template #default="{ row }">
-            <el-tag size="small" :type="setTagType(row.eventStatus)">{{
-              setStatus(row.eventStatus) || "未知"
-            }}</el-tag>
-          </template>
-        </vxe-column>
-        <vxe-column
-          align="center"
-          title="工单名"
-          field="eventTitle"
-          width="180"
-          :filters="[{ data: '' }]"
-        >
-          <template #filter="{ $panel, column }">
-            <template v-for="(option, index) in column.filters">
-              <vxe-input
-                class="filter-input"
-                :key="index"
-                style="width: 200px"
-                v-model="option.data"
-                @input="$panel.changeOption($event, !!option.data, option)"
-                placeholder="输入完整编码"
-                size="mini"
-              ></vxe-input>
+          </vxe-column>
+          <vxe-column
+            align="center"
+            title="项目编码"
+            field="projectCode"
+            width="180"
+            :filters="[{ data: '' }]"
+          >
+            <template #filter="{ $panel, column }">
+              <template v-for="(option, index) in column.filters">
+                <vxe-input
+                  class="filter-input"
+                  :key="index"
+                  style="width: 200px"
+                  v-model="option.data"
+                  @input="$panel.changeOption($event, !!option.data, option)"
+                  placeholder="输入完整编码"
+                  size="mini"
+                ></vxe-input>
+              </template>
             </template>
-          </template>
-        </vxe-column>
-        <vxe-column
-          align="center"
-          title="工单类型"
-          field="eventType"
-          width="180"
-          :filter-multiple="false"
-          :filters="[]"
-        >
-          <template #default="{ row }">
-            {{ row.eventTypeName }}
-          </template>
-        </vxe-column>
-        <vxe-column
-          align="center"
-          title="创建人"
-          field="createName"
-          width="120"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="创建时间"
-          field="createTime"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="截止时间"
-          field="eventHandleDate"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="责任人"
-          field="handlerName"
-          width="120"
-          :filters="[{ data: '' }]"
-        >
-          <template #filter="{ $panel, column }">
-            <template v-for="(option, index) in column.filters">
-              <vxe-input
-                class="filter-input"
-                :key="index"
-                style="width: 200px"
-                v-model="option.data"
-                @input="$panel.changeOption($event, !!option.data, option)"
-                placeholder="输入完整编码"
-                size="mini"
-              ></vxe-input>
+            <template #default="{ row }">
+              <a
+                style="color: #57a3f3"
+                @click="
+                  () =>
+                    $router.push({
+                      path: `/order/details/${row.handlerId}`,
+                      query: { projectCode: row.projectCode },
+                    })
+                "
+                >{{ row.projectCode }}</a
+              >
             </template>
-          </template>
-        </vxe-column>
-        <vxe-column
-          align="center"
-          title="责任人部门"
-          field="handlerDeptName"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          align="center"
-          title="最后更新时间"
-          field="lastUpdateDate"
-          width="180"
-        ></vxe-column>
-        <vxe-column
-          v-if="userRolse.includes('risker')"
-          align="center"
-          title="操作"
-          fixed="right"
-          width="100px"
-        >
-          <template #default="{ row }">
-            <el-button
-              :disabled="row.eventStatus == 1"
-              size="mini"
-              type="primary"
-              @click="closeOrder(row)"
-              >关 闭</el-button
-            >
-          </template>
-        </vxe-column>
-      </vxe-table>
+          </vxe-column>
+          <vxe-column
+            align="center"
+            title="项目名称"
+            field="projectName"
+            width="180"
+          />
+          <vxe-column
+            align="center"
+            title="父项目名称"
+            field="parentProjectCode"
+            width="180"
+          />
+          <vxe-column
+            align="center"
+            title="父项目编码"
+            field="parentProjectName"
+            width="180"
+          />
+          <vxe-column
+            align="center"
+            title="状态"
+            field="eventStatus"
+            width="100"
+            :filter-multiple="false"
+            :filters="[
+              { label: '处理中', value: 0 },
+              { label: '已关闭', value: 1 },
+            ]"
+          >
+            <template #default="{ row }">
+              <el-tag size="small" :type="setTagType(row.eventStatus)">{{
+                setStatus(row.eventStatus) || "未知"
+              }}</el-tag>
+            </template>
+          </vxe-column>
+          <vxe-column
+            align="center"
+            title="工单名"
+            field="eventTitle"
+            width="180"
+            :filters="[{ data: '' }]"
+          >
+            <template #filter="{ $panel, column }">
+              <template v-for="(option, index) in column.filters">
+                <vxe-input
+                  class="filter-input"
+                  :key="index"
+                  style="width: 200px"
+                  v-model="option.data"
+                  @input="$panel.changeOption($event, !!option.data, option)"
+                  placeholder="输入完整编码"
+                  size="mini"
+                ></vxe-input>
+              </template>
+            </template>
+          </vxe-column>
+          <vxe-column
+            align="center"
+            title="工单类型"
+            field="eventType"
+            width="180"
+            :filter-multiple="false"
+            :filters="[]"
+          >
+            <template #default="{ row }">
+              {{ row.eventTypeName }}
+            </template>
+          </vxe-column>
+          <vxe-column
+            align="center"
+            title="创建人"
+            field="createName"
+            width="120"
+          ></vxe-column>
+          <vxe-column
+            align="center"
+            title="创建时间"
+            field="createTime"
+            width="180"
+          ></vxe-column>
+          <vxe-column
+            align="center"
+            title="截止时间"
+            field="eventHandleDate"
+            width="180"
+          ></vxe-column>
+          <vxe-column
+            align="center"
+            title="责任人"
+            field="handlerName"
+            width="120"
+            :filters="[{ data: '' }]"
+          >
+            <template #filter="{ $panel, column }">
+              <template v-for="(option, index) in column.filters">
+                <vxe-input
+                  class="filter-input"
+                  :key="index"
+                  style="width: 200px"
+                  v-model="option.data"
+                  @input="$panel.changeOption($event, !!option.data, option)"
+                  placeholder="输入完整编码"
+                  size="mini"
+                ></vxe-input>
+              </template>
+            </template>
+          </vxe-column>
+          <vxe-column
+            align="center"
+            title="责任人部门"
+            field="handlerDeptName"
+            width="180"
+          ></vxe-column>
+          <vxe-column
+            align="center"
+            title="最后更新时间"
+            field="lastUpdateDate"
+            width="180"
+          ></vxe-column>
+          <vxe-column
+            v-if="userRolse.includes('risker')"
+            align="center"
+            title="操作"
+            fixed="right"
+            width="100px"
+          >
+            <template #default="{ row }">
+              <el-button
+                :disabled="row.eventStatus == 1"
+                size="mini"
+                type="primary"
+                @click="closeOrder(row)"
+                >关 闭</el-button
+              >
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
     </el-card>
     <pagination
       v-show="totals > 0"
@@ -278,6 +281,14 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
+      eventTypeList: [
+        { label: "提问工单", value: "提问工单" },
+        { label: "开票类工单", value: "开票类工单" },
+        { label: "收款类工单", value: "收款类工单" },
+        { label: "阶段文档类工单", value: "阶段文档类工单" },
+        { label: "毛利类工单", value: "毛利类工单" },
+        { label: "项目结项工单", value: "项目结项工单" },
+      ],
       tableData: [],
       totals: 0,
       loading: false,
@@ -412,6 +423,14 @@ export default {
 .wrap {
   padding: 20px;
   min-height: calc(100vh - 84px);
+  .header-class {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    span {
+      line-height: 27px;
+    }
+  }
   ::v-deep .el-table__body-wrapper {
     // max-height: 22vh;
     overflow-y: auto;

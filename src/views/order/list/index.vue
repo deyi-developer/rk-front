@@ -975,10 +975,14 @@ import {
   PROJECT_TYPEP,
   HEADER_CELL_CLASS_NAME,
   CONTEXT_CELL_CLASS_NAME,
+  FILTER_TITLE
 } from "./constants";
 
 // 缓存过滤参数
 let QUERY_STORE = "[]";
+
+// 部门筛选
+let ONE_DEPTID = "";
 
 /* 每列宽度200
     前面2列固定
@@ -1003,7 +1007,7 @@ const secondLeft = firstWidth;
 const thirdLeft = firstWidth + secondWidth;
 const fourthLeft = firstWidth + secondWidth + thirdWidth;
 const fifthLeft = firstWidth + secondWidth + thirdWidth + fourthWidth;
-
+import { deleteCurrentMonth } from './api';
 export default {
   dicts: ["risk_level", "risk_status", "deyi_project_amount_type"],
   name: "List",
@@ -1084,17 +1088,13 @@ export default {
     if (res.code == 200) {
       this.deptList = res.rows;
     }
-  },
-  mounted() {
     this.initHandle("mounted");
   },
   watch: {
     $route({ path }) {
-      // 进入的不是项目清单，结束逻辑
-      if (path !== "/order/list") return;
-
-      // 过滤初始化
-      this.initHandle("watch");
+      console.log("qqqqq");
+      // 进入的是项目清单, 过滤初始化
+      if (path === "/order/list") this.initHandle("watch");
     },
   },
   methods: {
@@ -1109,24 +1109,33 @@ export default {
       this.$nextTick(() => {
         const {
           query,
-          params: { projectType },
+          params: { projectType, oneDeptId }, // 状态， 部门id
         } = this.$route;
         const filter = query.filter || "[]";
 
         // 参数一样并且不是初始化,走缓存
-        if (filter === QUERY_STORE && type !== "mounted") return;
+        if (
+          filter === QUERY_STORE &&
+          oneDeptId === ONE_DEPTID &&
+          type !== "mounted"
+        )
+          return;
 
         // 记录上一次的筛选数据
         QUERY_STORE = filter;
+        ONE_DEPTID = oneDeptId;
 
         // 初始化过滤条件
         this.filterParams = FILTER_PARAMS();
+
+        // 部门赋值
+        if (Number(oneDeptId)) this.filterParams.oneDeptId = Number(oneDeptId);
 
         // 获取筛选数据
         const filterData = JSON.parse(filter);
 
         if (filterData[0] || projectType) {
-          this.handleFilter(filterData, projectType);
+          this.handleFilter(filterData, projectType, Number(oneDeptId));
         }
 
         // 重新请求
@@ -1176,7 +1185,7 @@ export default {
       }
     },
     // 处理初始化过滤条件
-    handleFilter(filterData, projectType) {
+    handleFilter(filterData, projectType, oneDeptId) {
       const $table = this.$refs.xTable;
 
       // 清空筛选
@@ -1195,10 +1204,12 @@ export default {
         ({ value }) => value === projectType
       )[0];
 
+      const dep = this.deptList.filter((res) => res.oneDeptId === oneDeptId);
+
       // 动态设置tab拦
       this.$tab.updatePage(
         Object.assign({}, this.$route, {
-          title: filterType?.label ? `${filterType?.label}项目` : "项目清单",
+          title: FILTER_TITLE(filterType, dep[0]),
         })
       );
 
@@ -1230,7 +1241,7 @@ export default {
       const { code, msg } = await initDataApi();
 
       if (code !== 200) return;
-      this.dialogVisibleValue = ''
+      this.dialogVisibleValue = "";
       loading.close();
 
       this.$message({
@@ -1243,7 +1254,7 @@ export default {
       if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
       }
-      this.dialogVisibleValue = ''
+      this.dialogVisibleValue = "";
     },
     oneDeptIdChange(val) {
       this.filterParams["oneDeptId"] = val;
@@ -1504,7 +1515,9 @@ export default {
 
       // 不同类型打开不同标签
       this.$router.push({
-        path: `/order/list2/${projectType.value}`,
+        path: `/order/list2/${projectType.value}/${
+          this.filterParams?.oneDeptId || 0
+        }`,
       });
     },
   },

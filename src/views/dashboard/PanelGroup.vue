@@ -134,6 +134,10 @@ import CountTo from "vue-count-to";
 
 export default {
   props: {
+    selectDeptId: {
+      type: Number,
+      default: () => 0
+    },
     risk: {
       type: Object,
       default() {
@@ -151,7 +155,7 @@ export default {
     projectTypeNav(value) {
       // 不同类型打开不同标签
       this.$router.push({
-        path: `/order/list2/${value}`,
+        path: `/order/list2/${value}/${this.selectDeptId}`,
       });
     },
   }
