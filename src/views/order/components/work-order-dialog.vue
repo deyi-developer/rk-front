@@ -111,7 +111,8 @@
           type="text"
           style="width: 80%"
           v-model="form.orderAmount"
-          @blur="form.orderAmount = handleCurrency(form.orderAmount)"
+          @blur="form.orderAmount = micrometerLevel(form.orderAmount)"
+          @focus="form.orderAmount = percentile(form.orderAmount)"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -212,9 +213,19 @@ export default {
   },
 
   methods: {
-    handleCurrency(cellValue) {
+    // 千分位
+    micrometerLevel(cellValue) {
       return currency(cellValue, {
         precision: 3,
+        symbol: "",
+        separator: ",",
+      }).format();
+    },
+    // 转成百分位
+    percentile(cellValue) {
+      if(cellValue.length <= 0) return ""
+      return currency(cellValue, {
+        precision: 0,
         symbol: "",
         separator: ",",
       }).format();

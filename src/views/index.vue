@@ -31,7 +31,7 @@
           ></span>
         </el-popover>
       </div>
-      <PanelGroup :risk="risk" />
+      <PanelGroup :risk="risk" :selectDeptId="Number(selectDeptId)" />
       <TableDesc :summary="summary" />
       <ChartsGroup :oneDeptId="oneDeptId" />
       <transition name="fade">

@@ -1,6 +1,6 @@
 <!-- 达成率 -->
 <template>
-  <div style="cursor: pointer;">
+  <div style="cursor: pointer">
     <div class="datepicker-wrap">
       <el-select
         size="mini"
@@ -16,12 +16,12 @@
         >
         </el-option>
       </el-select>
-       <el-link type="primary" @click="handleJump">更多...</el-link>
+      <el-link type="primary" @click="handleJump">查看更多</el-link>
     </div>
 
     <div
       ref="dom"
-      style="margin-top: 10px;"
+      style="margin-top: 10px"
       :class="className"
       :style="{ height: height, width: width }"
     />
@@ -93,7 +93,7 @@ export default {
         query: {
           title: this.title,
           type: this.type,
-          projectCode: this.projectCode
+          projectCode: this.projectCode,
         },
       });
     },
@@ -202,8 +202,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
- .datepicker-wrap {
-   display:flex;
-   justify-content: space-between;
- }
+.datepicker-wrap {
+  display: flex;
+  justify-content: space-between;
+}
 </style>
