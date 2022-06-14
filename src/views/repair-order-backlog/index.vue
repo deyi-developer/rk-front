@@ -8,13 +8,39 @@
           v-bind:key="item.title"
           :title="item.title"
           :description="item.description"
+          :icon="item.icon"
         />
       </el-steps>
 
       <!-- 工单列表 -->
-      <div class="repair_order_list">
-        <div v-for="item in list" v-bind:key="item.title">
-          <el-card shadow="always">
+      <div class="repair_order">
+        <div
+          v-for="item in list"
+          v-bind:key="item.title"
+          class="repair_order_list"
+        >
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="hover">
+            总是显示cdccdsacacsasascacs
+          </el-card>
+          <el-card class="repair_order-Item" shadow="always">
             总是显示cdccdsacacsasascacs
           </el-card>
         </div>
@@ -30,16 +56,20 @@ export default {
     return {
       list: [
         {
-          title: "步骤1",
-          description: "这是一段很长很长很长的描述性文字",
+          title: "过期",
+          icon: "el-icon-circle-close"
         },
         {
-          title: "步骤2",
-          description: "这是一段很长很长很长的描述性文字",
+          title: "本周",
+          icon: "el-icon-edit-outline"
         },
         {
-          title: "步骤3",
-          description: "这是一段很长很长很长的描述性文字",
+          title: "未来一周",
+          icon: "el-icon-c-scale-to-original"
+        },
+        {
+          title: "未来两周",
+          icon: "el-icon-date"
         },
       ],
     };
@@ -65,10 +95,19 @@ export default {
   .space {
     min-height: calc(100vh - 124px);
 
-    .repair_order_list {
+    .repair_order {
       display: flex;
       flex-direction: row;
       justify-content: space-around;
+
+      .repair_order_list {
+        max-height: 72vh;
+        overflow: scroll;
+        .repair_order-Item {
+          margin-top: 20px;
+          cursor: pointer;
+        }
+      }
     }
   }
 }
