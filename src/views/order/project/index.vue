@@ -201,9 +201,6 @@
                 <span>天</span>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="计划开票金额:">
                 <el-input
@@ -216,12 +213,38 @@
                 ></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="开票备注:">
+                <el-input
+                  style="width: 70%"
+                  size="mini"
+                  v-model="updateData.billRemark"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
+                ></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="8">
               <el-form-item label="计划收款金额:">
                 <el-input
                   style="width: 70%"
                   size="mini"
                   v-model="updateData.planReceiptsMoney"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="收款备注:">
+                <el-input
+                  style="width: 70%"
+                  size="mini"
+                  v-model="updateData.receiptRemark"
                   :disabled="
                     !checkRole(['pm', 'boss']) || !projectData.planEditEnable
                   "
@@ -461,6 +484,8 @@ export default {
         planRemark: "",
         projectCode: "",
         projectChargeType: "",
+        receiptRemark: "",
+        billRemark: ""
       },
       // 工单内容
       workOrderform: {

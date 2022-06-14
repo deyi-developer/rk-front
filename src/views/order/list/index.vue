@@ -740,6 +740,22 @@
                 ></vxe-input>
               </template>
             </vxe-column>
+            <!-- 新增字段 -->
+            <vxe-column
+              field="billRemark" 
+              class-name="bg-plan"
+              title="开票备注"
+              :edit-render="{}"
+            >
+              <template #edit="{ row }">
+                <vxe-input
+                  :disabled="risk.planEditEnable == 0"
+                  v-model="row.billRemark"
+                  type="text"
+                  placeholder="请输入备注信息"
+                ></vxe-input>
+              </template>
+            </vxe-column>
             <vxe-column
               field="billingThisMonth"
               class-name="bg-plan"
@@ -782,6 +798,21 @@
                   v-model="row.planReceiptsMoney"
                   type="number"
                   placeholder="请输入数值"
+                ></vxe-input>
+              </template>
+            </vxe-column>
+            <!-- 新增字段 -->
+            <vxe-column
+              field="receiptRemark"
+              class-name="bg-plan"
+              title="收款备注"
+              :edit-render="{}"
+            >
+              <template #edit="{ row }">
+                <vxe-input
+                  :disabled="risk.planEditEnable == 0"
+                  v-model="row.receiptRemark "
+                  placeholder="请输入备注信息"
                 ></vxe-input>
               </template>
             </vxe-column>
