@@ -16,15 +16,16 @@
           >
             <a class="close" @click="close">关闭</a>
             <el-descriptions
-              :labelStyle="labelStyle"
+              :labelStyle="{ ...labelStyle, ...contentStyle }"
               :contentStyle="contentStyle"
               class="margin-top"
               :column="1"
               direction="horizontal"
             >
-              <el-descriptions-item
-                label="工单编号"
-                >kooriookami</el-descriptions-item
+              <el-descriptions-item label="工单编号"
+                ><span style="font-size: 14px"
+                  >kooriookami</span
+                ></el-descriptions-item
               >
               <el-descriptions-item
                 labelClassName="font-size-lable"
@@ -37,7 +38,7 @@
                 ></el-descriptions-item
               >
               <el-descriptions-item
-                :labelStyle="labelStyle"
+                :labelStyle="{ ...labelStyle, ...contentStyle }"
                 :contentStyle="contentStyle"
                 label="项目名称"
                 :span="2"
@@ -48,24 +49,28 @@
                   >
                 </el-tooltip></el-descriptions-item
               >
+              <el-descriptions-item label="工单内容">
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    工单内容工单内容工单内容工单内容工单内容工单内容
+                  </div>
+                  <span class="flowClamp"
+                    >工单内容工单内容工单内容工单内容工单内容工单内容</span
+                  >
+                </el-tooltip>
+              </el-descriptions-item>
             </el-descriptions>
             <el-descriptions
               class="margin-top"
-              :labelStyle="labelStyle"
+              :labelStyle="{ ...labelStyle, ...contentStyle }"
               :contentStyle="contentStyle"
               :column="2"
               direction="horizontal"
             >
-              <el-descriptions-item label="提单日期">
-                2020/2/2
-              </el-descriptions-item>
-              <el-descriptions-item label="截止时间">
-                2020/2/2
-              </el-descriptions-item>
-              <el-descriptions-item label="责任人">
+              <el-descriptions-item label="责任人" :labelStyle="threeStyle">
                 <el-tag class="borderRad5" size="small">杨先生</el-tag>
               </el-descriptions-item>
-              <el-descriptions-item label="优先级">
+              <el-descriptions-item label="优先级" :labelStyle="threeStyle">
                 <el-tag class="borderRad5" size="small">高</el-tag>
                 <el-tag
                   class="borderRad5"
@@ -81,27 +86,15 @@
               <el-descriptions-item label="涉及金额">
                 <el-tag class="borderRad5" size="small">123</el-tag>
               </el-descriptions-item>
+              <el-descriptions-item label="提单日期">
+                2020/2/2
+              </el-descriptions-item>
+              <el-descriptions-item label="截止时间">
+                2020/2/2
+              </el-descriptions-item>
               <!-- <el-descriptions-item label="状态">
                 <el-tag class="borderRad5" size="small">高</el-tag>
               </el-descriptions-item> -->
-            </el-descriptions>
-            <el-descriptions
-              class="margin-top"
-              :labelStyle="labelStyle"
-              :contentStyle="contentStyle"
-              :column="1"
-              direction="horizontal"
-            >
-              <el-descriptions-item label="工单内容">
-                <el-tooltip placement="top">
-                  <div slot="content">
-                    工单内容工单内容工单内容工单内容工单内容工单内容
-                  </div>
-                  <span class="flowClamp"
-                    >工单内容工单内容工单内容工单内容工单内容工单内容</span
-                  >
-                </el-tooltip>
-              </el-descriptions-item>
             </el-descriptions>
           </div>
         </div>
@@ -117,7 +110,7 @@ export default {
     return {
       list: [
         {
-          title: "过期",
+          title: "超期",
           data: [
             {
               content:
@@ -161,9 +154,22 @@ export default {
           ],
         },
       ],
-      labelStyle: "font-size: 12px; color: #909399; font-family: LarkHackSafariFont,LarkEmojiFont,LarkChineseQuote,-apple-system,BlinkMacSystemFont,Helvetica Neue,Tahoma,PingFang SC,Microsoft Yahei,Arial,Hiragino Sans GB,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;",
-      contentStyle: "font-size: 12px; font-family: LarkHackSafariFont,LarkEmojiFont,LarkChineseQuote,-apple-system,BlinkMacSystemFont,Helvetica Neue,Tahoma,PingFang SC,Microsoft Yahei,Arial,Hiragino Sans GB,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;"
-
+      labelStyle: {
+        color: "#909399",
+        display: "flex",
+        alignItems: "center",
+      },
+      contentStyle: {
+        fontSize: "12px",
+        fontFamily:
+          "LarkHackSafariFont,LarkEmojiFont,LarkChineseQuote,-apple-system,BlinkMacSystemFont,Helvetica Neue,Tahoma,PingFang SC,Microsoft Yahei,Arial,Hiragino Sans GB,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
+      },
+      threeStyle: {
+        paddingLeft: "12px",
+        marginTop: "4px",
+        color: "rgb(144, 147, 153)",
+        fontSize: "12px",
+      },
     };
   },
   methods: {
@@ -174,30 +180,31 @@ export default {
         this.$router.go(-1);
       }
     },
-    close(){
-      this.$alert('确认关闭该工单吗?', '', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `关闭成功!`
-            });
-          }
-        });
-    }
+    close() {
+      this.$alert("确认关闭该工单吗?", "", {
+        confirmButtonText: "确定",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `关闭成功!`,
+          });
+        },
+      });
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .repair_order_backlog {
-  background: #f0f2f5;
-  padding: 20px;
+  background: #eee;
+  // padding: 20px;
   min-height: calc(100vh - 84px);
   font-size: 12px;
-
   .space {
     min-height: calc(100vh - 124px);
+    background-color: #eee;
+    box-shadow: none;
     > div {
     }
     .quartering {
@@ -208,14 +215,23 @@ export default {
       .quarteringFlex {
         overflow-y: scroll;
         outline: none;
-        height: calc(100vh - 182px);
+        height: calc(100vh - 152px);
         align-items: flex-start;
-        margin: 20px 5px 0 0;
+        margin-top: 30px;
+        margin-right: 5px;
+        padding: 0 7px 5px 3px;
+        border-radius: 5px;
+        border-top: 5px solid #eee;
+        background-color: transparent;
+        &:nth-last-of-type(1) {
+          margin-right: 0;
+        }
       }
       .quarteringBorder {
         position: relative;
-        border: 1px solid #dcdfe6;
-        padding: 8px 10px 0px 6px;
+        background-color: #fff;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 15px;
         margin: 0px 0px 12px 5px;
         border-radius: 5px;
         .close {
@@ -232,12 +248,21 @@ export default {
     text-overflow: ellipsis;
     width: 180px;
     display: inline-block;
+    margin-top: 4px;
   }
 
   .title {
     position: fixed;
-    font-weight: 600;
-    margin: -25px 0 0 5px;
+    margin-left: 5px;
+    margin-top: -35px;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 30px;
+    background-color: #ccc;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 3px;
+    z-index: 9999;
   }
 
   .borderRad5 {
@@ -263,9 +288,9 @@ export default {
   }
   /*滚动条里面轨道*/
   .quarteringFlex::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 5px #f2f6fc;
+    -webkit-box-shadow: inset 0 0 5px #eee;
     border-radius: 0;
-    background: #f2f6fc;
+    background: #eee;
   }
 }
 </style>
