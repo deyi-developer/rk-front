@@ -201,9 +201,9 @@ export default {
           "-",
           thousandHandle(planBillingMoney),
           thousandHandle(billingThisMonth),
+          '-',
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
-          "-",
           "-",
         ],
       ];
@@ -217,10 +217,10 @@ export default {
 
     // 数据过滤
     filterHandler({ property, values, datas }) {
-      const val =
-        values[0] === null || values[0] === undefined || val !== ""
-          ? values[0]
-          : datas[0];
+      let val = datas[0];
+      if (values[0] == 0 || values[0]) {
+        val = values[0];
+      }
       if (val !== null || val !== undefined || val !== "") {
         this.filterConditions[property] = val;
       } else {
