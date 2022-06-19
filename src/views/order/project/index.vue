@@ -37,6 +37,20 @@
           @click="sendOrder"
           >发起工单</el-button
         >
+        <el-tooltip
+          v-if="checkRole(['risker'])"
+          effect="dark"
+          content="风控永久关闭"
+          placement="bottom"
+        >
+          <vxe-switch
+            :disabled="!checkRole(['risker'])"
+            :open-value="1"
+            :close-value="0"
+            v-model="projectData.openStatus"
+            @change="openStatusChange(projectData)"
+          />
+        </el-tooltip>
       </div>
     </header>
     <div class="content">
@@ -421,10 +435,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { projectDetails, projectUpdate } from "./api";
+import { projectDetails, projectUpdate, toggle } from "./api";
 import ChartsGroup from "../../dashboard/ChartsGroup";
 import TableDesc from "../../dashboard/TableDesc.vue";
 import filterForm from "../list/filterForm";
+import { debounce } from "lodash-es";
 import workOrderDialog from "../components/work-order-dialog";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 export default {
@@ -485,7 +500,7 @@ export default {
         projectCode: "",
         projectChargeType: "",
         receiptRemark: "",
-        billRemark: ""
+        billRemark: "",
       },
       // 工单内容
       workOrderform: {
@@ -626,6 +641,11 @@ export default {
     sendOrder() {
       this.dialogVisible = true;
     },
+
+    // 项目开关
+    openStatusChange: debounce(async function ({ openStatus, projectCode }) {
+     await toggle({ openStatus, projectCode });
+    }, 500),
   },
 };
 </script>

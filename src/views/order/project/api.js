@@ -43,3 +43,12 @@ export const projectUpdate = (data) => {
     data,
   })
 }
+
+// 风控永久关闭
+export function toggle(data) {
+  return request({
+    url: "/reportdata/reportdata/toggle",
+    method: "put",
+    data,
+  });
+}

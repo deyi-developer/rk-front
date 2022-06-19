@@ -164,7 +164,7 @@
     </header>
     <div v-show="editorVisible" style="margin: 18px 0">
       <div v-if="info.eventStatus == 0">
-        <span><i class="require-icon">*</i>责任人：</span>
+        <span><i class="require-icon">*</i>回复给：</span>
         <el-select
           v-model="eventHandler"
           style="width: 20%; margin-bottom: 12px; margin-right: 24px"
@@ -234,7 +234,7 @@
           type="primary"
           size="small"
           @click="submit"
-          >发 布</el-button
+          >回 复</el-button
         >
       </div>
 
@@ -245,18 +245,18 @@
 
             <p class="name">{{ item.nameOfRespondent }}</p>
             <p class="top-item">
+              <span class="label">回复给: </span>{{ item.handlerName }}
+            </p>
+            <p class="top-item">
+              <span class="label">抄送人: </span>{{ item.ccName }}
+            </p>
+            <p class="top-item">
               <span class="label">回复时间: </span
               >{{ formatDate(item.createDate) }}
             </p>
             <p class="top-item">
               <span class="label">截止时间: </span
               >{{ formatDateOf(item.eventHandleDate) }}
-            </p>
-            <p class="top-item">
-              <span class="label">责任人: </span>{{ item.handlerName }}
-            </p>
-            <p class="top-item">
-              <span class="label">抄送人: </span>{{ item.ccName }}
             </p>
             <!-- <p class="reply" @click="editorVisible = !editorVisible">回复</p> -->
             <!-- item.eventCompleteStutas && item.showFlagButton -->
