@@ -164,7 +164,7 @@ export default {
     };
   },
   created() {
-    // 初始加载所有数据
+    // 初始加载所有数据  ----接口功能问题，weekType暂时传，获取全部数据传null或不传
     getCurrentMonthApi({ weekType: 1 }).then((res) => {
       // 根据字段来匹配顺序
       const resKeys = Object.keys(this.titles);
