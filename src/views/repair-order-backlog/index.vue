@@ -2,7 +2,7 @@
   <div class="repair_order_backlog">
     <el-card class="space">
       <div class="quartering">
-        <div class="quarteringFlex" v-for="(item, index) of list" :key="index">
+        <div class="quarteringFlex" v-for="item of list" :key="item.type">
           <!-- <div>{{ item.data.content }}</div> -->
           <h3 class="title">
             {{ item.title }}
@@ -12,102 +12,16 @@
           </h3>
           <div
             v-for="(itemElement, index) of item.data"
-            :key="index"
             class="quarteringBorder"
           >
-            <el-collapse-transition
-              name="custom-classes-transition"
-              leave-active-class="animated bounceOutRight"
-            >
-              <div class="quarteringPadd" v-if="!itemElement.show">
-                <a
-                  class="close"
-                  @click="close({ itemElement, name: item.name, index })"
-                  >关闭</a
-                >
-                <div>
-                  <span>工单编号: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.eventHeaderCode
-                  }}</span>
-                </div>
-                <div>
-                  <span>工单名称: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.eventTitle
-                  }}</span>
-                </div>
-                <div>
-                  <span>项目编码: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.projectCode
-                  }}</span>
-                </div>
-                <div>
-                  <span>项目名称: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.projectName
-                  }}</span>
-                </div>
-                <div>
-                  <span>工单内容: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.eventContext
-                  }}</span>
-                </div>
-                <div>
-                  <span>责任人: </span>
-                  <span style="font-size: 14px"><el-tag
-                      class="borderRad5"
-                      style="margin-left: 3px"
-                      size="small"
-                      >{{ itemElement.handlerName || "无" }}</el-tag
-                    ></span>
-                </div>
-                <div>
-                  <span>优先级/状态: </span>
-                  <span style="font-size: 14px">
-                    <el-tag class="borderRad5" size="small">{{
-                      itemElement.eventUrgencyLevelName || "无"
-                    }}</el-tag>
-                    <el-tag
-                      class="borderRad5"
-                      style="margin-left: 3px"
-                      type="danger"
-                      size="small"
-                      >{{ itemElement.eventStatus || "无" }}</el-tag
-                    ></span>
-                </div>
-                <div>
-                  <span>工单类型: </span>
-                  <span style="font-size: 14px">
-                  <el-tag
-                      class="borderRad5"
-                      style="margin-left: 3px"
-                      size="small"
-                      >{{ itemElement.eventTypeName || "无" }}</el-tag
-                    ></span>
-                </div>
-                <div>
-                  <span>涉及金额: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.eventAmount
-                  }}</span>
-                </div>
-                <div>
-                  <span>提单日期: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.createTime
-                  }}</span>
-                </div>
-                <div>
-                  <span>截止时间: </span>
-                  <span style="font-size: 14px">{{
-                    itemElement.headerEndDate
-                  }}</span>
-                </div>
-              </div>
-            </el-collapse-transition>
+            <transition name="el-fade-in-linear">
+              <list-item
+                :itemElement="itemElement"
+                :type="item.type"
+                :key="index"
+                @close="close"
+              />
+            </transition>
           </div>
         </div>
       </div>
@@ -117,85 +31,53 @@
 
 <script>
 import { getCurrentMonthApi, edit } from "./api";
+import ListItem from "./list-item.vue";
 export default {
   name: "repairOrderBacklog",
+  components: { ListItem },
   data() {
     return {
       list: [
         {
           title: "超期",
-          data: [],
+          type: "overdueWeekData",
+          data: []
         },
         {
           title: "本周",
-          data: [],
+          type: "nowWeekData",
+          data: []
         },
         {
           title: "未来一周",
-          data: [],
+          type: "nextOneWeekData",
+          data: []
         },
         {
           title: "未来两周",
-          data: [],
-        },
-      ],
-      titles: {
-        overdueWeekData: "超期",
-        nowWeekData: "本周",
-        nextOneWeekData: "未来一周",
-        nextTwoWeekData: "未来两周",
-      },
-      labelStyle: {
-        color: "#909399",
-        display: "flex",
-        alignItems: "center",
-      },
-      contentStyle: {
-        fontSize: "12px",
-        fontFamily:
-          "LarkHackSafariFont,LarkEmojiFont,LarkChineseQuote,-apple-system,BlinkMacSystemFont,Helvetica Neue,Tahoma,PingFang SC,Microsoft Yahei,Arial,Hiragino Sans GB,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji",
-      },
-      threeStyle: {
-        paddingLeft: "12px",
-        marginTop: "4px",
-        color: "rgb(144, 147, 153)",
-        fontSize: "12px",
-      },
+          type: "nextTwoWeekData",
+          data: []
+        }
+      ]
     };
   },
   created() {
     // 初始加载所有数据  ----接口功能问题，weekType暂时传，获取全部数据传null或不传
     getCurrentMonthApi({ weekType: 1 }).then((res) => {
-      // 根据字段来匹配顺序
-      const resKeys = Object.keys(this.titles);
       // 处理数据
-      const resData = resKeys.map((item) => {
-        return {
-          data: res[item] ? res[item].rows : [],
-          title: this.titles[item],
-          name: item,
-        };
+      const newData = this.list.map((o) => {
+        const type = o.type;
+        const data = res[type]?.rows || [];
+        return { ...o, data };
       });
-      this.list = resData;
+      this.list = newData;
     });
   },
   methods: {
-    back() {
-      if (this.$route.query.noGoBack) {
-        this.$router.push({ path: "/" });
-      } else {
-        this.$router.go(-1);
-      }
-    },
     close(params) {
       this.$alert("确认关闭该工单吗?", "", {
         confirmButtonText: "确定",
         callback: async (action) => {
-          // 获取需要关闭的是哪一个页签
-          const index = Object.keys(this.titles).indexOf(params.name);
-          if (index < 0) {
-            this.$modal.msgError("程序错误!");
-          }
           // eventHeaderId没有值，等接口好了之后放开注释代码即可
           // const res = await edit({
           //   eventHeaderId: params.itemElement.eventHeaderId,
@@ -203,15 +85,15 @@ export default {
           // });
           // if (res.code === 200) {
           //   this.$modal.msgSuccess("删除成功!");
-            // 静态删除选择的工单  -----params.index点击的是哪一条数据    ----用于动画处理，列表用 show 字段来处理
-            this.$set(this.list[index].data[params.index], "show", true);
+          // 静态删除选择的工单  -----params.index点击的是哪一条数据    ----用于动画处理，列表用 show 字段来处理
+          // this.$set(this.list[index].data[params.index], "show", true);
           //   return true;
           // }
           // this.$modal.msgSuccess(res.msg || "删除失败!");
-        },
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
