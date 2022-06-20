@@ -6,96 +6,108 @@
           <!-- <div>{{ item.data.content }}</div> -->
           <h3 class="title">
             {{ item.title }}
-            <span style="color: #909399; font-size: 10px">{{ index }}</span>
+            <span style="color: #909399; font-size: 10px">{{
+              item.data.length
+            }}</span>
           </h3>
-
           <div
-            v-for="(itemElement, index) of item"
+            v-for="(itemElement, index) of item.data"
             :key="index"
             class="quarteringBorder"
           >
-            <a class="close" @click="close">关闭</a>
-            <el-descriptions
-              :labelStyle="{ ...labelStyle, ...contentStyle }"
-              :contentStyle="contentStyle"
-              class="margin-top"
-              :column="1"
-              direction="horizontal"
+            <el-collapse-transition
+              name="custom-classes-transition"
+              leave-active-class="animated bounceOutRight"
             >
-              <el-descriptions-item label="工单编号"
-                ><span style="font-size: 14px"
-                  >kooriookami</span
-                ></el-descriptions-item
-              >
-              <el-descriptions-item
-                labelClassName="font-size-lable"
-                label="工单名称"
-                >这是个测试工单</el-descriptions-item
-              >
-              <el-descriptions-item label="项目编码"
-                ><el-tag class="borderRad5" size="small"
-                  >18100000000</el-tag
-                ></el-descriptions-item
-              >
-              <el-descriptions-item
-                :labelStyle="{ ...labelStyle, ...contentStyle }"
-                :contentStyle="contentStyle"
-                label="项目名称"
-                :span="2"
-                ><el-tooltip placement="top">
-                  <div slot="content">内部项目名称</div>
-                  <span class="flowClamp"
-                    >内部项目名称内部项目名称内部项目名称内部项目名称内部项目名称内部项目名称</span
-                  >
-                </el-tooltip></el-descriptions-item
-              >
-              <el-descriptions-item label="工单内容">
-                <el-tooltip placement="top">
-                  <div slot="content">
-                    工单内容工单内容工单内容工单内容工单内容工单内容
-                  </div>
-                  <span class="flowClamp"
-                    >工单内容工单内容工单内容工单内容工单内容工单内容</span
-                  >
-                </el-tooltip>
-              </el-descriptions-item>
-            </el-descriptions>
-            <el-descriptions
-              class="margin-top"
-              :labelStyle="{ ...labelStyle, ...contentStyle }"
-              :contentStyle="contentStyle"
-              :column="2"
-              direction="horizontal"
-            >
-              <el-descriptions-item label="责任人" :labelStyle="threeStyle">
-                <el-tag class="borderRad5" size="small">杨先生</el-tag>
-              </el-descriptions-item>
-              <el-descriptions-item label="优先级" :labelStyle="threeStyle">
-                <el-tag class="borderRad5" size="small">高</el-tag>
-                <el-tag
-                  class="borderRad5"
-                  style="margin-left: 3px"
-                  type="danger"
-                  size="small"
-                  >紧急</el-tag
+              <div class="quarteringPadd" v-if="!itemElement.show">
+                <a
+                  class="close"
+                  @click="close({ itemElement, name: item.name, index })"
+                  >关闭</a
                 >
-              </el-descriptions-item>
-              <el-descriptions-item label="工单类型">
-                <el-tag class="borderRad5" size="small">无类型</el-tag>
-              </el-descriptions-item>
-              <el-descriptions-item label="涉及金额">
-                <el-tag class="borderRad5" size="small">123</el-tag>
-              </el-descriptions-item>
-              <el-descriptions-item label="提单日期">
-                2020/2/2
-              </el-descriptions-item>
-              <el-descriptions-item label="截止时间">
-                2020/2/2
-              </el-descriptions-item>
-              <!-- <el-descriptions-item label="状态">
-                <el-tag class="borderRad5" size="small">高</el-tag>
-              </el-descriptions-item> -->
-            </el-descriptions>
+                <div>
+                  <span>工单编号: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.eventHeaderCode
+                  }}</span>
+                </div>
+                <div>
+                  <span>工单名称: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.eventTitle
+                  }}</span>
+                </div>
+                <div>
+                  <span>项目编码: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.projectCode
+                  }}</span>
+                </div>
+                <div>
+                  <span>项目名称: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.projectName
+                  }}</span>
+                </div>
+                <div>
+                  <span>工单内容: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.eventContext
+                  }}</span>
+                </div>
+                <div>
+                  <span>责任人: </span>
+                  <span style="font-size: 14px"><el-tag
+                      class="borderRad5"
+                      style="margin-left: 3px"
+                      size="small"
+                      >{{ itemElement.handlerName || "无" }}</el-tag
+                    ></span>
+                </div>
+                <div>
+                  <span>优先级/状态: </span>
+                  <span style="font-size: 14px">
+                    <el-tag class="borderRad5" size="small">{{
+                      itemElement.eventUrgencyLevelName || "无"
+                    }}</el-tag>
+                    <el-tag
+                      class="borderRad5"
+                      style="margin-left: 3px"
+                      type="danger"
+                      size="small"
+                      >{{ itemElement.eventStatus || "无" }}</el-tag
+                    ></span>
+                </div>
+                <div>
+                  <span>工单类型: </span>
+                  <span style="font-size: 14px">
+                  <el-tag
+                      class="borderRad5"
+                      style="margin-left: 3px"
+                      size="small"
+                      >{{ itemElement.eventTypeName || "无" }}</el-tag
+                    ></span>
+                </div>
+                <div>
+                  <span>涉及金额: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.eventAmount
+                  }}</span>
+                </div>
+                <div>
+                  <span>提单日期: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.createTime
+                  }}</span>
+                </div>
+                <div>
+                  <span>截止时间: </span>
+                  <span style="font-size: 14px">{{
+                    itemElement.headerEndDate
+                  }}</span>
+                </div>
+              </div>
+            </el-collapse-transition>
           </div>
         </div>
       </div>
@@ -104,6 +116,7 @@
 </template>
 
 <script>
+import { getCurrentMonthApi, edit } from "./api";
 export default {
   name: "repairOrderBacklog",
   data() {
@@ -111,49 +124,27 @@ export default {
       list: [
         {
           title: "超期",
-          data: [
-            {
-              content:
-                "这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据",
-              orderNumber: "1223456456",
-              orderNumberNeibu: "231231sdas23123123",
-            },
-          ],
+          data: [],
         },
         {
           title: "本周",
-          data: [
-            {
-              content:
-                "这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据",
-              orderNumber: "1223456456",
-              orderNumberNeibu: "231231sdas23123123",
-            },
-          ],
+          data: [],
         },
         {
           title: "未来一周",
-          data: [
-            {
-              content:
-                "这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据",
-              orderNumber: "1223456456",
-              orderNumberNeibu: "231231sdas23123123",
-            },
-          ],
+          data: [],
         },
         {
           title: "未来两周",
-          data: [
-            {
-              content:
-                "这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据这是测试数据",
-              orderNumber: "1223456456",
-              orderNumberNeibu: "231231sdas23123123",
-            },
-          ],
+          data: [],
         },
       ],
+      titles: {
+        overdueWeekData: "超期",
+        nowWeekData: "本周",
+        nextOneWeekData: "未来一周",
+        nextTwoWeekData: "未来两周",
+      },
       labelStyle: {
         color: "#909399",
         display: "flex",
@@ -172,6 +163,22 @@ export default {
       },
     };
   },
+  created() {
+    // 初始加载所有数据
+    getCurrentMonthApi({ weekType: 1 }).then((res) => {
+      // 根据字段来匹配顺序
+      const resKeys = Object.keys(this.titles);
+      // 处理数据
+      const resData = resKeys.map((item) => {
+        return {
+          data: res[item] ? res[item].rows : [],
+          title: this.titles[item],
+          name: item,
+        };
+      });
+      this.list = resData;
+    });
+  },
   methods: {
     back() {
       if (this.$route.query.noGoBack) {
@@ -180,14 +187,27 @@ export default {
         this.$router.go(-1);
       }
     },
-    close() {
+    close(params) {
       this.$alert("确认关闭该工单吗?", "", {
         confirmButtonText: "确定",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `关闭成功!`,
-          });
+        callback: async (action) => {
+          // 获取需要关闭的是哪一个页签
+          const index = Object.keys(this.titles).indexOf(params.name);
+          if (index < 0) {
+            this.$modal.msgError("程序错误!");
+          }
+          // eventHeaderId没有值，等接口好了之后放开注释代码即可
+          // const res = await edit({
+          //   eventHeaderId: params.itemElement.eventHeaderId,
+          //   eventStatus: 1,
+          // });
+          // if (res.code === 200) {
+          //   this.$modal.msgSuccess("删除成功!");
+            // 静态删除选择的工单  -----params.index点击的是哪一条数据    ----用于动画处理，列表用 show 字段来处理
+            this.$set(this.list[index].data[params.index], "show", true);
+          //   return true;
+          // }
+          // this.$modal.msgSuccess(res.msg || "删除失败!");
         },
       });
     },
@@ -205,8 +225,6 @@ export default {
     min-height: calc(100vh - 124px);
     background-color: #eee;
     box-shadow: none;
-    > div {
-    }
     .quartering {
       .el-tag--medium {
         border-radius: 10px;
@@ -216,28 +234,33 @@ export default {
         overflow-y: scroll;
         outline: none;
         height: calc(100vh - 152px);
-        align-items: flex-start;
+        flex: 1 1 0;
         margin-top: 30px;
         margin-right: 5px;
         padding: 0 7px 5px 3px;
         border-radius: 5px;
         border-top: 5px solid #eee;
         background-color: transparent;
+        transition: all 3s ease;
         &:nth-last-of-type(1) {
           margin-right: 0;
         }
       }
       .quarteringBorder {
+        width: 100%;
         position: relative;
         background-color: #fff;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
-        padding: 10px 15px;
-        margin: 0px 0px 12px 5px;
         border-radius: 5px;
+        transition: all 3s ease;
         .close {
           position: absolute;
           right: 5px;
         }
+      }
+      .quarteringPadd {
+        padding: 10px 15px;
+        margin: 0px 0px 12px 5px;
       }
     }
   }
@@ -246,7 +269,7 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: 180px;
+    width: 250px;
     display: inline-block;
     margin-top: 4px;
   }
@@ -262,7 +285,7 @@ export default {
     font-weight: 700;
     font-size: 14px;
     border-radius: 3px;
-    z-index: 9999;
+    z-index: 99;
   }
 
   .borderRad5 {
@@ -291,6 +314,15 @@ export default {
     -webkit-box-shadow: inset 0 0 5px #eee;
     border-radius: 0;
     background: #eee;
+  }
+
+  .divdiv {
+    width: 50px;
+    transition: all 3s ease;
+    background-color: red;
+  }
+  .divdiv:hover {
+    width: 300px;
   }
 }
 </style>
