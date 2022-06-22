@@ -178,7 +178,7 @@ export default {
 
       // 获取当前月度
       const {
-        planDtoList = [],
+        deptPlanDtoList = [],
         totalBillThisMonth: billingThisMonth, // 本月实际开票总额
         totalPlanBilling: planBillingMoney, //本月计划开票总额
         totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
@@ -191,7 +191,7 @@ export default {
       });
 
       // 当前月度列表
-      this.MonthList = planDtoList;
+      this.MonthList = deptPlanDtoList;
 
       // 有总计项的当前月度列表
       this.currentMonthList = [
