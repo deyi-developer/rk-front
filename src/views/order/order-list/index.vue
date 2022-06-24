@@ -93,7 +93,7 @@
                   style="width: 200px"
                   v-model="option.data"
                   @input="$panel.changeOption($event, !!option.data, option)"
-                  placeholder="输入完整编码"
+                  placeholder="输入项目编码"
                   size="mini"
                 ></vxe-input>
               </template>
@@ -117,7 +117,22 @@
             title="项目名称"
             field="projectName"
             width="180"
-          />
+            :filters="[{ data: '' }]"
+          >
+             <template #filter="{ $panel, column }">
+              <template v-for="(option, index) in column.filters">
+                <vxe-input
+                  class="filter-input"
+                  :key="index"
+                  style="width: 200px"
+                  v-model="option.data"
+                  @input="$panel.changeOption($event, !!option.data, option)"
+                  placeholder="输入项目名称"
+                  size="mini"
+                />
+              </template>
+            </template>
+          </vxe-column>
           <vxe-column
             align="center"
             title="父项目名称"

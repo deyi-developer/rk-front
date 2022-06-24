@@ -99,6 +99,14 @@
             <Badge v-else status="success" text="处理中" />
           </span>
         </li>
+        <li v-if="info.overdueDay > 0" class="order-item">
+          <label class="space">已超期:</label>
+          <span class="value">
+            <Tag :color="color">
+              {{info.overdueDay}}
+            </Tag>
+          </span>
+        </li>
         <li class="order-item">
           <label class="space">优先级:</label>
           <span class="value">
@@ -647,6 +655,9 @@ export default {
         margin-left: 32px;
         padding: 15px 0;
         font-size: 12px;
+        ::v-deep img {
+          max-width: 100%;
+        }
       }
     }
   }

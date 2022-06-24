@@ -42,10 +42,11 @@ export function toggle(data) {
   });
 }
 
-export function deleteCurrentMonth(type) {
+export function deleteCurrentMonth(data) {
   return request({
-    url: `/report/deleteCurrentMonth/${type}`,
-    method: "delete",
+    url: `/report/deleteCurrentMonth`,
+    method: "post",
+    data,
   });
 }
 
@@ -57,4 +58,4 @@ export function rkPlanEdit(enableFlag) {
 }
 
 // 导出项目清单
-export const reportdataExort = `/reportdata/reportdata/export`
+export const reportdataExort = `/reportdata/reportdata/export`;

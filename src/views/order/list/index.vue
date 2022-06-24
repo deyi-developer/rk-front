@@ -85,13 +85,6 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-              <span>确定要执行该操作吗？</span>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirm">确 定</el-button>
-              </span>
-            </el-dialog>
             <!-- 计划是否可编辑 -->
             <el-tooltip
               v-if="checkRole(['risker'])"
@@ -151,10 +144,11 @@
           :header-cell-class-name="headerCellClassName"
         >
           <vxe-column field="billNum" fixed="left" title="状态" width="50">
-            <template #default="{ row: { billNum = {}, alertList = '无' } }">
+            <template #default="{ row: { billNum = {}, alertList = '无', projectCode } }">
               <el-tooltip effect="dark" placement="right">
                 <div slot="content" v-html="alertList" />
                 <span
+                  @click="() => navPrderList(projectCode, billNum)"
                   :style="{ cursor: 'default', color: billNum.color || '' }"
                   >{{ billNum.count || "-" }}</span
                 >
@@ -977,6 +971,30 @@
         ></vxe-pager>
       </el-card>
     </div>
+
+    <!-- 风控操作按钮提示 -->
+    <el-dialog title="清选择日期" :visible.sync="dialogVisible" width="40%">
+      <div class="risk-operation-class">
+        <!-- <el-date-picker
+          v-model="riskOperation.year"
+          type="year"
+          placeholder="选择年"
+          :end-placeholder="new Date()"
+        /> -->
+
+        <el-date-picker
+          v-model="riskOperation.date"
+          :clearable="false"
+          type="month"
+          placeholder="选择月"
+          :picker-options="pickerOptions"
+        />
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -1110,6 +1128,16 @@ export default {
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
         planReceiptsMoney: [{ required: true, message: "必须填写" }],
+      },
+      // 风控操作弹框对象
+      riskOperation: {
+        date: new Date(),
+      },
+      // 时间选择器设置
+      pickerOptions: {
+        disabledDate(time) {
+          return time > new Date();
+        },
       },
     };
   },
@@ -1280,7 +1308,11 @@ export default {
       });
     },
     async otherButtom(command) {
-      const res = await deleteCurrentMonth(command);
+      const res = await deleteCurrentMonth({
+        command,
+        month: this.riskOperation.date.getMonth() + 1,
+        year: this.riskOperation.date.getFullYear(),
+      });
       if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
       }
@@ -1552,6 +1584,15 @@ export default {
         }`,
       });
     },
+
+    // 跳转工单列表
+    navPrderList(projectCode, billNum) {
+      if(!billNum.count) return;
+      this.$router.push({
+        name: 'Order-list',
+        params: { projectCode },
+      })
+    }
   },
 };
 </script>
@@ -1642,5 +1683,10 @@ export default {
     font-weight: bold;
     color: #000;
   }
+}
+// 风控操作弹框样式
+.risk-operation-class {
+  display: flex;
+  justify-content: space-around;
 }
 </style>

@@ -192,83 +192,6 @@
 
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="项目结算周期:" prop="projectChargePeriod">
-                <el-input-number
-                  size="mini"
-                  style="width: 60%"
-                  step-strictly
-                  v-model="updateData.projectChargePeriod"
-                  :disabled="!checkRole(['pm', 'boss'])"
-                ></el-input-number>
-                <span>月</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="发票账期:" prop="projectInvoicePeriod">
-                <el-input-number
-                  size="mini"
-                  style="width: 60%"
-                  step-strictly
-                  v-model="updateData.projectInvoicePeriod"
-                  :disabled="!checkRole(['pm', 'boss'])"
-                ></el-input-number>
-                <span>天</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="计划开票金额:">
-                <el-input
-                  style="width: 70%"
-                  size="mini"
-                  v-model="updateData.planBillingMoney"
-                  :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
-                  "
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item label="开票备注:">
-                <el-input
-                  style="width: 70%"
-                  size="mini"
-                  v-model="updateData.billRemark"
-                  :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
-                  "
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="计划收款金额:">
-                <el-input
-                  style="width: 70%"
-                  size="mini"
-                  v-model="updateData.planReceiptsMoney"
-                  :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
-                  "
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="收款备注:">
-                <el-input
-                  style="width: 70%"
-                  size="mini"
-                  v-model="updateData.receiptRemark"
-                  :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
-                  "
-                ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="8">
               <el-form-item label="开票风险等级:">
                 <el-select
                   style="width: 70%"
@@ -327,12 +250,106 @@
             </el-col>
           </el-row>
 
+          <!-- 项目结算周期，计划开票金额 -->
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="项目结算周期:" prop="projectChargePeriod">
+                <el-input-number
+                  size="mini"
+                  style="width: 60%"
+                  step-strictly
+                  v-model="updateData.projectChargePeriod"
+                  :disabled="!checkRole(['pm', 'boss'])"
+                />
+                <span> 月</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="计划开票金额:">
+                <el-input
+                  style="width: 70%"
+                  size="mini"
+                  v-model="updateData.planBillingMoney"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <!-- 开票备注 -->
+          <el-row :gutter="20">
+            <el-col :span="20">
+              <el-form-item label="开票备注:">
+                <el-input
+                  type="textarea"
+                  size="mini"
+                  :autosize="{
+                    minRows: 6,
+                  }"
+                  v-model="updateData.billRemark"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <!-- 发票账期，计划收款金额 -->
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="发票账期:" prop="projectInvoicePeriod">
+                <el-input-number
+                  size="mini"
+                  style="width: 60%"
+                  step-strictly
+                  v-model="updateData.projectInvoicePeriod"
+                  :disabled="!checkRole(['pm', 'boss'])"
+                />
+                <span> 天</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="计划收款金额:">
+                <el-input
+                  style="width: 70%"
+                  size="mini"
+                  v-model="updateData.planReceiptsMoney"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <!-- 收款备注 -->
+          <el-row :gutter="20">
+            <el-col :span="20">
+              <el-form-item label="收款备注:">
+                <el-input
+                  size="mini"
+                  type="textarea"
+                  :autosize="{
+                    minRows: 6,
+                  }"
+                  v-model="updateData.receiptRemark"
+                  :disabled="
+                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                  "
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <!-- <el-col :span="8">
               <el-form-item label="项目结算类型:">{{ projectData.projectChargeType }}</el-form-item>
           </el-col>-->
-
+          <!-- 项目备注 -->
           <el-row :gutter="20">
-            <el-col :span="16">
+            <el-col :span="20">
               <el-form-item label="项目备注:">
                 <el-input
                   type="textarea"
@@ -644,7 +661,7 @@ export default {
 
     // 项目开关
     openStatusChange: debounce(async function ({ openStatus, projectCode }) {
-     await toggle({ openStatus, projectCode });
+      await toggle({ openStatus, projectCode });
     }, 500),
   },
 };
