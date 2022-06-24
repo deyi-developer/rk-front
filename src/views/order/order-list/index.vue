@@ -4,14 +4,19 @@
       <div class="header-class" slot="header">
         <span>工单列表</span>
 
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-download"
-          @click="handleExport"
-        >
-          导出
-        </el-button>
+        <div>
+          <el-button icon="el-icon-refresh" size="small" @click="reset"
+            >重置筛选</el-button
+          >
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-download"
+            @click="handleExport"
+          >
+            导出
+          </el-button>
+        </div>
       </div>
       <!-- <filter-form
         :projectCode="$route.query.projectCode"
@@ -292,7 +297,8 @@ export default {
       tableData: [],
       totals: 0,
       loading: false,
-      filterParams: {}, // 表头筛选条件
+      filterParams: {
+      }, // 表头筛选条件
     };
   },
   computed: {
@@ -312,33 +318,47 @@ export default {
 
     const { params } = this.$route;
     //如果从项目详情进来  回写项目编码 且页码重置
-    if (params?.projectCode) {
-      this.$refs.form.queryParams = {
-        projectCode: params.projectCode,
-      };
-      this.params = {
-        pageNum: 1,
-        pageSize: 10,
-      };
-    }
+    this.projectCodeFilter();
     this.getList();
   },
   activated() {
-    const { params } = this.$route;
-
-    if (params?.projectCode) {
-      this.$refs.form.queryParams = {
-        projectCode: params.projectCode,
-      };
+    this.projectCodeFilter();
+  },
+  methods: {
+    reset() {
+      const $table = this.$refs.xTable1;
+      this.filterParams = {};
+      $table.clearFilter();
+      // 重新请求
       this.params = {
         pageNum: 1,
         pageSize: 10,
       };
-    }
+      this.getList();
+    },
+    projectCodeFilter() {
+      const { params } = this.$route;
+      if (params?.projectCode) {
+        this.filterParams = {
+          projectCode: params.projectCode,
+        };
 
-    this.getList();
-  },
-  methods: {
+        const xTable = this.$refs.xTable1;
+        const column = xTable.getColumnByField("projectCode");
+        // 修改第一个选项为勾选状态
+        const option = column.filters[0];
+        option.data = params.projectCode;
+        option.checked = true;
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        xTable.updateData();
+
+        this.params = {
+          pageNum: 1,
+          pageSize: 10,
+        };
+        this.getList();
+      }
+    },
     filterNameMethod: ({ value, row }) => {
       console.log(value, row);
       // return XEUtils.toValueString(row.name).toLowerCase().indexOf(value) > -1;
