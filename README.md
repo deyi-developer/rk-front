@@ -30,10 +30,15 @@ npm run build:prod
 
 ```bash
 # 打测试包 并部署到47环境
-npm run scp
+##npm run scp
 
 
 # 打正式包 并 部署到48环境  生产环境
-npm run scp2
+##npm run scp2
+
+# 打测试包 并部署到46环境
+npm run scp46
+
+
 
 ```
