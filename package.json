@@ -12,7 +12,8 @@
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
     "scp": "npm run build:stage && node scp2-dev.js",
-    "scp2": "npm run build:prod && node scp2-prod.js"
+    "scp2": "npm run build:prod && node scp2-prod.js",
+    "scp46": "npm run build:stage && node scp2-46.js"
   },
   "husky": {
     "hooks": {

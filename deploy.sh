@@ -1,3 +1,3 @@
 
-rm -rf /root/guns-vip-admin/data/rk-system/rk/
-cp -r /usr/project/www/rk/ /root/guns-vip-admin/data/rk-system/rk/
+rm -rf /dev-data/deyi-rk-hr/data/rk-system/frontend/rk
+cp -r /usr/project/www/rk/ /dev-data/deyi-rk-hr/data/rk-system/frontend/rk
