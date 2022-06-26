@@ -108,9 +108,12 @@
               }}</span>
 
               <!-- 是否超期 -->
-              <span v-else-if="item.field === 'overdueDayType'">{{
-                0 > row.overdueDay ? "是" : "否"
-              }}</span>
+              <el-tag
+                v-else-if="item.field === 'overdueDayType'"
+                size="small"
+                :type="0 > row.overdueDay && 'danger'"
+                >{{ 0 > row.overdueDay ? "是" : "否" }}</el-tag
+              >
 
               <!-- 超期天数 -->
               <span v-else-if="item.field === 'overdueDay'">{{
