@@ -5,17 +5,15 @@
     <el-link
       class="close-btn"
       :underline="false"
-      @click="$emit('close', { dataSource, pid, cid })"
+      @click="$emit('close', dataSource, pid)"
       ><i class="el-icon-close"></i
     ></el-link>
 
     <div class="item-line">
       <span>工单编号: </span>
-      <el-link
-        :underline="false"
-        @click="$emit('gotoWorkOrder', { dataSource })"
-        >{{ dataSource.eventHeaderCode }}</el-link
-      >
+      <el-link :underline="false" @click="$emit('gotoWorkOrder', dataSource)">{{
+        dataSource.eventHeaderCode
+      }}</el-link>
     </div>
     <div class="item-line order-name">
       <span>工单名称: </span>
@@ -98,9 +96,6 @@ export default {
       type: String
     },
     pid: {
-      type: String | Number
-    },
-    cid: {
       type: String | Number
     }
   },

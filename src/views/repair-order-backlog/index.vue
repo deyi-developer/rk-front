@@ -7,19 +7,17 @@
           <span class="title-num">{{ item.data.length }}</span>
         </h3>
         <div class="list-content">
-          <template v-for="(itemElement, cid) of item.data">
-            <transition name="el-fade-in-linear">
-              <list-item
-                :dataSource="itemElement"
-                :type="item.type"
-                :pid="pid"
-                :cid="cid"
-                :key="itemElement.eventHeaderCode"
-                @close="close"
-                @gotoWorkOrder="gotoWorkOrder"
-              />
-            </transition>
-          </template>
+          <transition-group leave-active-class="animated bounceOutRight">
+            <list-item
+              v-for="itemElement of item.data"
+              :key="itemElement.eventHeaderId"
+              :dataSource="itemElement"
+              :type="item.type"
+              :pid="pid"
+              @close="close"
+              @gotoWorkOrder="gotoWorkOrder"
+            />
+          </transition-group>
         </div>
       </div>
     </div>
@@ -73,18 +71,22 @@ export default {
   },
   methods: {
     close(dataSource, pid, cid) {
+      const { eventHeaderId } = dataSource;
+      // 这两行调试用的
+      // const newList = this.deleteItem(pid, eventHeaderId);
+      // this.list[pid]["data"] = newList;
       this.$confirm("确认关闭该工单吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       }).then(async () => {
         const { code, msg } = await edit({
-          eventHeaderId: dataSource.eventHeaderId,
+          eventHeaderId,
           eventStatus: 1
         });
         if (code === 200) {
           this.$modal.msgSuccess(msg);
-          const newList = this.deleteItem(pid, cid);
-          this.list[pid] = newList;
+          const newList = this.deleteItem(pid, eventHeaderId);
+          this.list[pid]["data"] = newList;
         } else {
           this.$modal.msgError(msg);
         }
@@ -93,7 +95,7 @@ export default {
     // 根据pid cid找到数据，然后本地删除数据
     deleteItem(pid, cid) {
       const list = this.list[pid]["data"];
-      const newList = list.filter((_, index) => index != cid);
+      const newList = list.filter((item) => item.eventHeaderId != cid);
       return newList;
     },
     gotoWorkOrder({ eventHeaderId }) {
