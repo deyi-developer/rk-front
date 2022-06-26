@@ -149,7 +149,7 @@
                 <div slot="content" v-html="alertList" />
                 <span
                   @click="() => navPrderList(projectCode, billNum)"
-                  :style="{ cursor: 'default', color: billNum.color || '' }"
+                  :style="{ cursor: 'default', color: billNum.color || '', cursor: billNum.count ? 'pointer' : 'default' }"
                   >{{ billNum.count || "-" }}</span
                 >
               </el-tooltip>

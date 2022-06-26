@@ -99,7 +99,7 @@
                 v-else-if="item.field === 'eventStatus'"
                 size="small"
                 :type="getTagList(row.eventStatus)('type')"
-                >{{ getTagList(row.eventStatus)('name') || "未知" }}</el-tag
+                >{{ getTagList(row.eventStatus)("name") || "未知" }}</el-tag
               >
 
               <!-- 工单类型 -->
@@ -109,12 +109,12 @@
 
               <!-- 是否超期 -->
               <span v-else-if="item.field === 'overdueDayType'">{{
-                row.overdueDay > 0 ? '是' : '否'
+                0 > row.overdueDay ? "是" : "否"
               }}</span>
 
               <!-- 超期天数 -->
               <span v-else-if="item.field === 'overdueDay'">{{
-                row.overdueDay > 0 ? row.overdueDay : '-'
+                0 > row.overdueDay ? -row.overdueDay : "-"
               }}</span>
 
               <span v-else>{{ row[item.field] }}</span>

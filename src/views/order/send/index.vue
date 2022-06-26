@@ -99,11 +99,11 @@
             <Badge v-else status="success" text="处理中" />
           </span>
         </li>
-        <li v-if="info.overdueDay > 0" class="order-item">
+        <li v-if="0 > info.overdueDay" class="order-item">
           <label class="space">已超期:</label>
           <span class="value">
             <Tag :color="color">
-              {{info.overdueDay}}
+              {{Math.abs(info.overdueDay)}}
             </Tag>
           </span>
         </li>
