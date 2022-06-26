@@ -5,14 +5,5 @@ export const getCurrentMonthApi = (params) =>
   request({
     url: "/workOrder/header/agencyList",
     method: "get",
-    params,
+    params
   });
-
-// 关闭
-export const edit = (data) => {
-  return request({
-    url: "/workOrder/header/edit",
-    method: "post",
-    data,
-  });
-};

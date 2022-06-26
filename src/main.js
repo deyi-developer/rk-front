@@ -1,6 +1,10 @@
 import Vue from "vue";
 // import VueCompositionAPI from "@vue/composition-api";
 import Cookies from "js-cookie";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+import relativeTime from "dayjs/plugin/relativeTime";
+import weekday from "dayjs/plugin/weekday";
 
 import Element from "element-ui";
 import "./assets/styles/element-variables.scss";
@@ -58,6 +62,11 @@ import VXETable from "vxe-table";
 import "./assets/styles/vxe-var.scss";
 
 // import "vxe-table/lib/style.css";
+require("dayjs/locale/zh-cn");
+dayjs.locale("zh-cn");
+dayjs.extend(calendar);
+dayjs.extend(relativeTime);
+dayjs.extend(weekday);
 
 require("./assets/walden"); // echarts theme
 // require("./assets/westeros"); // echarts theme
@@ -78,6 +87,7 @@ Vue.prototype.selectDictLabels = selectDictLabels;
 Vue.prototype.download = download;
 Vue.prototype.handleTree = handleTree;
 
+Vue.prototype.dayjs = dayjs;
 // 全局组件挂载
 Vue.component("DictTag", DictTag);
 Vue.component("sex", sex);
