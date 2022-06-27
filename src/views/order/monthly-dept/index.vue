@@ -19,9 +19,8 @@
         </div>
         <div>
           <!-- clear filter -->
-          <el-button @click="clearFilter" type="primary" size="small">
-            清除所有过滤器
-          </el-button>
+          <el-button plain size="small" @click="clearFilter">重置筛选</el-button>
+
 
           <!-- 当前表格导出 -->
           <el-button
@@ -39,7 +38,7 @@
       <vxe-table
         show-footer
         align="center"
-        :footer-method="() => currentMonthList"
+        :footer-method="footerMethod"
         ref="filterTable"
         v-loading="loading"
         auto-resize
@@ -140,7 +139,6 @@ export default {
       columnist: COLUMN_LIST, // tableColum
       inputPlaceholder: INPUT_PLACEHOLDER, // 筛选提示文案
 
-      currentMonthList: [], // 当前月度列表总计
       duringMonth: new Date(), // 当前选择月份
       MonthList: [], // 当前月度列表
       loading: false, // 加载
@@ -179,10 +177,6 @@ export default {
       // 获取当前月度
       const {
         deptPlanDtoList = [],
-        totalBillThisMonth: billingThisMonth, // 本月实际开票总额
-        totalPlanBilling: planBillingMoney, //本月计划开票总额
-        totalPlanReceipts: planReceiptsMoney, // 本月计划收款总额
-        totalReceiptsThisMonth: receiptsThisMonth, // 本月实际收款总额
       } = await getCurrentMonthApi({
         oneDeptId: this.id,
         month: this.duringMonth.getMonth() + 1,
@@ -193,22 +187,35 @@ export default {
       // 当前月度列表
       this.MonthList = deptPlanDtoList;
 
-      // 有总计项的当前月度列表
-      this.currentMonthList = [
+      this.loading = false;
+    },
+
+    footerMethod({ data }){
+      let planBillingMoney = 0;
+      let billingThisMonth = 0;
+      let planReceiptsMoney = 0;
+      let receiptsThisMonth = 0;
+      data.forEach((item) => {
+        planBillingMoney += Number(item.planBillingMoney || 0)
+        billingThisMonth += Number(item.billingThisMonth || 0)
+        planReceiptsMoney += Number(item.planReceiptsMoney || 0)
+        receiptsThisMonth += Number(item.receiptsThisMonth || 0)
+      })
+      const billingThisPlanBillingMonth = ((billingThisMonth/planBillingMoney || 0)*100).toFixed(2)
+      const receiptsThisPlanReceiptsMoney = ((receiptsThisMonth/planReceiptsMoney || 0)*100).toFixed(2)
+      return [
         [
           "总计",
           "-",
           "-",
           thousandHandle(planBillingMoney),
           thousandHandle(billingThisMonth),
-          '-',
+          `${billingThisPlanBillingMonth == Infinity ? 100 : billingThisPlanBillingMonth}%`,
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
-          "-",
+          `${receiptsThisPlanReceiptsMoney == Infinity ? 100 : receiptsThisPlanReceiptsMoney}%`,
         ],
       ];
-
-      this.loading = false;
     },
 
     setId(id) {

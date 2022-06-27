@@ -100,10 +100,10 @@
           </span>
         </li>
         <li v-if="0 > info.overdueDay" class="order-item">
-          <label class="space">已超期:</label>
           <span class="value">
-            <Tag :color="color">
-              {{Math.abs(info.overdueDay)}}
+            <Tag color="red">
+              <label class="space">已超期:</label>
+              {{ Math.abs(info.overdueDay) }}天
             </Tag>
           </span>
         </li>

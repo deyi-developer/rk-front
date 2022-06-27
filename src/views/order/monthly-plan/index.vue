@@ -30,7 +30,7 @@
         ref="table1"
         show-footer
         height="500"
-        :footer-method="() => this.currentMonthList"
+        :footer-method="footerMethod"
         v-loading="loading"
         :data="MonthList"
         style="width: 100%"
@@ -62,7 +62,7 @@
                 item.prop === 'bilCompletionRate' ||
                 item.prop === 'colleCompletionRate'
               "
-              >{{ row[item.prop] | percent }}</span
+              >{{ (row[item.prop]*100).toFixed(2) }}%</span
             >
             <!-- 默认值 -->
             <span v-else>{{ row[item.prop] | currency }}</span>
@@ -100,7 +100,6 @@ export default {
       columnist: COLUMN_LIST, // 表格项
 
       MonthList: [], // 当前选择月度列表
-      currentMonthList: [], // 合计
       loading: false, // 加载
       duringMonth: new Date(), // 当前选择月份
       pickerOptions: {
@@ -122,10 +121,6 @@ export default {
       // 获取当前月度
       const {
         planDtoList = [],
-        totalBillThisMonth: billingThisMonth, // 当前月实际开票总额
-        totalPlanBilling: planBillingMoney, //当前月计划开票总额
-        totalPlanReceipts: planReceiptsMoney, // 当前月计划收款总额
-        totalReceiptsThisMonth: receiptsThisMonth, // 当前月实际收款总额
       } = await getCurrentMonthApi({
         month: this.duringMonth.getMonth() + 1,
         year: this.duringMonth.getFullYear(),
@@ -134,21 +129,34 @@ export default {
       // 当前月度列表
       this.MonthList = planDtoList;
 
-      // 有总计项的当前月度列表
-      this.currentMonthList = [
+      this.loading = false;
+    },
+
+    footerMethod({ data }){
+      let planBillingMoney = 0;
+      let billingThisMonth = 0;
+      let planReceiptsMoney = 0;
+      let receiptsThisMonth = 0;
+      data.forEach((item) => {
+        planBillingMoney += Number(item.planBillingMoney || 0)
+        billingThisMonth += Number(item.billingThisMonth || 0)
+        planReceiptsMoney += Number(item.planReceiptsMoney || 0)
+        receiptsThisMonth += Number(item.receiptsThisMonth || 0)
+      })
+      const billingThisPlanBillingMonth = ((billingThisMonth/planBillingMoney || 0)*100).toFixed(2)
+      const receiptsThisPlanReceiptsMoney = ((receiptsThisMonth/planReceiptsMoney || 0)*100).toFixed(2)
+      return [
         [
           "总计",
           "-",
           thousandHandle(planBillingMoney),
           thousandHandle(billingThisMonth),
-          "-",
+          `${billingThisPlanBillingMonth == Infinity ? 100 : billingThisPlanBillingMonth}%`,
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
-          "-",
+          `${receiptsThisPlanReceiptsMoney == Infinity ? 100 : receiptsThisPlanReceiptsMoney}%`,
         ],
       ];
-
-      this.loading = false;
     },
 
     // 导出

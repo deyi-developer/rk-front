@@ -6,9 +6,8 @@
         <span>工单列表</span>
 
         <div>
-          <el-button icon="el-icon-refresh" size="small" @click="reset">
-            重置筛选
-          </el-button>
+          <el-button plain size="small" @click="reset">重置筛选</el-button>
+
           <el-button
             type="primary"
             size="small"
