@@ -113,9 +113,6 @@ export default {
   padding: 10px 20px 0 10px;
   background-color: #f8f8f9;
   .quartering {
-    .el-tag--medium {
-      border-radius: 10px;
-    }
     .list-wrap {
       display: inline-block;
       width: 24.5%;
@@ -138,29 +135,16 @@ export default {
     }
   }
 
-  .flowClamp {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 250px;
-    display: inline-block;
-    margin-top: 4px;
-  }
-
-  .borderRad5 {
-    border-radius: 5px;
-  }
-
   /*滚动条整体样式,高宽分别对应横竖滚动条的尺寸*/
   .list-content::-webkit-scrollbar {
-    width: 6px;
+    width: 12px;
     height: 2px;
     scrollbar-arrow-color: #898989;
   }
   /*滚动条里面小方块*/
   .list-content::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 5px #f2f6fc;
+    -webkit-box-shadow: inset 0 0 12px #f2f6fc;
     background: rgba(0, 0, 0, 0.2);
     scrollbar-arrow-color: #898989;
   }

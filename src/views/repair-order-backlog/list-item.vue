@@ -2,20 +2,26 @@
 <template>
   <div class="list-item">
     <div class="risk-color" :class="riskClass"></div>
-    <el-link
-      class="close-btn"
-      :underline="false"
-      @click="$emit('close', dataSource, pid)"
-      ><i class="el-icon-close"></i
-    ></el-link>
+    <el-tooltip class="item" effect="dark" content="关闭" placement="top">
+      <el-link
+        class="close-btn"
+        :underline="false"
+        @click="$emit('close', dataSource, pid)"
+        ><i class="el-icon-close"></i
+      ></el-link>
+    </el-tooltip>
 
     <div class="item-line">
-      <span>工单编号: </span>
+      <span style="margin-right: 5px">
+        <el-tag type="warning" size="mini"
+          >{{ dataSource.eventTypeName }}
+        </el-tag>
+      </span>
       <el-link :underline="false" @click="$emit('gotoWorkOrder', dataSource)">{{
         dataSource.eventHeaderCode
       }}</el-link>
     </div>
-    <div class="item-line order-name">
+    <!-- <div class="item-line order-name">
       <span>工单名称: </span>
       <el-tooltip
         class="item"
@@ -25,7 +31,12 @@
       >
         <span style="cursor: pointer">{{ dataSource.eventTitle }}</span>
       </el-tooltip>
+    </div> -->
+    <div class="item-line">
+      <span style="font-weight: bold">涉及金额: </span>
+      <span style="font-weight: bold">{{ dataSource.eventAmount }}</span>
     </div>
+
     <div class="ellipsis project-code">
       <span>项目编码: </span>
       <span>{{ dataSource.projectCode }}</span>
@@ -46,16 +57,11 @@
         <span>责任人: </span>
         <span>{{ dataSource.handlerName || "无" }}</span>
       </div>
-
-      <div>
-        <span>涉及金额: </span>
-        <span style="font-weight: bold">{{ dataSource.eventAmount }}</span>
-      </div>
     </div>
 
     <div class="end-date">
       <span v-if="type === 'overdueWeekData'" class="risk-red end-date-content">
-        超期{{ Math.abs(dataSource.overdueDay) }}天<span>
+        已超期{{ Math.abs(dataSource.overdueDay) }}天<span>
           ({{ dataSource.headerEndDate }})</span
         ></span
       >
@@ -152,6 +158,7 @@ export default {
   // font-weight: 700;
   .item-line {
     line-height: 26px;
+    width: 100%;
   }
   .project-name,
   .project-code {
@@ -192,6 +199,7 @@ export default {
   position: absolute;
   right: 10px;
   top: 5px;
+  font-size: 14px;
 }
 
 .risk-red {

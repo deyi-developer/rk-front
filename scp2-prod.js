@@ -3,6 +3,7 @@ const ora = require("ora");
 const chalk = require("chalk"); //设置命令颜色的
 const spinner = ora(chalk.blue("正在部署到服务器...")); //显示加载
 
+// 旧生产环境
 spinner.start();
 scp.scp(
   "./dist/",
