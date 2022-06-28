@@ -2,7 +2,13 @@
 <template>
   <div class="list-item">
     <div class="risk-color" :class="riskClass"></div>
-    <el-tooltip class="item" effect="dark" content="关闭工单" placement="top">
+    <el-tooltip
+      v-if="checkRole(['risker'])"
+      class="item"
+      effect="dark"
+      content="关闭工单"
+      placement="top"
+    >
       <el-link
         class="close-btn"
         :underline="false"
@@ -93,6 +99,8 @@
 </template>
 
 <script>
+import { checkRole } from "@/utils/permission"; // 权限判断函数
+
 export default {
   data() {
     return {};
@@ -134,6 +142,7 @@ export default {
     }
   },
   methods: {
+    checkRole,
     fmtCalendar(t) {
       const { createTime, headerEndDate } = t;
       return (
