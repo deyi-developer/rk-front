@@ -67,7 +67,7 @@
           </span>
         </li>
         <li class="order-item">
-          <label class="space">截止日期:</label>
+          <label class="space"><i class="require-icon">*</i>截止日期:</label>
           <span class="value">
             <el-date-picker
               v-if="checkRole(['risker'])"
@@ -77,6 +77,7 @@
               filterable
               placeholder="选择日期"
               format="yyyy-MM-dd"
+              :clearable="false"
               value-format="yyyy-MM-dd"
             ></el-date-picker>
             <span v-else>
@@ -86,7 +87,7 @@
           </span>
         </li>
         <li class="order-item">
-          <label class="space">金额:</label>
+          <label class="space"><i class="require-icon">*</i>金额:</label>
           <span class="value">
             <el-input
               size="mini"
