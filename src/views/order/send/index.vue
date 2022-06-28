@@ -25,6 +25,14 @@
             @click="closeOrder"
             >关闭工单</el-button
           >
+          <el-button
+            :disabled="info.eventStatus == 1"
+            size="mini"
+            type="danger"
+            plain
+            @click="closeProject"
+            >关闭项目</el-button
+          >
         </span>
       </div>
       <ul class="order-info">
@@ -34,7 +42,7 @@
             () =>
               $router.push({
                 path: `/order/details/${info.eventHeaderId}`,
-                query: { projectCode: info.projectCode },
+                query: { projectCode: info.projectCode }
               })
           "
         >
@@ -303,7 +311,7 @@
 <script>
 import { formatDate, formatDateOf } from "@/utils";
 import { mapActions, mapGetters } from "vuex";
-import { detail, reply, replyList, update } from "./api";
+import { detail, reply, replyList, update, toggle } from "./api";
 import { handlerList } from "../project/api";
 import { edit } from "../order-list/api";
 import { debounce } from "lodash-es";
@@ -317,7 +325,7 @@ export default {
     editor,
     Badge,
     Tag,
-    Icon,
+    Icon
   },
   dicts: ["event_type", "event_urgency_level"],
 
@@ -338,8 +346,8 @@ export default {
       saveParams: {
         eventAmount: "", // 金额
         headerEndDate: "", // 截止日期
-        eventHeaderId: "", // 工单id
-      },
+        eventHeaderId: "" // 工单id
+      }
     };
   },
 
@@ -382,12 +390,12 @@ export default {
           break;
       }
       return type;
-    },
+    }
   },
 
   async created() {
     const {
-      query: { id },
+      query: { id }
     } = this.$route;
     if (id) {
       await this.getDetailInfo(id);
@@ -417,7 +425,7 @@ export default {
 
       this.getReplyList(id);
       const obj = Object.assign({}, this.$route, {
-        title: "工单：" + data.eventTitle,
+        title: "工单：" + data.eventTitle
       });
       this.$tab.updatePage(obj);
     },
@@ -425,9 +433,14 @@ export default {
     /** 保存 */
     save() {
       this.saveParams.eventHeaderId = this.info.eventHeaderId;
+      const { eventAmount, headerEndDate } = this.saveParams;
+      if (!eventAmount || !headerEndDate) {
+        return this.$modal.msgError("截止日期和金额不能为空！");
+      }
       edit(this.saveParams).then((res) => {
         if (res.code === 200) {
           this.$modal.msgSuccess(res.msg);
+          this.getDetailInfo(this.$route.query.id);
         } else {
           this.$modal.msgError(res.msg);
         }
@@ -447,7 +460,23 @@ export default {
         }
       });
     },
-
+    // 项目开关
+    closeProject() {
+      console.log(this.info);
+      this.$modal.confirm(`确定关闭项目吗？`).then(async () => {
+        const { projectCode } = this.info;
+        const { code, msg } = await await toggle({
+          openStatus: 0,
+          projectCode
+        });
+        if (code === 200) {
+          this.$modal.msgSuccess(msg);
+          this.getDetailInfo(this.$route.query.id);
+        } else {
+          this.$modal.msgError(msg);
+        }
+      });
+    },
     /** 回复 */
     async submit() {
       // 校验责任人
@@ -500,7 +529,7 @@ export default {
           const params = {
             eventHeaderId: item.eventHeaderId,
             eventLineId: item.eventLineId,
-            eventCompleteStutas: id,
+            eventCompleteStutas: id
           };
           const { code, msg } = await update(params);
           if (code === 200) {
@@ -521,8 +550,8 @@ export default {
       const { rows } = await handlerList(params);
       this.handlers = rows;
       this.handlerLoding = false;
-    }, 500),
-  },
+    }, 500)
+  }
 };
 </script>
 

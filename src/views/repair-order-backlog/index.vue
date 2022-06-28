@@ -108,7 +108,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .repair_order_backlog {
   padding: 10px 20px 0 10px;
   background-color: #f8f8f9;

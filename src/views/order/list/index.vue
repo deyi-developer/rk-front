@@ -128,14 +128,14 @@
             trigger: 'click',
             mode: 'cell',
             showStatus: true,
-            activeMethod: activeCellMethod,
+            activeMethod: activeCellMethod
           }"
           :column-config="{
-            width: 200,
+            width: 200
           }"
           :edit-rules="validRules"
           :filter-config="{
-            remote: true,
+            remote: true
           }"
           @scroll="scrollHandle"
           @edit-disabled="editDisabledEvent"
@@ -144,12 +144,20 @@
           :header-cell-class-name="headerCellClassName"
         >
           <vxe-column field="billNum" fixed="left" title="状态" width="50">
-            <template #default="{ row: { billNum = {}, alertList = '无', projectCode } }">
+            <template
+              #default="{
+                row: { billNum = {}, alertList = '无', projectCode }
+              }"
+            >
               <el-tooltip effect="dark" placement="right">
                 <div slot="content" v-html="alertList" />
                 <span
                   @click="() => navPrderList(projectCode, billNum)"
-                  :style="{ cursor: 'default', color: billNum.color || '', cursor: billNum.count ? 'pointer' : 'default' }"
+                  :style="{
+                    cursor: 'default',
+                    color: billNum.color || '',
+                    cursor: billNum.count ? 'pointer' : 'default'
+                  }"
                   >{{ billNum.count || "-" }}</span
                 >
               </el-tooltip>
@@ -308,7 +316,7 @@
                   style="font-size: 12px"
                   @click="
                     $router.push({
-                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=1`,
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=1`
                     })
                   "
                   type="primary"
@@ -322,7 +330,7 @@
               title="结算周期（月）"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
               :filter-multiple="false"
               :edit-render="{}"
@@ -371,7 +379,7 @@
                   style="font-size: 12px"
                   @click="
                     $router.push({
-                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`,
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`
                     })
                   "
                   type="primary"
@@ -405,7 +413,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -420,7 +428,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -435,7 +443,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -450,7 +458,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -465,7 +473,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -515,7 +523,7 @@
                   style="font-size: 12px"
                   @click="
                     $router.push({
-                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`,
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=2`
                     })
                   "
                   type="primary"
@@ -529,7 +537,7 @@
               title="发票账期（天）"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
               :filter-multiple="false"
               :edit-render="{}"
@@ -578,7 +586,7 @@
                   style="font-size: 12px"
                   @click="
                     $router.push({
-                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=3`,
+                      path: `/project/item/${row.id}?projectCode=${row.projectCode}&name=${row.projectName}&type=3`
                     })
                   "
                   type="primary"
@@ -612,7 +620,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -627,7 +635,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -642,7 +650,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -657,7 +665,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -672,7 +680,7 @@
               :filter-multiple="false"
               :filters="[
                 { label: '数据非空', value: 2 },
-                { label: '数据为空', value: 1 },
+                { label: '数据为空', value: 1 }
               ]"
             >
               <template #default="{ row }">{{
@@ -919,7 +927,7 @@
             </vxe-column>
           </vxe-colgroup>
 
-          <vxe-column
+          <!-- <vxe-column
             field="openStatus"
             class-name="bg-other"
             width="100"
@@ -934,15 +942,22 @@
                 @change="openStatusChange(row)"
               ></vxe-switch>
             </template>
-          </vxe-column>
+          </vxe-column> -->
 
           <vxe-column
             v-if="checkPermi(['order:list:save'])"
-            width="100"
+            width="120"
             title="操作"
             fixed="right"
           >
             <template #default="{ row }">
+              <vxe-switch
+                :disabled="!checkRole(['risker'])"
+                :open-value="1"
+                :close-value="0"
+                v-model="row.openStatus"
+                @change="openStatusChange(row)"
+              ></vxe-switch>
               <vxe-button
                 icon="fa fa-save"
                 type="text"
@@ -966,7 +981,7 @@
             'NextJump',
             'Sizes',
             'FullJump',
-            'Total',
+            'Total'
           ]"
         ></vxe-pager>
       </el-card>
@@ -1010,7 +1025,7 @@ import {
   initDataApi,
   toggle,
   rkPlanEdit,
-  reportdataExort, // 文件导出
+  reportdataExort // 文件导出
 } from "./api";
 import currency from "currency.js";
 
@@ -1023,7 +1038,7 @@ import {
   PROJECT_TYPEP,
   HEADER_CELL_CLASS_NAME,
   CONTEXT_CELL_CLASS_NAME,
-  FILTER_TITLE,
+  FILTER_TITLE
 } from "./constants";
 
 // 缓存过滤参数
@@ -1069,34 +1084,34 @@ export default {
       riskLevelFilter: [
         {
           label: "高风险",
-          value: "Red",
+          value: "Red"
         },
         {
           label: "中风险",
-          value: "Yellow",
+          value: "Yellow"
         },
         {
           label: "无风险",
-          value: "Green",
-        },
+          value: "Green"
+        }
       ],
       riskStatusFilter: [
         {
           label: "法务接管",
-          value: "lawsuit",
+          value: "lawsuit"
         },
         {
           label: "高风险",
-          value: "Red",
+          value: "Red"
         },
         {
           label: "中风险",
-          value: "Yellow",
+          value: "Yellow"
         },
         {
           label: "无风险",
-          value: "Green",
-        },
+          value: "Green"
+        }
       ],
       activeName: "first",
       tableLodaing: true,
@@ -1110,14 +1125,14 @@ export default {
         noRiskProjectNum: 0,
         noRiskProjectRate: 0,
         totalProjectNum: 827,
-        planEditEnable: false, // 计划是否可编辑
+        planEditEnable: false // 计划是否可编辑
       },
       //表头筛选项
       filterParams: {},
       page: {
         pageSize: 20,
         pageNum: 1,
-        total: 0,
+        total: 0
       },
       validRules: {
         // grossProfitRiskLevel: [
@@ -1127,18 +1142,18 @@ export default {
         projectChargePeriod: [{ required: true, message: "必须填写" }],
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
-        planReceiptsMoney: [{ required: true, message: "必须填写" }],
+        planReceiptsMoney: [{ required: true, message: "必须填写" }]
       },
       // 风控操作弹框对象
       riskOperation: {
-        date: new Date(),
+        date: new Date()
       },
       // 时间选择器设置
       pickerOptions: {
         disabledDate(time) {
           return time > new Date();
-        },
-      },
+        }
+      }
     };
   },
   async created() {
@@ -1153,7 +1168,7 @@ export default {
       console.log("qqqqq");
       // 进入的是项目清单, 过滤初始化
       if (path === "/order/list") this.initHandle("watch");
-    },
+    }
   },
   methods: {
     checkPermi,
@@ -1167,7 +1182,7 @@ export default {
       this.$nextTick(() => {
         const {
           query,
-          params: { projectType, oneDeptId }, // 状态， 部门id
+          params: { projectType, oneDeptId } // 状态， 部门id
         } = this.$route;
         const filter = query.filter || "[]";
 
@@ -1267,7 +1282,7 @@ export default {
       // 动态设置tab拦
       this.$tab.updatePage(
         Object.assign({}, this.$route, {
-          title: FILTER_TITLE(filterType, dep[0]),
+          title: FILTER_TITLE(filterType, dep[0])
         })
       );
 
@@ -1292,7 +1307,7 @@ export default {
         lock: true,
         text: "重算中...",
         spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)",
+        background: "rgba(0, 0, 0, 0.7)"
       });
 
       // 重算接口调用
@@ -1304,14 +1319,14 @@ export default {
 
       this.$message({
         message: msg,
-        type: "success",
+        type: "success"
       });
     },
     async otherButtom(command) {
       const res = await deleteCurrentMonth({
         command,
         month: this.riskOperation.date.getMonth() + 1,
-        year: this.riskOperation.date.getFullYear(),
+        year: this.riskOperation.date.getFullYear()
       });
       if (res.code == "200") {
         this.$modal.notifySuccess(res.msg);
@@ -1381,7 +1396,7 @@ export default {
           console.log(errMap);
           this.$notify({
             type: "warning",
-            message: "请检查数据是否填写完整！",
+            message: "请检查数据是否填写完整！"
           });
           return;
         }
@@ -1404,7 +1419,7 @@ export default {
     gotoDetail(row) {
       const { id, projectCode } = row;
       this.$router.push({
-        path: `/order/details/${id}?projectCode=${projectCode}`,
+        path: `/order/details/${id}?projectCode=${projectCode}`
       });
     },
     //提交全部
@@ -1417,7 +1432,7 @@ export default {
         if (errMap) {
           this.$notify({
             type: "warning",
-            message: "请检查数据是否填写完整！",
+            message: "请检查数据是否填写完整！"
           });
           return;
         }
@@ -1445,7 +1460,7 @@ export default {
           msg = msg + item.projectName + "，<br/>";
         }
         this.$confirm(msg + "是否放弃填写?", "提示", {
-          dangerouslyUseHTMLString: true,
+          dangerouslyUseHTMLString: true
         })
           .then(() => {
             this.fetchData({ pageNum, pageSize });
@@ -1471,7 +1486,7 @@ export default {
             "grossProfitRiskLevel",
             "invoicingRiskLevel",
             "receiveRiskLevel",
-            "riskStatus",
+            "riskStatus"
           ].includes(field)
         ) {
           return false;
@@ -1484,7 +1499,7 @@ export default {
             "projectChargePeriod",
             "projectInvoicePeriod",
             "planBillingMoney",
-            "planReceiptsMoney",
+            "planReceiptsMoney"
           ].includes(field)
         ) {
           return false;
@@ -1520,7 +1535,7 @@ export default {
       isX,
       bodyWidth,
       scrollLeft,
-      scrollWidth,
+      scrollWidth
     }) {
       if (isX) {
         if (scrollLeft >= firstLeft && scrollLeft <= firstLeft + firstWidth) {
@@ -1581,19 +1596,19 @@ export default {
       this.$router.push({
         path: `/order/list2/${projectType.value}/${
           this.filterParams?.oneDeptId || 0
-        }`,
+        }`
       });
     },
 
     // 跳转工单列表
     navPrderList(projectCode, billNum) {
-      if(!billNum.count) return;
+      if (!billNum.count) return;
       this.$router.push({
-        name: 'Order-list',
-        params: { projectCode },
-      })
+        name: "Order-list",
+        params: { projectCode }
+      });
     }
-  },
+  }
 };
 </script>
 

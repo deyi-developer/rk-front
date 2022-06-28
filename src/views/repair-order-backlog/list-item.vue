@@ -2,7 +2,7 @@
 <template>
   <div class="list-item">
     <div class="risk-color" :class="riskClass"></div>
-    <el-tooltip class="item" effect="dark" content="关闭" placement="top">
+    <el-tooltip class="item" effect="dark" content="关闭工单" placement="top">
       <el-link
         class="close-btn"
         :underline="false"
