@@ -16,6 +16,7 @@
               :pid="pid"
               @close="close"
               @gotoWorkOrder="gotoWorkOrder"
+              @gotoProject="gotoProject"
             />
           </transition-group>
         </div>

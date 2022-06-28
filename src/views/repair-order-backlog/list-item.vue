@@ -40,7 +40,7 @@
     <div class="ellipsis project-code">
       <span>项目编码: </span>
       <span>
-        <a class="project-link" @click="$emit('gotoWorkOrder', dataSource)">{{
+        <a class="project-link" @click="$emit('gotoProject', dataSource)">{{
           dataSource.projectCode
         }}</a></span
       >
