@@ -687,6 +687,7 @@ export default {
         font-size: 12px;
         ::v-deep img {
           max-width: 100%;
+          border: 2px solid #000;
         }
       }
     }
