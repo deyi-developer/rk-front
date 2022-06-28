@@ -103,6 +103,12 @@ export default {
         path: `/work/details/${eventHeaderId}`,
         query: { id: eventHeaderId }
       });
+    },
+    gotoProject(row) {
+      const { projectId, projectCode } = row;
+      this.$router.push({
+        path: `/order/details/${projectId}?projectCode=${projectCode}`
+      });
     }
   }
 };

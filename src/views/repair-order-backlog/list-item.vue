@@ -39,7 +39,11 @@
 
     <div class="ellipsis project-code">
       <span>项目编码: </span>
-      <span>{{ dataSource.projectCode }}</span>
+      <span>
+        <a class="project-link" @click="$emit('gotoWorkOrder', dataSource)">{{
+          dataSource.projectCode
+        }}</a></span
+      >
     </div>
     <div class="ellipsis project-name">
       <span>项目名称: </span>
@@ -164,6 +168,12 @@ export default {
   .project-code {
     font-size: 10px;
     color: #808695;
+  }
+  .project-link {
+    color: #808695;
+    &:hover {
+      color: #2d8cf0;
+    }
   }
   .order-name {
     margin-bottom: 5px;
