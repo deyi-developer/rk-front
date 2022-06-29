@@ -32,6 +32,7 @@
           v-loading="loading"
           @filter-change="filterChangeEvent"
           :filter-config="{ remote: true }"
+          :row-class-name="rowClsName"
         >
           <vxe-column
             v-for="item in columnList"
@@ -39,6 +40,7 @@
             :title="item.title"
             :type="item.type"
             :align="item.align"
+            :header-align="item.headerAlign"
             :width="item.width"
             :fixed="item.fixed"
             :filters="item.filters"
@@ -171,11 +173,11 @@ export default {
       tableData: [], // 列表数据
       totals: 0, // 总页数
       loading: false, // 表格加载
-      filterParams: {}, // 表头筛选条件
+      filterParams: {} // 表头筛选条件
     };
   },
   computed: {
-    ...mapGetters(["userRolse"]),
+    ...mapGetters(["userRolse"])
   },
   mounted() {
     // 异步加载筛选数据
@@ -198,13 +200,17 @@ export default {
     this.projectCodeFilter();
   },
   methods: {
+    rowClsName({ row }) {
+      const { overdueDay } = row;
+      return 0 > overdueDay ? "overdue" : "";
+    },
     // 获取工单列表数据
     async getList() {
       this.loading = true;
 
       const { total, rows } = await list({
         ...this.paging,
-        ...this.filterParams,
+        ...this.filterParams
       });
       this.loading = false;
       this.tableData = rows;
@@ -216,7 +222,7 @@ export default {
       const { params } = this.$route;
       if (params?.projectCode) {
         this.filterParams = {
-          projectCode: params.projectCode,
+          projectCode: params.projectCode
         };
 
         const xTable = this.$refs.xTable1;
@@ -300,7 +306,7 @@ export default {
     navWorkDetails({ eventHeaderId }) {
       this.$router.push({
         path: `/work/details/${eventHeaderId}`,
-        query: { id: eventHeaderId },
+        query: { id: eventHeaderId }
       });
     },
 
@@ -308,12 +314,13 @@ export default {
     navOrderDetails({ handlerId, projectCode }) {
       this.$router.push({
         path: `/order/details/${handlerId}`,
-        query: { projectCode: projectCode },
+        query: { projectCode: projectCode }
       });
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style lang="scss" scoped>
 .wrap {
   padding: 20px;
@@ -339,5 +346,11 @@ export default {
     margin: 0;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   }
+}
+</style>
+<style lang="scss">
+.overdue {
+  background: url("../../../assets/images/over-date.png") no-repeat 65px;
+  background-size: 70px;
 }
 </style>

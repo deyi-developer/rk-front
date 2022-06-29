@@ -10,17 +10,18 @@ export const COLUMN_LIST = [
     align: "center",
     fixed: "left",
     type: "seq",
-    field: "serialNumber",
+    field: "serialNumber"
   },
   {
     field: "eventHeaderCode",
     title: "工单编号",
-    align: "center",
+    headerAlign: "center",
+    align: "right",
     width: "240px",
     fixed: "left",
     filters: [{ data: "" }],
     customFiltering: true,
-    FilterPlaceholder: "请输入工单编号",
+    FilterPlaceholder: "请输入工单编号"
   },
   {
     align: "center",
@@ -29,7 +30,7 @@ export const COLUMN_LIST = [
     width: "180",
     filters: [{ data: "" }],
     customFiltering: true,
-    FilterPlaceholder: "输入项目编码",
+    FilterPlaceholder: "输入项目编码"
   },
   {
     align: "center",
@@ -38,19 +39,19 @@ export const COLUMN_LIST = [
     width: "180",
     filters: [{ data: "" }],
     customFiltering: true,
-    FilterPlaceholder: "输入项目名称",
+    FilterPlaceholder: "输入项目名称"
   },
   {
     align: "center",
     title: "父项目名称",
     field: "parentProjectName",
-    width: "180",
+    width: "180"
   },
   {
     align: "center",
     title: "父项目编码",
     field: "parentProjectCode",
-    width: "180",
+    width: "180"
   },
   {
     align: "center",
@@ -60,8 +61,8 @@ export const COLUMN_LIST = [
     filterMultiple: false,
     filters: [
       { label: "处理中", value: 0 },
-      { label: "已关闭", value: 1 },
-    ],
+      { label: "已关闭", value: 1 }
+    ]
   },
   {
     align: "center",
@@ -70,7 +71,7 @@ export const COLUMN_LIST = [
     width: "180",
     customFiltering: true,
     FilterPlaceholder: "输入工单名",
-    filters: [{ data: "" }],
+    filters: [{ data: "" }]
   },
   {
     align: "center",
@@ -78,43 +79,43 @@ export const COLUMN_LIST = [
     field: "eventType",
     width: "180",
     filterMultiple: false,
-    filters: [],
+    filters: []
   },
   {
     align: "center",
     title: "金额",
     field: "eventAmount",
-    width: "100",
+    width: "100"
   },
   {
     align: "center",
     title: "创建人",
     field: "createName",
-    width: "120",
+    width: "120"
   },
   {
     align: "center",
     title: "创建时间",
     field: "createTime",
-    width: "180",
+    width: "180"
   },
   {
     align: "center",
     title: "截止时间",
     field: "eventHandleDate",
-    width: "180",
+    width: "180"
   },
   {
     align: "center",
     title: "是否超期",
     field: "overdueDayType",
-    width: "100",
+    width: "100"
   },
   {
     align: "center",
     title: "超期天数",
     field: "overdueDay",
-    width: "100",
+    width: "100"
   },
   {
     align: "center",
@@ -123,33 +124,33 @@ export const COLUMN_LIST = [
     width: "120",
     filters: [{ data: "" }],
     FilterPlaceholder: "输入责任人",
-    customFiltering: true,
+    customFiltering: true
   },
   {
     align: "center",
     title: "责任人部门",
     field: "handlerDeptName",
-    width: "180",
+    width: "180"
   },
   {
     align: "center",
     title: "最后更新时间",
     field: "lastUpdateDate",
-    width: "180",
+    width: "180"
   },
   {
     align: "center",
     title: "待办人",
     field: "eventLineHandler",
-    width: "120",
-  },
+    width: "120"
+  }
 ];
 
 // 分页初始化数据
 export const RESET_PAGING = () => {
   return {
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 10
   };
 };
 
@@ -159,11 +160,11 @@ export const TAG_LIST = (type) => {
     ({
       0: {
         type: "success",
-        name: "处理中",
+        name: "处理中"
       },
       1: {
         type: "info",
-        name: "已关闭",
-      },
+        name: "已关闭"
+      }
     }[type][name]);
 };

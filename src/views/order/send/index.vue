@@ -1,5 +1,12 @@
 <template>
   <div class="work-order page-bg">
+    <img
+      class="over-date"
+      v-if="0 > info.overdueDay"
+      :src="overdateImg"
+      alt="已超期"
+      srcset=""
+    />
     <header>
       <div class="order-title">
         <span>{{ info.eventHeaderCode }}</span>
@@ -319,7 +326,9 @@ import { debounce } from "lodash-es";
 import editor from "@/components/Editor";
 import { Tag, Icon, Badge } from "view-design";
 import defaultImg from "@/assets/images/avatar.png";
+import overdateImg from "@/assets/images/over-date.png";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+
 export default {
   name: "Send",
   components: {
@@ -333,6 +342,7 @@ export default {
   data() {
     return {
       defaultImg,
+      overdateImg,
       errorAvatar: "this.src = '" + require("@/assets/images/avatar.png") + "'",
       info: {},
       replyList: [],
@@ -561,6 +571,14 @@ export default {
   font-size: 8px;
   color: red;
   margin-right: 2px;
+}
+.over-date {
+  width: 150px;
+  position: absolute;
+  top: 200px;
+  left: 1024px;
+  z-index: 999;
+  transform: rotate(-30deg);
 }
 .work-order {
   padding: 20px;
