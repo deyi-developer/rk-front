@@ -573,7 +573,7 @@ export default {
   margin-right: 2px;
 }
 .over-date {
-  width: 150px;
+  width: 240px;
   position: absolute;
   top: 200px;
   left: 1024px;

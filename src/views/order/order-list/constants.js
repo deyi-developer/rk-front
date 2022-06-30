@@ -16,7 +16,7 @@ export const COLUMN_LIST = [
     field: "eventHeaderCode",
     title: "工单编号",
     headerAlign: "center",
-    align: "right",
+    align: "center",
     width: "240px",
     fixed: "left",
     filters: [{ data: "" }],

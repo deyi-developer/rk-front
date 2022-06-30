@@ -32,7 +32,7 @@
           v-loading="loading"
           @filter-change="filterChangeEvent"
           :filter-config="{ remote: true }"
-          :row-class-name="rowClsName"
+          :cell-class-name="rowClsName"
         >
           <vxe-column
             v-for="item in columnList"
@@ -80,13 +80,20 @@
               }}</span>
 
               <!-- 工单编号 -->
-              <a
-                v-if="item.field === 'eventHeaderCode'"
-                style="color: #57a3f3"
-                @click="() => navWorkDetails(row)"
-                >{{ row[item.field] }}</a
-              >
 
+              <div
+                class="event-header-code"
+                v-if="item.field === 'eventHeaderCode'"
+              >
+                <!-- <img
+                  v-if="0 > row.overdueDay"
+                  style="width: 60px; transform: rotate(-30deg)"
+                  :src="require('@/assets/images/over-date.png')"
+                /> -->
+                <a style="color: #57a3f3" @click="() => navWorkDetails(row)">{{
+                  row[item.field]
+                }}</a>
+              </div>
               <!-- 项目编码 -->
               <a
                 v-else-if="item.field === 'projectCode'"
@@ -200,9 +207,10 @@ export default {
     this.projectCodeFilter();
   },
   methods: {
-    rowClsName({ row }) {
+    rowClsName({ row, column }) {
+      const { field } = column;
       const { overdueDay } = row;
-      return 0 > overdueDay ? "overdue" : "";
+      return 0 > overdueDay && field === "eventHeaderCode" ? "overdue" : "";
     },
     // 获取工单列表数据
     async getList() {
@@ -350,7 +358,17 @@ export default {
 </style>
 <style lang="scss">
 .overdue {
-  background: url("../../../assets/images/over-date.png") no-repeat 65px;
-  background-size: 70px;
+  position: relative;
+}
+.overdue ::before {
+  position: absolute;
+  content: " ";
+  left: -20px;
+  top: -40px;
+  width: 100%;
+  height: 100%;
+  background: url("../../../assets/images/over-date.png") no-repeat;
+  background-size: 60px;
+  transform: rotate(-30deg);
 }
 </style>
