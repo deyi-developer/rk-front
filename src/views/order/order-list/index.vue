@@ -81,19 +81,13 @@
 
               <!-- 工单编号 -->
 
-              <div
-                class="event-header-code"
+              <a
                 v-if="item.field === 'eventHeaderCode'"
+                style="color: #57a3f3"
+                @click="() => navWorkDetails(row)"
+                >{{ row[item.field] }}</a
               >
-                <!-- <img
-                  v-if="0 > row.overdueDay"
-                  style="width: 60px; transform: rotate(-30deg)"
-                  :src="require('@/assets/images/over-date.png')"
-                /> -->
-                <a style="color: #57a3f3" @click="() => navWorkDetails(row)">{{
-                  row[item.field]
-                }}</a>
-              </div>
+
               <!-- 项目编码 -->
               <a
                 v-else-if="item.field === 'projectCode'"

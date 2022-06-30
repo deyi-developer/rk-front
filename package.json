@@ -11,7 +11,6 @@
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
-    "scp": "npm run build:stage && node scp2-dev.js",
     "scp46": "npm run build:stage && node scp2-46.js",
     "scp41": "npm run build:prod && node scp2-41.js"
   },
