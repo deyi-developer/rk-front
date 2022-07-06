@@ -737,7 +737,8 @@
                 <vxe-input
                   :disabled="risk.planEditEnable"
                   v-model="row.planBillingMoney"
-                  type="number"
+                  type="text"
+                  @change="valiNum(row, 'planBillingMoney')"
                   placeholder="请输入数值"
                 ></vxe-input>
               </template>
@@ -797,7 +798,7 @@
                 <vxe-input
                   :disabled="risk.planEditEnable"
                   v-model="row.planReceiptsMoney"
-                  type="number"
+                  @change="valiNum(row, 'planReceiptsMoney')"
                   placeholder="请输入数值"
                 ></vxe-input>
               </template>
@@ -1176,7 +1177,10 @@ export default {
     currency({ cellValue }) {
       return currency(cellValue, { symbol: "", separator: "," }).format();
     },
-
+    valiNum(row, key) {
+      const val = currency(row[key]).value;
+      row[key] = val;
+    },
     // 初始化处理
     initHandle(type) {
       this.$nextTick(() => {
