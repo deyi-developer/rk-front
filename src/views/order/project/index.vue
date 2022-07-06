@@ -259,7 +259,7 @@
                   style="width: 60%"
                   step-strictly
                   v-model="updateData.projectChargePeriod"
-                  :disabled="!checkRole(['pm', 'boss'])"
+                  :disabled="!checkRole(['pm', 'boss']) || projectData.planEditEnable"
                 />
                 <span> 月</span>
               </el-form-item>
@@ -271,7 +271,7 @@
                   size="mini"
                   v-model="updateData.planBillingMoney"
                   :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                    !checkRole(['pm', 'boss']) || projectData.planEditEnable
                   "
                 ></el-input>
               </el-form-item>
@@ -290,7 +290,7 @@
                   }"
                   v-model="updateData.billRemark"
                   :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                    !checkRole(['pm', 'boss']) || projectData.planEditEnable
                   "
                 ></el-input>
               </el-form-item>
@@ -306,7 +306,7 @@
                   style="width: 60%"
                   step-strictly
                   v-model="updateData.projectInvoicePeriod"
-                  :disabled="!checkRole(['pm', 'boss'])"
+                  :disabled="!checkRole(['pm', 'boss']) || projectData.planEditEnable"
                 />
                 <span> 天</span>
               </el-form-item>
@@ -318,7 +318,7 @@
                   size="mini"
                   v-model="updateData.planReceiptsMoney"
                   :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                    !checkRole(['pm', 'boss']) || projectData.planEditEnable
                   "
                 />
               </el-form-item>
@@ -337,7 +337,7 @@
                   }"
                   v-model="updateData.receiptRemark"
                   :disabled="
-                    !checkRole(['pm', 'boss']) || !projectData.planEditEnable
+                    !checkRole(['pm', 'boss']) || projectData.planEditEnable
                   "
                 />
               </el-form-item>
