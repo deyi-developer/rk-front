@@ -104,7 +104,7 @@
             >
           </i-circle>
           <div class="circel-desc">
-            <p class="circel-desc-title">法务接管项目</p>
+            <p class="circel-desc-title">凤控接管项目</p>
             <div class="circel-desc-content">
               <countTo
                 :startVal="0"

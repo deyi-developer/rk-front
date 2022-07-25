@@ -1096,7 +1096,7 @@ export default {
       ],
       riskStatusFilter: [
         {
-          label: "法务接管",
+          label: "凤控接管项",
           value: "lawsuit",
         },
         {
@@ -1248,16 +1248,16 @@ export default {
     },
     // 下拉菜单事件触发
     handleCommand(command) {
-      this.dialogVisible = true;
-      this.dialogVisibleValue = command;
+      if (command == "initData") {
+        this.initData();
+      } else {
+        this.dialogVisible = true;
+        this.dialogVisibleValue = command;
+      }
     },
     confirm() {
       this.dialogVisible = false;
-      if (this.dialogVisibleValue == "initData") {
-        this.initData();
-      } else {
-        this.otherButtom(this.dialogVisibleValue);
-      }
+      this.otherButtom(this.dialogVisibleValue);
     },
     // 处理初始化过滤条件
     handleFilter(filterData, projectType, oneDeptId) {
@@ -1643,7 +1643,7 @@ export default {
     }
   }
 
-  // 法务接管
+  // 凤控接管项
   .cell-lawsuit {
     background-color: #fef0f0 !important;
     a {
