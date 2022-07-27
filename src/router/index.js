@@ -240,6 +240,20 @@ export const dynamicRoutes = [
       },
     ],
   },
+  {
+    path: "/order",
+    component: Layout,
+    hidden: true,
+    permissions: ["risk:detail:lookup"],
+    children: [
+      {
+        path: "item/:id",
+        component: () => import("@/views/order/backlog-list"),
+        name: "BacklogList",
+        meta: { title: "", activeMenu: "/order/backlog-list" },
+      },
+    ],
+  },
 ];
 
 export default new Router({

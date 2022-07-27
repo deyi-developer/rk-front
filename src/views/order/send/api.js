@@ -45,3 +45,12 @@ export function toggle(data) {
     data
   });
 }
+
+// 新增提醒事项
+export const workOrderDetail = (params) => {
+  return request({
+    url: `/workOrder/note/add`,
+    method: "post",
+    data: params
+  });
+};
