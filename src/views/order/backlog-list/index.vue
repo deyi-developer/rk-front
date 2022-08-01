@@ -37,9 +37,9 @@ export default {
     };
   },
   async created() {
+    // 获取列表数据
     const { rows } = await getNoteList();
     this.noteData = rows;
-    console.log(this.noteData);
   },
   methods: {
     async deleteApi() {
@@ -47,7 +47,6 @@ export default {
         return this.$modal.msgError("请至少选择一条数据");
       }
       const { code, msg = '操作错误' } = await editNotes(this.checkedCities.join(","));
-      console.log(msg);
       if (code === 200) {
         this.checkedCities.forEach((element) => {
           this.noteData.splice(
@@ -57,7 +56,9 @@ export default {
             1
           );
         });
+        // 清空选中列表
         this.checkedCities = []
+        return true
       }
       return this.$modal.msgSuccess(msg);
     },
