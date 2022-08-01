@@ -30,6 +30,7 @@
             type="primary"
             plain
             @click="dialogVisible = true"
+            v-if="checkRole(['risker'])"
             >添加提醒事项</el-button
           >
           <el-button
