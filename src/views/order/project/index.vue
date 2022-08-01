@@ -18,7 +18,7 @@
         <el-button v-hasPermi="['risk:detail:save']" type="text" @click="save">
           <i class="el-icon-edit"></i>保存
         </el-button>
-        <el-button v-hasPermi="['workOrder:order:list']" type="text" @click="drawer = true">
+        <el-button v-hasPermi="['workOrder:order:list']" type="text" @click="getOrderList">
           相关工单列表
         </el-button>
         <el-button
@@ -730,6 +730,16 @@ export default {
         this.$modal.notifySuccess(res.msg);
       }
     },
+
+    // 相关工单
+    getOrderList(){
+      // 打开右侧弹框
+      this.drawer = true
+      // 无数据给提示
+      if(this.data.length===0){
+        this.$modal.msgError("无数据");
+      }
+    }
   },
 };
 </script>
