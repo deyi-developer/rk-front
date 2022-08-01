@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-  <div class="list-item">
-    <div class="risk-color" :class="riskClass"></div>
+  <div class="list-item" @click="$emit('gotoProject', dataSource)">
+    <!-- <div class="risk-color" :class="riskClass"></div> -->
     <div class="item-line">
       <span style="margin-right: 5px">
         <el-tag type="warning" size="mini"
@@ -17,10 +17,10 @@
       <span style="font-weight: bold">{{ dataSource.eventAmount }}</span>
     </div>
 
-    <div class="ellipsis project-code">
+    <div class=" project-code">
       <span>项目编码: </span>
       <span>
-        <a class="project-link" @click="$emit('gotoProject', dataSource)">{{
+        <a class="project-link">{{
           dataSource.projectCode
         }}</a></span
       >
@@ -132,14 +132,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .list-item {
+  left: auto;
+  cursor: pointer;
   position: relative;
   width: 95%;
   border-radius: 5px;
-  padding: 10px 20px;
-  margin: 0px 0px 12px 5px;
+  padding: 10px 20px 10px 10px;
+  margin: 3px 0px 12px 5px;
   background-color: #fff;
-  box-shadow: 0 0 8px 0 rgb(232 237 250 / 60%),
-    0 2px 4px 0 rgb(232 237 250 / 50%);
+  box-shadow: 0 0 8px 0 #ccc,
+    0 2px 4px 0 #ccc;
   font-size: 14px;
   color: #333;
   // font-weight: 700;
@@ -154,9 +156,9 @@ export default {
   }
   .project-link {
     color: #808695;
-    &:hover {
-      color: #2d8cf0;
-    }
+    // &:hover {
+    //   color: #2d8cf0;
+    // }
   }
   .order-name {
     margin-bottom: 5px;

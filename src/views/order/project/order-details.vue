@@ -27,6 +27,14 @@
           <el-button
             :disabled="info.eventStatus == 1"
             size="mini"
+            type="primary"
+            plain
+            @click="dialogVisible = true"
+            >添加提醒事项</el-button
+          >
+          <el-button
+            :disabled="info.eventStatus == 1"
+            size="mini"
             type="danger"
             plain
             @click="closeOrder"
@@ -315,14 +323,102 @@
         </li>
       </ul>
     </div>
-
+    <!-- 添加提醒弹框 -->
+    <el-dialog
+      title="提示"
+      :close-on-click-modal="false"
+      :modal="false"
+      :visible.sync="dialogVisible"
+      :destroy-on-close="true"
+      width="30%"
+    >
+      <ul class="ul-type">
+        <li>
+          <label class="space"><i class="require-icon">*</i>工单编号标题:</label>
+          <span class="value value-span">
+            <el-input
+              size="mini"
+              :disabled="true"
+              v-model="addRemindParams.orderCode"
+            />
+          </span>
+        </li>
+        <li>
+          <label class="space"><i class="require-icon">*</i>项目编号标题:</label>
+          <span class="value value-span">
+            <el-input
+              size="mini"
+              :disabled="true"
+              v-model="addRemindParams.projectCode"
+            />
+          </span>
+        </li>
+        <li>
+          <label class="space"><i class="require-icon">*</i>截止时间:</label>
+          <span class="value value-span">
+          <el-date-picker
+            v-model="addRemindParams.headerEndDate"
+            style="width: 100%"
+            size="mini"
+            type="date"
+            filterable
+            placeholder="选择日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+          ></el-date-picker>
+          </span>
+        </li>
+        <li>
+          <label class="space"><i class="require-icon">*</i>创建人:</label>
+          <span class="value value-span">
+          <el-select
+            v-model="addRemindParams.createById"
+            style="width: 100%;"
+            size="mini"
+            filterable
+            placeholder="请选择工单责任人"
+            :filter-method="getHandlers"
+            :loading="handlerLoding"
+            clearable
+          >
+            <el-option
+              v-for="item in handlers"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.userId"
+            >
+              <span style="float: left">{{ item.nickName }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{
+                item.userId
+              }}</span>
+            </el-option>
+          </el-select>
+          </span>
+        </li>
+        <li>
+          <label class="space" style="vertical-align: top"><i class="require-icon">*</i>提醒事项:</label>
+          <span class="value value-span">
+            <el-input
+              type="textarea"
+              size="mini"
+              v-model="addRemindParams.noteContext"
+            />
+          </span>
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addRemind">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { formatDate, formatDateOf } from "@/utils";
 import { mapActions, mapGetters } from "vuex";
 import { detail, reply, replyList, update, toggle } from "../send/api";
-import { handlerList } from "./api";
+import { workOrderDetail } from '../send/api'
+import { handlerList } from "../project/api";
 import { edit } from "../order-list/api";
 import { debounce } from "lodash-es";
 import editor from "@/components/Editor";
@@ -360,6 +456,14 @@ export default {
         eventAmount: "", // 金额
         headerEndDate: "", // 截止日期
         eventHeaderId: "" // 工单id
+      },
+      dialogVisible: false,
+      addRemindParams: {
+        headerEndDate: "",
+        orderCode: "",
+        projectCode: "",
+        headerEndDate:"",
+        createById:''
       }
     };
   },
@@ -440,12 +544,15 @@ export default {
       // 金额和截止日期
       this.saveParams.eventAmount = data.eventAmount;
       this.saveParams.headerEndDate = data.headerEndDate;
-
+      // 提醒弹框的 截止日期，工单和项目编号
+      this.addRemindParams.headerEndDate = data.headerEndDate
+      this.addRemindParams.orderCode = data.eventHeaderCode
+      this.addRemindParams.projectCode = data.projectCode
       this.getReplyList(id);
-      // const obj = Object.assign({}, this.$route, {
-      //   title: "工单：" + data.eventTitle
-      // });
-      // this.$tab.updatePage(obj);
+      const obj = Object.assign({}, this.$route, {
+        title: "工单：" + data.eventTitle
+      });
+      this.$tab.updatePage(obj);
     },
 
     /** 保存 */
@@ -568,7 +675,47 @@ export default {
       const { rows } = await handlerList(params);
       this.handlers = rows;
       this.handlerLoding = false;
-    }, 500)
+    }, 500),
+
+    // 校验提醒弹框字段
+    getRulesAddRemindParams(data){
+      console.log(data)
+      if(!data.headerEndDate||!data.headerEndDate.trim()){
+        this.$modal.msgError('截止时间不能为空');
+        return false
+      }
+      if(!data.createById){
+        this.$modal.msgError('创建人不能为空');
+        return false
+      }
+      if(!data.noteContext||!data.noteContext.trim()){
+        this.$modal.msgError('提醒事项不能为空');
+        return false
+      }
+      return true
+    },
+
+    // 添加提醒事项
+    async addRemind () {
+      
+      // 如果校验不通过，则弹框提示，并且不关闭新增弹框
+      if(!this.getRulesAddRemindParams(this.addRemindParams)){
+        return true
+      }
+      const { code, msg } = await workOrderDetail(this.addRemindParams)
+      if(code === 200){
+        this.$modal.msgSuccess(msg);
+        this.dialogVisible = false
+        // 隐藏弹框之后清空创建人和提醒事项并且还原截止日期
+        console.log(this.info.headerEndDate)
+        this.addRemindParams = {
+          ...this.addRemindParams,
+          noteContext: '',
+          createById: '',
+          headerEndDate: this.info.headerEndDate
+        }
+      }
+    }
   }
 };
 </script>
@@ -730,6 +877,22 @@ export default {
   }
   .triangle-down {
     border-top: 8px solid #000;
+  }
+}
+.value-span {
+  display: inline-block;
+  margin-left: 5px;
+  width:60%
+}
+.ul-type {
+  list-style-type: none;
+  >li {
+    margin-bottom: 10px;
+    >label{
+      width: 130px;
+      display: inline-block;
+      text-align: right;
+    }
   }
 }
 </style>

@@ -480,16 +480,16 @@
         type="overdueWeekData"
         @gotoProject="innerDrawer = true;eventHeaderId=itemElement.eventHeaderId"
       />
-        <el-drawer
-          title="工单详情"
-          size="50%"
-          :destroy-on-close='true'
-          :append-to-body="true"
-          :before-close="handleClose"
-          :visible.sync="innerDrawer"
-        >
-          <orderDetails :id="eventHeaderId"></orderDetails>
-        </el-drawer>
+      <el-drawer
+        title="工单详情"
+        size="50%"
+        :destroy-on-close='true'
+        :append-to-body="true"
+        :before-close="handleClose"
+        :visible.sync="innerDrawer"
+      >
+        <orderDetails :id="eventHeaderId"></orderDetails>
+      </el-drawer>
     </el-drawer>
   </div>
 </template>
@@ -843,7 +843,8 @@ let form = ref({
   }
   .el-drawer__wrapper{
     width: 20%;
-    left: auto
+    left: auto;
+    border-left: 2px solid #E4E7ED
   }
 }
 </style>
