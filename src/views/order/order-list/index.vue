@@ -56,7 +56,8 @@
                   item.field === 'projectCode' ||
                   item.field === 'projectName' ||
                   item.field === 'eventTitle' ||
-                  item.field === 'handlerName'
+                  item.field === 'handlerName' ||
+                  item.field === 'oneDeptName'
                 "
               >
                 <vxe-input

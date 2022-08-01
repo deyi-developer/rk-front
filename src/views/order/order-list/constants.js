@@ -55,6 +55,15 @@ export const COLUMN_LIST = [
   },
   {
     align: "center",
+    title: "一级部门",
+    field: "oneDeptName",
+    width: "180",
+    filters: [{ data: "" }],
+    customFiltering: true,
+    FilterPlaceholder: "输入一级部门"
+  },
+  {
+    align: "center",
     title: "状态",
     field: "eventStatus",
     width: "100",

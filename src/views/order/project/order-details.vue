@@ -53,16 +53,17 @@
       <ul class="order-info">
         <li
           class="order-item"
-          @click="
+        >
+          <!-- @click="
             () =>
               $router.push({
                 path: `/order/details/${info.eventHeaderId}`,
                 query: { projectCode: info.projectCode }
               })
-          "
-        >
+          " -->
           <label class="space">项目编码:</label>
-          <span class="value projectCode">
+          <span class="value"> 
+            <!-- projectCode -->
             {{ info.projectCode }}
           </span>
         </li>
@@ -325,6 +326,8 @@
     <!-- 添加提醒弹框 -->
     <el-dialog
       title="提示"
+      :close-on-click-modal="false"
+      :modal="false"
       :visible.sync="dialogVisible"
       :destroy-on-close="true"
       width="30%"
@@ -413,7 +416,8 @@
 <script>
 import { formatDate, formatDateOf } from "@/utils";
 import { mapActions, mapGetters } from "vuex";
-import { detail, reply, replyList, update, toggle, workOrderDetail } from "./api";
+import { detail, reply, replyList, update, toggle } from "../send/api";
+import { workOrderDetail } from '../send/api'
 import { handlerList } from "../project/api";
 import { edit } from "../order-list/api";
 import { debounce } from "lodash-es";
@@ -432,7 +436,7 @@ export default {
     Icon
   },
   dicts: ["event_type", "event_urgency_level"],
-
+  props: ['id'],
   data() {
     return {
       defaultImg,
@@ -508,8 +512,8 @@ export default {
 
   async created() {
     const {
-      query: { id }
-    } = this.$route;
+      id
+    } = this;
     if (id) {
       await this.getDetailInfo(id);
 
@@ -529,13 +533,17 @@ export default {
     /** 获取详情数据 */
     async getDetailInfo(id) {
       const { data } = await detail({ eventHeaderId: id });
+      if(!data){
+        return this.$message({
+          message: '查不到此工单数据'
+        });
+      }
       this.info = data;
       this.info.eventHandler = this.usersInfo.userId; // 默认自己能搞定不转接
       this.info.forwardFlag = 0;
       // 金额和截止日期
       this.saveParams.eventAmount = data.eventAmount;
       this.saveParams.headerEndDate = data.headerEndDate;
-      console.log(data)
       // 提醒弹框的 截止日期，工单和项目编号
       this.addRemindParams.headerEndDate = data.headerEndDate
       this.addRemindParams.orderCode = data.eventHeaderCode
@@ -557,7 +565,7 @@ export default {
       edit(this.saveParams).then((res) => {
         if (res.code === 200) {
           this.$modal.msgSuccess(res.msg);
-          this.getDetailInfo(this.$route.query.id);
+          this.getDetailInfo(this.id);
         } else {
           this.$modal.msgError(res.msg);
         }
@@ -570,7 +578,7 @@ export default {
         const { code, msg } = await edit({ eventHeaderId, eventStatus: 1 });
         if (code === 200) {
           this.$modal.msgSuccess(msg);
-          this.getDetailInfo(this.$route.query.id);
+          this.getDetailInfo(this.id);
           // this.getList()
         } else {
           this.$modal.msgError(msg);
@@ -588,7 +596,7 @@ export default {
         });
         if (code === 200) {
           this.$modal.msgSuccess(msg);
-          this.getDetailInfo(this.$route.query.id);
+          this.getDetailInfo(this.id);
         } else {
           this.$modal.msgError(msg);
         }
@@ -616,7 +624,7 @@ export default {
       const { code, msg } = await reply(this.info);
       if (code === 200) {
         this.$modal.msgSuccess(msg);
-        this.getReplyList(this.$route.query.id);
+        this.getReplyList(this.id);
       } else {
         this.$modal.msgError(msg);
       }
@@ -651,7 +659,7 @@ export default {
           const { code, msg } = await update(params);
           if (code === 200) {
             this.$modal.msgSuccess(msg);
-            this.getReplyList(this.$route.query.id);
+            this.getReplyList(this.id);
           } else {
             this.$modal.msgError(msg);
           }

@@ -18,6 +18,9 @@
         <el-button v-hasPermi="['risk:detail:save']" type="text" @click="save">
           <i class="el-icon-edit"></i>保存
         </el-button>
+        <el-button v-hasPermi="['workOrder:order:list']" type="text" @click="drawer = true">
+          相关工单列表
+        </el-button>
         <el-button
           v-hasPermi="['workOrder:order:list']"
           style="padding: 3px 0"
@@ -37,7 +40,7 @@
           @click="sendOrder"
           >发起工单</el-button
         >
-        <el-tooltip
+        <!-- <el-tooltip
           v-if="checkRole(['risker'])"
           effect="dark"
           content="风控永久关闭"
@@ -50,7 +53,19 @@
             v-model="projectData.openStatus"
             @change="openStatusChange(projectData)"
           />
-        </el-tooltip>
+        </el-tooltip> -->
+        <!-- 计划是否可编辑 -->
+        <el-button
+          style="margin: 0 10px"
+          :disabled="!checkRole(['risker'])"
+          plain
+          size="small"
+          :type="projectData.openStatus ? 'success' : 'warning'"
+          @click="checkoutPlanEdit(projectData)"
+        >
+          {{ projectData.openStatus ? "风控永久开启" : "风控永久关闭" }}
+        </el-button>
+
       </div>
     </header>
     <div class="content">
@@ -447,6 +462,35 @@
       :form="workOrderform"
       :dialogVisible.sync="dialogVisible"
     ></work-order-dialog>
+
+    <!-- 相关工单列表侧边栏 -->
+    <el-drawer
+      title="相关工单列表"
+      :visible.sync="drawer"
+      size="100%"
+      v-loading="true"
+      :modal='false'
+      :wrapperClosable='false'
+      :modal-append-to-body='true'
+    >
+      <list-item
+        v-for="itemElement of data"
+        :key="itemElement.eventHeaderId"
+        :dataSource="itemElement"
+        type="overdueWeekData"
+        @gotoProject="innerDrawer = true;eventHeaderId=itemElement.eventHeaderId"
+      />
+      <el-drawer
+        title="工单详情"
+        size="50%"
+        :destroy-on-close='true'
+        :append-to-body="true"
+        :before-close="handleClose"
+        :visible.sync="innerDrawer"
+      >
+        <orderDetails :id="eventHeaderId"></orderDetails>
+      </el-drawer>
+    </el-drawer>
   </div>
 </template>
 
@@ -459,6 +503,8 @@ import filterForm from "../list/filterForm";
 import { debounce } from "lodash-es";
 import workOrderDialog from "../components/work-order-dialog";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+import ListItem from './list-item.vue'; // 引入工单待办页面组件
+import orderDetails from './order-details'; // 引入工单待办页面组件
 export default {
   name: "Details",
   dicts: ["event_type", "event_urgency_level", "risk_level", "risk_status"],
@@ -467,6 +513,8 @@ export default {
     workOrderDialog,
     ChartsGroup,
     TableDesc,
+    ListItem,
+    orderDetails
   },
   data() {
     /** 项目结算周期 */
@@ -539,6 +587,11 @@ export default {
         ],
       },
       dialogVisible: false,
+      drawer: false,
+      innerDrawer: false,
+      eventHeaderId: '',
+      data:[
+      ]
     };
   },
 
@@ -618,6 +671,7 @@ export default {
       });
       this.$tab.updatePage(obj);
       this.projectData = data;
+      this.data = data.progressOrderList || []
       this.setUpdata(data);
       this.$refs["form"].validate(); // 请求完数据后即做一次验证
     },
@@ -645,6 +699,11 @@ export default {
       });
     },
 
+    /** 相关工单列表 */
+    handleClose(done) {
+      done();
+    },
+
     /** 设置回显数据 */
     setUpdata(data) {
       Object.keys(data).forEach((key) => {
@@ -660,9 +719,17 @@ export default {
     },
 
     // 项目开关
-    openStatusChange: debounce(async function ({ openStatus, projectCode }) {
-      await toggle({ openStatus, projectCode });
-    }, 500),
+    // openStatusChange: debounce(async function ({ openStatus, projectCode }) {
+    //   await toggle({ openStatus, projectCode });
+    // }, 500),
+    // 切换计划编辑状态
+    async checkoutPlanEdit({ openStatus, projectCode}) {
+      this.projectData.openStatus = openStatus === 0 ? 1 : 0;
+      const res = await toggle({ openStatus: openStatus === 0 ? 1 : 0, projectCode });
+      if (res.code == "200") {
+        this.$modal.notifySuccess(res.msg);
+      }
+    },
   },
 };
 </script>
@@ -773,6 +840,11 @@ let form = ref({
     width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .el-drawer__wrapper{
+    width: 20%;
+    left: auto;
+    border-left: 2px solid #E4E7ED
   }
 }
 </style>
