@@ -1,17 +1,21 @@
 <!--  -->
 <template>
-  <div class="list-item" @click="$emit('gotoProject', dataSource)">
+  <div class="list-item" @click="$emit('gotoProject', dataSource)" :style="{backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff'}">
+    <!-- 中划线 -->
+    <div v-if="dataSource.noteStatus === 1" class="wire"></div>
     <div class="label-list-item">
-      <el-checkbox :label="dataSource.noteId" :key="dataSource.noteId"
+      <el-checkbox :style="{opacity: dataSource.noteStatus === 1 ? '0' : '1'}" :label="dataSource.noteId" :key="dataSource.noteId"
         ><a :style="{ display: 'none' }">占位</a></el-checkbox
       >
-      <el-collapse-item :name="dataSource.noteId">
+      <el-collapse-item :name="dataSource.noteId" :style="{backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff'}">
         <template slot="title">
-          <div class="ellipsis title-font16" :style="{ marginRight: '50px' }">
+          <div class="ellipsis title-font16 title-margin">
             工单编号标题: {{ dataSource.orderCode || "无" }}
           </div>
-          <div v-show="getDay(dataSource.headerEndDate) >= 1" class="end-date">
+          <!-- 超期一天或者未完成则显示 -->
+          <div v-show="getDay(dataSource.headerEndDate) >= 1 && dataSource.noteStatus === 0" class="end-date">
             <span class="risk-red end-date-content">
+              <!-- :style="{backgroundColor: dataSource.noteStatus === 1 ? '#F56C6C' : '#ed4014'}" -->
               已超过截止日期{{ getDay(dataSource.headerEndDate) }}天 {{ dataSource.headerEndDate }}
             </span>
           </div>
@@ -76,19 +80,28 @@ export default {
   border-radius: 5px;
   padding: 5px 20px 5px 10px;
   margin: 3px 10px 12px 5px;
-  background-color: #fff;
+  // background-color: #fff;
   box-shadow: 0 0 2px 0 #dcdfe6, 0 2px 2px 0 #dcdfe6;
   font-size: 14px;
   color: #333;
   // font-weight: 700;
+  .wire{
+    width: 95%;
+    height: 2px;
+    background-color: #ccc;
+    position: absolute;
+    top: 30px;
+  }
   ::v-deep .el-collapse-item__header {
     border: none !important;
+    background-color: transparent;
   }
   ::v-deep .el-collapse-item__content {
     padding: 0 !important;
   }
   ::v-deep .el-collapse-item__wrap {
     border: none !important;
+    background-color: transparent;
   }
   .item-line {
     line-height: 26px;
@@ -188,6 +201,11 @@ export default {
   scrollbar-arrow-color: #898989;
 }
 
+.title-margin{
+  margin-right: 50px;
+  width: 300px;
+}
+
 // 提醒事项换行
 .detail {
   white-space: break-spaces;
@@ -198,5 +216,23 @@ export default {
   -webkit-box-shadow: inset 0 0 12px #f2f6fc;
   background: rgba(0, 0, 0, 0.2);
   scrollbar-arrow-color: #898989;
+}
+.transition-box {
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #409EFF;
+  text-align: center;
+  color: #fff;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

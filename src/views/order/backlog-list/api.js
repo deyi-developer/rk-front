@@ -1,9 +1,9 @@
 import request from "@/utils/request";
 
 // 查询参数列表
-export function getNoteList() {
+export function getNoteList(status) {
   return request({
-    url: "/workOrder/note/list?noteStatus=0",
+    url: `/workOrder/note/list?noteStatus=${status}`,
     method: "get",
   });
 }
