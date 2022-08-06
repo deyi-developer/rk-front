@@ -169,7 +169,8 @@ export default {
         this.addRemindParams = {
           ...this.addRemindParams,
           noteContext: '',
-          createById: '',
+          orderCode: this.info.eventHeaderCode,
+          projectCode: this.info.projectCode,
           headerEndDate: this.info.headerEndDate
         }
       }

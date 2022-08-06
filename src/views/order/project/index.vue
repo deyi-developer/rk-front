@@ -496,7 +496,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { projectDetails, projectUpdate, toggle } from "./api";
+import { projectDetails, projectUpdate, toggle, projectFindOrderList } from "./api";
 import ChartsGroup from "../../dashboard/ChartsGroup";
 import TableDesc from "../../dashboard/TableDesc.vue";
 import filterForm from "../list/filterForm";
@@ -666,12 +666,13 @@ export default {
     async getData(projectCode) {
       const vm = this;
       const { data } = await projectDetails(projectCode);
+      const { rows } = await projectFindOrderList(projectCode)
       const obj = Object.assign({}, vm.$route, {
         title: "项目:" + data.projectCode,
       });
       this.$tab.updatePage(obj);
       this.projectData = data;
-      this.data = data.progressOrderList || []
+      this.data = rows || []
       this.setUpdata(data);
       this.$refs["form"].validate(); // 请求完数据后即做一次验证
     },
@@ -857,4 +858,5 @@ let form = ref({
     border-left: 2px solid #E4E7ED
   }
 }
+
 </style>

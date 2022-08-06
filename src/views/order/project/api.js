@@ -35,6 +35,15 @@ export const projectDetails = (projectCode) => {
   });
 };
 
+// 相关工单列表
+
+export const projectFindOrderList = (projectCode) => {
+  return request({
+    url: `/projectDetail/findOrderListByProjectCode/${projectCode}`,
+    method: "get"
+  });
+};
+
 // 项目保存
 export const projectUpdate = (data) => {
   return request({
