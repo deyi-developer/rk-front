@@ -49,6 +49,19 @@
           <TabPane label="其他指标" name="fifth"></TabPane>
           <template #extra>
             <el-button plain size="small" @click="reset">重置筛选</el-button>
+
+            <el-dropdown @command="checkIncludeClose">
+              <el-button size="small" type="primary" style="margin-left: 10px"
+                >是否包含已关闭项目<i
+                  class="el-icon-arrow-down el-icon--right"
+                ></i
+              ></el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :style="{color: filterParams.includeClose === 1 ? '#409EFF' : ''}" :command="1">是</el-dropdown-item>
+                <el-dropdown-item :style="{color: filterParams.includeClose === 0 ? '#409EFF' : ''}" :command="0">否</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
             <el-tooltip
               class="item"
               effect="dark"
@@ -57,6 +70,7 @@
             >
               <el-button
                 plain
+                style="margin-left: 10px"
                 v-hasPermi="['order:list:valid']"
                 type="primary"
                 size="small"
@@ -1096,7 +1110,7 @@ export default {
       ],
       riskStatusFilter: [
         {
-          label: "凤控接管项",
+          label: "风控接管项",
           value: "lawsuit",
         },
         {
@@ -1359,8 +1373,14 @@ export default {
     //重置筛选
     reset() {
       const $table = this.$refs.xTable;
-      this.filterParams = {};
+      this.filterParams = FILTER_PARAMS();
       $table.clearFilter();
+      // 重新请求
+      this.fetchData({ pageNum: 1 });
+    },
+    // 切换包含已关闭项目
+    checkIncludeClose(type) {
+      this.filterParams.includeClose = type;
       // 重新请求
       this.fetchData({ pageNum: 1 });
     },
