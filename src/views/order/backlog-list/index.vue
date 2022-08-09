@@ -199,9 +199,9 @@ export default {
       this.resetLoad()
     },
     load() {
-      // 如果是最后一页，则不请求数据
+      // 如果是最后一页，并且不是第一页，则不请求数据
       if (this.totalPage <= this.pageNum) {
-        this.$modal.msgError('没有更多了');
+        this.totalPage !== 1 && this.$modal.msgError('没有更多了');
         return true;
       }
       // 触底分页参数累加
