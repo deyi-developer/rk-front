@@ -356,6 +356,7 @@ export default {
   position: relative;
 }
 .overdue ::before {
+  pointer-events:none;
   position: absolute;
   content: " ";
   left: -20px;
