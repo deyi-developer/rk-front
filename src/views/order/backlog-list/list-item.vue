@@ -1,24 +1,74 @@
 <!--  -->
 <template>
-  <div class="list-item" @click="$emit('gotoProject', dataSource)" :style="{backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff'}">
+  <div
+    class="list-item"
+    @click="$emit('gotoProject', dataSource)"
+    :style="{
+      backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff',
+    }"
+  >
     <!-- 中划线 -->
     <div v-if="dataSource.noteStatus === 1" class="wire"></div>
     <div class="label-list-item">
-      <el-checkbox :style="{opacity: dataSource.noteStatus === 1 ? '0' : '1'}" :label="dataSource.noteId" :key="dataSource.noteId"
+      <el-checkbox
+        :style="{ opacity: dataSource.noteStatus === 1 ? '0' : '1' }"
+        :label="dataSource.noteId"
+        :key="dataSource.noteId"
         ><a :style="{ display: 'none' }">占位</a></el-checkbox
       >
-      <el-collapse-item :name="dataSource.noteId" :style="{backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff'}">
+      <el-collapse-item
+        :name="dataSource.noteId"
+        :style="{
+          backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff',
+        }"
+      >
         <template slot="title">
-          <div class="ellipsis title-font16 title-margin">
-            工单编号标题: {{ dataSource.orderCode || "无" }}
-          </div>
-          <!-- 超期一天或者未完成则显示 -->
-          <div v-show="getDay(dataSource.headerEndDate) >= 1 && dataSource.noteStatus === 0" class="end-date">
-            <span class="risk-red end-date-content">
-              <!-- :style="{backgroundColor: dataSource.noteStatus === 1 ? '#F56C6C' : '#ed4014'}" -->
-              已超过截止日期{{ getDay(dataSource.headerEndDate) }}天 {{ dataSource.headerEndDate }}
-            </span>
-          </div>
+          <el-row :style="{ width: '100%' }" :gutter="24">
+            <el-col :span="6">
+              <div class="ellipsis title-font16 title-margin title-remind">
+                <span class="fontW">工单编号标题: </span>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="dataSource.orderCode || '无'"
+                  placement="top"
+                >
+                  <span class="detail">{{ dataSource.orderCode || "无" }}</span>
+                </el-tooltip>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="ellipsis title-font16 title-margin title-remind">
+                <span class="fontW">提醒事项: </span>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="dataSource.noteContext || '无'"
+                  placement="top"
+                >
+                  <span class="detail">{{
+                    dataSource.noteContext || "无"
+                  }}</span>
+                </el-tooltip>
+              </div>
+            </el-col>
+            <!-- 超期一天或者未完成则显示 -->
+            <el-col :span="6">
+              <div
+                v-show="
+                  getDay(dataSource.headerEndDate) >= 1 &&
+                  dataSource.noteStatus === 0
+                "
+                class="end-date"
+              >
+                <span class="risk-red end-date-content">
+                  <!-- :style="{backgroundColor: dataSource.noteStatus === 1 ? '#F56C6C' : '#ed4014'}" -->
+                  已超过截止日期{{ getDay(dataSource.headerEndDate) }}天
+                  {{ dataSource.headerEndDate }}
+                </span>
+              </div>
+            </el-col>
+          </el-row>
         </template>
         <div class="ellipsis project-name">
           项目编号标题: {{ dataSource.projectCode || "无" }}
@@ -31,12 +81,6 @@
           <div>
             <span>创建人: </span>
             <span>{{ dataSource.createUserName || "无" }}</span>
-          </div>
-        </div>
-        <div class="ellipsis project-name">
-          <div class="title-font14">
-            <span>提醒事项: </span>
-            <span class="detail">{{ dataSource.noteContext || "无" }}</span>
           </div>
         </div>
       </el-collapse-item>
@@ -85,7 +129,7 @@ export default {
   font-size: 14px;
   color: #333;
   // font-weight: 700;
-  .wire{
+  .wire {
     width: 95%;
     height: 2px;
     background-color: #ccc;
@@ -201,7 +245,7 @@ export default {
   scrollbar-arrow-color: #898989;
 }
 
-.title-margin{
+.title-margin {
   margin-right: 50px;
   width: 300px;
 }
@@ -209,6 +253,11 @@ export default {
 // 提醒事项换行
 .detail {
   white-space: break-spaces;
+  font-size: 14px;
+  color: #303133;
+}
+.fontW{
+  font-weight: 550;
 }
 /*滚动条里面小方块*/
 .list-content::-webkit-scrollbar-thumb {
@@ -220,7 +269,7 @@ export default {
 .transition-box {
   margin-bottom: 10px;
   border-radius: 4px;
-  background-color: #409EFF;
+  background-color: #409eff;
   text-align: center;
   color: #fff;
   padding: 40px 20px;
@@ -234,5 +283,13 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.title-remind {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 </style>

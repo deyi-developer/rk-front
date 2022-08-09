@@ -1,85 +1,116 @@
 <template>
   <div class="wrap page-bg">
     <el-card v-loading="loading" class="card">
-      <el-form
-        label-width="120px"
-        :inline="true"
-        :model="formInline"
-        class="demo-form-inline"
-      >
-        <el-form-item label="工单编号标题: ">
-          <el-input size="small" v-model="formInline.orderCode"></el-input>
-        </el-form-item>
-        <el-form-item label="项目编号标题: ">
-          <el-input size="small" v-model="formInline.projectCode"></el-input>
-        </el-form-item>
-        <el-form-item label="创建人: ">
-          <el-select
-            v-model="formInline.createById"
-            style="width: 100%"
-            size="small"
-            filterable
-            :filter-method="getHandlers"
-            :loading="handlerLoding"
-            clearable
-          >
-            <el-option
-              v-for="item in handlers"
-              :key="item.userId"
-              :label="item.nickName"
-              :value="item.userId"
-            >
-              <span style="float: left">{{ item.nickName }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
-                item.userId
-              }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <div class="title-finish">
-            <el-button
-              size="mini"
-              plain
-              @click="toggleDownFlag = !toggleDownFlag"
-              >{{ toggleDownFlag ? "收起" : "打开" }}</el-button
-            ><el-button size="mini" plain @click="reset"
-              >重置</el-button
-            >
-            <el-button size="mini" type="primary" @click="submit"
-              >搜索</el-button
-            >
-            <el-button size="mini" type="primary" @click="deleteApi"
-              >完成</el-button
-            >
-            <el-button size="mini" type="primary" @click="dialogVisible = true"
-              >添加提醒事项</el-button
-            >
-          </div>
-        </el-form-item>
-      </el-form>
-      <el-form
-        label-width="120px"
-        v-show="toggleDownFlag"
-        :inline="true"
-        :model="formInline"
-        class="demo-form-inline"
-      >
-        <el-form-item label="提醒事项: ">
-          <el-input size="small" v-model="formInline.noteContext"></el-input>
-        </el-form-item>
-        <el-form-item label="截止日期: ">
-          <el-date-picker
-            size="small"
-            v-model="formInline.headerEndDate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-      </el-form>
+      <div class="form-container">
+        <el-form
+          label-width="120px"
+          :inline="true"
+          :model="formInline"
+          class="demo-form-inline"
+        >
+          <el-row :style="{ width: '100%' }" :gutter="24">
+            <el-col :span="5">
+              <el-form-item label="工单编号标题: ">
+                <el-input
+                  :style="{ width: '80%' }"
+                  size="mini"
+                  v-model="formInline.orderCode"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="项目编号标题: ">
+                <el-input
+                  size="mini"
+                  v-model="formInline.projectCode"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="提醒事项: ">
+                <el-input
+                  size="mini"
+                  v-model="formInline.noteContext"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col :span="6">
+            <el-form-item label="创建人: ">
+              <el-select
+                v-model="formInline.createById"
+                size="mini"
+                filterable
+                :filter-method="getHandlers"
+                :loading="handlerLoding"
+                clearable
+              >
+                <el-option
+                  v-for="item in handlers"
+                  :key="item.userId"
+                  :label="item.nickName"
+                  :value="item.userId"
+                >
+                  <span style="float: left">{{ item.nickName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{
+                    item.userId
+                  }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+            <el-col :span="7">
+              <el-form-item>
+                <div class="title-finish">
+                  <el-button
+                    size="mini"
+                    :icon="
+                      toggleDownFlag ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
+                    "
+                    @click="toggleDownFlag = !toggleDownFlag"
+                    >{{ toggleDownFlag ? "收起" : "更多" }}</el-button
+                  >
+                  <el-button size="mini" plain @click="reset">重置</el-button>
+                  <el-button size="mini" type="primary" @click="submit"
+                    >搜索</el-button
+                  >
+                  <el-button size="mini" type="primary" @click="deleteApi"
+                    >完成</el-button
+                  >
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    @click="dialogVisible = true"
+                    >添加提醒事项</el-button
+                  >
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <el-form
+          label-width="120px"
+          v-show="toggleDownFlag"
+          :inline="true"
+          :model="formInline"
+          class="demo-form-inline"
+        >
+          <el-row :style="{ width: '100%' }" :gutter="24">
+            <el-col :span="5">
+              <el-form-item label="截止日期: ">
+                <el-date-picker
+                  size="mini"
+                  v-model="formInline.headerEndDate"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
       <div
         class="contail"
         v-infinite-scroll="load"
@@ -143,10 +174,10 @@ export default {
   async created() {
     this.getHandlers();
     // 获取初始数据
-    this.resetLoad()
+    this.resetLoad();
   },
   methods: {
-    async resetLoad(){
+    async resetLoad() {
       const params = {
         pageNum: 1,
         pageSize: this.pageSize,
@@ -155,7 +186,7 @@ export default {
       if (code === 200) {
         this.loading = false;
         this.noteData = rows;
-        this.pageNum= 1
+        this.pageNum = 1;
         // 初始计算最大页码
         this.totalPage = Math.ceil(total / 20);
         return true;
@@ -196,12 +227,12 @@ export default {
     async callBack() {
       this.dialogVisible = false;
       // 获取初始数据
-      this.resetLoad()
+      this.resetLoad();
     },
     load() {
       // 如果是最后一页，并且不是第一页，则不请求数据
       if (this.totalPage <= this.pageNum) {
-        this.totalPage !== 1 && this.$modal.msgError('没有更多了');
+        this.totalPage !== 1 && this.$modal.msgError("没有更多了");
         return true;
       }
       // 触底分页参数累加
@@ -247,10 +278,11 @@ export default {
         }, 500);
         // 如果是点击搜索，则直接赋值数据
         if (type !== "yesLoad") {
-          document.getElementsByClassName('contail')[0].scrollTop=document.getElementsByClassName('contail')[0].scrollTop=0
-          this.noteData = rows
-          rows.length === 0 && this.$modal.msgError('无数据');
-          return true
+          document.getElementsByClassName("contail")[0].scrollTop =
+            document.getElementsByClassName("contail")[0].scrollTop = 0;
+          this.noteData = rows;
+          rows.length === 0 && this.$modal.msgError("无数据");
+          return true;
         }
         // 如果是下拉加载数据，则push追加数据
         this.noteData.push(...rows);
@@ -279,10 +311,7 @@ export default {
       display: flex;
       align-items: center;
       // background-color: #f8f8f9 !important;
-      padding: 0 50px;
-      > div {
-        margin-right: 50px;
-      }
+      padding: 0 10px;
       .el-form-item {
         margin-bottom: 5px;
       }
@@ -297,8 +326,6 @@ export default {
   border: none !important;
 }
 .title-finish {
-  padding: 5px 20px 5px 3px;
-  margin: 3px 10px 5px 0px;
   border-radius: 5px;
 }
 .flip-list-move {
@@ -306,7 +333,7 @@ export default {
 }
 .contail {
   overflow-y: scroll;
-  height: 75vh;
+  height: 70vh;
   margin: 0 10px;
   background-color: #fff;
   box-shadow: 0 4px 17px 0 rgb(0 0 0 / 20%);
@@ -314,5 +341,8 @@ export default {
 }
 .el-form-item {
   white-space: nowrap;
+}
+.form-container{
+  padding: 15px 0 10px 0;
 }
 </style>
