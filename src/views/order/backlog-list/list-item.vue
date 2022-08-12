@@ -24,19 +24,6 @@
       >
         <template slot="title">
           <el-row :style="{ width: '100%' }" :gutter="24">
-            <el-col :span="6">
-              <div class="ellipsis title-font16 title-margin title-remind">
-                <span class="fontW">工单编号标题: </span>
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="dataSource.orderCode || '无'"
-                  placement="top"
-                >
-                  <span class="detail">{{ dataSource.orderCode || "无" }}</span>
-                </el-tooltip>
-              </div>
-            </el-col>
             <el-col :span="12">
               <div class="ellipsis title-font16 title-margin title-remind">
                 <span class="fontW">提醒事项: </span>
@@ -49,6 +36,19 @@
                   <span class="detail">{{
                     dataSource.noteContext || "无"
                   }}</span>
+                </el-tooltip>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="ellipsis title-font16 title-margin title-remind">
+                <span class="fontW">工单编号标题: </span>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="dataSource.orderCode || '无'"
+                  placement="top"
+                >
+                  <span class="detail">{{ dataSource.orderCode || "无" }}</span>
                 </el-tooltip>
               </div>
             </el-col>
@@ -247,7 +247,7 @@ export default {
 
 .title-margin {
   margin-right: 50px;
-  width: 300px;
+  // width: 300px;
 }
 
 // 提醒事项换行

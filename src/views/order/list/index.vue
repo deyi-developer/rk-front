@@ -57,8 +57,20 @@
                 ></i
               ></el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :style="{color: filterParams.includeClose === 1 ? '#409EFF' : ''}" :command="1">是</el-dropdown-item>
-                <el-dropdown-item :style="{color: filterParams.includeClose === 0 ? '#409EFF' : ''}" :command="0">否</el-dropdown-item>
+                <el-dropdown-item
+                  :style="{
+                    color: filterParams.includeClose === 1 ? '#409EFF' : '',
+                  }"
+                  :command="1"
+                  >是</el-dropdown-item
+                >
+                <el-dropdown-item
+                  :style="{
+                    color: filterParams.includeClose === 0 ? '#409EFF' : '',
+                  }"
+                  :command="0"
+                  >否</el-dropdown-item
+                >
               </el-dropdown-menu>
             </el-dropdown>
 
@@ -78,7 +90,21 @@
                 >整页提交</el-button
               >
             </el-tooltip>
-
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="此功能会给待办列表添加提醒数据"
+              placement="top-start"
+            >
+              <el-button
+                size="mini"
+                type="primary"
+                plain
+                @click="dialogVisibleBackLog = true"
+                v-if="checkRole(['risker'])"
+                >添加提醒事项</el-button
+              >
+            </el-tooltip>
             <el-dropdown v-if="checkRole(['risker'])" @command="handleCommand">
               <el-button
                 style="margin-left: 10px"
@@ -1023,6 +1049,14 @@
         <el-button type="primary" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 添加提醒弹框 -->
+    <BacklogDialog
+      :modal="true"
+      :info="{}"
+      :dialogVisible="dialogVisibleBackLog"
+      @callBack="dialogVisibleBackLog=false"
+      @toggleFalse="dialogVisibleBackLog = false"
+    />
   </div>
 </template>
 
@@ -1053,6 +1087,8 @@ import {
   CONTEXT_CELL_CLASS_NAME,
   FILTER_TITLE,
 } from "./constants";
+
+import BacklogDialog from "../components/backlog-dialog.vue";
 
 // 缓存过滤参数
 let QUERY_STORE = "[]";
@@ -1087,9 +1123,10 @@ import { deleteCurrentMonth } from "./api";
 export default {
   dicts: ["risk_level", "risk_status", "deyi_project_amount_type"],
   name: "List",
-  components: { Tabs, TabPane, filterForm },
+  components: { Tabs, TabPane, filterForm, BacklogDialog },
   data() {
     return {
+      dialogVisibleBackLog: false,
       projectType: PROJECT_TYPEP, // 项目数量以及类型信息
       dialogVisible: false,
       dialogVisibleValue: "",
