@@ -117,6 +117,8 @@
         infinite-scroll-delay="500"
         :infinite-scroll-immediate="false"
       >
+        <!-- 空状态 -->
+        <el-empty v-if="total === 0" description="当前没有待办"></el-empty>
         <el-collapse value="activeNames">
           <el-checkbox-group v-model="checkedCities">
             <transition-group name="flip-list">
@@ -169,6 +171,7 @@ export default {
       pageNum: 1,
       pageSize: 20,
       totalPage: 1,
+      total: 0,
     };
   },
   async created() {
@@ -189,6 +192,7 @@ export default {
         this.pageNum = 1;
         // 初始计算最大页码
         this.totalPage = Math.ceil(total / 20);
+        this.total = total;
         return true;
       }
       return this.$modal.msgError("接口错误");
@@ -230,9 +234,12 @@ export default {
       this.resetLoad();
     },
     load() {
-      // 如果是最后一页，并且不是第一页，则不请求数据
+      // 如果是最后一页，并且不是第一页或无数据，则不请求数据
       if (this.totalPage <= this.pageNum) {
-        this.totalPage !== 1 && this.$modal.msgError("没有更多了");
+        this.totalPage !== 1 &&
+          this.totalPage !== 0 &&
+          this.$modal.msgError("没有更多了");
+
         return true;
       }
       // 触底分页参数累加
@@ -272,6 +279,7 @@ export default {
       if (code === 200) {
         // 每次搜索都重新计算当前最大页码
         this.totalPage = Math.ceil(total / 20);
+        this.total = total;
         // 接口请求太快，会闪屏，延迟500ms
         setTimeout(() => {
           this.loading = false;
@@ -342,7 +350,7 @@ export default {
 .el-form-item {
   white-space: nowrap;
 }
-.form-container{
+.form-container {
   padding: 15px 0 10px 0;
 }
 </style>

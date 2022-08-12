@@ -4,7 +4,7 @@
     class="list-item"
     @click="$emit('gotoProject', dataSource)"
     :style="{
-      backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff',
+      backgroundColor: dataSource.noteStatus === 1 ? '#EBEEF5' : '#fff',
     }"
   >
     <!-- 中划线 -->
@@ -19,7 +19,7 @@
       <el-collapse-item
         :name="dataSource.noteId"
         :style="{
-          backgroundColor: dataSource.noteStatus === 1 ? '#E4E7ED' : '#fff',
+          backgroundColor: dataSource.noteStatus === 1 ? '#EBEEF5' : '#fff',
         }"
       >
         <template slot="title">
