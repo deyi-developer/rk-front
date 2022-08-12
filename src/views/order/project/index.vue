@@ -22,6 +22,12 @@
           相关工单列表
         </el-button>
         <el-button
+          type="text"
+          @click="dialogVisibleBackLog = true"
+          v-if="checkRole(['risker'])"
+          >添加提醒事项</el-button
+        >
+        <el-button
           v-hasPermi="['workOrder:order:list']"
           style="padding: 3px 0"
           type="text"
@@ -491,6 +497,14 @@
         <orderDetails :id="eventHeaderId"></orderDetails>
       </el-drawer>
     </el-drawer>
+    <!-- 添加提醒弹框 -->
+    <BacklogDialog
+      :modal="true"
+      :info="{}"
+      :dialogVisible="dialogVisibleBackLog"
+      @callBack="dialogVisibleBackLog=false"
+      @toggleFalse="dialogVisibleBackLog = false"
+    />
   </div>
 </template>
 
@@ -505,6 +519,7 @@ import workOrderDialog from "../components/work-order-dialog";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 import ListItem from './list-item.vue'; // 引入工单待办页面组件
 import orderDetails from './order-details'; // 引入工单待办页面组件
+import BacklogDialog from "../components/backlog-dialog.vue";
 export default {
   name: "Details",
   dicts: ["event_type", "event_urgency_level", "risk_level", "risk_status"],
@@ -514,7 +529,8 @@ export default {
     ChartsGroup,
     TableDesc,
     ListItem,
-    orderDetails
+    orderDetails,
+    BacklogDialog
   },
   data() {
     /** 项目结算周期 */
@@ -551,6 +567,7 @@ export default {
       }
     };
     return {
+      dialogVisibleBackLog: false,
       projectData: {},
       updateData: {
         // 可编辑内容

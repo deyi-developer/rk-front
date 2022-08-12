@@ -90,7 +90,7 @@
                 >整页提交</el-button
               >
             </el-tooltip>
-            <el-tooltip
+            <!-- <el-tooltip
               class="item"
               effect="dark"
               content="此功能会给待办列表添加提醒数据"
@@ -104,7 +104,7 @@
                 v-if="checkRole(['risker'])"
                 >添加提醒事项</el-button
               >
-            </el-tooltip>
+            </el-tooltip> -->
             <el-dropdown v-if="checkRole(['risker'])" @command="handleCommand">
               <el-button
                 style="margin-left: 10px"
@@ -1050,13 +1050,13 @@
       </span>
     </el-dialog>
     <!-- 添加提醒弹框 -->
-    <BacklogDialog
+    <!-- <BacklogDialog
       :modal="true"
       :info="{}"
       :dialogVisible="dialogVisibleBackLog"
       @callBack="dialogVisibleBackLog=false"
       @toggleFalse="dialogVisibleBackLog = false"
-    />
+    /> -->
   </div>
 </template>
 
