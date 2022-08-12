@@ -48,48 +48,35 @@
           <TabPane label="项目计划" name="fourth"></TabPane>
           <TabPane label="其他指标" name="fifth"></TabPane>
           <template #extra>
-            <el-button plain size="small" @click="reset">重置筛选</el-button>
+            <el-button plain size="mini" @click="reset">重置筛选</el-button>
 
-            <el-dropdown @command="checkIncludeClose">
-              <el-button size="small" type="primary" style="margin-left: 10px"
-                >是否包含已关闭项目<i
-                  class="el-icon-arrow-down el-icon--right"
-                ></i
-              ></el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  :style="{
-                    color: filterParams.includeClose === 1 ? '#409EFF' : '',
-                  }"
-                  :command="1"
-                  >是</el-dropdown-item
-                >
-                <el-dropdown-item
-                  :style="{
-                    color: filterParams.includeClose === 0 ? '#409EFF' : '',
-                  }"
-                  :command="0"
-                  >否</el-dropdown-item
-                >
-              </el-dropdown-menu>
-            </el-dropdown>
+           <el-checkbox
+              :border="true"
+              size="mini"
+              style="margin-left: 5px"
+              :v-model="Boolean(filterParams.includeClose)"
+              @change="checkIncludeClose"
+              >包含已关闭项目</el-checkbox
+            >
 
             <el-tooltip
               class="item"
               effect="dark"
+              size="mini"
               content="此功能会校验数据必填项"
               placement="top-start"
             >
               <el-button
                 plain
-                style="margin-left: 10px"
+                style="margin-left: 5px"
                 v-hasPermi="['order:list:valid']"
                 type="primary"
-                size="small"
+                size="mini"
                 @click="validAllEvent"
                 >整页提交</el-button
               >
             </el-tooltip>
+
             <el-tooltip
               class="item"
               effect="dark"
@@ -105,12 +92,13 @@
                 >添加提醒事项</el-button
               >
             </el-tooltip>
+
             <el-dropdown v-if="checkRole(['risker'])" @command="handleCommand">
               <el-button
-                style="margin-left: 10px"
+                style="margin-left: 5px"
                 plain
                 type="danger"
-                size="small"
+                size="mini"
                 >风控操作<i class="el-icon-arrow-down el-icon--right"></i
               ></el-button>
               <el-dropdown-menu slot="dropdown">
@@ -127,10 +115,10 @@
             </el-dropdown>
             <!-- 计划是否可编辑 -->
             <el-button
-              style="margin: 0 10px"
+              style="margin-left: 5px"
               v-if="checkRole(['risker'])"
               plain
-              size="small"
+              size="mini"
               :type="risk.planEditEnable ? 'success' : 'warning'"
               @click="() => checkoutPlanEdit(!risk.planEditEnable)"
             >
@@ -142,7 +130,8 @@
               @click="downloadFile"
               type="primary"
               icon="el-icon-download"
-              size="small"
+              size="mini"
+              style="margin-left: 5px"
             >
               导出
             </el-button>
@@ -1417,7 +1406,7 @@ export default {
     },
     // 切换包含已关闭项目
     checkIncludeClose(type) {
-      this.filterParams.includeClose = type;
+      this.filterParams.includeClose = type === true ? 1 : 0;
       // 重新请求
       this.fetchData({ pageNum: 1 });
     },

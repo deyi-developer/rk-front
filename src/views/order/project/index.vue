@@ -35,6 +35,7 @@
         >
         <el-button
           v-hasPermi="['workOrder:header:add']"
+          v-if="projectData.openStatus === 1"
           style="padding: 3px 0"
           type="text"
           @click="sendOrder"
@@ -60,6 +61,7 @@
           :disabled="!checkRole(['risker'])"
           plain
           size="small"
+          v-if="projectData.openStatus === 1"
           :type="projectData.openStatus ? 'success' : 'warning'"
           @click="checkoutPlanEdit(projectData)"
         >
