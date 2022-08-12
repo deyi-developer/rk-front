@@ -224,15 +224,19 @@ export default {
     sendWorkOrder() {
       this.$refs.formRef.validate(async (valid) => {
         if (valid) {
-          this.btnloading = true;
-          const { code, msg } = await send(this.form);
-          this.btnloading = false;
-          if (code == 200) {
-            this.close();
-            this.refresh();
-            this.$router.push({ path: "/order/order-list" });
+          try {
+            this.btnloading = true;
+            const { code, msg } = await send(this.form);
+            this.btnloading = false;
+            if (code == 200) {
+              this.close();
+              this.refresh();
+              this.$router.push({ path: "/order/order-list" });
+            }
+            this.message(code, msg);
+          } catch (error) {
+            this.btnloading = false;
           }
-          this.message(code, msg);
         }
       });
     },
@@ -240,14 +244,18 @@ export default {
     updateWorkOrder() {
       this.$refs.formRef.validate(async (valid) => {
         if (valid) {
-          this.btnloading = true;
-          const { code, msg } = await update(this.form);
-          this.btnloading = false;
-          if (code == 200) {
-            this.close();
-            this.refresh();
+          try {
+            this.btnloading = true;
+            const { code, msg } = await update(this.form);
+            this.btnloading = false;
+            if (code == 200) {
+              this.close();
+              this.refresh();
+            }
+            this.message(code, msg);
+          } catch (error) {
+            this.btnloading = false;
           }
-          this.message(code, msg);
         }
       });
     },

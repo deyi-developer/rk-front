@@ -4,6 +4,7 @@ export const FILTER_PARAMS = () => {
     projectChargePeriod: null,
     projectChargePeriod: null,
     oneDeptId: null,
+    includeClose: 0, // 默认不包含已关闭项目
   };
 };
 
