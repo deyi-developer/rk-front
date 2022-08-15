@@ -67,16 +67,23 @@
                   {{ dataSource.headerEndDate }}
                 </span>
               </div>
+        <div v-show="
+                  !(getDay(dataSource.headerEndDate) >= 1 &&
+                  dataSource.noteStatus === 0)
+                " class="ellipsis project-name">
+          <span>截止日期: </span>
+          <span>{{ dataSource.headerEndDate }}</span>
+        </div>
             </el-col>
           </el-row>
         </template>
         <div class="ellipsis project-name">
           项目编号标题: {{ dataSource.projectCode || "无" }}
         </div>
-        <div class="ellipsis project-name">
+        <!-- <div class="ellipsis project-name">
           <span>截止日期: </span>
           <span>{{ dataSource.headerEndDate }}</span>
-        </div>
+        </div> -->
         <div class="ellipsis project-name">
           <div>
             <span>创建人: </span>
