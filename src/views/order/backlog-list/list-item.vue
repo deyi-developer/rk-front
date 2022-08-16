@@ -41,7 +41,7 @@
             </el-col>
             <el-col :span="6">
               <div class="ellipsis title-font16 title-margin title-remind">
-                <span class="fontW">工单编号标题: </span>
+                <span class="fontW">工单编号: </span>
                 <el-tooltip
                   class="item"
                   effect="dark"
@@ -54,31 +54,40 @@
             </el-col>
             <!-- 超期一天或者未完成则显示 -->
             <el-col :span="6">
-              <div
-                v-show="
-                  getDay(dataSource.headerEndDate) >= 1 &&
-                  dataSource.noteStatus === 0
-                "
-                class="end-date"
-              >
-                <span class="risk-red end-date-content">
+              <div class="end-date">
+                <span>截止日期: </span>
+                <span :style="{ marginRight: '10px' }">{{
+                  dataSource.headerEndDate
+                }}</span>
+                <span
+                  v-show="
+                    getDay(dataSource.headerEndDate) >= 1 &&
+                    dataSource.noteStatus === 0
+                  "
+                  class="risk-red end-date-content"
+                >
                   <!-- :style="{backgroundColor: dataSource.noteStatus === 1 ? '#F56C6C' : '#ed4014'}" -->
                   已超过截止日期{{ getDay(dataSource.headerEndDate) }}天
-                  {{ dataSource.headerEndDate }}
+                  <!-- {{ dataSource.headerEndDate }} -->
                 </span>
               </div>
-        <div v-show="
-                  !(getDay(dataSource.headerEndDate) >= 1 &&
-                  dataSource.noteStatus === 0)
-                " class="ellipsis project-name">
-          <span>截止日期: </span>
-          <span>{{ dataSource.headerEndDate }}</span>
-        </div>
+              <!-- <div
+                v-show="
+                  !(
+                    getDay(dataSource.headerEndDate) >= 1 &&
+                    dataSource.noteStatus === 0
+                  )
+                "
+                class="ellipsis project-name"
+              >
+                <span>截止日期: </span>
+                <span>{{ dataSource.headerEndDate }}</span>
+              </div> -->
             </el-col>
           </el-row>
         </template>
         <div class="ellipsis project-name">
-          项目编号标题: {{ dataSource.projectCode || "无" }}
+          项目编号: {{ dataSource.projectCode || "无" }}
         </div>
         <!-- <div class="ellipsis project-name">
           <span>截止日期: </span>
@@ -263,7 +272,7 @@ export default {
   font-size: 14px;
   color: #303133;
 }
-.fontW{
+.fontW {
   font-weight: 550;
 }
 /*滚动条里面小方块*/

@@ -502,7 +502,7 @@
     <!-- 添加提醒弹框 -->
     <BacklogDialog
       :modal="true"
-      :info="{}"
+      :info="info"
       :dialogVisible="dialogVisibleBackLog"
       @callBack="dialogVisibleBackLog=false"
       @toggleFalse="dialogVisibleBackLog = false"
@@ -610,7 +610,8 @@ export default {
       innerDrawer: false,
       eventHeaderId: '',
       data:[
-      ]
+      ],
+      info:{}
     };
   },
 
@@ -689,6 +690,8 @@ export default {
       const obj = Object.assign({}, vm.$route, {
         title: "项目:" + data.projectCode,
       });
+      this.info = data;
+      console.log("datadata",data)
       this.$tab.updatePage(obj);
       this.projectData = data;
       this.data = rows || []

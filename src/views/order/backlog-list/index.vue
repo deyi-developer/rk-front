@@ -10,7 +10,7 @@
         >
           <el-row :style="{ width: '100%' }" :gutter="24">
             <el-col :span="5">
-              <el-form-item label="工单编号标题: ">
+              <el-form-item label="工单编号: ">
                 <el-input
                   :style="{ width: '80%' }"
                   size="mini"
@@ -19,7 +19,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="5">
-              <el-form-item label="项目编号标题: ">
+              <el-form-item label="项目编号: ">
                 <el-input
                   size="mini"
                   v-model="formInline.projectCode"

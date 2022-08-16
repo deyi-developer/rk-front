@@ -11,7 +11,7 @@
   >
     <ul class="ul-type">
       <li>
-        <label class="space">工单编号标题:</label>
+        <label class="space">工单编号:</label>
         <span class="value value-span">
           <el-input
             size="mini"
@@ -20,7 +20,7 @@
         </span>
       </li>
       <li>
-        <label class="space">项目编号标题:</label>
+        <label class="space">项目编号:</label>
         <span class="value value-span">
           <el-input
             size="mini"
