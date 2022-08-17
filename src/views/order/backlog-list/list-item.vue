@@ -24,14 +24,14 @@
       >
         <template slot="title">
           <el-row :style="{ width: '100%' }" :gutter="24">
-            <el-col :span="11">
+            <el-col :span="10">
               <div class="ellipsis title-font16 title-margin title-remind">
                 <span class="fontW">提醒事项: </span>
                 <el-tooltip
                   class="item"
                   effect="dark"
                   :content="dataSource.noteContext || '无'"
-                  placement="topLeft"
+                  placement="top"
                 >
                   <span class="detail">{{
                     dataSource.noteContext || "无"
@@ -46,14 +46,14 @@
                   class="item"
                   effect="dark"
                   :content="dataSource.orderCode || '无'"
-                  placement="topLeft"
+                  placement="top"
                 >
                   <span class="detail">{{ dataSource.orderCode || "无" }}</span>
                 </el-tooltip>
               </div>
             </el-col>
             <!-- 超期一天或者未完成则显示 -->
-            <el-col :span="7">
+            <el-col :span="8">
               <div class="end-date">
                 <span>截止日期: </span>
                 <span :style="{ marginRight: '10px' }">{{
@@ -203,6 +203,7 @@ export default {
     .end-date-content {
       border-radius: 3px;
       padding: 5px 10px;
+      white-space: nowrap;
     }
   }
 }
