@@ -490,7 +490,7 @@
       />
       <el-drawer
         title="工单详情"
-        size="50%"
+        size="63%"
         :destroy-on-close='true'
         :append-to-body="true"
         :before-close="handleClose"
