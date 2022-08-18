@@ -474,7 +474,7 @@
     <!-- 相关工单列表侧边栏 -->
     <el-drawer
       title="相关工单列表"
-      :visible.sync="drawer"
+      :visible.sync="drawer" 
       size="100%"
       v-loading="true"
       :modal='false'
@@ -686,7 +686,7 @@ export default {
     async getData(projectCode) {
       const vm = this;
       const { data } = await projectDetails(projectCode);
-      const { rows } = await projectFindOrderList(projectCode)
+      // const { rows } = await projectFindOrderList(projectCode) 
       const obj = Object.assign({}, vm.$route, {
         title: "项目:" + data.projectCode,
       });
@@ -694,7 +694,7 @@ export default {
       console.log("datadata",data)
       this.$tab.updatePage(obj);
       this.projectData = data;
-      this.data = rows || []
+      // this.data = rows || []
       this.setUpdata(data);
       this.$refs["form"].validate(); // 请求完数据后即做一次验证
     },
@@ -755,12 +755,18 @@ export default {
     },
 
     // 相关工单
-    getOrderList(){
+    async getOrderList(){
+      const {
+        query: { projectCode },
+      } = this.$route;
       // 打开右侧弹框
       this.drawer = true
+      const { rows } = await projectFindOrderList(projectCode) 
+      this.data = rows || []
       // 无数据给提示
-      if(this.data.length===0){
+      if(rows.length===0){
         this.$modal.msgError("无数据");
+        return false
       }
     }
   },

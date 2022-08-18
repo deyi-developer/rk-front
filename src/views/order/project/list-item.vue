@@ -44,18 +44,20 @@
     </div>
 
     <div class="end-date">
-      <span v-if="type === 'overdueWeekData'" class="risk-red end-date-content">
-        已超期{{ Math.abs(dataSource.overdueDay) }}天<span>
-          ({{ dataSource.headerEndDate }})</span
-        ></span
+      <span :class="`${dataSource.overdueDay > 0 ? 'risk-primary' : 'risk-red'} end-date-content`">
+        {{dataSource.overdueDay > 0 ? '离截止日期还剩' : '已超期'}}
+        {{ Math.abs(dataSource.overdueDay) }} 天
+          <span>
+            ({{ dataSource.headerEndDate }})
+          </span>
+        </span
       >
-      <span
+      <!-- <span
         v-else-if="type === 'nowWeekData'"
         class="risk-orange end-date-content"
         >本周{{ dayjs(dataSource.headerEndDate).format("dd")
         }}<span> ({{ dataSource.headerEndDate }})</span></span
       >
-
       <span
         v-else-if="type === 'nextOneWeekData'"
         class="risk-primary end-date-content"
@@ -67,7 +69,7 @@
         class="risk-default end-date-content"
         >下下周{{ dayjs(dataSource.headerEndDate).format("dd")
         }}<span> ({{ dataSource.headerEndDate }})</span></span
-      >
+      > -->
     </div>
   </div>
 </template>
