@@ -38,7 +38,7 @@ import {
   deleteCheckitem,
 } from "./api.js";
 export default {
-  name: "checkItem-list",
+  name: "check-item",
   components: { CheckItemTable, AddDialog },
   data() {
     return {
