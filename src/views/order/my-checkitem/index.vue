@@ -2,63 +2,26 @@
   <div class="page-bg">
     <div class="table-bg">
       <!-- 表格 -->
-      <CheckItemTable
-        :tableData="tableData"
-        @switchChange="switchChange"
-        :tableLoading="tableLoading"
-        operateSlot
-      />
+      <CheckItemTable tableType="finish" />
     </div>
   </div>
 </template>
 <script>
 import CheckItemTable from "../components/checkItemTable.vue";
-import { getUserCheckitemlist, UserCheckitemlistEdit } from "./api.js";
 export default {
   name: "my-checkItem",
   components: { CheckItemTable },
   data() {
     return {
-      tableData: [],
-      tableLoading: false,
     };
   },
-  created() {
-    this.appInit();
-  },
+  created() {},
   watch: {},
-  methods: {
-    async appInit() {
-      this.tableLoading = true;
-      const res = await getUserCheckitemlist();
-      this.tableData = res.rows;
-      this.tableLoading = false;
-    },
-    async switchChange(row) {
-      const data = {
-        ...row,
-        finish: +row.finish,
-      };
-      console.log(data, +row.finish, row.finish);
-      const res = await UserCheckitemlistEdit(data);
-      if (res.code === 200) {
-        this.$message({
-          message: "操作成功",
-          type: "success",
-        });
-        this.appInit();
-      } else {
-        this.$message({
-          message: "操作失败,请重试",
-          type: "error",
-        });
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped lang="scss">
-.page-bg{
+.page-bg {
   padding: 20px;
 }
 .table-bg {

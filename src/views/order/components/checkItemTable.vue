@@ -1,24 +1,25 @@
 <template>
   <div>
-    <slot name="tableBtn"></slot>
-    <el-table
-      :data="tableDataList"
-      :border="column[0].border"
-      style="width: 100%"
-      v-loading="tableLoading || Loading"
-    >
+    <div class="addBtn" v-if="tableType === 'operate'">
+      <el-button type="primary" @click="addBtn">新增</el-button>
+    </div>
+    <el-table :data="tableDataList" border style="width: 100%">
       <el-table-column
-        v-for="(tableEl, index) in column[0].files"
+        v-for="(tableEl, index) in column"
         :key="tableEl.id || index"
         :align="tableEl.align"
         :type="tableEl.type"
         :label="tableEl.label"
         :prop="tableEl.prop"
       />
-      <el-table-column align="center" label="是否已完成" v-if="!finishSlot">
+      <el-table-column
+        align="center"
+        label="是否已完成"
+        v-if="tableType === 'finish'"
+      >
         <template slot-scope="scope">
           <el-switch
-            v-if="tableType !== 'string'"
+            v-if="tableType === 'finish'"
             v-model="scope.row.finish"
             :active-value="1"
             :inactive-value="0"
@@ -32,12 +33,11 @@
           </div>
         </template>
       </el-table-column>
-      <slot name="finishSlot" v-else></slot>
       <el-table-column
         fixed="right"
         label="操作"
         align="center"
-        v-if="!operateSlot"
+        v-if="tableType === 'operate'"
       >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="Editor(scope.row)"
@@ -48,100 +48,151 @@
           >
         </template>
       </el-table-column>
-      <slot name="operateSlot" v-else></slot>
     </el-table>
+
+    <!-- 新增or编辑弹框 -->
+    <AddDialog
+      v-if="Visible"
+      :dialogType="dialogType(DialogData)"
+      :Visible="Visible"
+      @dialogClose="Visible = false"
+      :DialogData="DialogData"
+      @confirm="onQuery()"
+    />
   </div>
 </template>
 <script>
+import { CustomRequest, deleteCheckitem } from "../check-item/api";
+import {
+  configData,
+  dialogType,
+  column,
+  columnFilter,
+  queryHandle,
+} from "./constants";
+import AddDialog from "./addDialog.vue";
 export default {
   name: "CheckItemTable",
+  components: { AddDialog },
   data() {
     return {
+      configData: configData,
       tableDataList: [],
-      Loading: false,
+      DialogData: {},
+      dialogType,
+      Visible: false,
     };
   },
   props: {
-    tableData: {
-      type: [Array],
-      default: () => [],
+    queryData: {
+      type: Object,
+      default: () => {},
     },
     tableType: {
       type: [String],
-      default: "",
-    },
-    operateSlot: {
-      type: [Boolean],
-      default: false,
-    },
-    finishSlot: {
-      type: [Boolean],
-      default: false,
-    },
-    tableLoading: {
-      type: [Boolean],
+      default: "operate",
     },
     column: {
       type: [Array],
-      default: () => [
-        {
-          border: true,
-          files: [
-            {
-              label: "序号",
-              type: "index",
-            },
-            {
-              label: "Checkitem",
-              prop: "checkItemName",
-              align: "center",
-            },
-            {
-              label: "描述",
-              prop: "checkItemDescribe",
-              align: "center",
-            },
-            {
-              label: "完成截止时间",
-              prop: "checkItemEndTime",
-              align: "center",
-            },
-            {
-              label: "Checkitem角色",
-              prop: "checkItemRoleCodeName",
-              align: "center",
-            },
-          ],
-        },
-      ],
+      default: () => column,
+    },
+  },
+  computed: {
+    queryHandles: function () {
+      return queryHandle[this.tableType];
+    },
+    requestData: function () {
+      const { configData, queryData = {} } = this;
+      let queryObj = { ...queryData };
+      Object.keys(queryData).forEach((v) => {
+        if (configData[v]) {
+          queryObj = {
+            ...queryObj,
+            data: { ...queryObj.data, ...configData[v] },
+          };
+          if (configData[v]) {
+            delete queryObj[v];
+          }
+        }
+      });
+      return queryObj;
     },
   },
   watch: {
-    tableData: {
-      handler: function (newValue) {
-        // 外部不控制loading 就内部走
-        if (!this.tableLoading) {
-          this.Loading = true;
-        }
-        this.tableDataList = newValue;
-        this.Loading = false;
+    requestData: {
+      handler: function () {
+        this.onQuery();
       },
-      deep: true, // 深度监听
-      immediate: true, // 首次监听
+      deep: true,
+      immediate: true,
+    },
+    tableType: {
+      handler: function (newval) {
+        const res = columnFilter(newval);
+        this.column = res;
+      },
+      deep: true,
+      immediate: true,
     },
   },
   created() {},
   methods: {
-    Delete(row) {
-      this.$emit("tableDelete", row);
+    async onQuery() {
+      const res = await this.queryHandles(this.requestData);
+      this.tableDataList = res;
+    },
+    addBtn() {
+      this.Visible = true;
+      this.DialogData = {};
     },
     Editor(row) {
-      this.$emit("tableEditor", row);
+      this.Visible = true;
+      this.DialogData = {
+        ...row,
+        checkItemRoleCode: row?.checkItemRoleCode?.split(",") || [],
+      };
     },
-    switchChange(row) {
-      this.$emit("switchChange", row);
+
+    async Delete(row) {
+      this.$confirm("此操作将永久删除该数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(async () => {
+        const { code } = await deleteCheckitem(row.checkItemId);
+        this.messageConfig(
+          code,
+          { success: "删除成功", error: "删除失败，请重试!" },
+          () => this.onQuery()
+        );
+      });
+    },
+    async switchChange(row) {
+      const { code } = await CustomRequest({
+        url: "/checkitem/item-user/edit",
+        method: "put",
+        data: { ...row },
+      });
+      this.messageConfig(code, { success: "修改成功", error: "修改失败" }, () =>
+        this.onQuery()
+      );
+    },
+    messageConfig(code, { success, error }, callback) {
+      this.$message(
+        code === 200
+          ? { message: success, type: "success" }
+          : { message: error }
+      );
+      callback();
     },
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.addBtn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+</style>

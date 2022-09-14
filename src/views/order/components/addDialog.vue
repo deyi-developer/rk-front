@@ -1,6 +1,6 @@
 
 <template>
-  <el-dialog :title="title" :visible.sync="logVisible" @close="dialogClose">
+  <el-dialog :title="name" :visible.sync="logVisible" @close="dialogClose">
     <div class="formbox">
       <el-form :model="form" :rules="rules" ref="ruleForm" v-if="logVisible">
         <el-form-item
@@ -51,17 +51,18 @@
 </template>
 
 <script>
+import { CustomRequest as DialogRequest } from "../check-item/api";
 export default {
   name: "AddDialog",
   dicts: ["check_item_role_code"],
   data() {
     const RoleCodevalidate = (rule, value, callback) => {
-      if(!value.length && !this.firstChange){
+      if (!value.length && !this.firstChange) {
         callback(new Error("请选择Checkitem角色"));
-      }else{
-        callback()
+      } else {
+        callback();
       }
-      this.firstChange = false
+      this.firstChange = false;
     };
     return {
       form: {
@@ -79,7 +80,6 @@ export default {
         ],
         checkItemRoleCode: [
           {
-
             validator: RoleCodevalidate,
             required: true,
             trigger: "change",
@@ -95,6 +95,10 @@ export default {
       },
       formLabelWidth: "140px",
       logVisible: false,
+      name: "",
+      type: "",
+      apiMessage: {},
+      requestConfig: {},
     };
   },
   props: {
@@ -102,9 +106,14 @@ export default {
       type: [Boolean],
       default: () => false,
     },
-    title: {
-      type: [String],
-      default: "新建",
+    dialogType: {
+      type: [Object],
+      default: () => {
+        return {
+          name: "新建",
+          type: "add",
+        };
+      },
     },
     DialogData: {
       type: [Object],
@@ -120,31 +129,54 @@ export default {
     },
     DialogData: {
       handler: function (newValue) {
-        this.form = newValue;
+        this.form = { ...newValue };
+      },
+      immediate: true, // 首次监听
+      deep: true,
+    },
+    dialogType: {
+      handler: function (newValue) {
+        Object.keys(newValue).forEach((v) => {
+          this[v] = newValue[v];
+        });
       },
       immediate: true, // 首次监听
     },
   },
   created() {
     // 解决首次校验的头疼问题
-    this.firstChange = true
+    this.firstChange = true;
   },
   methods: {
     dialogClose() {
       this.$emit("dialogClose");
     },
     confirm() {
-       this.firstChange = false
+      this.firstChange = false;
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          this.$emit("dialogConfirm", {
-            form: this.form,
-            diaLogtype: this.title,
-          });
+          this.tableElitorORadd();
         } else {
           return false;
         }
       });
+    },
+    // 表格新增OR编辑
+    async tableElitorORadd() {
+      const { requestConfig, form = {} } = this;
+      form.checkItemRoleCode = form.checkItemRoleCode.join(",");
+      const { code } = await DialogRequest({ ...requestConfig, data: form });
+      this.messageConfig(code, this.apiMessage, () => {
+        this.$emit("confirm"), this.$emit("dialogClose");
+      });
+    },
+    messageConfig(code, { success, error }, callback) {
+      this.$message(
+        code === 200
+          ? { message: success, type: "success" }
+          : { message: error }
+      );
+      callback();
     },
   },
 };
