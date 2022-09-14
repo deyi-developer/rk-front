@@ -32,6 +32,7 @@ export const dialogType = (data) => {
   };
 };
 
+// column默认配置
 export const column = [
   {
     label: "序号",
@@ -59,6 +60,7 @@ export const column = [
   },
 ];
 
+// column过滤
 export const columnFilter = (tableType) => {
   let Newcolumn = column;
   switch (tableType) {
@@ -72,13 +74,16 @@ export const columnFilter = (tableType) => {
   return Newcolumn;
 };
 
-export const queryHandle = {
-  finish: async (data) => {
-    const res = await itemUseList(data);
-    return res.rows;
-  },
-  operate: async (data) => {
-    const res = await getCheckitemlist(data);
-    return res.rows;
-  },
+// 通过不同的类型请求不同的接口
+export const queryHandle = (type) => {
+  return {
+    finish: async (data) => {
+      const res = await itemUseList(data);
+      return res.rows;
+    },
+    operate: async (data) => {
+      const res = await getCheckitemlist(data);
+      return res.rows;
+    },
+  }[type];
 };

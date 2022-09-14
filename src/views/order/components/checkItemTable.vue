@@ -76,11 +76,11 @@ export default {
   components: { AddDialog },
   data() {
     return {
-      configData: configData,
-      tableDataList: [],
-      DialogData: {},
-      dialogType,
-      Visible: false,
+      configData: configData, // 表格配置数据
+      tableDataList: [], // 表格列表数据
+      DialogData: {}, // 弹框数据
+      dialogType, // 弹框类型
+      Visible: false, // 编辑/新增弹框
     };
   },
   props: {
@@ -98,9 +98,11 @@ export default {
     },
   },
   computed: {
+    // 根据状态，获取请求方法
     queryHandles: function () {
-      return queryHandle[this.tableType];
+      return queryHandle(this.tableType);
     },
+    // 请求参数过滤处理
     requestData: function () {
       const { configData, queryData = {} } = this;
       let queryObj = { ...queryData };
@@ -118,33 +120,18 @@ export default {
       return queryObj;
     },
   },
-  watch: {
-    requestData: {
-      handler: function () {
-        this.onQuery();
-      },
-      deep: true,
-      immediate: true,
-    },
-    tableType: {
-      handler: function (newval) {
-        const res = columnFilter(newval);
-        this.column = res;
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-  created() {},
   methods: {
+    // 请求获取表格数据
     async onQuery() {
       const res = await this.queryHandles(this.requestData);
       this.tableDataList = res;
     },
+    // 新增
     addBtn() {
       this.Visible = true;
       this.DialogData = {};
     },
+    // 编辑
     Editor(row) {
       this.Visible = true;
       this.DialogData = {
@@ -153,6 +140,7 @@ export default {
       };
     },
 
+    // 删除数据
     async Delete(row) {
       this.$confirm("此操作将永久删除该数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -167,6 +155,8 @@ export default {
         );
       });
     },
+
+    // 切换状态
     async switchChange(row) {
       const { code } = await CustomRequest({
         url: "/checkitem/item-user/edit",
@@ -184,6 +174,24 @@ export default {
           : { message: error }
       );
       callback();
+    },
+  },
+  watch: {
+    // 如果请求参数改变，重新触发请求
+    requestData: {
+      handler: function () {
+        this.onQuery();
+      },
+      deep: true,
+      immediate: true,
+    },
+    // type改变，过滤coumn
+    tableType: {
+      handler: function (newval) {
+        this.column = columnFilter(newval);
+      },
+      deep: true,
+      immediate: true,
     },
   },
 };
