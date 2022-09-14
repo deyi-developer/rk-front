@@ -1077,11 +1077,7 @@ import {
 
 import BacklogDialog from "../components/backlog-dialog.vue";
 
-// 缓存过滤参数
-let QUERY_STORE = "[]";
 
-// 部门筛选
-let ONE_DEPTID = "";
 
 /* 每列宽度200
     前面2列固定
@@ -1113,6 +1109,11 @@ export default {
   components: { Tabs, TabPane, filterForm, BacklogDialog },
   data() {
     return {
+      // 缓存过滤参数
+      QUERY_STORE: "[]",
+      // 部门筛选
+      ONE_DEPTID: '0',
+
       dialogVisibleBackLog: false,
       projectType: PROJECT_TYPEP, // 项目数量以及类型信息
       dialogVisible: false,
@@ -1200,13 +1201,16 @@ export default {
     }
     this.initHandle("mounted");
   },
-  watch: {
-    $route({ path }) {
-      console.log("qqqqq");
-      // 进入的是项目清单, 过滤初始化
-      if (path === "/order/list") this.initHandle("watch");
-    },
+  activated(){
+    if (this.$route.name !== 'orderList2') this.initHandle("watch")
   },
+  // watch: {
+  //   $route({ path }) {
+  //     console.log("qqqqq");
+  //     // 进入的是项目清单, 过滤初始化
+  //     if (path === "/order/list") this.initHandle("watch");
+  //   },
+  // },
   methods: {
     checkPermi,
     checkRole,
@@ -1228,15 +1232,16 @@ export default {
 
         // 参数一样并且不是初始化,走缓存
         if (
-          filter === QUERY_STORE &&
-          oneDeptId === ONE_DEPTID &&
+          filter === this.QUERY_STORE &&
+          oneDeptId === this.ONE_DEPTID &&
           type !== "mounted"
-        )
+        ) {
           return;
+        }
 
         // 记录上一次的筛选数据
-        QUERY_STORE = filter;
-        ONE_DEPTID = oneDeptId;
+        this.QUERY_STORE = filter;
+        this.ONE_DEPTID = oneDeptId;
 
         // 初始化过滤条件
         this.filterParams = FILTER_PARAMS();
@@ -1261,8 +1266,6 @@ export default {
       this.tableLodaing = true;
       const filterParams = this.filterParams;
       const formVal = {}; //this.$refs.form.queryParams ;
-      console.log(filterParams);
-      console.log(formVal);
       const params = { ...formVal, ...filterParams, ...this.page, ...page };
       //获取列表
       const res = await getList(params);
