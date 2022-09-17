@@ -21,3 +21,10 @@ export default {
   }
 };
 </script>
+<style>
+/* 全局样式 */
+.item-tooltip{
+  max-width: 40%;
+}
+</style>
+

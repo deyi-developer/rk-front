@@ -7,7 +7,7 @@
     :destroy-on-close="true"
     :show-close="false"
     :modal="modal"
-    width="30%"
+    width="40%"
   >
     <ul class="ul-type">
       <li>
@@ -16,6 +16,7 @@
           <el-input
             size="mini"
             v-model="addRemindParams.orderCode"
+            maxlength="50"
           />
         </span>
       </li>
@@ -25,6 +26,7 @@
           <el-input
             size="mini"
             v-model="addRemindParams.projectCode"
+            maxlength="50"
           />
         </span>
       </li>
@@ -78,6 +80,7 @@
           <el-input
             type="textarea"
             size="mini"
+            :autosize="{ minRows: 10}"
             v-model="addRemindParams.noteContext"
           />
         </span>

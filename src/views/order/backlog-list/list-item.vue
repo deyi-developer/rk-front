@@ -8,7 +8,9 @@
     }"
   >
     <!-- 中划线 -->
-    <div v-if="dataSource.noteStatus === 1" class="wire"></div>
+    <div v-if="dataSource.noteStatus === 1" class="wire">
+    </div>
+    
     <div class="label-list-item">
       <el-checkbox
         :style="{ opacity: dataSource.noteStatus === 1 ? '0' : '1' }"
@@ -28,10 +30,10 @@
               <div class="ellipsis title-font16 title-margin title-remind">
                 <span class="fontW">提醒事项: </span>
                 <el-tooltip
-                  class="item"
+                  popper-class="item-tooltip"
                   effect="dark"
                   :content="dataSource.noteContext || '无'"
-                  placement="top"
+                  placement="top-start"
                 >
                   <span class="detail">{{
                     dataSource.noteContext || "无"
@@ -43,10 +45,11 @@
               <div class="ellipsis title-font16 title-margin title-remind">
                 <span class="fontW">工单编号: </span>
                 <el-tooltip
+                  popper-class="item-tooltip"
                   class="item"
                   effect="dark"
                   :content="dataSource.orderCode || '无'"
-                  placement="top"
+                  placement="top-start"
                 >
                   <span class="detail">{{ dataSource.orderCode || "无" }}</span>
                 </el-tooltip>
@@ -148,7 +151,7 @@ export default {
   .wire {
     width: 95%;
     height: 2px;
-    background-color: #ccc;
+    border-top: 2px solid #ccc;
     position: absolute;
     top: 30px;
   }
@@ -272,7 +275,9 @@ export default {
 .detail {
   white-space: break-spaces;
   font-size: 14px;
-  color: #303133;
+  color: #303133;    
+  // max-width: 500px;
+  // display: inline-block;
 }
 .fontW {
   font-weight: 550;
@@ -303,11 +308,15 @@ export default {
   opacity: 0;
 }
 .title-remind {
-  white-space: nowrap;
+  max-width: 500px;
+  word-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.item-tooltip{
+  max-width:30% !important
 }
 </style>
