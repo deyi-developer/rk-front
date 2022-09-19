@@ -29,15 +29,9 @@
             <el-col :span="10">
               <div class="ellipsis title-font16 title-margin title-remind">
                 <span class="fontW">提醒事项: </span>
-                <el-tooltip
-                  popper-class="item-tooltip"
-                  effect="dark"
-                  :content="dataSource.noteContext || '无'"
-                  placement="top-start"
-                >
-                  <span class="detail">{{
-                    dataSource.noteContext || "无"
-                  }}</span>
+                <el-tooltip popper-class="item-tooltip">
+                  <div v-html="dataSource.noteContext || '无'" class="detail"></div>
+                  <p slot="content" v-html="dataSource.noteContext || '无'"></p>
                 </el-tooltip>
               </div>
             </el-col>
@@ -273,9 +267,20 @@ export default {
 
 // 提醒事项换行
 .detail {
-  white-space: break-spaces;
+  white-space: nowrap;
   font-size: 14px;
-  color: #303133;    
+  color: #303133;
+  display: inline-block;
+  max-width: 500px;
+  ::v-deep p {
+    height: 30px;
+    display: inline-block;
+  }
+  ::v-deep img {
+    vertical-align: middle;
+    height: 30px;
+    display: inline-block;
+  }
   // max-width: 500px;
   // display: inline-block;
 }
@@ -308,8 +313,7 @@ export default {
   opacity: 0;
 }
 .title-remind {
-  max-width: 500px;
-  word-wrap: break-word;
+  word-wrap: normal;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

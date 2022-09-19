@@ -77,11 +77,13 @@
           ><i class="require-icon">*</i>提醒事项:</label
         >
         <span class="value value-span">
-          <el-input
+          <editor
             type="textarea"
             size="mini"
             :autosize="{ minRows: 10}"
             v-model="addRemindParams.noteContext"
+            :height="100"
+            @input="checkContent"
           />
         </span>
       </li>
@@ -96,11 +98,14 @@
 import { handlerList } from "../project/api";
 import { debounce } from "lodash-es";
 import { workOrderDetail } from '../send/api'
+import editor from "@/components/Editor";
 import { mapGetters } from "vuex";
 export default {
   dicts: [],
   name: "backlogDialog",
-  components: {},
+  components: {
+    editor
+  },
   computed: {
     ...mapGetters(["usersInfo"]),
   },
