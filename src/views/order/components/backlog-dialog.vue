@@ -7,7 +7,7 @@
     :destroy-on-close="true"
     :show-close="false"
     :modal="modal"
-    width="40%"
+    width="60%"
   >
     <ul class="ul-type">
       <li>
@@ -76,13 +76,13 @@
         <label class="space" style="vertical-align: top"
           ><i class="require-icon">*</i>提醒事项:</label
         >
-        <span class="value value-span">
+        <span class="value value-span" :style="{width: '80%'}">
           <editor
             type="textarea"
             size="mini"
             :autosize="{ minRows: 10}"
             v-model="addRemindParams.noteContext"
-            :height="100"
+            :height="300"
             @input="checkContent"
           />
         </span>
@@ -221,6 +221,7 @@ export default {
   list-style-type: none;
   > li {
     margin-bottom: 10px;
+    white-space: nowrap;
     .space {
       display: inline-block;
       // min-width: 60px;
@@ -238,7 +239,7 @@ export default {
 .value-span {
   display: inline-block;
   margin-left: 5px;
-  width:60%
+  width: 60%;
 }
 .value {
   // color: #909399;
