@@ -97,6 +97,9 @@ export default {
       default: () => column,
     },
   },
+  created: function() {
+    this.column = columnFilter(this.tableType);
+  },
   computed: {
     // 根据状态，获取请求方法
     queryHandles: function () {
@@ -181,14 +184,6 @@ export default {
     requestData: {
       handler: function () {
         this.onQuery();
-      },
-      deep: true,
-      immediate: true,
-    },
-    // type改变，过滤coumn
-    tableType: {
-      handler: function (newval) {
-        this.column = columnFilter(newval);
       },
       deep: true,
       immediate: true,

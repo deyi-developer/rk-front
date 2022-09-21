@@ -33,7 +33,7 @@ export const dialogType = (data) => {
 };
 
 // column默认配置
-export const column = [
+export const column = () => [
   {
     label: "序号",
     type: "index",
@@ -62,7 +62,7 @@ export const column = [
 
 // column过滤
 export const columnFilter = (tableType) => {
-  let Newcolumn = column;
+  let Newcolumn = column();
   switch (tableType) {
     case "finish":
       Newcolumn.pop();
