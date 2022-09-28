@@ -68,10 +68,10 @@
           plain
           size="small"
           v-if="projectData.openStatus === 1"
-          :type="projectData.openStatus ? 'success' : 'warning'"
+          :type="!projectData.openStatus ? 'success' : 'warning'"
           @click="checkoutPlanEdit(projectData)"
         >
-          {{ projectData.openStatus ? "风控永久开启" : "风控永久关闭" }}
+          {{ !projectData.openStatus ? "风控永久开启" : "风控永久关闭" }}
         </el-button>
 
       </div>
