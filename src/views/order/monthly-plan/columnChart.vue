@@ -74,6 +74,9 @@ export default {
             type: "value",
           },
         ],
+        grid: {
+          top: 120,
+        },
         series: [
           {
             name: "计划开票额",
