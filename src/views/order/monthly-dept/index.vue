@@ -19,8 +19,9 @@
         </div>
         <div>
           <!-- clear filter -->
-          <el-button plain size="small" @click="clearFilter">重置筛选</el-button>
-
+          <el-button plain size="small" @click="clearFilter"
+            >重置筛选</el-button
+          >
 
           <!-- 当前表格导出 -->
           <el-button
@@ -106,11 +107,28 @@
               {{ row.compleBillingThisMonth + "%" }}
             </span>
 
+            <!-- 开票备注 -->
+            <el-tooltip
+              v-else-if="item.prop === 'billRemark'"
+              effect="dark"
+              :content="row[item.prop]"
+            >
+              <span class="overflowHiding">{{ row[item.prop] }}</span>
+            </el-tooltip>
+
             <!-- 收款完成率 -->
             <span v-else-if="item.prop === 'compleReceiptsThisMonth'">
               {{ row.compleReceiptsThisMonth + "%" }}
             </span>
 
+            <!-- 收款备注 -->
+            <el-tooltip
+              v-else-if="item.prop === 'receiptRemark'"
+              effect="dark"
+              :content="row[item.prop]"
+            >
+              <span class="overflowHiding">{{ row[item.prop] }}</span>
+            </el-tooltip>
             <span v-else>{{ row[item.prop] | currency }}</span>
           </template>
         </vxe-column>
@@ -132,7 +150,7 @@ import { checkRole } from "@/utils/permission";
 export default {
   name: "MonthlyDept",
   components: {
-    selectAll,
+    selectAll
   },
   data() {
     return {
@@ -148,8 +166,8 @@ export default {
         // 时间选择器有效范围
         disabledDate(time) {
           return time.getTime() > Date.now() - 8.64e6;
-        },
-      },
+        }
+      }
     };
   },
   created() {
@@ -157,7 +175,7 @@ export default {
     // 动态设置tab拦
     this.$tab.updatePage(
       Object.assign({}, this.$route, {
-        title: `${title || ""}计划明细`,
+        title: `${title || ""}计划明细`
       })
     );
 
@@ -175,13 +193,11 @@ export default {
       this.loading = true;
 
       // 获取当前月度
-      const {
-        deptPlanDtoList = [],
-      } = await getCurrentMonthApi({
+      const { deptPlanDtoList = [] } = await getCurrentMonthApi({
         oneDeptId: this.id,
         month: this.duringMonth.getMonth() + 1,
         year: this.duringMonth.getFullYear(),
-        ...this.filterConditions,
+        ...this.filterConditions
       });
 
       // 当前月度列表
@@ -190,19 +206,23 @@ export default {
       this.loading = false;
     },
 
-    footerMethod({ data }){
+    footerMethod({ data }) {
       let planBillingMoney = 0;
       let billingThisMonth = 0;
       let planReceiptsMoney = 0;
       let receiptsThisMonth = 0;
       data.forEach((item) => {
-        planBillingMoney += Number(item.planBillingMoney || 0)
-        billingThisMonth += Number(item.billingThisMonth || 0)
-        planReceiptsMoney += Number(item.planReceiptsMoney || 0)
-        receiptsThisMonth += Number(item.receiptsThisMonth || 0)
-      })
-      const billingThisPlanBillingMonth = ((billingThisMonth/planBillingMoney || 0)*100).toFixed(2)
-      const receiptsThisPlanReceiptsMoney = ((receiptsThisMonth/planReceiptsMoney || 0)*100).toFixed(2)
+        planBillingMoney += Number(item.planBillingMoney || 0);
+        billingThisMonth += Number(item.billingThisMonth || 0);
+        planReceiptsMoney += Number(item.planReceiptsMoney || 0);
+        receiptsThisMonth += Number(item.receiptsThisMonth || 0);
+      });
+      const billingThisPlanBillingMonth = (
+        (billingThisMonth / planBillingMoney || 0) * 100
+      ).toFixed(2);
+      const receiptsThisPlanReceiptsMoney = (
+        (receiptsThisMonth / planReceiptsMoney || 0) * 100
+      ).toFixed(2);
       return [
         [
           "总计",
@@ -210,11 +230,19 @@ export default {
           "-",
           thousandHandle(planBillingMoney),
           thousandHandle(billingThisMonth),
-          `${billingThisPlanBillingMonth == Infinity ? 100 : billingThisPlanBillingMonth}%`,
+          `${
+            billingThisPlanBillingMonth == Infinity
+              ? 100
+              : billingThisPlanBillingMonth
+          }%`,
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
-          `${receiptsThisPlanReceiptsMoney == Infinity ? 100 : receiptsThisPlanReceiptsMoney}%`,
-        ],
+          `${
+            receiptsThisPlanReceiptsMoney == Infinity
+              ? 100
+              : receiptsThisPlanReceiptsMoney
+          }%`
+        ]
       ];
     },
 
@@ -245,7 +273,7 @@ export default {
           oneDeptId: this.id,
           month: this.duringMonth.getMonth() + 1,
           year: this.duringMonth.getFullYear(),
-          ...this.filterConditions,
+          ...this.filterConditions
         },
         `${
           this.$route.query.title || ""
@@ -260,7 +288,7 @@ export default {
       this.filterConditions = FILTER_CONDITIONS();
 
       this.getCurrentMonthInfo();
-    },
+    }
   },
   watch: {
     // 监听时间变化，更新列表
@@ -269,8 +297,8 @@ export default {
     },
     id() {
       this.getCurrentMonthInfo();
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
