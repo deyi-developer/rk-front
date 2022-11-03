@@ -235,13 +235,15 @@ export default {
               ? 100
               : billingThisPlanBillingMonth
           }%`,
+          "-",
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
           `${
             receiptsThisPlanReceiptsMoney == Infinity
               ? 100
               : receiptsThisPlanReceiptsMoney
-          }%`
+          }%`,
+          "-"
         ]
       ];
     },

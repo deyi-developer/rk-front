@@ -50,13 +50,13 @@ export const COLUMN_LIST = [
       { label: "数据非空", value: 2 },
       { label: "数据为空", value: 1 }
     ],
-    minWidth: "110",
+    minWidth: "130",
     align: "center"
   },
   {
     prop: "billRemark",
     label: "开票备注",
-    minWidth: "110",
+    minWidth: "200",
     align: "left"
   },
   {
@@ -87,13 +87,13 @@ export const COLUMN_LIST = [
       { label: "数据非空", value: 2 },
       { label: "数据为空", value: 1 }
     ],
-    minWidth: "110",
+    minWidth: "130",
     align: "center"
   },
   {
     prop: "receiptRemark",
     label: "收款备注",
-    minWidth: "110",
+    minWidth: "200",
     align: "left"
   }
 ];
