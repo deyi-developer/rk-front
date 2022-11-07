@@ -436,6 +436,21 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="角色标记">
+              <el-select v-model="form.checkItemRoleCode" placeholder="请选择">
+                <el-option
+                  v-for="item in dict.type.check_item_role_code"
+                  :key="item.raw.dictCode"
+                  :label="item.raw.dictLabel"
+                  :value="item.raw.dictValue"
+                  :disabled="item.raw.status == 1"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="备注">
               <el-input
@@ -518,7 +533,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "User",
-  dicts: ["sys_normal_disable", "sys_user_sex"],
+  dicts: ["sys_normal_disable", "sys_user_sex", "check_item_role_code"],
   components: { Treeselect },
   data() {
     return {

@@ -254,6 +254,20 @@ export const dynamicRoutes = [
       },
     ],
   },
+  {
+    path: "/monthly-checkItem",
+    component: Layout,
+    hidden: true,
+    permissions: ["order:plan:list"],
+    children: [
+      {
+        path: "checkItem/:id",
+        component: () => import("@/views/order/checkItem-list"),
+        name: "CheckItemList",
+        meta: { title: "checkItem项数据报表" },
+      },
+    ],
+  },
 ];
 
 export default new Router({
