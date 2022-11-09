@@ -37,26 +37,27 @@ export const column = () => [
   {
     label: "序号",
     type: "index",
+    align: "center",
   },
   {
     label: "Checkitem",
     prop: "checkItemName",
-    align: "center",
+    align: "left",
   },
   {
     label: "描述",
     prop: "checkItemDescribe",
-    align: "center",
+    align: "left",
   },
   {
     label: "完成截止时间",
     prop: "checkItemEndTime",
-    align: "center",
+    align: "left",
   },
   {
     label: "Checkitem角色",
     prop: "checkItemRoleCodeName",
-    align: "center",
+    align: "left",
   },
 ];
 

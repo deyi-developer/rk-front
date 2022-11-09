@@ -1,11 +1,13 @@
 <template>
   <div>
     <div class="addBtn" v-if="tableType === 'operate'">
-      <el-button type="primary" @click="addBtn">新增</el-button>
+      <span class="title">维护checkItem</span>
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="addBtn">新增</el-button>
     </div>
     <el-table :data="tableDataList" border style="width: 100%">
       <el-table-column
-        v-for="(tableEl, index) in column"
+        v-for="(tableEl, index) in curColumn"
+        header-align="center"
         :key="tableEl.id || index"
         :align="tableEl.align"
         :type="tableEl.type"
@@ -34,7 +36,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        fixed="right"
         label="操作"
         align="center"
         v-if="tableType === 'operate'"
@@ -49,7 +50,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <!-- 新增or编辑弹框 -->
     <AddDialog
       v-if="Visible"
@@ -81,6 +81,7 @@ export default {
       DialogData: {}, // 弹框数据
       dialogType, // 弹框类型
       Visible: false, // 编辑/新增弹框
+      curColumn:[],
     };
   },
   props: {
@@ -89,16 +90,16 @@ export default {
       default: () => {},
     },
     tableType: {
-      type: [String],
+      type: String,
       default: "operate",
     },
     column: {
-      type: [Array],
-      default: () => column,
+      type: Array,
+      default: column,
     },
   },
   created: function() {
-    this.column = columnFilter(this.tableType);
+    this.curColumn = columnFilter(this.tableType);
   },
   computed: {
     // 根据状态，获取请求方法
@@ -195,7 +196,12 @@ export default {
 .addBtn {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 15px;
+}
+.title {
+  line-height: 36px;
+  font-size: 16px;
+  font-weight: 600;
 }
 </style>
