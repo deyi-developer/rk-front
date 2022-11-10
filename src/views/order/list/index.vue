@@ -770,6 +770,23 @@
             </vxe-column>
             <!-- 新增字段 -->
             <vxe-column
+              field="nextBillingMoney"
+              class-name="bg-plan"
+              title="次月计划开票额"
+              :formatter="currency"
+              :edit-render="{}"
+            >
+              <template #edit="{ row }">
+                <vxe-input
+                  :disabled="risk.planEditEnable"
+                  v-model="row.nextBillingMoney"
+                  type="text"
+                  @change="valiNum(row, 'nextBillingMoney')"
+                  placeholder="请输入数值"
+                ></vxe-input>
+              </template>
+            </vxe-column>
+            <vxe-column
               field="billRemark"
               class-name="bg-plan"
               title="开票备注"
@@ -1181,6 +1198,7 @@ export default {
         projectInvoicePeriod: [{ required: true, message: "必须填写" }],
         planBillingMoney: [{ required: true, message: "必须填写" }],
         planReceiptsMoney: [{ required: true, message: "必须填写" }],
+        nextBillingMoney: [{ required: true, message: "必须填写" }],
       },
       // 风控操作弹框对象
       riskOperation: {
@@ -1547,6 +1565,7 @@ export default {
             "projectChargePeriod",
             "projectInvoicePeriod",
             "planBillingMoney",
+            'nextBillingMoney',
             "planReceiptsMoney",
           ].includes(field)
         ) {
