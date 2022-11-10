@@ -1354,8 +1354,7 @@ export default {
       });
 
       // 重算接口调用
-      const { code, msg } = await initDataApi();
-
+      const { code, msg } = await initDataApi().finally(()=>loading.close());
       if (code !== 200) return;
       this.dialogVisibleValue = "";
       loading.close();
