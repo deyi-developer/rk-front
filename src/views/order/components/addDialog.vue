@@ -25,7 +25,7 @@
           :label-width="formLabelWidth"
           prop="checkItemRoleCode"
         >
-          <el-select v-model="form.checkItemRoleCode" multiple>
+          <el-select v-model="form.checkItemRoleCode" multiple class="selectStyle">
             <el-option
               v-for="(dict, index) in dict.type.check_item_role_code"
               :key="index"
@@ -39,7 +39,7 @@
           :label-width="formLabelWidth"
           prop="checkItemDescribe"
         >
-          <el-input type="textarea" v-model="form.checkItemDescribe"></el-input>
+          <el-input type="textarea" v-model="form.checkItemDescribe" rows="3"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -185,5 +185,8 @@ export default {
 <style  scoped lang="scss">
 .formbox {
   padding: 0 40px 0 40px;
+}
+.selectStyle{
+  width: 100%;
 }
 </style>
