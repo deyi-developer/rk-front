@@ -847,6 +847,22 @@
             </vxe-column>
             <!-- 新增字段 -->
             <vxe-column
+              field="nextReceiptsMoney"
+              class-name="bg-plan"
+              title="次月计划收款额"
+              :formatter="currency"
+              :edit-render="{}"
+            >
+              <template #edit="{ row }">
+                <vxe-input
+                  :disabled="risk.planEditEnable"
+                  v-model="row.nextReceiptsMoney"
+                  @change="valiNum(row, 'nextReceiptsMoney')"
+                  placeholder="请输入数值"
+                ></vxe-input>
+              </template>
+            </vxe-column>
+            <vxe-column
               field="receiptRemark"
               class-name="bg-plan"
               title="收款备注"
@@ -1111,7 +1127,7 @@ const fixedWidth = w * 2; //固定列
 const firstWidth = w * 11;
 const secondWidth = w * 14;
 const thirdWidth = w * 14;
-const fourthWidth = w * 9;
+const fourthWidth = w * 10;
 const fifthWidth = w * 5;
 //列   距离
 const firstLeft = 0;
@@ -1199,6 +1215,7 @@ export default {
         planBillingMoney: [{ required: true, message: "必须填写" }],
         planReceiptsMoney: [{ required: true, message: "必须填写" }],
         nextBillingMoney: [{ required: true, message: "必须填写" }],
+        nextReceiptsMoney: [{ required: true, message: "必须填写" }],
       },
       // 风控操作弹框对象
       riskOperation: {
@@ -1567,6 +1584,7 @@ export default {
             "planBillingMoney",
             'nextBillingMoney',
             "planReceiptsMoney",
+            'nextReceiptsMoney',
           ].includes(field)
         ) {
           return false;

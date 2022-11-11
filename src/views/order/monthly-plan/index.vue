@@ -104,9 +104,9 @@ export default {
       duringMonth: new Date(), // 当前选择月份
       pickerOptions: {
         // 时间选择器有效范围
-        disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6;
-        },
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now() - 8.64e6;
+        // },
       },
     };
   },

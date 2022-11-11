@@ -164,9 +164,9 @@ export default {
       id: this.$route.params.id, // 当月
       pickerOptions: {
         // 时间选择器有效范围
-        disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6;
-        }
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now() - 8.64e6;
+        // }
       }
     };
   },
