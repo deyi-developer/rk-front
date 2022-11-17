@@ -211,11 +211,15 @@ export default {
       let billingThisMonth = 0;
       let planReceiptsMoney = 0;
       let receiptsThisMonth = 0;
+      let totalShouldNotBillingMoney = 0;
+      let totalShouldNotReceiptsMoney = 0;
       data.forEach((item) => {
         planBillingMoney += Number(item.planBillingMoney || 0);
         billingThisMonth += Number(item.billingThisMonth || 0);
         planReceiptsMoney += Number(item.planReceiptsMoney || 0);
         receiptsThisMonth += Number(item.receiptsThisMonth || 0);
+        totalShouldNotBillingMoney += Number(item.totalShouldNotBillingMoney || 0)
+        totalShouldNotReceiptsMoney += Number(item.totalShouldNotReceiptsMoney || 0)
       });
       const billingThisPlanBillingMonth = (
         (billingThisMonth / planBillingMoney || 0) * 100
@@ -228,6 +232,7 @@ export default {
           "总计",
           "-",
           "-",
+          thousandHandle(totalShouldNotBillingMoney),
           thousandHandle(planBillingMoney),
           thousandHandle(billingThisMonth),
           `${
@@ -236,6 +241,7 @@ export default {
               : billingThisPlanBillingMonth
           }%`,
           "-",
+          thousandHandle(totalShouldNotReceiptsMoney),
           thousandHandle(planReceiptsMoney),
           thousandHandle(receiptsThisMonth),
           `${

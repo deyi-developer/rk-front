@@ -14,6 +14,12 @@ export const COLUMN_LIST = [
     align: "center",
   },
   {
+    prop: "totalShouldNotBillingMoney",
+    label: "总应开未开",
+    minWidth: "180",
+    align: "center",
+  },
+  {
     prop: "planBillingMoney",
     label: "本月计划开票金额",
     minWidth: "180",
@@ -28,6 +34,12 @@ export const COLUMN_LIST = [
   {
     prop: "bilCompletionRate",
     label: "开票完成率",
+    minWidth: "180",
+    align: "center",
+  },
+  {
+    prop: "totalShouldNotReceiptsMoney",
+    label: "总应收未收",
     minWidth: "180",
     align: "center",
   },

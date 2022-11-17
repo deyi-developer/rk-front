@@ -24,6 +24,12 @@ export const COLUMN_LIST = [
     align: "center"
   },
   {
+    prop: "totalShouldNotBillingMoney",
+    label: "总应开未开",
+    minWidth: "180",
+    align: "center",
+  },
+  {
     prop: "planBillingMoney",
     label: "本月计划开票金额",
     filters: [
@@ -58,6 +64,12 @@ export const COLUMN_LIST = [
     label: "开票备注",
     minWidth: "200",
     align: "left"
+  },
+  {
+    prop: "totalShouldNotReceiptsMoney",
+    label: "总应收未收",
+    minWidth: "180",
+    align: "center",
   },
   {
     prop: "planReceiptsMoney",
