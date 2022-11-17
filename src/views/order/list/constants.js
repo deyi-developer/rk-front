@@ -35,7 +35,7 @@ export const PROJECT_TYPEP = [
   },
   {
     color: "#909399",
-    name: "凤控接管项目：",
+    name: "风控接管项目：",
     content: (risk) =>
       `${risk.lawsuitRiskProjectNum || 0} (${
         risk.lawsuitRiskProjectRate || 0
