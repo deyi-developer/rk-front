@@ -108,6 +108,15 @@ const install = function (Vue) {
     }
   })
 
+  // 浮点数转百分号
+  Vue.filter("percentTwo", (value) => {
+    if (value && typeof value === "number") {
+      return (value * 100).toFixed(2) + "%"
+    } else {
+      return "0%"
+    }
+  })
+
   // 关联需求
   // Vue.filter("needs", (value, types) => {
   //   if (

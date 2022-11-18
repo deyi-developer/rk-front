@@ -927,7 +927,7 @@
               title="毛利率"
             >
               <template #default="{ row }">{{
-                row.grossProfitRate | percent
+                row.grossProfitRate | percentTwo
               }}</template>
             </vxe-column>
 
